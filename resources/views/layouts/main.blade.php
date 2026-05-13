@@ -247,6 +247,11 @@
     
     <!-- App Script -->
     <script src={{ asset('js/hope-ui.js') }} defer></script>
+
+    {{-- jQuery --}}
+    <script src={{ asset('vendor/jQuery/jquery-4.0.0.js') }}></script>
+
+    @stack('scripts')
     
   </body>
 </html>
