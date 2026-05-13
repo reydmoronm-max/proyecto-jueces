@@ -251,6 +251,10 @@
     {{-- jQuery --}}
     <script src={{ asset('vendor/jQuery/jquery-4.0.0.js') }}></script>
 
+    {{-- sweetalert2 --}}
+    <script src={{ asset('vendor/sweetalert/sweetalert2.all.min.js') }}></script>
+
+
     @stack('scripts')
     
   </body>

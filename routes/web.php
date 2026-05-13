@@ -14,9 +14,15 @@ Route::post('/logear', [AuthController::class, 'login'])->name('logear');
 Route::middleware('auth')->group(function() {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Rutas para gestión de usuarios
     Route::resource('/usuarios', UsersController::class);
     Route::get('/tbody', [UsersController::class, 'tbody'])->name('tbody');
     Route::get('usuarios/cambiar-estado/{id}/{estado}', [UsersController::class, 'cambiarEstado'])->name('cambiar-estado');
+    Route::get('usuarios/cambiar-password/{id}/{password}', [UsersController::class, 'cambiarPassword'])->name('cambiar-password');
+    Route::get('/usuarios/{id}/edit', [UsersController::class, 'edit'])->name('usuarios.edit');
+    Route::put('/usuarios/update/{id}', [UsersController::class, 'update'])->name('usuarios.update');
+
 
 
 });

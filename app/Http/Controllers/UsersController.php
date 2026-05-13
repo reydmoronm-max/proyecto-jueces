@@ -43,7 +43,7 @@ class UsersController extends Controller
             'rol' => $request->rol
         ]);
 
-        return to_route('usuarios.index');
+        return to_route('usuarios.index')->with('success', 'Usuario registrado exitosamente.');
     }
 
     /**
@@ -59,7 +59,8 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $usuario = User::findOrFail($id);
+        return response()->json($usuario);
     }
 
     /**
@@ -67,7 +68,14 @@ class UsersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $usuario = User::findOrFail($id);
+        $usuario->nombre = $request->nombre;
+        $usuario->apellido = $request->apellido;
+        $usuario->user = $request->user;
+        $usuario->rol = $request->rol;
+        $usuario->save();
+
+        return to_route('usuarios.index')->with('update', 'Usuario actualizado exitosamente.');
     }
 
     /**
@@ -86,6 +94,12 @@ class UsersController extends Controller
     public function cambiarEstado($id, $estado){
         $item = User::find($id);
         $item->activo = $estado;
+        return $item->save();
+    }
+
+    public function cambiarPassword($id, $password){
+        $item = User::find($id);
+        $item->password = Hash::make($password);
         return $item->save();
     }
 }

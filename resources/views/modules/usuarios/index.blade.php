@@ -40,12 +40,38 @@
 </div>
 
 @include('modules.usuarios.modalUsuario')
+@include('modules.usuarios.modalPassword')
+@include('modules.usuarios.modalEditarUsuario')
+
 
 @endsection
 
 
 
 @push('scripts')
+    <script>
+        @if (session('success')) 
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se registró el usuario correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+            
+        @endif
+        
+        @if (session('update')) 
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se actualizó el usuario correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+            
+        @endif
+    </script>
     <script>
         function recargar_tbody(){
             $.ajax({
@@ -63,6 +89,45 @@
                 url : "usuarios/cambiar-estado/" + id + "/" + estado,
                 success: function(respuesta){
                     console.log(respuesta);
+                }
+            });
+        }
+
+        function agregar_id_usuario(id){
+            $('#id_usuario').val(id);
+        }
+
+        function cambio_password(){
+            let id = $('#id_usuario').val();
+            let password = $('#newPassword').val();
+
+            $.ajax({
+                type : "GET",
+                url : "usuarios/cambiar-password/" + id + "/" + password,
+                success: function(respuesta){
+                    if (respuesta == 1){
+                        alert("Contraseña actualizada correctamente.");
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('modalCambiarPassword'));
+                        modal.hide();
+                        $('#formPassword')[0].reset();
+                    }
+                }
+
+            });
+            return false;
+        }
+
+        function editarUsuario(id) {
+            $.ajax({
+                url: 'usuarios/' + id + '/edit',
+                type: 'GET',
+                success: function(usuario) {
+                    $('#formEditarUsuario').attr('action', '/usuarios/update/' + usuario.id);
+                    $('#edit-nombre').val(usuario.nombre);
+                    $('#edit-apellido').val(usuario.apellido);
+                    $('#edit-user').val(usuario.user);
+                    $('#edit-rol').val(usuario.rol);
+                    $('#modalEditarUsuario').modal('show');
                 }
             });
         }
