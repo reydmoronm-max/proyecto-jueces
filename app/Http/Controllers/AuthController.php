@@ -50,7 +50,8 @@ class AuthController extends Controller
     public function crearAdmin(){
         // Crear un admin
         User::create([
-            'name' => 'Rey Morón',
+            'nombre' => 'Rey',
+            'apellido' => 'Morón',
             'user' => 'admin',
             'password' => Hash::make('admin'),
             'activo' => true

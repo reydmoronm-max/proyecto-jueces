@@ -69,7 +69,7 @@
                         <div class="m-0 shadow-none card">
                             <div class="py-3 card-header d-flex justify-content-between bg-primary">
                                 <div class="header-title">
-                                <h5 class="mb-0 text-white">All Notifications</h5>
+                                <h5 class="mb-0 text-white">Notificaciones</h5>
                                 </div>
                             </div>
                             <div class="p-0 card-body">
@@ -77,10 +77,10 @@
                                 <div class="d-flex align-items-center">
                                     <img class="p-1 avatar-40 rounded-pill bg-soft-primary" src="{{ asset('images/shapes/01.png') }}" alt="">
                                     <div class="ms-3 w-100">
-                                        <h6 class="mb-0 ">Emma Watson Bni</h6>
+                                        <h6 class="mb-0 ">Durán Julián</h6>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <p class="mb-0">95 MB</p>
-                                            <small class="float-end font-size-12">Just Now</small>
+                                            <p class="mb-0">Nuevo</p>
+                                            <small class="float-end font-size-12">Hace 5 min.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@
                         <img src={{ asset('images/avatars/avtar_5.png') }} alt="User-Profile" class="theme-color-yellow-img img-fluid avatar avatar-50 avatar-rounded">
                         <img src={{ asset('images/avatars/avtar_3.png') }} alt="User-Profile" class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
                         <div class="caption ms-3 d-none d-md-block ">
-                            <h6 class="mb-0 caption-title">{{ Auth::user()->name }}</h6>
+                            <h6 class="mb-0 caption-title">{{ Auth::user()->nombre }} {{ Auth::user()->apellido }}</h6>
                             <p class="mb-0 caption-sub-title">{{  Auth::user()->rol }}</p>
                         </div>
                     </a>
@@ -116,8 +116,8 @@
                         <div class="col-md-12">
                             <div class="flex-wrap d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h1>Hello Devs!</h1>
-                                    <p>We are on a mission to help developers like you build successful projects for FREE.</p>
+                                    <h1 class="fw-bold">@yield('paginaTitulo')</h1>
+                                    <p>@yield('paginaSubtitulo')</p>
                                 </div>
                             </div>
                         </div>

@@ -1,0 +1,61 @@
+{{-- Modal --}}
+<div class="modal fade" id="modalRegistrarUsuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalRegistrarUsuarioLabel">Registrar Usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="needs-validation" novalidate id="formUsuario" action="{{ route('usuarios.store') }}" autocomplete="off" method="POST">
+                            @csrf
+                            <section class="row g-3">                            
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" required>
+                                        <label for="nombre">Nombre</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido" required>
+                                        <label for="apellido">Apellido</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" name="user" id="user" placeholder="Nombre de Usuario" required>
+                                        <label for="user">Nombre de usuario</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="Contraseña" required>
+                                        <label for="password">Contraseña</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-4">
+                                    <div class="form-floating">
+                                        <select class="form-select" name="rol" id="rol" required>
+                                        <option value="">Seleccione una opción</option>
+                                        <option value="Administrador">Administrador</option>
+                                        <option value="Juez">Juez</option>
+                                        <option value="Recepcionista">Recepcionista</option>
+                                    </select>
+                                        <label for="rol">Rol</label>
+                                    </div>
+                                </div>
+                            </section>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+        </div>
+    </div>
+</div>
+</div>
