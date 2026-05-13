@@ -6,7 +6,10 @@
             </div>
         </td>
         <td>
-            <h6>{{ $item->cedula }}</h6>
+            <h6>
+                <span>{{ $item->cedula_tipo }} -</span>
+                {{ $item->cedula }}
+            </h6>
         </td>
         <td>
             <button class="btn btn-sm btn-info" style="background-color: #007bff; border-color: #007bff;" onclick="mostrarProposito({{ $item->id }})">
