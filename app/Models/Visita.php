@@ -13,6 +13,7 @@ class Visita extends Model
         'nombre',
         'apellido',
         'cedula',
+        'cedula_tipo',
         'proposito'
     ];
 }

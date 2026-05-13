@@ -26,17 +26,19 @@ class VisitasController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
-            'cedula' => 'required|string|max:255',
-            'proposito' => 'nullable|string',
+            'nombre'      => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
+            'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
+            'cedula_tipo' => ['required', 'in:V,E'],
+            'cedula'      => ['required', 'digits_between:7,8'],
+            'proposito'   => ['required', 'string', 'min:5', 'max:255'],
         ]);
 
         Visita::create([
-            'nombre' => $request->nombre,
-            'apellido' => $request->apellido,
-            'cedula' => $request->cedula,
-            'proposito' => $request->proposito,
+            'nombre'      => $request->nombre,
+            'apellido'    => $request->apellido,
+            'cedula_tipo' => $request->cedula_tipo,
+            'cedula'      => $request->cedula,
+            'proposito'   => $request->proposito,
         ]);
 
         return to_route('visitas.index')->with('success', 'Visita registrada correctamente.');
