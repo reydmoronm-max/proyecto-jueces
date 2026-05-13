@@ -12,35 +12,35 @@
                             <section class="row g-3">                            
                                 <div class="col-md-12">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" required>
+                                        <input type="text" class="form-control bg-white" name="nombre" id="nombre" placeholder="Nombre" required>
                                         <label for="nombre">Nombre</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido" required>
+                                        <input type="text" class="form-control bg-white" name="apellido" id="apellido" placeholder="Apellido" required>
                                         <label for="apellido">Apellido</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" name="user" id="user" placeholder="Nombre de Usuario" required>
+                                        <input type="text" class="form-control bg-white" name="user" id="user" placeholder="Nombre de Usuario" required>
                                         <label for="user">Nombre de usuario</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-floating">
-                                        <input type="password" class="form-control" name="password" id="password" placeholder="Contraseña" required>
+                                        <input type="password" class="form-control bg-white" name="password" id="password" placeholder="Contraseña" required>
                                         <label for="password">Contraseña</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12 mb-4">
                                     <div class="form-floating">
-                                        <select class="form-select" name="rol" id="rol" required>
+                                        <select class="form-select bg-white" name="rol" id="rol" required>
                                         <option value="">Seleccione una opción</option>
                                         <option value="Administrador">Administrador</option>
                                         <option value="Juez">Juez</option>

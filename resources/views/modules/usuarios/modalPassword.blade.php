@@ -13,7 +13,7 @@
                                 <div class="col-md-12 mb-3">
                                     <div class="form-floating">
                                         <input type="text" hidden id="id_usuario" name="id">
-                                        <input type="password" class="form-control" name="password" id="newPassword" placeholder="Nueva contraseña" required>
+                                        <input type="password" class="form-control bg-white" name="password" id="newPassword" placeholder="Nueva contraseña" required>
                                         <label for="newPassword">Nueva contraseña</label>
                                     </div>
                                 </div>

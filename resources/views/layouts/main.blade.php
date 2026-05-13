@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="es" dir="ltr">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,12 +19,13 @@
         <link rel="stylesheet" href={{ asset('css/hope-ui.min.css') }} />
         
         <!-- Custom Css -->
-        <link rel="stylesheet" href={{ asset('css/custom.min.css') }} />
+        <link rel="stylesheet" href={{ asset('css/custom.css') }} />
+
         <!-- Dark Css -->
         <link rel="stylesheet" href={{ asset('css/dark.min.css') }} />
         
         <!-- Customizer Css -->
-        <link rel="stylesheet" href={{ asset('css/customizer.min.css') }} />
+        <link rel="stylesheet" href={{ asset('css/customizer.css') }} />
         
         <!-- RTL Css -->
         <link rel="stylesheet" href={{ asset('css/rtl.min.css') }} />
@@ -33,7 +34,7 @@
         <link href="{{ asset('vendor/remixicon/remixicon.css') }}" rel="stylesheet">
         
     </head>
-    <body class="">
+    <body class="fase-animada">
         @include('shared.aside')        
         <main class="main-content">
             @include('shared.header')
