@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\VisitasController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-admin');
@@ -22,6 +23,10 @@ Route::middleware('auth')->group(function() {
     Route::get('usuarios/cambiar-password/{id}/{password}', [UsersController::class, 'cambiarPassword'])->name('cambiar-password');
     Route::get('/usuarios/{id}/edit', [UsersController::class, 'edit'])->name('usuarios.edit');
     Route::put('/usuarios/update/{id}', [UsersController::class, 'update'])->name('usuarios.update');
+
+    // Rutas para gestión de visitas
+    Route::resource('/visitas', VisitasController::class);
+    Route::get('/tbody-visitas', [VisitasController::class, 'tbody'])->name('tbody.visitas');
 
 
 
