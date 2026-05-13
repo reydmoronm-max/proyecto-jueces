@@ -7,7 +7,7 @@
         </td>
         <td>
             <h6>
-                <span>{{ $item->cedula_tipo }} -</span>
+                <span class="badge bg-primary me-1">{{ $item->cedula_tipo }}</span>
                 {{ $item->cedula }}
             </h6>
         </td>
