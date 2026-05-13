@@ -13,8 +13,9 @@ class DashboardController extends Controller
     public function index()
     {
         $titulo = 'Inicio';
+        $home = 'active';
         $paginaTitulo = '¡Hola!';
         $paginaSubtitulo = 'Bienvenido de vuelta, ' . Auth::user()->nombre . '.';
-        return view('modules.dashboard.home', compact('titulo', 'paginaTitulo', 'paginaSubtitulo'));
+        return view('modules.dashboard.home', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'home'));
     }
 }

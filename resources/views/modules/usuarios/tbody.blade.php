@@ -11,7 +11,7 @@
             <h6>{{ $item->user }}</h6>
         </td>
         <td>
-            <button href="#" onclick="agregar_id_usuario({{ $item->id }})" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCambiarPassword">
+            <button href="#" onclick="agregar_id_usuario({{ $item->id }})" class="btn btn-sm btn-primary" data-bs-toggle="modal" title="Cambiar contraseña" data-bs-target="#modalCambiarPassword">
                 <i class="ri-lock-password-fill"></i>
             </button>
         </td>
@@ -25,7 +25,7 @@
             <h6>{{ $item->rol }}</h6>
         </td>
         <td>
-            <button class="btn btn-sm btn-warning" onclick="editarUsuario({{ $item->id }})">
+            <button class="btn btn-sm btn-warning" title="Editar usuario" onclick="editarUsuario({{ $item->id }})">
                 <i class="ri-edit-fill"></i>
             </button>
         </td>

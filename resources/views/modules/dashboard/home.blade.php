@@ -1,6 +1,8 @@
 @extends('layouts.main')
 
 @section('titulo', $titulo)
+@section('home', $home)
+    
 @section('paginaTitulo', $paginaTitulo)
 @section('paginaSubtitulo', $paginaSubtitulo)
 

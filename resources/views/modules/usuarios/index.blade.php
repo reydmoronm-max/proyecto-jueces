@@ -1,5 +1,6 @@
 @extends('layouts.main')
 @section('titulo', $titulo)
+@section('usuariosActive', $usuariosActive)
 @section('paginaTitulo', $paginaTitulo)
 @section('paginaSubtitulo', $paginaSubtitulo)
 
@@ -106,9 +107,15 @@
                 url : "usuarios/cambiar-password/" + id + "/" + password,
                 success: function(respuesta){
                     if (respuesta == 1){
-                        alert("Contraseña actualizada correctamente.");
+                        // alert("Contraseña actualizada correctamente.");
                         var modal = bootstrap.Modal.getInstance(document.getElementById('modalCambiarPassword'));
                         modal.hide();
+                        Swal.fire({
+                            title: '¡Éxito!',
+                            text: 'Se actualizó la contraseña correctamente.',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar'
+                        });
                         $('#formPassword')[0].reset();
                     }
                 }

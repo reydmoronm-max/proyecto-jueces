@@ -14,11 +14,12 @@ class UsersController extends Controller
     public function index()
     {
         $titulo = 'Usuarios';
+        $usuariosActive = 'active';
         $paginaTitulo = 'Usuarios';
         $paginaSubtitulo = 'Listado de usuarios registrados en el sistema.';
 
         $items = User::all();
-        return view('modules.usuarios.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'items'));
+        return view('modules.usuarios.index', compact('titulo', 'usuariosActive', 'paginaTitulo', 'paginaSubtitulo', 'items'));
     }
 
     /**

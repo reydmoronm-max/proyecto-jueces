@@ -561,3 +561,28 @@ body.uikit .btn-download {
 .top-1 {
   top: 1rem;
 }
+
+/*--------------------------------------------------------------
+# Animación fadeIn
+--------------------------------------------------------------*/
+
+/* Definición de la animación */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        /* transform: translateY(20px); //*Empieza 20px abajo */
+    }
+    to {
+        opacity: 1;
+        /* transform: translateY(0); /* Termina en su posición original */
+    }
+}
+
+/* Clase que aplica a las secciones */
+.fase-animada {
+    animation: fadeIn 1s ease-out forwards;
+}
+
+#grad{
+  background-image: radial-gradient(circle, #1e50bd 0%, #012572 100%);
+}
