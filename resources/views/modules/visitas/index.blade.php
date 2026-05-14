@@ -22,6 +22,7 @@
                             <tr>
                                 <th>Nombre y Apellido</th>
                                 <th>Cédula</th>
+                                <th>De parte</th>
                                 <th>Propósito</th>
                                 <th>Fecha y Hora</th>
                                 <th>Acciones</th>
@@ -85,6 +86,21 @@
             
         @endif
     </script>
+    @if ($errors->any())
+    <script>
+        var erroresServidor = {!! json_encode($errors->all()) !!};
+        Swal.fire({
+            title: 'Errores en el formulario',
+            html: erroresServidor.join('<br>'),
+            icon: 'error',
+            confirmButtonText: 'Corregir'
+        }).then(function(){
+            var modalEl = document.getElementById('modalRegistrarVisita');
+            var modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        });
+    </script>
+    @endif
     <script>
         function recargar_tbody_visitas(){
             $.ajax({
@@ -122,5 +138,56 @@
                 }
             });
         }
+        
+        // Client-side validation before submitting the registrar visita form
+        $(document).ready(function(){
+            $('#formRegistrarVisita').on('submit', function(e){
+                e.preventDefault();
+
+                var nombre = $('#nombre').val().trim();
+                var apellido = $('#apellido').val().trim();
+                var cedula = $('#cedula').val().trim();
+                var cedulaTipo = $('#cedula_tipo').val();
+                var proposito = $('#proposito').val().trim();
+
+                var errors = [];
+
+                // Nombre y Apellido: letras y espacios, 3-50
+                var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s]/;
+                if (nombre.length < 3 || nombre.length > 50 || invalidNameRegex.test(nombre)){
+                    errors.push('Nombre: debe tener entre 3 y 50 caracteres y solo letras.');
+                }
+                if (apellido.length < 3 || apellido.length > 50 || invalidNameRegex.test(apellido)){
+                    errors.push('Apellido: debe tener entre 3 y 50 caracteres y solo letras.');
+                }
+
+                // Cédula: solo dígitos, 7-8
+                if (!/^\d{7,8}$/.test(cedula)){
+                    errors.push('Cédula: debe contener solo números (7 u 8 dígitos).');
+                }
+
+                // Cedula tipo
+                if (!(cedulaTipo === 'V' || cedulaTipo === 'E')){
+                    errors.push('Tipo de cédula inválido.');
+                }
+
+                // Propósito: mínimo 5 caracteres
+                if (proposito.length < 5){
+                    errors.push('Propósito: mínimo 5 caracteres.');
+                }
+
+                if (errors.length > 0){
+                    Swal.fire({
+                        title: 'Errores en el formulario',
+                        html: errors.join('<br>'),
+                        icon: 'error'
+                    });
+                    return false;
+                }
+
+                // submit if all good
+                this.submit();
+            });
+        });
     </script>
 @endpush

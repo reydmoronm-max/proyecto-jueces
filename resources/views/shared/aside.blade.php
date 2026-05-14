@@ -54,6 +54,12 @@
                                 <span class="item-name">Usuarios</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('visitas.*') ? 'active' : '' }}" href="{{ route('visitas.index') }}">
+                                <i class="icon ri-calendar-fill"></i>
+                                <span class="item-name">Visitas</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

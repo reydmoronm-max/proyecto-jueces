@@ -5,31 +5,45 @@
                 <h5 class="modal-title">Registrar Visita</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('visitas.store') }}">
+            <form id="formRegistrarVisita" method="POST" action="{{ route('visitas.store') }}">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
                         <div class="form-floating">
-                            <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
+                            <input id="nombre" type="text" name="nombre" class="form-control" placeholder="Nombre" value="{{ old('nombre') }}" required maxlength="50">
                             <label for="nombre">Nombre</label>
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="form-floating">
-                            <input type="text" name="apellido" class="form-control" placeholder="Apellido" required>
+                            <input id="apellido" type="text" name="apellido" class="form-control" placeholder="Apellido" value="{{ old('apellido') }}" required maxlength="50">
                             <label for="apellido">Apellido</label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <div class="form-floating">
-                            <input type="text" name="cedula" class="form-control" placeholder="Cédula" required>
-                            <label for="cedula">Cédula</label>
+                        <div class="row g-2">
+                            <div class="col-3">
+                                <select id="cedula_tipo" name="cedula_tipo" class="form-select">
+                                    <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
+                                    <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input id="cedula" type="text" name="cedula" class="form-control" placeholder="Cédula" value="{{ old('cedula') }}" required>
+                                    <label for="cedula">Cédula</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label for="proposito" class="form-label">Propósito</label>
+                        <textarea id="proposito" name="proposito" class="form-control" rows="4" placeholder="Propósito" required>{{ old('proposito') }}</textarea>
+                    </div>
+                    <div class="mb-3">
                         <div class="form-floating">
-                            <input type="text" name="proposito" class="form-control" placeholder="Propósito">
-                            <label for="proposito">Propósito</label>
+                            <input id="de_parte" type="text" name="de_parte" class="form-control" placeholder="De parte" value="{{ old('de_parte') }}">
+                            <label for="de_parte">De parte</label>
                         </div>
                     </div>
                 </div>
