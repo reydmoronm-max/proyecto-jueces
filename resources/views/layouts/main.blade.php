@@ -32,6 +32,8 @@
 
         {{-- Remix Icons --}}
         <link href="{{ asset('vendor/remixicon/remixicon.css') }}" rel="stylesheet">
+
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         
     </head>
     <body class="fase-animada">

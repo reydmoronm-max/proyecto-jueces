@@ -10,9 +10,16 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                 <div class="header-title">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarVisita">
-                        <i class=" ri-add-fill"></i> Registrar Visita
-                    </button>
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarVisita">
+                                <i class=" ri-add-fill"></i> Registrar Visita
+                            </button>
+                            <button class="btn btn-info ms-2" id="btn-iniciar-tour" style="color: white;">
+                                <i class="ri-question-line"></i> Ver Tutorial
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 </div>
                 <div class="card-body p-0">
@@ -188,6 +195,81 @@
                 // submit if all good
                 this.submit();
             });
+        });
+    </script>
+    <script>
+        document.getElementById('btn-iniciar-tour').addEventListener('click', function() {
+            const driverObj = window.driver({
+                showProgress: true,
+                animate: true,
+                // Traduciendo los botones al español
+                doneBtnText: 'Entendido',
+                nextBtnText: 'Siguiente',
+                prevBtnText: 'Anterior',
+                steps: [
+                    {
+                        element: '[data-bs-target="#modalRegistrarVisita"]',
+                        popover: {
+                            title: '1. Registrar Visita',
+                            description: 'Este es el botón principal. Aquí debes hacer clic cuando llegue un visitante a la UPTYAB.'
+                        }
+                    },
+                    {
+                        element: '#modalRegistrarVisita .modal-content',
+                        popover: {
+                            title: '2. El Formulario',
+                            description: 'Aquí debes llenar todos los datos de la persona. Voy a mostrarte los campos clave.'
+                        },
+                        onHighlightStarted: (element) => {
+                            // Magia: Abrimos el modal automáticamente con jQuery
+                            $('#modalRegistrarVisita').modal('show');
+                        }
+                    },
+                    {
+                        element: '#nombre',
+                        popover: {
+                            title: '3. Nombre y Apellido',
+                            description: 'Recuerda que estos campos validan que no se ingresen números, solo letras (mínimo 3 caracteres).'
+                        }
+                    },
+                    {
+                        element: '#cedula',
+                        popover: {
+                            title: '4. Documento de Identidad',
+                            description: 'Verifica primero si es Venezolano (V) o Extranjero (E) en el selector de al lado antes de escribir los números.'
+                        }
+                    },
+                    {
+                        element: '#proposito',
+                        popover: {
+                            title: '5. Motivo de la visita',
+                            description: 'Sé específico. Este campo es obligatorio y exige al menos 5 caracteres de descripción.'
+                        }
+                    },
+                    {
+                        element: '#de_parte',
+                        popover: {
+                            title: '6. De parte de quién o que Institución',
+                            description: 'Especifica de quién o de qué institución es la visita.'
+                        }
+                    },
+                    {
+                        element: '#formRegistrarVisita button[type="submit"]',
+                        popover: {
+                            title: '7. Finalizar',
+                            description: 'Una vez que todo esté listo y sin errores, haz clic aquí para guardar la visita en el sistema.'
+                        }
+                    }
+                ],
+                onDestroyStarted: () => {
+                    // Si el usuario cierra el tour a la mitad, cerramos el modal para que no quede estorbando
+                    $('#modalRegistrarVisita').modal('hide');
+                    driverObj.destroy();
+                }
+            });
+
+            // Iniciar el recorrido
+            driverObj.drive();
         });
     </script>
 @endpush
