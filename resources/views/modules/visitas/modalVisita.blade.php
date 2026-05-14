@@ -40,6 +40,12 @@
                         <label for="proposito" class="form-label">Propósito</label>
                         <textarea id="proposito" name="proposito" class="form-control" rows="4" placeholder="Propósito" required>{{ old('proposito') }}</textarea>
                     </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input id="de_parte" type="text" name="de_parte" class="form-control" placeholder="De parte" value="{{ old('de_parte') }}">
+                            <label for="de_parte">De parte</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

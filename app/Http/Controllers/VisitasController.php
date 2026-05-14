@@ -16,7 +16,7 @@ class VisitasController extends Controller
         $paginaTitulo = 'Visitas';
         $paginaSubtitulo = 'Listado de visitas registradas.';
 
-        $items = Visita::orderBy('created_at', 'desc')->get();
+        $items = Visita::with('persona')->orderBy('created_at', 'desc')->get();
         return view('modules.visitas.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'items'));
     }
 
@@ -31,14 +31,28 @@ class VisitasController extends Controller
             'cedula_tipo' => ['required', 'in:V,E'],
             'cedula'      => ['required', 'digits_between:7,8'],
             'proposito'   => ['required', 'string', 'min:5', 'max:255'],
+            'de_parte'    => ['nullable', 'string', 'max:255'],
         ]);
 
+        // find or create persona
+        $persona = \App\Models\Persona::firstOrCreate(
+            ['cedula' => $request->cedula],
+            [
+                'cedula_tipo' => $request->cedula_tipo,
+                'nombres' => $request->nombre,
+                'apellidos' => $request->apellido,
+            ]
+        );
+
+        // update persona names if changed
+        if ($persona->nombres !== $request->nombre || $persona->apellidos !== $request->apellido) {
+            $persona->update(['nombres' => $request->nombre, 'apellidos' => $request->apellido]);
+        }
+
         Visita::create([
-            'nombre'      => $request->nombre,
-            'apellido'    => $request->apellido,
-            'cedula_tipo' => $request->cedula_tipo,
-            'cedula'      => $request->cedula,
-            'proposito'   => $request->proposito,
+            'persona_id' => $persona->id,
+            'proposito'  => $request->proposito,
+            'de_parte'   => $request->de_parte,
         ]);
 
         return to_route('visitas.index')->with('success', 'Visita registrada correctamente.');
@@ -49,7 +63,7 @@ class VisitasController extends Controller
      */
     public function tbody()
     {
-        $items = Visita::orderBy('created_at', 'desc')->get();
+        $items = Visita::with('persona')->orderBy('created_at', 'desc')->get();
         return view('modules.visitas.tbody', compact('items'));
     }
 

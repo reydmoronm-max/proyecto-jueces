@@ -22,6 +22,7 @@
                             <tr>
                                 <th>Nombre y Apellido</th>
                                 <th>Cédula</th>
+                                <th>De parte</th>
                                 <th>Propósito</th>
                                 <th>Fecha y Hora</th>
                                 <th>Acciones</th>

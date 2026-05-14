@@ -2,14 +2,17 @@
     <tr>
         <td>
             <div class="d-flex align-items-center">
-                <h6>{{ $item->nombre }} {{ $item->apellido }}</h6>
+                <h6>{{ optional($item->persona)->nombres }} {{ optional($item->persona)->apellidos }}</h6>
             </div>
         </td>
         <td>
             <h6>
-                <span class="badge bg-primary me-1">{{ $item->cedula_tipo }}</span>
-                {{ $item->cedula }}
+                <span class="badge {{ optional($item->persona)->cedula_tipo == 'V' ? 'bg-primary' : 'bg-warning text-dark' }} me-1">{{ optional($item->persona)->cedula_tipo }}</span>
+                {{ optional($item->persona)->cedula }}
             </h6>
+        </td>
+        <td>
+            <h6>{{ $item->de_parte }}</h6>
         </td>
         <td>
             <button class="btn btn-sm btn-info" style="background-color: #007bff; border-color: #007bff;" onclick="mostrarProposito({{ $item->id }})">

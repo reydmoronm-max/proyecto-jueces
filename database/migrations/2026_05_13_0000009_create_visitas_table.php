@@ -13,10 +13,12 @@ class CreateVisitasTable extends Migration
     {
         Schema::create('visitas', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('apellido');
-            $table->string('cedula');
+            $table->unsignedBigInteger('persona_id');
+            $table->text('proposito');
+            $table->string('de_parte')->nullable();
             $table->timestamps();
+
+            $table->foreign('persona_id')->references('id')->on('personas')->onDelete('cascade');
         });
     }
 
