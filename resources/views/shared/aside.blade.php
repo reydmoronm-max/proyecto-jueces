@@ -44,16 +44,18 @@
                         {{-- <li><hr class="hr-horizontal"></li> --}}
                         <li class="nav-item static-item">
                             <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                                <span class="default-icon">Administrador</span>
+                                <span class="default-icon">{{ Auth::user()->rol ?? 'Usuario' }}</span>
                                 <span class="mini-icon">-</span>
                             </a>
                         </li>
+                        @if(Auth::user()->rol === 'Administrador')
                         <li class="nav-item">
                             <a class="nav-link @yield('usuariosActive')" href="{{ route('usuarios.index') }}">
                                 <i class="icon ri-user-fill"></i>
                                 <span class="item-name">Usuarios</span>
                             </a>
                         </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('visitas.*') ? 'active' : '' }}" href="{{ route('visitas.index') }}">
                                 <i class="icon ri-calendar-fill"></i>
