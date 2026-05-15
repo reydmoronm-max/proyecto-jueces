@@ -7,7 +7,24 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form class="needs-validation" novalidate id="formDenuncia" action="{{ route('denuncias.store') }}" autocomplete="off" method="POST">
+                            @push('scripts')
+                            <script>
+                                @if ($errors->any())
+                                    var modal = new bootstrap.Modal(document.getElementById('modalRegistrarDenuncia'));
+                                    modal.show();
+                                @endif
+                            </script>
+                            @endpush
                             @csrf
                             <section class="row g-3">                            
                                 <div class="mb-1">
@@ -54,6 +71,13 @@
                                     <div class="form-floating">
                                         <input type="text" class="form-control bg-white" name="direccion" id="direccion" placeholder="Dirección" required>
                                         <label for="direccion">Dirección</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control bg-white" name="motivo_denuncia" id="motivo_denuncia" placeholder="Motivo de denuncia" required>
+                                        <label for="motivo_denuncia">Motivo de denuncia</label>
                                     </div>
                                 </div>
 

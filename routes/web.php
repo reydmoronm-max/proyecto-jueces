@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/tbody-visitas', [VisitasController::class, 'tbody'])->name('tbody.visitas');
 
     // Rutas para denuncias
-    Route::resource('/denuncias', DenunciasController::class);
+    Route::resource('denuncias', DenunciasController::class);
 
 
 
