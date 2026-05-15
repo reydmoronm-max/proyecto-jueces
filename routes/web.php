@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DenunciasController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisitasController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,9 @@ Route::middleware('auth')->group(function() {
     // Rutas para gestión de visitas
     Route::resource('/visitas', VisitasController::class);
     Route::get('/tbody-visitas', [VisitasController::class, 'tbody'])->name('tbody.visitas');
+
+    // Rutas para denuncias
+    Route::resource('/denuncias', DenunciasController::class);
 
 
 

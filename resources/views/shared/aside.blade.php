@@ -62,6 +62,12 @@
                                 <span class="item-name">Visitas</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link @yield('denunciasActive')" href="{{ route('denuncias.index') }}">
+                                <i class="icon  ri-ticket-2-fill"></i>
+                                <span class="item-name">Denuncias</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
