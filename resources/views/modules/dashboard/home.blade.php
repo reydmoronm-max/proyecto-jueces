@@ -186,7 +186,7 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('vendor/echarts/echarts.min.js') }}"></script>
+<script src="{{ asset('vendor/echart/echarts.min.js') }}"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script> -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
