@@ -12,7 +12,15 @@ class CitacionesController extends Controller
      */
     public function index()
     {
-        //
+        $titulo = 'Citaciones';
+        $paginaTitulo = 'Citaciones';
+        $paginaSubtitulo = 'Listado de citaciones registradas';
+        $citacionesActive = 'active';
+        
+        // Obtener citaciones con expediente y ordenados por fecha de creación descendente
+        $citaciones = Citaciones::with('expediente')->orderBy('created_at', 'desc')->get();
+
+        return view('modules.citaciones.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'citacionesActive', 'citaciones'));
     }
 
     /**

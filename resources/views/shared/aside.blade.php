@@ -68,6 +68,12 @@
                                 <span class="item-name">Denuncias</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link @yield('citacionesActive')" href="{{ route('citaciones.index') }}">
+                                <i class="icon ri-alarm-fill"></i>
+                                <span class="item-name">Citaciones</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
