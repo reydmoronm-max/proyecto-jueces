@@ -1,15 +1,13 @@
 @extends('layouts.main')
 
 @section('titulo', $titulo)
-@section('home', $home)
-    
 @section('paginaTitulo', $paginaTitulo)
 @section('paginaSubtitulo', $paginaSubtitulo)
 
 @section('contenido')
 
 <div class="conatiner-fluid content-inner mt-n5 py-0">
-    <div class="row">
+    <!-- <div class="row">
     <div class="col-md-12 col-lg-12">
         <div class="row row-cols-1">
             <div class="overflow-hidden d-slider1 ">
@@ -124,8 +122,164 @@
                 <div class="swiper-button swiper-button-prev"></div>
             </div>
         </div>
-    </div>
+    </div> -->
+
+    <div class="row">
+        <!-- Casos más frecuentes -->
+        <div class="col-md-12 col-lg-6">
+            <div class="card" data-aos="fade-up" data-aos-delay="800">
+                <div class="flex-wrap card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Casos más frecuentes</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="chart-casos-frecuentes" style="min-height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ciudadanos reincidentes -->
+        <div class="col-md-12 col-lg-6">
+            <div class="card" data-aos="fade-up" data-aos-delay="900">
+                <div class="flex-wrap card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Ciudadanos reincidentes</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="chart-ciudadanos-reincidentes" style="min-height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Denuncias frecuentes -->
+        <div class="col-md-12 col-lg-6">
+            <div class="card" data-aos="fade-up" data-aos-delay="1000">
+                <div class="flex-wrap card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Frecuencias de las Denuncias</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="chart-denuncias-frecuentes" style="min-height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sectores frecuentes -->
+        <div class="col-md-12 col-lg-6">
+            <div class="card" data-aos="fade-up" data-aos-delay="1100">
+                <div class="flex-wrap card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Sectores frecuentes</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="chart-sectores-frecuentes" style="min-height: 350px;"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @endsection
+
+@push('scripts')
+<script src="{{ asset('vendor/echarts/echarts.min.js') }}"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script> -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 1. Casos más frecuentes
+        const chartCasos = echarts.init(document.querySelector('#chart-casos-frecuentes'));
+        chartCasos.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: { type: 'value', boundaryGap: [0, 0.01] },
+            yAxis: {
+                type: 'category',
+                data: ['Robo', 'Asalto', 'Violencia Doméstica', 'Vandalismo', 'Otros']
+            },
+            series: [{
+                name: 'Frecuencia',
+                type: 'bar',
+                data: [182, 234, 290, 104, 131],
+                itemStyle: { color: '#3a57e8' }
+            }]
+        });
+
+        // 2. Ciudadanos reincidentes
+        const chartReincidentes = echarts.init(document.querySelector('#chart-ciudadanos-reincidentes'));
+        chartReincidentes.setOption({
+            tooltip: { trigger: 'item' },
+            legend: { top: '5%', left: 'center' },
+            series: [{
+                name: 'Reincidencias',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
+                label: { show: false, position: 'center' },
+                emphasis: { label: { show: true, fontSize: 20, fontWeight: 'bold' } },
+                labelLine: { show: false },
+                data: [
+                    { value: 1048, name: '1 vez' },
+                    { value: 735, name: '2 veces' },
+                    { value: 580, name: '3 veces' },
+                    { value: 484, name: '4+ veces' }
+                ]
+            }]
+        });
+
+        // 3. Denuncias frecuentes
+        const chartDenuncias = echarts.init(document.querySelector('#chart-denuncias-frecuentes'));
+        chartDenuncias.setOption({
+            tooltip: { trigger: 'axis' },
+            xAxis: {
+                type: 'category',
+                data: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']
+            },
+            yAxis: { type: 'value' },
+            series: [{
+                data: [120, 200, 150, 80, 70, 110, 130],
+                type: 'line',
+                smooth: true,
+                areaStyle: {},
+                itemStyle: { color: '#08b1ba' }
+            }]
+        });
+
+        // 4. Sectores frecuentes
+        const chartSectores = echarts.init(document.querySelector('#chart-sectores-frecuentes'));
+        chartSectores.setOption({
+            tooltip: { trigger: 'item' },
+            series: [{
+                name: 'Sectores',
+                type: 'pie',
+                radius: '50%',
+                data: [
+                    { value: 40, name: 'Sector Norte' },
+                    { value: 30, name: 'Sector Sur' },
+                    { value: 20, name: 'Sector Este' },
+                    { value: 10, name: 'Sector Oeste' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        });
+
+        window.addEventListener('resize', () => {
+            chartCasos.resize();
+            chartReincidentes.resize();
+            chartDenuncias.resize();
+            chartSectores.resize();
+        });
+    });
+</script>
+</div>
+@endpush
