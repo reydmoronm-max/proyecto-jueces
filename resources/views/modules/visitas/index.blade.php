@@ -25,7 +25,7 @@
                                 <th>De parte</th>
                                 <th>Propósito</th>
                                 <th>Fecha y Hora</th>
-                                <th>Acciones</th>
+                                <th hidden>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-visitas">

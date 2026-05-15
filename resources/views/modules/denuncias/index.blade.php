@@ -25,30 +25,33 @@
                                 <th>Denunciante</th>
                                 <th>Motivo</th>
                                 <th>Estado</th>
-                                <th>Cita</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
+                        @foreach($expedientes as $expediente)
                             <tr>
-                                <td>Fecha</td>
-                                <td>Juan Pérez</td>
-                                <td>Deuda</td>
-                                <td>Abierto</td>
+                                <td>{{ $expediente->created_at->format('d/m/Y H:i') }}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary">C</button>
+                                    @php
+                                        $denunciante = $expediente->personas->first();
+                                    @endphp
+                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
                                 </td>
+                                <td>{{ $expediente->motivo_denuncia }}</td>
+                                <td><span class="badge bg-warning">{{ ucfirst($expediente->estatus) }}</span></td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-secondary">
-                                            C
+                                        <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
+                                            <i class="ri-eye-fill"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-warning">
-                                            E
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCita" onclick="agregar_id_expediente({{ $expediente->id }})">
+                                            <i class="ri-calendar-2-fill"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -59,6 +62,8 @@
 </div>
 
 @include('modules.denuncias.modalDenuncia')
+@include('modules.denuncias.modalConsultarDenuncia')
+@include('modules.denuncias.modalCita')
 
 {{-- <style>
     #modalVerProposito .modal-dialog { max-width: 900px; }
@@ -94,15 +99,39 @@
 
 @push('scripts')
     <script>
-        @if (session('success')) 
+        function consultarDenuncia(id) {
+            $.ajax({
+                url: 'denuncias/' + id,
+                type: 'GET',
+                success: function(data) {
+                    $('#view-cedula_tipo').val(data.cedula_tipo);
+                    $('#view-cedula').val(data.cedula);
+                    $('#view-nombres').val(data.nombres);
+                    $('#view-apellidos').val(data.apellidos);
+                    $('#view-telefono').val(data.telefono);
+                    $('#view-direccion').val(data.direccion);
+                    $('#view-motivo_denuncia').val(data.motivo_denuncia);
+                    $('#view-requirente').val(data.requirente);
+                    $('#view-receptor').val(data.receptor);
+                    $('#view-acuerdos').val(data.acuerdos);
 
+                    var modal = new bootstrap.Modal(document.getElementById('modalConsultarDenuncia'));
+                    modal.show();
+                }
+            });
+        }
+
+        function agregar_id_expediente(id){
+            $('#cita_expediente_id').val(id);
+        }
+
+        @if (session('success')) 
             Swal.fire({
                 title: '¡Éxito!',
                 text: '{{ session('success') }}',
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             });
-            
         @endif
     </script>
 @endpush

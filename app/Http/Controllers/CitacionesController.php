@@ -28,7 +28,11 @@ class CitacionesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $data = $request->all();
+        Citaciones::create($data);
+
+        return redirect()->route('denuncias.index')->with('success', 'Citación creada exitosamente.');
     }
 
     /**

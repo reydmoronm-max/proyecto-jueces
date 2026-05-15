@@ -7,31 +7,14 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
             <form class="needs-validation" novalidate id="formDenuncia" action="{{ route('denuncias.store') }}" autocomplete="off" method="POST">
-                            @push('scripts')
-                            <script>
-                                @if ($errors->any())
-                                    var modal = new bootstrap.Modal(document.getElementById('modalRegistrarDenuncia'));
-                                    modal.show();
-                                @endif
-                            </script>
-                            @endpush
                             @csrf
                             <section class="row g-3">                            
                                 <div class="mb-1">
                                     <div class="row g-2">
                                         <div class="col-3">
                                             <div class="form-floating">
-                                            <select id="cedula_tipo" name="cedula_tipo" class="form-select">
+                                            <select id="cedula_tipo" name="cedula_tipo" class="form-select" required>
                                                 <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
                                                 <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
                                             </select>
@@ -83,17 +66,17 @@
 
                                 <div class="col-md-12">
                                     <label for="requirente">El requirente expone</label>
-                                    <textarea name="requirente" id="requirente" class="form-control" rows="3"></textarea>
+                                    <textarea name="requirente" id="requirente" class="form-control" rows="3" required></textarea>
                                 </div>
 
                                 <div class="col-md-12">
                                     <label for="receptor">El receptor expone</label>
-                                    <textarea name="receptor" id="receptor" class="form-control" rows="3"></textarea>
+                                    <textarea name="receptor" id="receptor" class="form-control" rows="3" required></textarea>
                                 </div>
 
                                 <div class="col-md-12 mb-3">
                                     <label for="acuerdos">Acuerdos</label>
-                                    <textarea name="acuerdos" id="acuerdos" class="form-control" rows="3"></textarea>
+                                    <textarea name="acuerdos" id="acuerdos" class="form-control" rows="3" required></textarea>
                                 </div>
 
                             </section>

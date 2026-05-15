@@ -22,7 +22,12 @@ class DenunciasController extends Controller
         $paginaSubtitulo = 'Listado de denuncias registradas';
         $denunciasActive = 'active';
         
-        return view('modules.denuncias.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'denunciasActive'));
+        // Obtener expedientes con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
+        $expedientes = \App\Models\Expediente::with(['personas' => function($q) {
+            $q->wherePivot('rol', 'denunciante');
+        }])->orderBy('created_at', 'desc')->get();
+
+        return view('modules.denuncias.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'denunciasActive', 'expedientes'));
     }
 
     /**
@@ -38,7 +43,7 @@ class DenunciasController extends Controller
      */
     public function store(Request $request)
     {
-        // Validación básica (puedes ajustarla según tus necesidades)
+        // Validación básica
         $request->validate([
             'cedula_tipo' => 'required',
             'cedula' => 'required',
@@ -68,20 +73,20 @@ class DenunciasController extends Controller
             // 2. Guardar expediente
             $expediente = Expediente::create([
                 'motivo_denuncia' => $request->motivo_denuncia,
-                'estatus' => 'Abierto', // Puedes ajustar el estatus según tu lógica
+                'estatus' => 'abierto',
             ]);
 
-            // 3. Relacionar persona y expediente en involucrados
+            // 3. Relacionar persona y expediente en tabla involucrados
             Involucrados::create([
                 'persona_id' => $persona->id,
                 'expediente_id' => $expediente->id,
-                'rol' => 'denunciante', // Puedes ajustar el rol si lo necesitas
+                'rol' => 'denunciante',
             ]);
 
             // 4. Guardar acta
             $contenido = "Requirente: " . ($request->requirente ?? '') . "\n" .
-                         "Receptor: " . ($request->receptor ?? '') . "\n" .
-                         "Acuerdos: " . ($request->acuerdos ?? '');
+                        "Receptor: " . ($request->receptor ?? '') . "\n" .
+                        "Acuerdos: " . ($request->acuerdos ?? '');
 
             Actas::create([
                 'expediente_id' => $expediente->id,
@@ -101,9 +106,37 @@ class DenunciasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $expediente = \App\Models\Expediente::with([
+            'personas' => function($q) {
+                $q->wherePivot('rol', 'denunciante');
+            },
+            'actas'
+        ])->findOrFail($id);
+
+        $denunciante = $expediente->personas->first();
+        $acta = $expediente->actas->first();
+
+        return response()->json([
+            'cedula_tipo' => $denunciante->cedula_tipo ?? '',
+            'cedula' => $denunciante->cedula ?? '',
+            'nombres' => $denunciante->nombres ?? '',
+            'apellidos' => $denunciante->apellidos ?? '',
+            'telefono' => $denunciante->telefono ?? '',
+            'direccion' => $denunciante->direccion ?? '',
+            'motivo_denuncia' => $expediente->motivo_denuncia,
+            'requirente' => $acta ? $this->extraerCampoActa($acta->contenido, 'Requirente') : '',
+            'receptor' => $acta ? $this->extraerCampoActa($acta->contenido, 'Receptor') : '',
+            'acuerdos' => $acta ? $this->extraerCampoActa($acta->contenido, 'Acuerdos') : '',
+        ]);
+    }
+
+    // Helper para extraer los campos del contenido del acta
+    private function extraerCampoActa($contenido, $campo)
+    {
+        preg_match('/' . $campo . ': (.*?)(\\n|$)/', $contenido, $matches);
+        return $matches[1] ?? '';
     }
 
     /**

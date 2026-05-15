@@ -10,7 +10,7 @@ class Citaciones extends Model
 
     protected $fillable = [
         'expediente_id',
-        'numero_citacion',
+        'hora_citacion',
         'fecha_citacion',
         'asistio',
     ];

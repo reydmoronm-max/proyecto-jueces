@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CitacionesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DenunciasController;
 use App\Http\Controllers\UsersController;
@@ -31,6 +32,10 @@ Route::middleware('auth')->group(function() {
 
     // Rutas para denuncias
     Route::resource('denuncias', DenunciasController::class);
+    Route::get('/denuncias/{id}', [DenunciasController::class, 'show'])->name('denuncias.show');
+
+    // Rutas para citaciones
+    Route::resource('citaciones', CitacionesController::class);
 
 
 

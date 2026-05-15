@@ -23,7 +23,7 @@
         <td>
             <h6>{{ $item->created_at->format('d/m/Y h:i A') }}</h6>
         </td>
-        <td>
+        <td hidden>
             <form id="delete-form-{{ $item->id }}" action="{{ route('visitas.destroy', $item->id) }}" method="POST" style="display:none;">
                 @csrf
                 @method('DELETE')

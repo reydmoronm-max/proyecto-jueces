@@ -15,4 +15,9 @@ class Expediente extends Model
     {
         return $this->belongsToMany(Persona::class, 'involucrados');
     }
+
+    public function actas()
+    {
+        return $this->hasMany(\App\Models\Actas::class, 'expediente_id');
+    }
 }

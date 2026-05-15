@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('citaciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('expediente_id')->constrained('expedientes')->onDelete('cascade');
-            $table->string('numero_citacion');
-            $table->dateTime('fecha_citacion');
+            // $table->string('numero_citacion');
+            $table->string('hora_citacion');
+            $table->string('fecha_citacion');
             $table->string('asistio')->nullable(); // Puede ser 'sí', 'no' o null si aún no se ha registrado la asistencia
             $table->timestamps();
         });
