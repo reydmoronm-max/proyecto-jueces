@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expedientes', function (Blueprint $table) {
+        Schema::create('involucrados', function (Blueprint $table) {
             $table->id();
-            // $table->string('codigo_expediente')->unique(); //Este código aún no sé cómmo hacerlo, pero me imagino que no debe ser manual, asi que por ahora lo dejo fuera.
-            $table->text('motivo_denuncia');
-            $table->enum('estatus', ['abierto', 'cerrado'])->default('abierto');
+            $table->foreignId('persona_id')->constrained('personas')->onDelete('cascade');
+            $table->foreignId('expediente_id')->constrained('expedientes')->onDelete('cascade');
+            $table->enum('rol', ['denunciante', 'denunciado'])->default('denunciante');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expedientes');
+        Schema::dropIfExists('involucrados');
     }
 };

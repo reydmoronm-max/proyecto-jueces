@@ -25,4 +25,9 @@ class Persona extends Model
     {
         return $this->hasMany(Visita::class, 'persona_id');
     }
+
+    public function expedientes()
+    {
+        return $this->belongsToMany(Expediente::class, 'involucrados');
+    }
 }

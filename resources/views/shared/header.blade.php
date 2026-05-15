@@ -17,7 +17,7 @@
                     
                     
                     
-                    <h4 class="logo-title">Sistema</h4>
+                    <h4 class="logo-title">SGAC</h4>
                 </a>
                 <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                     <i class="icon">
@@ -44,6 +44,22 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="mb-2 navbar-nav ms-auto align-items-center navbar-list mb-lg-0">
+                    {{-- Color Mode Toggle --}}
+                    <li class="nav-item dropdown me-2">
+                        <div class="btn btn-border active" data-setting="color-mode" data-name="color" data-value="light">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor" d="M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z" />
+                            </svg>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown me-2">
+                        <div class="btn btn-border" data-setting="color-mode" data-name="color" data-value="dark">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor" d="M9,2C7.95,2 6.95,2.16 6,2.46C10.06,3.73 13,7.5 13,12C13,16.5 10.06,20.27 6,21.54C6.95,21.84 7.95,22 9,22A10,10 0 0,0 19,12A10,10 0 0,0 9,2Z" />
+                            </svg>
+                        </div>
+                    </li>
+                    {{-- End Color Mode Toggle --}}
                     <li class="nav-item dropdown">
                     <a href="#"  class="nav-link" id="notification-drop" data-bs-toggle="dropdown" style="pointer-events: none;">
                         <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

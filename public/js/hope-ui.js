@@ -461,8 +461,9 @@ window.addEventListener('load', function () {
   Array.from(date_flatpickr, (elem) => {
     if (typeof flatpickr !== typeof undefined) {
       flatpickr(elem, {
+        locale: "Spanish",
         minDate: "today",
-        dateFormat: "Y-m-d",
+        dateFormat: "d-m-Y",
       })
     }
   })
@@ -471,9 +472,10 @@ window.addEventListener('load', function () {
   Array.from(range_flatpicker, (elem) => {
     if (typeof flatpickr !== typeof undefined) {
       flatpickr(elem, {
+        locale: "Spanish",
         mode: "range",
         minDate: "today",
-        dateFormat: "Y-m-d",
+        dateFormat: "d-m-Y",
       })
     }
   })
@@ -482,9 +484,10 @@ window.addEventListener('load', function () {
   Array.from(wrap_flatpicker, (elem) => {
     if (typeof flatpickr !== typeof undefined) {
       flatpickr(elem, {
+        locale: "Spanish",
         wrap: true,
         minDate: "today",
-        dateFormat: "Y-m-d",
+        dateFormat: "d-m-Y",
       })
     }
   })
@@ -493,6 +496,7 @@ window.addEventListener('load', function () {
   Array.from(time_flatpickr, (elem) => {
     if (typeof flatpickr !== typeof undefined) {
       flatpickr(elem, {
+        locale: "Spanish",
         enableTime: true,
         noCalendar: true,
         dateFormat: "H:i",
@@ -504,9 +508,10 @@ window.addEventListener('load', function () {
   Array.from(inline_flatpickr, (elem) => {
     if (typeof flatpickr !== typeof undefined) {
       flatpickr(elem, {
+        locale: "Spanish",
         inline: true,
         minDate: "today",
-        dateFormat: "Y-m-d",
+        dateFormat: "d-m-Y",
       })
     }
   })

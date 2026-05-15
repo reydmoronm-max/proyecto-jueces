@@ -15,7 +15,7 @@
                     
                     
                     
-                    <h4 class="logo-title">Sistema</h4>
+                    <h4 class="logo-title">SGAC</h4>
                 </a>
                 <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                     <i class="icon">
@@ -60,6 +60,18 @@
                             <a class="nav-link {{ request()->routeIs('visitas.*') ? 'active' : '' }}" href="{{ route('visitas.index') }}">
                                 <i class="icon ri-calendar-fill"></i>
                                 <span class="item-name">Visitas</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @yield('denunciasActive')" href="{{ route('denuncias.index') }}">
+                                <i class="icon  ri-ticket-2-fill"></i>
+                                <span class="item-name">Denuncias</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @yield('citacionesActive')" href="{{ route('citaciones.index') }}">
+                                <i class="icon ri-alarm-fill"></i>
+                                <span class="item-name">Citaciones</span>
                             </a>
                         </li>
                     </ul>
