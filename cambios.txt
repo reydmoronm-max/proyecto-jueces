@@ -1,0 +1,35 @@
+(listo) En dashboard: colocar sectores frecuentes de denuncias, y eliminar casos (o denuncias) frecuentes
+///R= El dashboard ya tiene sectores frecuentes xd. pero se quito el cuadro de casos frecuentes
+
+(listo) en la parte de usuario, cambiar ícono por uno más intuitivo
+///R= el icono de candado fue cambiado por un lapiz.///
+
+(listo) en el campo de agregar usuario, en nombre y apellido no debería dejar ingresar números (solo letras)
+///R= los campos nombre y apellido solo permiten colocar letras. no permite numeros ni caracteres especiales///
+
+(cambio adicional)En el modulo de visitas tambien ocurria lo mismo que en el campo de agregar usuario
+///R= el campo nombre y apellido solo permite letras, el campo de cedula solo permite numeros hasta 8 caracteres maximo///
+
+(listo) en visitas, debe haber un botón para editar las visitas, por si hay algún error
+///R= se agrego un boton para editar las visitas, intuitivo, ya que es el mismo icono que tiene editar usuario///
+
+
+X en registrar visitas el sistema no puede registrar el mismo instante de registro, (el mismo minuto)
+
+
+X en el dashboard hay que colocar un botón (alerta) de las citas agendadas para hoy
+
+
+X debe haber una alerta que indique que la cita no puede modificarse después de 3 veces, en la parte de citas
+
+
+X el sistema debe permitir cambiar la fecha de la citación
+
+
+X hay que colocar quien está solicitando el cambio de fecha para la cita, y el motivo.
+
+
+X el en caso del denunciado deberían capturar sus datos en la visita...
+
+
+X el sistema también debe capturar la cédula de la persona que atiende, es decir, un juez de paz, y plasmar esos datos

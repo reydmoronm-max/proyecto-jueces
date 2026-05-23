@@ -12,7 +12,7 @@
         </td>
         <td>
             <button href="#" onclick="agregar_id_usuario({{ $item->id }})" class="btn btn-sm btn-primary" data-bs-toggle="modal" title="Cambiar contraseña" data-bs-target="#modalCambiarPassword">
-                <i class="ri-lock-password-fill"></i>
+                <i class="ri-pencil-fill"></i>
             </button>
         </td>
         <td>

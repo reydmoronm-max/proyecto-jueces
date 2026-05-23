@@ -23,13 +23,9 @@
         <td>
             <h6>{{ $item->created_at->format('d/m/Y h:i A') }}</h6>
         </td>
-        <td hidden>
-            <form id="delete-form-{{ $item->id }}" action="{{ route('visitas.destroy', $item->id) }}" method="POST" style="display:none;">
-                @csrf
-                @method('DELETE')
-            </form>
-            <button class="btn btn-sm btn-danger" onclick="confirmDeleteVisita({{ $item->id }})">
-                <i class="ri-delete-bin-6-fill"></i>
+        <td>
+            <button class="btn btn-sm btn-warning" onclick="editarVisita({{ $item->id }})" title="Editar visita">
+                <i class="ri-edit-fill"></i>
             </button>
         </td>
     </tr>

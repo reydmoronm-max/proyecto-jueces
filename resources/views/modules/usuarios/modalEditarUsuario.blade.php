@@ -13,14 +13,14 @@
                             <section class="row g-3">                            
                                 <div class="col-md-12">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="nombre" id="edit-nombre" placeholder="Nombre" required>
+                                        <input type="text" class="form-control bg-white" name="nombre" id="edit-nombre" placeholder="Nombre" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]+/g, '')">
                                         <label for="edit-nombre">Nombre</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="apellido" id="edit-apellido" placeholder="Apellido" required>
+                                        <input type="text" class="form-control bg-white" name="apellido" id="edit-apellido" placeholder="Apellido" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]+/g, '')">
                                         <label for="edit-apellido">Apellido</label>
                                     </div>
                                 </div>

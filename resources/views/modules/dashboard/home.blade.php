@@ -125,20 +125,6 @@
     </div> -->
 
     <div class="row">
-        <!-- Casos más frecuentes -->
-        <div class="col-md-12 col-lg-6">
-            <div class="card" data-aos="fade-up" data-aos-delay="800">
-                <div class="flex-wrap card-header d-flex justify-content-between">
-                    <div class="header-title">
-                        <h4 class="card-title">Casos más frecuentes</h4>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div id="chart-casos-frecuentes" style="min-height: 350px;"></div>
-                </div>
-            </div>
-        </div>
-
         <!-- Ciudadanos reincidentes -->
         <div class="col-md-12 col-lg-6">
             <div class="card" data-aos="fade-up" data-aos-delay="900">
@@ -191,22 +177,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // 1. Casos más frecuentes
-        const chartCasos = echarts.init(document.querySelector('#chart-casos-frecuentes'));
-        chartCasos.setOption({
-            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-            xAxis: { type: 'value', boundaryGap: [0, 0.01] },
-            yAxis: {
-                type: 'category',
-                data: ['Robo', 'Asalto', 'Violencia Doméstica', 'Vandalismo', 'Otros']
-            },
-            series: [{
-                name: 'Frecuencia',
-                type: 'bar',
-                data: [182, 234, 290, 104, 131],
-                itemStyle: { color: '#3a57e8' }
-            }]
-        });
+        
 
         // 2. Ciudadanos reincidentes
         const chartReincidentes = echarts.init(document.querySelector('#chart-ciudadanos-reincidentes'));
@@ -274,12 +245,10 @@
         });
 
         window.addEventListener('resize', () => {
-            chartCasos.resize();
             chartReincidentes.resize();
             chartDenuncias.resize();
             chartSectores.resize();
         });
     });
 </script>
-</div>
 @endpush
