@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Visita;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Models\Persona;
 
 class VisitasController extends Controller
 {
@@ -29,7 +31,7 @@ class VisitasController extends Controller
             'nombre'      => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'cedula_tipo' => ['required', 'in:V,E'],
-            'cedula'      => ['required', 'digits_between:7,8'],
+            'cedula'      => ['required', 'digits_between:7,8', Rule::unique('personas', 'cedula')->ignore($visita->persona_id)],
             'proposito'   => ['required', 'string', 'min:5', 'max:255'],
             'de_parte'    => ['nullable', 'string', 'max:255'],
         ]);
@@ -56,6 +58,47 @@ class VisitasController extends Controller
         ]);
 
         return to_route('visitas.index')->with('success', 'Visita registrada correctamente.');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $visita = Visita::with('persona')->findOrFail($id);
+        return response()->json($visita);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'nombre'      => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
+            'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
+            'cedula_tipo' => ['required', 'in:V,E'],
+            'cedula'      => ['required', 'digits_between:7,8'],
+            'proposito'   => ['required', 'string', 'min:5', 'max:255'],
+            'de_parte'    => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $visita = Visita::findOrFail($id);
+        $persona = Persona::findOrFail($visita->persona_id);
+
+        $persona->update([
+            'cedula_tipo' => $request->cedula_tipo,
+            'cedula'      => $request->cedula,
+            'nombres'     => $request->nombre,
+            'apellidos'   => $request->apellido,
+        ]);
+
+        $visita->update([
+            'proposito' => $request->proposito,
+            'de_parte'  => $request->de_parte,
+        ]);
+
+        return to_route('visitas.index')->with('success', 'Visita actualizada correctamente.');
     }
 
     /**

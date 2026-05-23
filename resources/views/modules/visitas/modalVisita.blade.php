@@ -10,13 +10,13 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <div class="form-floating">
-                            <input id="nombre" type="text" name="nombre" class="form-control" placeholder="Nombre" value="{{ old('nombre') }}" required maxlength="50">
+                            <input id="nombre" type="text" name="nombre" class="form-control" placeholder="Nombre" value="{{ old('nombre') }}" required maxlength="50" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                             <label for="nombre">Nombre</label>
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="form-floating">
-                            <input id="apellido" type="text" name="apellido" class="form-control" placeholder="Apellido" value="{{ old('apellido') }}" required maxlength="50">
+                            <input id="apellido" type="text" name="apellido" class="form-control" placeholder="Apellido" value="{{ old('apellido') }}" required maxlength="50" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                             <label for="apellido">Apellido</label>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                             </div>
                             <div class="col">
                                 <div class="form-floating">
-                                    <input id="cedula" type="text" name="cedula" class="form-control" placeholder="Cédula" value="{{ old('cedula') }}" required>
+                                    <input id="cedula" type="text" name="cedula" class="form-control" placeholder="Cédula" value="{{ old('cedula') }}" required maxlength="8" inputmode="numeric" pattern="^[0-9]{7,8}$" title="Solo números, hasta 8 dígitos" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)">
                                     <label for="cedula">Cédula</label>
                                 </div>
                             </div>

@@ -25,7 +25,7 @@
                                 <th>De parte</th>
                                 <th>Propósito</th>
                                 <th>Fecha y Hora</th>
-                                <th hidden>Acciones</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-visitas">
@@ -40,6 +40,7 @@
 </div>
 
 @include('modules.visitas.modalVisita')
+@include('modules.visitas.modalEditarVisita')
 
 <style>
     #modalVerProposito .modal-dialog { max-width: 900px; }
@@ -122,23 +123,34 @@
             modal.show();
         }
 
-        function confirmDeleteVisita(id){
-            Swal.fire({
-                title: '¿Eliminar visita?',
-                text: 'Esta acción eliminará la visita de forma permanente.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar',
-                reverseButtons: true,
-                confirmButtonColor: '#d33'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form-' + id).submit();
+        // Eliminar funcionalidad de borrado: no permitido por diseño
+        
+        function editarVisita(id) {
+            $.ajax({
+                url: '/visitas/' + id + '/edit',
+                type: 'GET',
+                success: function(visita) {
+                    $('#formEditarVisita').attr('action', '/visitas/' + visita.id);
+                    $('#edit-nombre').val(visita.persona?.nombres ?? '');
+                    $('#edit-apellido').val(visita.persona?.apellidos ?? '');
+                    $('#edit-cedula_tipo').val(visita.persona?.cedula_tipo ?? 'V');
+                    $('#edit-cedula').val(visita.persona?.cedula ?? '');
+                    $('#edit-proposito').val(visita.proposito ?? '');
+                    $('#edit-de_parte').val(visita.de_parte ?? '');
+                    var modalEl = document.getElementById('modalEditarVisita');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo cargar la visita para editar.',
+                        icon: 'error'
+                    });
                 }
             });
         }
-        
+
         // Client-side validation before submitting the registrar visita form
         $(document).ready(function(){
             $('#formRegistrarVisita').on('submit', function(e){
@@ -186,6 +198,45 @@
                 }
 
                 // submit if all good
+                this.submit();
+            });
+            $('#formEditarVisita').on('submit', function(e){
+                e.preventDefault();
+
+                var nombre = $('#edit-nombre').val().trim();
+                var apellido = $('#edit-apellido').val().trim();
+                var cedula = $('#edit-cedula').val().trim();
+                var cedulaTipo = $('#edit-cedula_tipo').val();
+                var proposito = $('#edit-proposito').val().trim();
+
+                var errors = [];
+                var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s]/;
+
+                if (nombre.length < 3 || nombre.length > 50 || invalidNameRegex.test(nombre)){
+                    errors.push('Nombre: debe tener entre 3 y 50 caracteres y solo letras.');
+                }
+                if (apellido.length < 3 || apellido.length > 50 || invalidNameRegex.test(apellido)){
+                    errors.push('Apellido: debe tener entre 3 y 50 caracteres y solo letras.');
+                }
+                if (!/^\d{7,8}$/.test(cedula)){
+                    errors.push('Cédula: debe contener solo números (7 u 8 dígitos).');
+                }
+                if (!(cedulaTipo === 'V' || cedulaTipo === 'E')){
+                    errors.push('Tipo de cédula inválido.');
+                }
+                if (proposito.length < 5){
+                    errors.push('Propósito: mínimo 5 caracteres.');
+                }
+
+                if (errors.length > 0){
+                    Swal.fire({
+                        title: 'Errores en el formulario',
+                        html: errors.join('<br>'),
+                        icon: 'error'
+                    });
+                    return false;
+                }
+
                 this.submit();
             });
         });
