@@ -31,10 +31,24 @@ class VisitasController extends Controller
             'nombre'      => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'cedula_tipo' => ['required', 'in:V,E'],
-            'cedula'      => ['required', 'digits_between:7,8', Rule::unique('personas', 'cedula')->ignore($visita->persona_id)],
+            'cedula'      => ['required', 'digits_between:7,8'],
             'proposito'   => ['required', 'string', 'min:5', 'max:255'],
             'de_parte'    => ['nullable', 'string', 'max:255'],
         ]);
+
+        // prevent duplicate visits by the same persona within the same minute
+        $existingPersona = Persona::where('cedula', $request->cedula)->first();
+        if ($existingPersona) {
+            $now = now();
+            $start = $now->copy()->startOfMinute();
+            $end = $now->copy()->endOfMinute();
+            $exists = Visita::where('persona_id', $existingPersona->id)
+                ->whereBetween('created_at', [$start, $end])
+                ->exists();
+            if ($exists) {
+                return back()->withErrors(['duplicate' => 'No puede registrar más de una visita en el mismo minuto.'])->withInput();
+            }
+        }
 
         // find or create persona
         $persona = \App\Models\Persona::firstOrCreate(
@@ -74,17 +88,18 @@ class VisitasController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // load visita and persona first so we can ignore persona on unique check
+        $visita = Visita::findOrFail($id);
+        $persona = Persona::findOrFail($visita->persona_id);
+
         $request->validate([
             'nombre'      => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'cedula_tipo' => ['required', 'in:V,E'],
-            'cedula'      => ['required', 'digits_between:7,8'],
+            'cedula'      => ['required', 'digits_between:7,8', Rule::unique('personas', 'cedula')->ignore($persona->id)],
             'proposito'   => ['required', 'string', 'min:5', 'max:255'],
             'de_parte'    => ['nullable', 'string', 'max:255'],
         ]);
-
-        $visita = Visita::findOrFail($id);
-        $persona = Persona::findOrFail($visita->persona_id);
 
         $persona->update([
             'cedula_tipo' => $request->cedula_tipo,
