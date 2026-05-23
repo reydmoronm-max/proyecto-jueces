@@ -1,0 +1,13 @@
+- En dashboard: colocar sectores frecuentes de denuncias.
+- en la parte de usuario, cambiar ícono por uno más intuitivo
+- en el campo de agregar usuario, en nombre y apellido no debería dejar ingresar números (solo letras)
+- en visitas, debe haber un botón para editar la visitar, por si hay algún error
+- en registrar visitas el sistema no puede registrar el mismo instante de registro, (el mismo minuto)
+- en el dashboard hay que colocar un botón (alerta) de las citas agendadas para hoy
+
+
+- debe haber una alerta que indique que la cita no puede modificarse después de 3 veces, en la parte de citas
+- el sistema debe permitir cambiar la fecha de la citación
+- hay que colocar quien está solicitando el cambio de fecha para la cita, y el motivo.
+- el en caso del denunciado deberían capturar sus datos en la visita...
+- el sistema también debe capturar la cédula de la persona que atiende, es decir, un juez de paz, y plasmar esos datos
