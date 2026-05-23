@@ -1,5 +1,8 @@
 - En dashboard: colocar sectores frecuentes de denuncias.
-- en la parte de usuario, cambiar ícono por uno más intuitivo
+
+(listo) en la parte de usuario, cambiar ícono por uno más intuitivo
+///R= el icono de candado fue cambiado por un lapiz.///
+
 - en el campo de agregar usuario, en nombre y apellido no debería dejar ingresar números (solo letras)
 - en visitas, debe haber un botón para editar la visitar, por si hay algún error
 - en registrar visitas el sistema no puede registrar el mismo instante de registro, (el mismo minuto)
