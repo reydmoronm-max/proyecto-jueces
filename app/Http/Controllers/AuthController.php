@@ -52,6 +52,7 @@ class AuthController extends Controller
         User::create([
             'nombre' => 'Rey',
             'apellido' => 'Morón',
+            'cedula_usuario' => '12312312',
             'user' => 'admin',
             'password' => Hash::make('admin'),
             'activo' => true
