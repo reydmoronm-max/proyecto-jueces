@@ -11,9 +11,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                 <div class="header-title">
-                    {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarDenuncia">
-                        <i class=" ri-add-fill"></i> Cita
-                    </button> --}}
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSeleccionarDenuncia">
+                        <i class=" ri-add-fill"></i> Agregar cita
+                    </button>
                 </div>
                 </div>
                 <div class="card-body p-0">
@@ -24,16 +24,23 @@
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Denunciante</th>
+                                <th>Cédula</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                         @foreach($citaciones as $citacion)
+                            @php
+                                $denunciante = $citacion->expediente->personas->first();
+                            @endphp
                             <tr>
                                 <td>{{ $citacion->fecha_citacion }}</td>
                                 <td>{{ $citacion->hora_citacion }}</td>
                                 <td>
-                                    -
+                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                </td>
+                                <td>
+                                    {{ $denunciante ? $denunciante->cedula_tipo . $denunciante->cedula : '-' }}
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
@@ -56,6 +63,7 @@
 @include('modules.denuncias.modalDenuncia')
 @include('modules.denuncias.modalConsultarDenuncia')
 @include('modules.denuncias.modalCita')
+@include('modules.citaciones.modalSeleccionarDenuncia')
 
 {{-- <style>
     #modalVerProposito .modal-dialog { max-width: 900px; }
@@ -116,6 +124,40 @@
         function agregar_id_expediente(id){
             $('#cita_expediente_id').val(id);
         }
+
+        $(document).ready(function() {
+            $('#formCita').on('submit', function(e) {
+                var expedienteId = $('#cita_expediente_id').val().trim();
+                var fecha = $('[name="fecha_citacion"]').val().trim();
+                var hora = $('[name="hora_citacion"]').val().trim();
+                var errors = [];
+
+                if (!expedienteId) {
+                    errors.push('Debe seleccionar primero una denuncia para agendar la citación.');
+                }
+
+                if (!fecha) {
+                    errors.push('La fecha de la citación es obligatoria.');
+                }
+
+                if (!hora) {
+                    errors.push('La hora de la citación es obligatoria.');
+                }
+
+                if (errors.length > 0) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Errores en el formulario',
+                        html: errors.join('<br>'),
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                    return false;
+                }
+
+                return true;
+            });
+        });
 
         @if (session('success')) 
             Swal.fire({

@@ -31,8 +31,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/tbody-visitas', [VisitasController::class, 'tbody'])->name('tbody.visitas');
 
     // Rutas para denuncias
+    Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
     Route::resource('denuncias', DenunciasController::class);
-    Route::get('/denuncias/{id}', [DenunciasController::class, 'show'])->name('denuncias.show');
 
     // Rutas para citaciones
     Route::resource('citaciones', CitacionesController::class);

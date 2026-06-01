@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Citaciones;
+use App\Models\Expediente;
 use Illuminate\Http\Request;
 
 class CitacionesController extends Controller
@@ -17,10 +18,12 @@ class CitacionesController extends Controller
         $paginaSubtitulo = 'Listado de citaciones registradas';
         $citacionesActive = 'active';
         
-        // Obtener citaciones con expediente y ordenados por fecha de creación descendente
-        $citaciones = Citaciones::with('expediente')->orderBy('created_at', 'desc')->get();
+        // Obtener citaciones con expediente y denunciante relacionados, ordenadas por fecha de creación descendente
+        $citaciones = Citaciones::with('expediente.personas')->orderBy('created_at', 'desc')->get();
+        // Obtener expedientes (denuncias) para la modal de selección
+        $expedientes = Expediente::with('personas')->orderBy('created_at', 'desc')->get();
 
-        return view('modules.citaciones.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'citacionesActive', 'citaciones'));
+        return view('modules.citaciones.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'citacionesActive', 'citaciones', 'expedientes'));
     }
 
     /**
@@ -40,15 +43,17 @@ class CitacionesController extends Controller
         $data = $request->all();
         Citaciones::create($data);
 
-        return redirect()->route('denuncias.index')->with('success', 'Citación creada exitosamente.');
+        return redirect()->route('citaciones.index')->with('success', 'Citación creada exitosamente.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Citaciones $citaciones)
+    public function show(Citaciones $citacion)
     {
-        //
+        $citacion->load('expediente.involucrados.persona');
+
+        return view('citaciones.show', compact('citacion'));
     }
 
     /**
@@ -74,4 +79,8 @@ class CitacionesController extends Controller
     {
         //
     }
+
+    
 }
+
+
