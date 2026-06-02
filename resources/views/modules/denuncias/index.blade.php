@@ -15,46 +15,153 @@
                         <i class=" ri-add-fill"></i> Recepcionar denuncia
                     </button>
                 </div>
+                <!-- Botones de pestañas -->
+                    <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="abierto-tab" data-bs-toggle="tab" data-bs-target="#bordered-abierto" type="button" role="tab" aria-controls="abierto" aria-selected="true">Abierto</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="enProceso-tab" data-bs-toggle="tab" data-bs-target="#bordered-enProceso" type="button" role="tab" aria-controls="enProceso" aria-selected="false">En proceso</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="cerrado-tab" data-bs-toggle="tab" data-bs-target="#bordered-cerrado" type="button" role="tab" aria-controls="cerrado" aria-selected="false">Cerrado</button>
+                        </li>
+                    </ul>
+                {{-- Fin de botones de pestañas --}}
                 </div>
                 <div class="card-body p-0">
-                <div class="table-responsive mt-4">
-                    <table id="basic-table" class="table table-striped mb-0" role="grid">
-                        <thead>
-                            <tr>
-                                <th>Fecha de apertura</th>
-                                <th>Denunciante</th>
-                                <th>Motivo</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($expedientes as $expediente)
-                            <tr>
-                                <td>{{ $expediente->created_at->format('d/m/Y H:i') }}</td>
-                                <td>
-                                    @php
-                                        $denunciante = $expediente->personas->first();
-                                    @endphp
-                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
-                                </td>
-                                <td>{{ $expediente->motivo_denuncia }}</td>
-                                <td><span class="badge bg-warning">{{ ucfirst($expediente->estatus) }}</span></td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
-                                            <i class="ri-eye-fill"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCita" onclick="agregar_id_expediente({{ $expediente->id }})">
-                                            <i class="ri-calendar-2-fill"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                    {{-- Contenido de las pestañas --}}
+                    <div class="tab-content pt-2" id="borderedTabContent">
+                        {{-- Contenido de la pestaña "Abierto" --}}
+                        <div class="tab-pane fade show active" id="bordered-abierto" role="tabpanel" aria-labelledby="abierto-tab">
+                            <div class="table-responsive mt-4">
+                                <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha de apertura</th>
+                                            <th>Requirente</th>
+                                            <th>Motivo</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($expedientesAbiertos as $expediente)
+                                            <tr>
+                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
+                                                <td>
+                                                    @php
+                                                        $denunciante = $expediente->personas->first();
+                                                    @endphp
+                                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                                </td>
+                                                <td>{{ $expediente->motivo_denuncia }}</td>
+                                                <td>
+                                                    <span class="badge bg-success">{{ $expediente->estatus }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
+                                                            <i class="ri-eye-fill"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCita" onclick="agregar_id_expediente({{ $expediente->id }})">
+                                                            <i class="ri-calendar-2-fill"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- Fin de pestaña "Abierto" --}}
+
+                        {{-- Pestaña "En proceso" --}}
+                        <div class="tab-pane fade" id="bordered-enProceso" role="tabpanel" aria-labelledby="enProceso-tab">
+                            <div class="table-responsive mt-4">
+                                <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha de apertura</th>
+                                            <th>Requirente</th>
+                                            <th>Motivo</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($expedientesEnProceso as $expediente)
+                                            <tr>
+                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
+                                                <td>
+                                                    @php
+                                                        $denunciante = $expediente->personas->first();
+                                                    @endphp
+                                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                                </td>
+                                                <td>{{ $expediente->motivo_denuncia }}</td>
+                                                <td>
+                                                    <span class="badge bg-warning">{{ $expediente->estatus }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
+                                                            <i class="ri-eye-fill"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- Fin de pestaña "En proceso" --}}
+
+                        {{-- Pestaña "Cerrado" --}}
+                        <div class="tab-pane fade" id="bordered-cerrado" role="tabpanel" aria-labelledby="cerrado-tab">
+                            <div class="table-responsive mt-4">
+                                <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha de apertura</th>
+                                            <th>Requirente</th>
+                                            <th>Motivo</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($expedientesCerrados as $expediente)
+                                            <tr>
+                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
+                                                <td>
+                                                    @php
+                                                        $denunciante = $expediente->personas->first();
+                                                    @endphp
+                                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                                </td>
+                                                <td>{{ $expediente->motivo_denuncia }}</td>
+                                                <td>
+                                                    <span class="badge bg-light">{{ $expediente->estatus }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
+                                                            <i class="ri-eye-fill"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- Fin de pestaña "Cerrado" --}}
+                    </div>
+                    {{-- Fin de contenido de las pestañas --}}
                 </div>
             </div>
         </div>
@@ -166,6 +273,15 @@
                 title: '¡Éxito!',
                 text: '{{ session('success') }}',
                 icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        @endif
+
+        @if (session('validar')) 
+            Swal.fire({
+                title: 'Error',
+                text: '{{ session('validar') }}',
+                icon: 'warning',
                 confirmButtonText: 'Aceptar'
             });
         @endif

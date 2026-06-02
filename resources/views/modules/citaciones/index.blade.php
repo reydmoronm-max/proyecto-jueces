@@ -34,7 +34,7 @@
                                 $denunciante = $citacion->expediente->personas->first();
                             @endphp
                             <tr>
-                                <td>{{ $citacion->fecha_citacion }}</td>
+                                <td>{{ $citacion->fecha_citacion->format('d/m/Y') }}</td>
                                 <td>{{ $citacion->hora_citacion }}</td>
                                 <td>
                                     {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}

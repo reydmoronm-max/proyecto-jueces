@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             // $table->string('codigo_expediente')->unique(); //Este código aún no sé cómmo hacerlo, pero me imagino que no debe ser manual, asi que por ahora lo dejo fuera.
             $table->text('motivo_denuncia');
-            $table->enum('estatus', ['abierto', 'cerrado'])->default('abierto');
+            $table->enum('estatus', ['Abierto', 'En proceso', 'Cerrado'])->default('Abierto');
             $table->timestamps();
         });
     }

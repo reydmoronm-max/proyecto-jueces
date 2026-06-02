@@ -22,12 +22,22 @@ class DenunciasController extends Controller
         $paginaSubtitulo = 'Listado de denuncias registradas';
         $denunciasActive = 'active';
         
-        // Obtener expedientes con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
-        $expedientes = Expediente::with(['personas' => function($q) {
+        // Obtener expedientes abiertos con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
+        $expedientesAbiertos = Expediente::with(['personas' => function($q) {
             $q->wherePivot('rol', 'denunciante');
-        }])->orderBy('created_at', 'desc')->get();
+        }])->where('estatus', 'Abierto')->orderBy('created_at', 'desc')->get();
 
-        return view('modules.denuncias.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'denunciasActive', 'expedientes'));
+        // Obtener expedientes en proceso con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
+        $expedientesEnProceso = Expediente::with(['personas' => function($q) {
+            $q->wherePivot('rol', 'denunciante');
+        }])->where('estatus', 'En proceso')->orderBy('created_at', 'desc')->get();
+
+        // Obtener expedientes cerrados con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
+        $expedientesCerrados = Expediente::with(['personas' => function($q) {
+            $q->wherePivot('rol', 'denunciante');
+        }])->where('estatus', 'Cerrado')->orderBy('created_at', 'desc')->get();
+
+        return view('modules.denuncias.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'denunciasActive', 'expedientesAbiertos', 'expedientesEnProceso', 'expedientesCerrados'));
     }
 
     /**

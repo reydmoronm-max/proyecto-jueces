@@ -15,6 +15,10 @@ class Citaciones extends Model
         'asistio',
     ];
 
+    protected $casts = [
+        'fecha_citacion' => 'date',
+    ];
+
     public function expediente()
     {
         return $this->belongsTo(Expediente::class, 'expediente_id');

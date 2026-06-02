@@ -42,7 +42,23 @@ class CitacionesController extends Controller
 
         $data = $request->all();
         $data['fecha_citacion'] = \Carbon\Carbon::createFromFormat('d-m-Y', $data['fecha_citacion'])->format('Y-m-d');
+
+
+        $validarHora = Citaciones::where('fecha_citacion', $data['fecha_citacion'])
+            ->where('hora_citacion', $data['hora_citacion'])
+            ->first();
+
+        if ($validarHora) {
+            return redirect()->back()->with('validar', 'Ya existe una citación para esa fecha y hora.');
+        }
+
         Citaciones::create($data);
+
+        $expediente = Expediente::find($data['expediente_id']);
+        if ($expediente->estatus === 'Abierto') {
+            $expediente->estatus = 'En proceso';
+            $expediente->save();
+        }
 
         return redirect()->route('citaciones.index')->with('success', 'Citación creada exitosamente.');
     }
