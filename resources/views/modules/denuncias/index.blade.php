@@ -125,6 +125,42 @@
             $('#cita_expediente_id').val(id);
         }
 
+        function buscarPersonaEnVisitas() {
+            var cedula = $('#cedula').val().trim();
+            if (!/^[0-9]{7,8}$/.test(cedula)) {
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route('denuncias.buscar-persona') }}',
+                method: 'GET',
+                data: {
+                    cedula_tipo: $('#cedula_tipo').val(),
+                    cedula: cedula
+                },
+                success: function(data) {
+                    $('#cedula_tipo').val(data.cedula_tipo);
+                    $('#nombres').val(data.nombres);
+                    $('#apellidos').val(data.apellidos);
+                    $('#telefono').val(data.telefono);
+                    $('#direccion').val(data.direccion);
+                },
+                error: function(xhr) {
+                    if (xhr.status === 404) {
+                        // No se encontró persona en visitas, el usuario puede completar manualmente.
+                    }
+                }
+            });
+        }
+
+        $('#cedula').on('blur', function() {
+            buscarPersonaEnVisitas();
+        });
+
+        $('#cedula_tipo').on('change', function() {
+            buscarPersonaEnVisitas();
+        });
+
         @if (session('success')) 
             Swal.fire({
                 title: '¡Éxito!',

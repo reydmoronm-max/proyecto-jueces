@@ -132,6 +132,32 @@ class DenunciasController extends Controller
         ]);
     }
 
+    public function buscarPersona(Request $request)
+    {
+        $request->validate([
+            'cedula_tipo' => ['required', 'in:V,E'],
+            'cedula' => ['required', 'digits_between:7,8'],
+        ]);
+
+        $persona = Persona::where('cedula', $request->cedula)
+            ->where('cedula_tipo', $request->cedula_tipo)
+            ->whereHas('visitas')
+            ->first();
+
+        if (!$persona) {
+            return response()->json(['message' => 'Persona no encontrada en visitas'], 404);
+        }
+
+        return response()->json([
+            'cedula_tipo' => $persona->cedula_tipo,
+            'cedula' => $persona->cedula,
+            'nombres' => $persona->nombres,
+            'apellidos' => $persona->apellidos,
+            'telefono' => $persona->telefono,
+            'direccion' => $persona->direccion,
+        ]);
+    }
+
     // Helper para extraer los campos del contenido del acta
     private function extraerCampoActa($contenido, $campo)
     {
