@@ -38,6 +38,7 @@ class CitacionesController extends Controller
     {
 
         $data = $request->all();
+        $data['fecha_citacion'] = \Carbon\Carbon::createFromFormat('d-m-Y', $data['fecha_citacion'])->format('Y-m-d');
         Citaciones::create($data);
 
         return redirect()->route('denuncias.index')->with('success', 'Citación creada exitosamente.');

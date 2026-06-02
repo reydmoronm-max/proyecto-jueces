@@ -3,6 +3,7 @@
 @section('titulo', $titulo)
 @section('paginaTitulo', $paginaTitulo)
 @section('paginaSubtitulo', $paginaSubtitulo)
+@section('home', $home)
 
 @section('contenido')
 
