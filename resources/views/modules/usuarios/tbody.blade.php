@@ -8,6 +8,9 @@
             </div>
         </td>
         <td>
+            <h6><span class="badge bg-primary me-1">V</span> {{ $item->cedula_usuario }}</h6>
+        </td>
+        <td>
             <h6>{{ $item->user }}</h6>
         </td>
         <td>

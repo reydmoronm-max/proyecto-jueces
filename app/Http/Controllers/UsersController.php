@@ -38,6 +38,7 @@ class UsersController extends Controller
         User::create([
             'nombre' => $request->nombre,
             'apellido' => $request->apellido,
+            'cedula_usuario' => $request->cedula_usuario,
             'user' => $request->user,
             'password' => Hash::make($request->password),
             'activo' => true,
@@ -72,6 +73,7 @@ class UsersController extends Controller
         $usuario = User::findOrFail($id);
         $usuario->nombre = $request->nombre;
         $usuario->apellido = $request->apellido;
+        $usuario->cedula_usuario = $request->cedula_usuario;
         $usuario->user = $request->user;
         $usuario->rol = $request->rol;
         $usuario->save();

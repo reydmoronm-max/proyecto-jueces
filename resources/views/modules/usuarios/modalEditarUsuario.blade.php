@@ -27,6 +27,13 @@
 
                                 <div class="col-md-12">
                                     <div class="form-floating">
+                                        <input id="edit-cedula_usuario" type="number" name="cedula_usuario" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula_usuario') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)"> 
+                                        <label for="edit-cedula_usuario">Cédula de identidad</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-floating">
                                         <input type="text" class="form-control bg-white" name="user" id="edit-user" placeholder="Nombre de Usuario" required>
                                         <label for="edit-user">Nombre de usuario</label>
                                     </div>

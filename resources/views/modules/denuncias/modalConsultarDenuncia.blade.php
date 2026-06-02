@@ -14,7 +14,7 @@
                                         <div class="row g-2">
                                             <div class="col-3">
                                                 <div class="form-floating">
-                                                <select id="view-cedula_tipo" name="cedula_tipo" class="form-select" disabled>
+                                                <select id="view-cedula_tipo" name="cedula_tipo" class="form-select bg-white" disabled>
                                                     <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
                                                     <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
                                                 </select>
@@ -22,8 +22,8 @@
                                             </div>
                                             <div class="col">
                                                 <div class="form-floating">
-                                                    <input id="view-cedula" type="number" name="cedula" class="form-control" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)" disabled> 
-                                                    <label for="view-cedula">Cédula del denunciante</label>
+                                                    <input id="view-cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)" disabled> 
+                                                    <label for="view-cedula">Cédula del requirente</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -45,7 +45,7 @@
 
                                     <div class="col-md-4">
                                                 <div class="form-floating">
-                                                    <input id="view-telefono" type="number" name="telefono" class="form-control" placeholder="Teléfono" value="{{ old('telefono') }}" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)" disabled>
+                                                    <input id="view-telefono" type="number" name="telefono" class="form-control bg-white" placeholder="Teléfono" value="{{ old('telefono') }}" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)" disabled>
                                                     <label for="view-telefono">Teléfono</label>
                                                 </div>
                                             </div>
@@ -66,17 +66,17 @@
 
                                     <div class="col-md-12">
                                         <label for="view-requirente">El requirente expone</label>
-                                        <textarea name="requirente" id="view-requirente" class="form-control" rows="3" disabled></textarea>
+                                        <textarea name="requirente" id="view-requirente" class="form-control bg-white" rows="3" disabled></textarea>
                                     </div>
 
                                     <div class="col-md-12">
                                         <label for="view-receptor">El receptor expone</label>
-                                        <textarea name="receptor" id="view-receptor" class="form-control" rows="3" disabled></textarea>
+                                        <textarea name="receptor" id="view-receptor" class="form-control bg-white" rows="3" disabled></textarea>
                                     </div>
 
                                     <div class="col-md-12 mb-3">
                                         <label for="view-acuerdos">Acuerdos</label>
-                                        <textarea name="acuerdos" id="view-acuerdos" class="form-control" rows="3" disabled></textarea>
+                                        <textarea name="acuerdos" id="view-acuerdos" class="form-control bg-white" rows="3" disabled></textarea>
                                     </div>
 
                                 </section>

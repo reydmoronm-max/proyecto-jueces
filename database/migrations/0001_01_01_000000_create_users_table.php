@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('apellido');
+            $table->string('cedula_usuario')->unique();
             $table->string('user')->unique();
             // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

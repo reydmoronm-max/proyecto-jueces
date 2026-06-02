@@ -22,6 +22,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre y Apellido</th>
+                                <th>Cédula</th>
                                 <th>Usuario</th>
                                 <th>Contraseña</th>
                                 <th>Activo</th>
@@ -132,6 +133,7 @@
                     $('#formEditarUsuario').attr('action', '/usuarios/update/' + usuario.id);
                     $('#edit-nombre').val(usuario.nombre);
                     $('#edit-apellido').val(usuario.apellido);
+                    $('#edit-cedula_usuario').val(usuario.cedula_usuario);
                     $('#edit-user').val(usuario.user);
                     $('#edit-rol').val(usuario.rol);
                     $('#modalEditarUsuario').modal('show');

@@ -23,7 +23,7 @@ class DenunciasController extends Controller
         $denunciasActive = 'active';
         
         // Obtener expedientes con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
-        $expedientes = \App\Models\Expediente::with(['personas' => function($q) {
+        $expedientes = Expediente::with(['personas' => function($q) {
             $q->wherePivot('rol', 'denunciante');
         }])->orderBy('created_at', 'desc')->get();
 
