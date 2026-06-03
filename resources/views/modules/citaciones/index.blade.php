@@ -52,7 +52,7 @@
                                         <button type="button" class="btn btn-sm btn-light" title="Ver denuncia" onclick="consultarDenuncia({{ $citacion->expediente_id }})">
                                             <i class="ri-eye-fill"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-primary" title="Conciliar" onclick="">
+                                        <button type="button" class="btn btn-sm btn-primary" title="Conciliar" data-bs-toggle="modal" data-bs-target="#modalConciliacion" onclick="agregar_id_expediente_conciliar({{ $citacion->expediente_id }})">
                                             <i class=" ri-check-fill"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-warning" title="Marcar como inasistente" data-bs-toggle="modal" data-bs-target="#modalCitaNueva" onclick="agregar_id_expediente({{ $citacion->expediente_id }})">
@@ -75,6 +75,7 @@
 @include('modules.denuncias.modalConsultarDenuncia')
 {{-- @include('modules.denuncias.modalCita')
 @include('modules.citaciones.modalSeleccionarDenuncia') --}}
+@include('modules.citaciones.modalConciliacion')
 @include('modules.citaciones.modalCitaNueva')
 
 @endsection
@@ -106,6 +107,57 @@
         function agregar_id_expediente(id){
             $('#cita_expediente_id').val(id);
         }
+
+        function agregar_id_expediente_conciliar(id){
+            $('#cita_expediente_id_conciliar').val(id);
+            // Consultar si el expediente ya tiene un involucrado con rol 'denunciado'
+            $.get('/expedientes/' + id + '/tiene-denunciado', function(response) {
+                if (response.hasDenunciado) {
+                    // Ocultar y deshabilitar campos de datos personales si ya existe denunciado
+                    $('#datos_denunciado_container').hide();
+                    $('#datos_denunciado_container').find('input, select, textarea').prop('disabled', true).prop('required', false);
+                } else {
+                    $('#datos_denunciado_container').show();
+                    $('#datos_denunciado_container').find('input, select, textarea').prop('disabled', false).prop('required', true);
+                }
+            }).fail(function() {
+                // En caso de error, mostrar y habilitar los campos para permitir captura
+                $('#datos_denunciado_container').show();
+                $('#datos_denunciado_container').find('input, select, textarea').prop('disabled', false).prop('required', true);
+            });
+        }
+
+        function buscarPersonaEnVisitas() {
+            var cedula = $('#cedula').val().trim();
+            if (!/^[0-9]{7,8}$/.test(cedula)) {
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route('denuncias.buscar-persona') }}',
+                method: 'GET',
+                data: {
+                    cedula_tipo: $('#cedula_tipo').val(),
+                    cedula: cedula
+                },
+                success: function(data) {
+                    $('#cedula_tipo').val(data.cedula_tipo);
+                    $('#nombres').val(data.nombres);
+                    $('#apellidos').val(data.apellidos);
+                    $('#telefono').val(data.telefono);
+                    $('#direccion').val(data.direccion);
+                },
+                error: function(xhr) {
+                    if (xhr.status === 404) {
+                        // No se encontró persona en visitas, el usuario puede completar manualmente.
+                    }
+                }
+            });
+        }
+
+        $('#cedula').on('blur', function() {
+            buscarPersonaEnVisitas();
+        });
 
         $(document).ready(function() {
             $('#formCita').on('submit', function(e) {

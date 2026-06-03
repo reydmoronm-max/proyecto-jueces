@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Citaciones;
 use App\Models\Expediente;
+use App\Models\Involucrados;
+use App\Models\Persona;
+use App\Models\Actas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CitacionesController extends Controller
 {
@@ -136,6 +140,79 @@ class CitacionesController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Citación agendada correctamente.');
+    }
+
+    // Verifica si el expediente tiene un involucrado con rol 'denunciado'
+    public function tieneDenunciado($id)
+    {
+        $involucrado = Involucrados::with('persona')->where('expediente_id', $id)->where('rol', 'denunciado')->first();
+        if ($involucrado) {
+            return response()->json(['hasDenunciado' => true, 'persona' => $involucrado->persona]);
+        }
+        return response()->json(['hasDenunciado' => false]);
+    }
+
+    // Guarda el acta de conciliación y cierra el expediente
+    public function conciliar(Request $request)
+    {
+        $request->validate([
+            'expediente_id' => 'required|integer',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Si vienen datos personales, crear/obtener persona y relacionarla como 'denunciado'
+            if ($request->filled('cedula')) {
+                $persona = Persona::firstOrCreate(
+                    [
+                        'cedula_tipo' => $request->cedula_tipo,
+                        'cedula' => $request->cedula,
+                    ],
+                    [
+                        'nombres' => $request->nombres,
+                        'apellidos' => $request->apellidos,
+                        'telefono' => $request->telefono,
+                        'direccion' => $request->direccion,
+                    ]
+                );
+
+                Involucrados::firstOrCreate([
+                    'persona_id' => $persona->id,
+                    'expediente_id' => $request->expediente_id,
+                    'rol' => 'denunciado',
+                ]);
+            }
+
+            $contenido = "Requirente: " . ($request->requirente ?? '') . "\n" .
+                         "Requerido: " . ($request->requerido ?? '') . "\n" .
+                         "Coordinador: " . ($request->coordinador ?? '') . "\n" .
+                         "Acuerdos: " . ($request->acuerdos ?? '');
+
+            Actas::create([
+                'expediente_id' => $request->expediente_id,
+                'tipo_acta' => 'conciliacion',
+                'contenido' => $contenido,
+            ]);
+
+            $expediente = Expediente::find($request->expediente_id);
+            if ($expediente) {
+                $expediente->estatus = 'Cerrado';
+                $expediente->save();
+            }
+
+            $citacion = Citaciones::where('expediente_id', $request->expediente_id)->where('estatus', true)->first();
+            if ($citacion) {
+                $citacion->asistio = 'Sí';
+                $citacion->estatus = false;
+                $citacion->save();
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Conciliación guardada correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Ocurrió un error al guardar la conciliación.');
+        }
     }
 
     
