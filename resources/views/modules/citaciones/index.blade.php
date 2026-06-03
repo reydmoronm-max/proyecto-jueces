@@ -10,21 +10,26 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                <div class="header-title">
+                {{-- <div class="header-title">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSeleccionarDenuncia">
                         <i class=" ri-add-fill"></i> Agregar cita
                     </button>
+                </div> --}}
                 </div>
-                </div>
+                @if(request()->boolean('hoy'))
+                    <div class="alert alert-info mb-3 mx-4">
+                        Mostrando citaciones pendientes para hoy.
+                    </div>
+                @endif
                 <div class="card-body p-0">
                 <div class="table-responsive mt-4">
                     <table id="basic-table" class="table table-striped mb-0" role="grid">
                         <thead>
                             <tr>
+                                <th>Requirente</th>
+                                <th>Cédula</th>
                                 <th>Fecha</th>
                                 <th>Hora</th>
-                                <th>Denunciante</th>
-                                <th>Cédula</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -34,18 +39,24 @@
                                 $denunciante = $citacion->expediente->personas->first();
                             @endphp
                             <tr>
-                                <td>{{ $citacion->fecha_citacion }}</td>
-                                <td>{{ $citacion->hora_citacion }}</td>
                                 <td>
                                     {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
                                 </td>
                                 <td>
-                                    {{ $denunciante ? $denunciante->cedula_tipo . $denunciante->cedula : '-' }}
+                                    <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
                                 </td>
+                                <td>{{ $citacion->fecha_citacion->format('d/m/Y') }}</td>
+                                <td>{{ $citacion->hora_citacion }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-primary" onclick="consultarDenuncia({{ $citacion->expediente_id }})">
+                                        <button type="button" class="btn btn-sm btn-light" title="Ver denuncia" onclick="consultarDenuncia({{ $citacion->expediente_id }})">
                                             <i class="ri-eye-fill"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-primary" title="Conciliar" data-bs-toggle="modal" data-bs-target="#modalConciliacion" onclick="agregar_id_expediente_conciliar({{ $citacion->expediente_id }})">
+                                            <i class=" ri-check-fill"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-warning" title="Marcar como inasistente" data-bs-toggle="modal" data-bs-target="#modalCitaNueva" onclick="agregar_id_expediente({{ $citacion->expediente_id }})">
+                                            <i class="ri-alert-fill"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -60,40 +71,12 @@
     </div>
 </div>
 
-@include('modules.denuncias.modalDenuncia')
+{{-- @include('modules.denuncias.modalDenuncia') --}}
 @include('modules.denuncias.modalConsultarDenuncia')
-@include('modules.denuncias.modalCita')
-@include('modules.citaciones.modalSeleccionarDenuncia')
-
-{{-- <style>
-    #modalVerProposito .modal-dialog { max-width: 900px; }
-    #modalVerProposito .modal-body {
-        white-space: pre-wrap;
-        overflow-wrap: break-word;
-        word-break: break-word;
-        max-height: 60vh;
-        overflow-y: auto;
-    }
-    #modal-proposito-content { white-space: pre-wrap; overflow-wrap: break-word; word-break: break-word; }
-</style> --}}
-
-<!-- Modal para ver el propósito completo -->
-<div class="modal fade" id="modalVerProposito" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Propósito</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="modal-proposito-content"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
+{{-- @include('modules.denuncias.modalCita')
+@include('modules.citaciones.modalSeleccionarDenuncia') --}}
+@include('modules.citaciones.modalConciliacion')
+@include('modules.citaciones.modalCitaNueva')
 
 @endsection
 
@@ -124,6 +107,57 @@
         function agregar_id_expediente(id){
             $('#cita_expediente_id').val(id);
         }
+
+        function agregar_id_expediente_conciliar(id){
+            $('#cita_expediente_id_conciliar').val(id);
+            // Consultar si el expediente ya tiene un involucrado con rol 'denunciado'
+            $.get('/expedientes/' + id + '/tiene-denunciado', function(response) {
+                if (response.hasDenunciado) {
+                    // Ocultar y deshabilitar campos de datos personales si ya existe denunciado
+                    $('#datos_denunciado_container').hide();
+                    $('#datos_denunciado_container').find('input, select, textarea').prop('disabled', true).prop('required', false);
+                } else {
+                    $('#datos_denunciado_container').show();
+                    $('#datos_denunciado_container').find('input, select, textarea').prop('disabled', false).prop('required', true);
+                }
+            }).fail(function() {
+                // En caso de error, mostrar y habilitar los campos para permitir captura
+                $('#datos_denunciado_container').show();
+                $('#datos_denunciado_container').find('input, select, textarea').prop('disabled', false).prop('required', true);
+            });
+        }
+
+        function buscarPersonaEnVisitas() {
+            var cedula = $('#cedula').val().trim();
+            if (!/^[0-9]{7,8}$/.test(cedula)) {
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route('denuncias.buscar-persona') }}',
+                method: 'GET',
+                data: {
+                    cedula_tipo: $('#cedula_tipo').val(),
+                    cedula: cedula
+                },
+                success: function(data) {
+                    $('#cedula_tipo').val(data.cedula_tipo);
+                    $('#nombres').val(data.nombres);
+                    $('#apellidos').val(data.apellidos);
+                    $('#telefono').val(data.telefono);
+                    $('#direccion').val(data.direccion);
+                },
+                error: function(xhr) {
+                    if (xhr.status === 404) {
+                        // No se encontró persona en visitas, el usuario puede completar manualmente.
+                    }
+                }
+            });
+        }
+
+        $('#cedula').on('blur', function() {
+            buscarPersonaEnVisitas();
+        });
 
         $(document).ready(function() {
             $('#formCita').on('submit', function(e) {

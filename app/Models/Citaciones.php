@@ -13,6 +13,13 @@ class Citaciones extends Model
         'hora_citacion',
         'fecha_citacion',
         'asistio',
+        'observaciones',
+        'solicita_cambio_id',
+        'estatus',
+    ];
+
+    protected $casts = [
+        'fecha_citacion' => 'date',
     ];
 
     public function expediente()

@@ -33,9 +33,13 @@ Route::middleware('auth')->group(function() {
     // Rutas para denuncias
     Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
     Route::resource('denuncias', DenunciasController::class);
+    Route::post('/denuncias/posponer-cita', [DenunciasController::class, 'posponerCita'])->name('denuncias.posponer-cita');
 
     // Rutas para citaciones
     Route::resource('citaciones', CitacionesController::class);
+    Route::post('/citaciones/conciliar', [CitacionesController::class, 'conciliar'])->name('citaciones.conciliar');
+    Route::get('/expedientes/{id}/tiene-denunciado', [CitacionesController::class, 'tieneDenunciado'])->name('expedientes.tiene-denunciado');
+    Route::post('/citaciones/marcar-inasistente', [CitacionesController::class, 'marcarInasistente'])->name('citaciones.marcar-inasistente');
 
 
 

@@ -9,6 +9,7 @@ use App\Models\Persona;
 use App\Models\Expediente;
 use App\Models\Involucrados;
 use App\Models\Actas;
+use App\Models\Citaciones;
 
 class DenunciasController extends Controller
 {
@@ -22,12 +23,22 @@ class DenunciasController extends Controller
         $paginaSubtitulo = 'Listado de denuncias registradas';
         $denunciasActive = 'active';
         
-        // Obtener expedientes con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
-        $expedientes = Expediente::with(['personas' => function($q) {
+        // Obtener expedientes abiertos con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
+        $expedientesAbiertos = Expediente::with(['personas' => function($q) {
             $q->wherePivot('rol', 'denunciante');
-        }])->orderBy('created_at', 'desc')->get();
+        }])->where('estatus', 'Abierto')->orderBy('created_at', 'desc')->get();
 
-        return view('modules.denuncias.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'denunciasActive', 'expedientes'));
+        // Obtener expedientes en proceso con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
+        $expedientesEnProceso = Expediente::with(['personas' => function($q) {
+            $q->wherePivot('rol', 'denunciante');
+        }])->where('estatus', 'En proceso')->orderBy('created_at', 'desc')->get();
+
+        // Obtener expedientes cerrados con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
+        $expedientesCerrados = Expediente::with(['personas' => function($q) {
+            $q->wherePivot('rol', 'denunciante');
+        }])->where('estatus', 'Cerrado')->orderBy('created_at', 'desc')->get();
+
+        return view('modules.denuncias.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'denunciasActive', 'expedientesAbiertos', 'expedientesEnProceso', 'expedientesCerrados'));
     }
 
     /**
@@ -73,7 +84,7 @@ class DenunciasController extends Controller
             // 2. Guardar expediente
             $expediente = Expediente::create([
                 'motivo_denuncia' => $request->motivo_denuncia,
-                'estatus' => 'abierto',
+                'estatus' => 'Abierto',
             ]);
 
             // 3. Relacionar persona y expediente en tabla involucrados
@@ -187,5 +198,89 @@ class DenunciasController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function posponerCita(Request $request)
+    {
+        $request->validate([
+            'expediente_id' => 'required|integer',
+            'fecha_citacion' => 'required',
+            'hora_citacion' => 'required',
+            'solicita_por' => 'required|in:denunciante,denunciado',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Solo crear/obtener persona si se enviaron datos de persona (cedula)
+            $persona = null;
+            if ($request->filled('cedula')) {
+                $persona = Persona::firstOrCreate(
+                    [
+                        'cedula_tipo' => $request->cedula_tipo,
+                        'cedula' => $request->cedula,
+                    ],
+                    [
+                        'nombres' => $request->nombres,
+                        'apellidos' => $request->apellidos,
+                        'telefono' => $request->telefono,
+                        'direccion' => $request->direccion,
+                    ]
+                );
+            }
+
+            // Si se creó/tenemos persona y es necesario, relacionarla como 'denunciado'
+            if ($persona) {
+                Involucrados::firstOrCreate([
+                    'persona_id' => $persona->id,
+                    'expediente_id' => $request->expediente_id,
+                    'rol' => 'denunciado',
+                ]);
+            }
+
+            // Crear nueva cita, pero primero validar hora
+            $fecha = $request->fecha_citacion;
+            $hora = $request->hora_citacion;
+            $fecha = \Carbon\Carbon::createFromFormat('d-m-Y', $fecha)->format('Y-m-d');
+
+            $validarHora = Citaciones::where('fecha_citacion', $fecha)->where('hora_citacion', $hora)->where('estatus', true)->first();
+
+            if ($validarHora) {
+                DB::rollBack();
+                return redirect()->back()->with('validar', 'Ya existe una citación para esa fecha y hora.');
+            }
+
+            // Determinar quién solicita el cambio y asignar su persona_id a solicita_cambio_id
+            $solicitaCambioId = null;
+            if ($request->solicita_por === 'denunciante') {
+                $invol = Involucrados::where('expediente_id', $request->expediente_id)->where('rol', 'denunciante')->first();
+                $solicitaCambioId = $invol ? $invol->persona_id : ($persona ? $persona->id : null);
+            } else { // 'denunciado'
+                $invol = Involucrados::where('expediente_id', $request->expediente_id)->where('rol', 'denunciado')->first();
+                $solicitaCambioId = $invol ? $invol->persona_id : ($persona ? $persona->id : null);
+            }
+
+            Citaciones::create([
+                'expediente_id' => $request->expediente_id,
+                'fecha_citacion' => $fecha,
+                'hora_citacion' => $hora,
+                'estatus' => true,
+            ]);
+
+            // Modificar cita anterior
+            $cita = Citaciones::where('expediente_id', $request->expediente_id)->where('estatus', true)->first();
+            if ($cita) {
+                $cita->observaciones = $request->observaciones;
+                $cita->solicita_cambio_id = $solicitaCambioId;
+                $cita->estatus = false;
+                $cita->save();
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Citación pospuesta correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Ocurrió un error al posponer la citación.');
+        }
     }
 }

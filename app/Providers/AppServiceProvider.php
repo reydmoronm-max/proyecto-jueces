@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Citaciones;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            $todayCount = Citaciones::whereDate('fecha_citacion', Carbon::today())
+                ->where('estatus', true)
+                ->count();
+
+            $view->with('citacionesHoyPendientesCount', $todayCount);
+        });
     }
 }

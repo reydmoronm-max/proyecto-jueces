@@ -15,46 +15,168 @@
                         <i class=" ri-add-fill"></i> Recepcionar denuncia
                     </button>
                 </div>
+                <!-- Botones de pestañas -->
+                    <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="abierto-tab" data-bs-toggle="tab" data-bs-target="#bordered-abierto" type="button" role="tab" aria-controls="abierto" aria-selected="true">Abierto</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="enProceso-tab" data-bs-toggle="tab" data-bs-target="#bordered-enProceso" type="button" role="tab" aria-controls="enProceso" aria-selected="false">En proceso</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="cerrado-tab" data-bs-toggle="tab" data-bs-target="#bordered-cerrado" type="button" role="tab" aria-controls="cerrado" aria-selected="false">Cerrado</button>
+                        </li>
+                    </ul>
+                {{-- Fin de botones de pestañas --}}
                 </div>
                 <div class="card-body p-0">
-                <div class="table-responsive mt-4">
-                    <table id="basic-table" class="table table-striped mb-0" role="grid">
-                        <thead>
-                            <tr>
-                                <th>Fecha de apertura</th>
-                                <th>Denunciante</th>
-                                <th>Motivo</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($expedientes as $expediente)
-                            <tr>
-                                <td>{{ $expediente->created_at->format('d/m/Y H:i') }}</td>
-                                <td>
-                                    @php
-                                        $denunciante = $expediente->personas->first();
-                                    @endphp
-                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
-                                </td>
-                                <td>{{ $expediente->motivo_denuncia }}</td>
-                                <td><span class="badge bg-warning">{{ ucfirst($expediente->estatus) }}</span></td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
-                                            <i class="ri-eye-fill"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCita" onclick="agregar_id_expediente({{ $expediente->id }})">
-                                            <i class="ri-calendar-2-fill"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                    {{-- Contenido de las pestañas --}}
+                    <div class="tab-content pt-2" id="borderedTabContent">
+                        {{-- Contenido de la pestaña "Abierto" --}}
+                        <div class="tab-pane fade show active" id="bordered-abierto" role="tabpanel" aria-labelledby="abierto-tab">
+                            <div class="table-responsive mt-4">
+                                <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>Requirente</th>
+                                            <th>Cédula</th>
+                                            <th>Fecha de apertura</th>
+                                            <th>Motivo</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($expedientesAbiertos as $expediente)
+                                            <tr>
+                                                <td>
+                                                    @php
+                                                        $denunciante = $expediente->personas->first();
+                                                    @endphp
+                                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
+                                                </td>
+                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
+                                                <td>{{ $expediente->motivo_denuncia }}</td>
+                                                <td>
+                                                    <span class="badge bg-success">{{ $expediente->estatus }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
+                                                            <i class="ri-eye-fill"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCita" onclick="agregar_id_expediente({{ $expediente->id }})">
+                                                            <i class="ri-calendar-2-fill"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- Fin de pestaña "Abierto" --}}
+
+                        {{-- Pestaña "En proceso" --}}
+                        <div class="tab-pane fade" id="bordered-enProceso" role="tabpanel" aria-labelledby="enProceso-tab">
+                            <div class="table-responsive mt-4">
+                                <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>Requirente</th>
+                                            <th>Cédula</th>
+                                            <th>Fecha de apertura</th>                                            
+                                            <th>Motivo</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($expedientesEnProceso as $expediente)
+                                            <tr>
+                                                <td>
+                                                    @php
+                                                        $denunciante = $expediente->personas->first();
+                                                    @endphp
+                                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
+                                                </td>
+                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
+                                                <td>{{ $expediente->motivo_denuncia }}</td>
+                                                <td>
+                                                    <span class="badge bg-warning">{{ $expediente->estatus }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
+                                                            <i class="ri-eye-fill"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalPosponerCita" onclick="agregar_id_expediente_posponer({{ $expediente->id }})">
+                                                            <i class="ri-calendar-event-fill"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- Fin de pestaña "En proceso" --}}
+
+                        {{-- Pestaña "Cerrado" --}}
+                        <div class="tab-pane fade" id="bordered-cerrado" role="tabpanel" aria-labelledby="cerrado-tab">
+                            <div class="table-responsive mt-4">
+                                <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>Requirente</th>
+                                            <th>Cédula</th>
+                                            <th>Fecha de apertura</th>
+                                            <th>Motivo</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($expedientesCerrados as $expediente)
+                                            <tr>
+                                                <td>
+                                                    @php
+                                                        $denunciante = $expediente->personas->first();
+                                                    @endphp
+                                                    {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
+                                                </td>
+                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
+                                                <td>{{ $expediente->motivo_denuncia }}</td>
+                                                <td>
+                                                    <span class="badge bg-light text-dark">{{ $expediente->estatus }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
+                                                            <i class="ri-eye-fill"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- Fin de pestaña "Cerrado" --}}
+                    </div>
+                    {{-- Fin de contenido de las pestañas --}}
                 </div>
             </div>
         </div>
@@ -64,6 +186,7 @@
 @include('modules.denuncias.modalDenuncia')
 @include('modules.denuncias.modalConsultarDenuncia')
 @include('modules.denuncias.modalCita')
+@include('modules.denuncias.modalPosponerCita')
 
 {{-- <style>
     #modalVerProposito .modal-dialog { max-width: 900px; }
@@ -125,6 +248,44 @@
             $('#cita_expediente_id').val(id);
         }
 
+        // Estado usado por la modal para saber si el expediente ya tiene un 'denunciado'
+        window.posponer_has_denunciado = false;
+
+        function updatePosponerFields() {
+            var selected = $('#solicita_por_posponer').val();
+            if (selected === 'denunciado' && window.posponer_has_denunciado || selected === 'denunciante') {
+                // ocultar campos personales
+                $('#posponer_person_fields').hide();
+                // quitar required para evitar validación al esconder
+                $('#posponer_person_fields').find('input,select').prop('required', false);
+            } else {
+                $('#posponer_person_fields').show();
+                $('#posponer_person_fields').find('input,select').prop('required', true);
+            }
+        }
+
+        $('#solicita_por_posponer').on('change', function(){
+            updatePosponerFields();
+        });
+
+        function agregar_id_expediente_posponer(id){
+            $('#cita_expediente_id_posponer').val(id);
+            // Por defecto asumimos que no hay denunciado hasta consultar
+            window.posponer_has_denunciado = false;
+            // reset select
+            $('#solicita_por_posponer').val('denunciante');
+            // Consultar si el expediente tiene un 'denunciado' ya registrado
+            $.get('/expedientes/' + id + '/tiene-denunciado', function(data){
+                if (data && data.hasDenunciado) {
+                    window.posponer_has_denunciado = true;
+                } else {
+                    window.posponer_has_denunciado = false;
+                }
+            }).always(function(){
+                updatePosponerFields();
+            });
+        }
+
         function buscarPersonaEnVisitas() {
             var cedula = $('#cedula').val().trim();
             if (!/^[0-9]{7,8}$/.test(cedula)) {
@@ -153,6 +314,34 @@
             });
         }
 
+        function buscarPersonaEnVisitasRequerido() {
+            var cedula = $('#cedulaRequerido').val().trim();
+            if (!/^[0-9]{7,8}$/.test(cedula)) {
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route('denuncias.buscar-persona') }}',
+                method: 'GET',
+                data: {
+                    cedula_tipo: $('#cedula_tipoRequerido').val(),
+                    cedula: cedula
+                },
+                success: function(data) {
+                    $('#cedula_tipoRequerido').val(data.cedula_tipo);
+                    $('#nombresRequerido').val(data.nombres);
+                    $('#apellidosRequerido').val(data.apellidos);
+                    $('#telefonoRequerido').val(data.telefono);
+                    $('#direccionRequerido').val(data.direccion);
+                },
+                error: function(xhr) {
+                    if (xhr.status === 404) {
+                        // No se encontró persona en visitas, el usuario puede completar manualmente.
+                    }
+                }
+            });
+        }
+
         $('#cedula').on('blur', function() {
             buscarPersonaEnVisitas();
         });
@@ -161,11 +350,29 @@
             buscarPersonaEnVisitas();
         });
 
+        $('#cedulaRequerido').on('blur', function() {
+            buscarPersonaEnVisitasRequerido();
+        });
+
+        $('#cedula_tipoRequerido').on('change', function() {
+            buscarPersonaEnVisitasRequerido();
+        });
+        
+
         @if (session('success')) 
             Swal.fire({
                 title: '¡Éxito!',
                 text: '{{ session('success') }}',
                 icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        @endif
+
+        @if (session('validar')) 
+            Swal.fire({
+                title: 'Error',
+                text: '{{ session('validar') }}',
+                icon: 'warning',
                 confirmButtonText: 'Aceptar'
             });
         @endif
