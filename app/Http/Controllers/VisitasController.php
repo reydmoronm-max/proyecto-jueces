@@ -32,6 +32,8 @@ class VisitasController extends Controller
             'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'cedula_tipo' => ['required', 'in:V,E'],
             'cedula'      => ['required', 'digits_between:7,8'],
+            'telefono'    => ['nullable', 'string', 'max:20'],
+            'direccion'   => ['nullable', 'string', 'min:5', 'max:255'],
             'proposito'   => ['required', 'string', 'min:5', 'max:255'],
             'de_parte'    => ['nullable', 'string', 'max:255'],
         ]);
@@ -57,12 +59,14 @@ class VisitasController extends Controller
                 'cedula_tipo' => $request->cedula_tipo,
                 'nombres' => $request->nombre,
                 'apellidos' => $request->apellido,
+                'telefono' => $request->telefono,
+                'direccion' => $request->direccion,
             ]
         );
 
         // update persona names if changed
         if ($persona->nombres !== $request->nombre || $persona->apellidos !== $request->apellido) {
-            $persona->update(['nombres' => $request->nombre, 'apellidos' => $request->apellido]);
+            $persona->update(['nombres' => $request->nombre, 'apellidos' => $request->apellido, 'telefono' => $request->telefono, 'direccion' => $request->direccion]);
         }
 
         Visita::create([
@@ -97,6 +101,8 @@ class VisitasController extends Controller
             'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'cedula_tipo' => ['required', 'in:V,E'],
             'cedula'      => ['required', 'digits_between:7,8', Rule::unique('personas', 'cedula')->ignore($persona->id)],
+            'telefono'    => ['nullable', 'string', 'max:20'],
+            'direccion'   => ['nullable', 'string', 'min:5', 'max:255'],
             'proposito'   => ['required', 'string', 'min:5', 'max:255'],
             'de_parte'    => ['nullable', 'string', 'max:255'],
         ]);
@@ -106,6 +112,8 @@ class VisitasController extends Controller
             'cedula'      => $request->cedula,
             'nombres'     => $request->nombre,
             'apellidos'   => $request->apellido,
+            'telefono'    => $request->telefono,
+            'direccion'   => $request->direccion,
         ]);
 
         $visita->update([

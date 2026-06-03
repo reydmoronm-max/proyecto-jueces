@@ -12,6 +12,12 @@
             </h6>
         </td>
         <td>
+            <h6>{{ optional($item->persona)->telefono ?? '-' }}</h6>
+        </td>
+        <td>
+            <h6 style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ optional($item->persona)->direccion ?? '-' }}" data-bs-toggle="tooltip">{{ optional($item->persona)->direccion ?? '-' }}</h6>
+        </td>
+        <td>
             <h6>{{ $item->de_parte }}</h6>
         </td>
         <td>

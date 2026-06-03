@@ -22,6 +22,8 @@
                             <tr>
                                 <th>Nombre y Apellido</th>
                                 <th>Cédula</th>
+                                <th>Teléfono</th>
+                                <th>Dirección</th>
                                 <th>De parte</th>
                                 <th>Propósito</th>
                                 <th>Fecha y Hora</th>
@@ -135,6 +137,8 @@
                     $('#edit-apellido').val(visita.persona?.apellidos ?? '');
                     $('#edit-cedula_tipo').val(visita.persona?.cedula_tipo ?? 'V');
                     $('#edit-cedula').val(visita.persona?.cedula ?? '');
+                    $('#edit-telefono').val(visita.persona?.telefono ?? '');
+                    $('#edit-direccion').val(visita.persona?.direccion ?? '');
                     $('#edit-proposito').val(visita.proposito ?? '');
                     $('#edit-de_parte').val(visita.de_parte ?? '');
                     var modalEl = document.getElementById('modalEditarVisita');
@@ -158,6 +162,8 @@
 
                 var nombre = $('#nombre').val().trim();
                 var apellido = $('#apellido').val().trim();
+                    var telefono = $('#telefono').val().trim();
+                    var direccion = $('#direccion').val().trim();
                 var cedula = $('#cedula').val().trim();
                 var cedulaTipo = $('#cedula_tipo').val();
                 var proposito = $('#proposito').val().trim();
@@ -188,6 +194,16 @@
                     errors.push('Propósito: mínimo 5 caracteres.');
                 }
 
+                // Telefono (opcional): solo números, espacios o + - () , max 20
+                if (telefono.length > 0 && !/^\+?[0-9\s\-()]{7,20}$/.test(telefono)){
+                    errors.push('Teléfono: formato inválido.');
+                }
+
+                // Direccion (opcional)
+                if (direccion.length > 0 && (direccion.length < 5 || direccion.length > 255)){
+                    errors.push('Dirección: entre 5 y 255 caracteres.');
+                }
+
                 if (errors.length > 0){
                     Swal.fire({
                         title: 'Errores en el formulario',
@@ -205,6 +221,8 @@
 
                 var nombre = $('#edit-nombre').val().trim();
                 var apellido = $('#edit-apellido').val().trim();
+                    var telefono = $('#edit-telefono').val().trim();
+                    var direccion = $('#edit-direccion').val().trim();
                 var cedula = $('#edit-cedula').val().trim();
                 var cedulaTipo = $('#edit-cedula_tipo').val();
                 var proposito = $('#edit-proposito').val().trim();
@@ -228,6 +246,13 @@
                     errors.push('Propósito: mínimo 5 caracteres.');
                 }
 
+                if (telefono.length > 0 && !/^\+?[0-9\s\-()]{7,20}$/.test(telefono)){
+                    errors.push('Teléfono: formato inválido.');
+                }
+                if (direccion.length > 0 && (direccion.length < 5 || direccion.length > 255)){
+                    errors.push('Dirección: entre 5 y 255 caracteres.');
+                }
+
                 if (errors.length > 0){
                     Swal.fire({
                         title: 'Errores en el formulario',
@@ -238,6 +263,11 @@
                 }
 
                 this.submit();
+            });
+            // Inicializar tooltips de Bootstrap para mostrar la dirección completa
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
             });
         });
     </script>
