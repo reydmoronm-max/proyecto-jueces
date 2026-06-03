@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function() {
 
     // Rutas para citaciones
     Route::resource('citaciones', CitacionesController::class);
+    Route::post('/citaciones/marcar-inasistente', [CitacionesController::class, 'marcarInasistente'])->name('citaciones.marcar-inasistente');
 
 
 

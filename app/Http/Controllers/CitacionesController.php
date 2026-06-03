@@ -11,19 +11,27 @@ class CitacionesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $titulo = 'Citaciones';
         $paginaTitulo = 'Citaciones';
         $paginaSubtitulo = 'Listado de citaciones registradas';
         $citacionesActive = 'active';
+        $mostrarHoy = $request->boolean('hoy');
         
-        // Obtener citaciones con expediente y denunciante relacionados, ordenadas por fecha de creación descendente
-        $citaciones = Citaciones::with('expediente.personas')->orderBy('created_at', 'desc')->get();
+        $citacionesQuery = Citaciones::with('expediente.personas')->orderBy('created_at', 'desc');
+
+        if ($mostrarHoy) {
+            $citacionesQuery->whereDate('fecha_citacion', now()->toDateString())
+                ->where('estatus', true);
+            $paginaSubtitulo = 'Citaciones activas para hoy';
+        }
+
+        $citaciones = $citacionesQuery->get();
         // Obtener expedientes (denuncias) para la modal de selección
         $expedientes = Expediente::with('personas')->orderBy('created_at', 'desc')->get();
 
-        return view('modules.citaciones.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'citacionesActive', 'citaciones', 'expedientes'));
+        return view('modules.citaciones.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'citacionesActive', 'citaciones', 'expedientes', 'mostrarHoy'));
     }
 
     /**
@@ -95,6 +103,39 @@ class CitacionesController extends Controller
     public function destroy(Citaciones $citaciones)
     {
         //
+    }
+
+    public function marcarInasistente(Request $request)
+    {
+        $citacion = Citaciones::where('expediente_id', $request->expediente_id)->where('estatus', true)->first();
+        
+        if($citacion) {
+            $citacion->asistio = 'No';
+            $citacion->observaciones = $request->observaciones;
+            $citacion->estatus = false;
+            $citacion->save();
+        }
+
+        $data = $request->all();
+        $data['fecha_citacion'] = \Carbon\Carbon::createFromFormat('d-m-Y', $data['fecha_citacion'])->format('Y-m-d');
+
+        $validarHora = Citaciones::where('fecha_citacion', $data['fecha_citacion'])
+            ->where('hora_citacion', $data['hora_citacion'])
+            ->where('estatus', true)
+            ->first();
+
+        if ($validarHora) {
+            return redirect()->back()->with('validar', 'Ya existe una citación para esa fecha y hora.');
+        }
+
+        Citaciones::create([
+            'expediente_id' => $request->expediente_id,
+            'fecha_citacion' => $request->fecha_citacion,
+            'hora_citacion' => $request->hora_citacion,
+            'estatus' => true,
+        ]);
+
+        return redirect()->back()->with('success', 'Citación agendada correctamente.');
     }
 
     

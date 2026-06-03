@@ -38,8 +38,9 @@
                                 <table id="basic-table" class="table table-striped mb-0" role="grid">
                                     <thead>
                                         <tr>
-                                            <th>Fecha de apertura</th>
                                             <th>Requirente</th>
+                                            <th>Cédula</th>
+                                            <th>Fecha de apertura</th>
                                             <th>Motivo</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
@@ -48,13 +49,16 @@
                                     <tbody>
                                         @foreach($expedientesAbiertos as $expediente)
                                             <tr>
-                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                 <td>
                                                     @php
                                                         $denunciante = $expediente->personas->first();
                                                     @endphp
                                                     {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
                                                 </td>
+                                                <td>
+                                                    <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
+                                                </td>
+                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                 <td>{{ $expediente->motivo_denuncia }}</td>
                                                 <td>
                                                     <span class="badge bg-success">{{ $expediente->estatus }}</span>
@@ -83,8 +87,9 @@
                                 <table id="basic-table" class="table table-striped mb-0" role="grid">
                                     <thead>
                                         <tr>
-                                            <th>Fecha de apertura</th>
                                             <th>Requirente</th>
+                                            <th>Cédula</th>
+                                            <th>Fecha de apertura</th>                                            
                                             <th>Motivo</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
@@ -93,13 +98,16 @@
                                     <tbody>
                                         @foreach($expedientesEnProceso as $expediente)
                                             <tr>
-                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                 <td>
                                                     @php
                                                         $denunciante = $expediente->personas->first();
                                                     @endphp
                                                     {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
                                                 </td>
+                                                <td>
+                                                    <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
+                                                </td>
+                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                 <td>{{ $expediente->motivo_denuncia }}</td>
                                                 <td>
                                                     <span class="badge bg-warning">{{ $expediente->estatus }}</span>
@@ -128,8 +136,9 @@
                                 <table id="basic-table" class="table table-striped mb-0" role="grid">
                                     <thead>
                                         <tr>
-                                            <th>Fecha de apertura</th>
                                             <th>Requirente</th>
+                                            <th>Cédula</th>
+                                            <th>Fecha de apertura</th>
                                             <th>Motivo</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
@@ -138,13 +147,16 @@
                                     <tbody>
                                         @foreach($expedientesCerrados as $expediente)
                                             <tr>
-                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                 <td>
                                                     @php
                                                         $denunciante = $expediente->personas->first();
                                                     @endphp
                                                     {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
                                                 </td>
+                                                <td>
+                                                    <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
+                                                </td>
+                                                <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                 <td>{{ $expediente->motivo_denuncia }}</td>
                                                 <td>
                                                     <span class="badge bg-light">{{ $expediente->estatus }}</span>

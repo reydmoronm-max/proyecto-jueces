@@ -35,6 +35,15 @@
                 </span>
                 <input type="search" class="form-control" placeholder="Buscar...">
                 </div>
+                <a href="{{ route('citaciones.index', ['hoy' => 1]) }}" class="btn btn-outline-primary btn-sm ms-3 d-flex align-items-center" title="Ver citaciones activas para hoy">
+                    <svg class="icon-16 me-1" width="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 7V3H16V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M19 7H5C3.89543 7 3 7.89543 3 9V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V9C21 7.89543 20.1046 7 19 7Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M16 11H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    Hoy
+                    <span class="badge bg-primary text-white ms-2">{{ $citacionesHoyPendientesCount ?? 0 }}</span>
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon">
                     <span class="mt-2 navbar-toggler-bar bar1"></span>
