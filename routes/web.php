@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function() {
     // Rutas para denuncias
     Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
     Route::resource('denuncias', DenunciasController::class);
+    Route::post('/denuncias/posponer-cita', [DenunciasController::class, 'posponerCita'])->name('denuncias.posponer-cita');
 
     // Rutas para citaciones
     Route::resource('citaciones', CitacionesController::class);

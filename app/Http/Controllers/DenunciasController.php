@@ -9,6 +9,7 @@ use App\Models\Persona;
 use App\Models\Expediente;
 use App\Models\Involucrados;
 use App\Models\Actas;
+use App\Models\Citaciones;
 
 class DenunciasController extends Controller
 {
@@ -83,7 +84,7 @@ class DenunciasController extends Controller
             // 2. Guardar expediente
             $expediente = Expediente::create([
                 'motivo_denuncia' => $request->motivo_denuncia,
-                'estatus' => 'abierto',
+                'estatus' => 'Abierto',
             ]);
 
             // 3. Relacionar persona y expediente en tabla involucrados
@@ -197,5 +198,67 @@ class DenunciasController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function posponerCita(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            // 1. Guardar persona (si no existe)
+            $persona = Persona::firstOrCreate(
+                [
+                    'cedula_tipo' => $request->cedula_tipo,
+                    'cedula' => $request->cedula,
+                ],
+                [
+                    'nombres' => $request->nombres,
+                    'apellidos' => $request->apellidos,
+                    'telefono' => $request->telefono,
+                    'direccion' => $request->direccion,
+                ]
+            );
+
+            // 2. Modificar cita anterior
+            $cita = Citaciones::where('expediente_id', $request->expediente_id)->where('estatus', true)->first();
+            if ($cita) {
+                $cita->observaciones = $request->observaciones;
+                $cita->estatus = false;
+                $cita->save();
+            }
+
+            // 3. Guardar nuevo involucrado (denunciado)
+            Involucrados::firstOrCreate([
+                'persona_id' => $persona->id,
+                'expediente_id' => $request->expediente_id,
+                'rol' => 'denunciado',
+            ]);
+
+            // 4. Crear nueva cita
+            $fecha = $request->fecha_citacion;
+            $hora = $request->hora_citacion;
+            $fecha = \Carbon\Carbon::createFromFormat('d-m-Y', $fecha)->format('Y-m-d');
+
+            $validarHora = Citaciones::where('fecha_citacion', $fecha)->where('hora_citacion', $hora)->where('estatus', true)->first();
+
+            if ($validarHora) {
+                DB::rollBack();
+                return redirect()->back()->with('validar', 'Ya existe una citación para esa fecha y hora.');
+            }
+
+            Citaciones::create([
+                'expediente_id' => $request->expediente_id,
+                'fecha_citacion' => $fecha,
+                'hora_citacion' => $hora,
+                'estatus' => true,
+            ]);
+
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Citación pospuesta correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Ocurrió un error al posponer la citación.');
+        }
     }
 }

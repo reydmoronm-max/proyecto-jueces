@@ -23,7 +23,7 @@
                                         <div class="col">
                                             <div class="form-floating">
                                                 <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)"> 
-                                                <label for="cedula">Cédula del denunciante</label>
+                                                <label for="cedula">Cédula del requirente</label>
                                             </div>
                                         </div>
                                     </div>
@@ -31,14 +31,14 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="nombres" id="nombres" placeholder="Nombres" required>
+                                        <input type="text" class="form-control bg-white" name="nombres" id="nombres" placeholder="Nombres" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                         <label for="nombres">Nombres</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="apellidos" id="apellidos" placeholder="Apellidos" required>
+                                        <input type="text" class="form-control bg-white" name="apellidos" id="apellidos" placeholder="Apellidos" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                         <label for="apellidos">Apellidos</label>
                                     </div>
                                 </div>

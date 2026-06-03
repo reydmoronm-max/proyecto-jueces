@@ -109,6 +109,9 @@
                                                         <button type="button" class="btn btn-sm btn-light" onclick="consultarDenuncia({{ $expediente->id }})">
                                                             <i class="ri-eye-fill"></i>
                                                         </button>
+                                                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalPosponerCita" onclick="agregar_id_expediente_posponer({{ $expediente->id }})">
+                                                            <i class="ri-calendar-event-fill"></i>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -171,6 +174,7 @@
 @include('modules.denuncias.modalDenuncia')
 @include('modules.denuncias.modalConsultarDenuncia')
 @include('modules.denuncias.modalCita')
+@include('modules.denuncias.modalPosponerCita')
 
 {{-- <style>
     #modalVerProposito .modal-dialog { max-width: 900px; }
@@ -232,6 +236,10 @@
             $('#cita_expediente_id').val(id);
         }
 
+        function agregar_id_expediente_posponer(id){
+            $('#cita_expediente_id_posponer').val(id);
+        }
+
         function buscarPersonaEnVisitas() {
             var cedula = $('#cedula').val().trim();
             if (!/^[0-9]{7,8}$/.test(cedula)) {
@@ -260,6 +268,34 @@
             });
         }
 
+        function buscarPersonaEnVisitasRequerido() {
+            var cedula = $('#cedulaRequerido').val().trim();
+            if (!/^[0-9]{7,8}$/.test(cedula)) {
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route('denuncias.buscar-persona') }}',
+                method: 'GET',
+                data: {
+                    cedula_tipo: $('#cedula_tipoRequerido').val(),
+                    cedula: cedula
+                },
+                success: function(data) {
+                    $('#cedula_tipoRequerido').val(data.cedula_tipo);
+                    $('#nombresRequerido').val(data.nombres);
+                    $('#apellidosRequerido').val(data.apellidos);
+                    $('#telefonoRequerido').val(data.telefono);
+                    $('#direccionRequerido').val(data.direccion);
+                },
+                error: function(xhr) {
+                    if (xhr.status === 404) {
+                        // No se encontró persona en visitas, el usuario puede completar manualmente.
+                    }
+                }
+            });
+        }
+
         $('#cedula').on('blur', function() {
             buscarPersonaEnVisitas();
         });
@@ -267,6 +303,15 @@
         $('#cedula_tipo').on('change', function() {
             buscarPersonaEnVisitas();
         });
+
+        $('#cedulaRequerido').on('blur', function() {
+            buscarPersonaEnVisitasRequerido();
+        });
+
+        $('#cedula_tipoRequerido').on('change', function() {
+            buscarPersonaEnVisitasRequerido();
+        });
+        
 
         @if (session('success')) 
             Swal.fire({

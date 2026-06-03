@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('citaciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('expediente_id')->constrained('expedientes')->onDelete('cascade');
-            // $table->string('numero_citacion');
+            // $table->enum('numero_citacion', ['Primera', 'Segunda', 'Tercera'])->default('Primera');
             $table->string('hora_citacion');
             $table->date('fecha_citacion');
             $table->string('asistio')->nullable(); // Puede ser 'sí', 'no' o null si aún no se ha registrado la asistencia
+            $table->string('observaciones')->nullable();
+            $table->boolean('estatus')->default(true); // true para activa, false para inactiva
             $table->timestamps();
         });
     }
