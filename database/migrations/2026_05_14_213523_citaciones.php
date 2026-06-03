@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('fecha_citacion');
             $table->string('asistio')->nullable(); // Puede ser 'sí', 'no' o null si aún no se ha registrado la asistencia
             $table->string('observaciones')->nullable();
+            $table->foreignId('solicita_cambio_id')->nullable()->constrained('personas')->onDelete('set null'); // Persona que solicita el cambio de fecha/hora
             $table->boolean('estatus')->default(true); // true para activa, false para inactiva
             $table->timestamps();
         });

@@ -58,6 +58,7 @@ class CitacionesController extends Controller
 
         $validarHora = Citaciones::where('fecha_citacion', $data['fecha_citacion'])
             ->where('hora_citacion', $data['hora_citacion'])
+            ->where('estatus', true)
             ->first();
 
         if ($validarHora) {
@@ -72,7 +73,7 @@ class CitacionesController extends Controller
             $expediente->save();
         }
 
-        return redirect()->route('citaciones.index')->with('success', 'Citación creada exitosamente.');
+        return redirect()->back()->with('success', 'Citación creada exitosamente.');
     }
 
     /**

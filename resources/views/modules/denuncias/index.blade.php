@@ -159,7 +159,7 @@
                                                 <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                 <td>{{ $expediente->motivo_denuncia }}</td>
                                                 <td>
-                                                    <span class="badge bg-light">{{ $expediente->estatus }}</span>
+                                                    <span class="badge bg-light text-dark">{{ $expediente->estatus }}</span>
                                                 </td>
                                                 <td>
                                                     <div class="btn-group" role="group">
@@ -248,8 +248,42 @@
             $('#cita_expediente_id').val(id);
         }
 
+        // Estado usado por la modal para saber si el expediente ya tiene un 'denunciado'
+        window.posponer_has_denunciado = false;
+
+        function updatePosponerFields() {
+            var selected = $('#solicita_por_posponer').val();
+            if (selected === 'denunciado' && window.posponer_has_denunciado || selected === 'denunciante') {
+                // ocultar campos personales
+                $('#posponer_person_fields').hide();
+                // quitar required para evitar validación al esconder
+                $('#posponer_person_fields').find('input,select').prop('required', false);
+            } else {
+                $('#posponer_person_fields').show();
+                $('#posponer_person_fields').find('input,select').prop('required', true);
+            }
+        }
+
+        $('#solicita_por_posponer').on('change', function(){
+            updatePosponerFields();
+        });
+
         function agregar_id_expediente_posponer(id){
             $('#cita_expediente_id_posponer').val(id);
+            // Por defecto asumimos que no hay denunciado hasta consultar
+            window.posponer_has_denunciado = false;
+            // reset select
+            $('#solicita_por_posponer').val('denunciante');
+            // Consultar si el expediente tiene un 'denunciado' ya registrado
+            $.get('/expedientes/' + id + '/tiene-denunciado', function(data){
+                if (data && data.hasDenunciado) {
+                    window.posponer_has_denunciado = true;
+                } else {
+                    window.posponer_has_denunciado = false;
+                }
+            }).always(function(){
+                updatePosponerFields();
+            });
         }
 
         function buscarPersonaEnVisitas() {

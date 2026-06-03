@@ -12,55 +12,66 @@
                             <section class="row g-3">     
                                 
                                 <input type="text" name="expediente_id" id="cita_expediente_id_posponer" hidden>
-                                <h6>Datos del requerido</h6>
 
-                                <div class="mb-1">
-                                    <div class="row g-2">
-                                        <div class="col-3">
-                                            <div class="form-floating">
-                                            <select id="cedula_tipoRequerido" name="cedula_tipo" class="form-select bg-white" required>
-                                                <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
-                                                <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
-                                            </select>
+                                <div class="col-12 mb-2">
+                                    <label for="solicita_por_posponer" class="form-label">Solicita el cambio</label>
+                                    <select id="solicita_por_posponer" name="solicita_por" class="form-select bg-white">
+                                        <option value="denunciante">Requirente (Denunciante)</option>
+                                        <option value="denunciado">Requerido (Denunciado)</option>
+                                    </select>
+                                </div>
+
+                                <div id="posponer_person_fields" class="mb-1 row g-3">
+
+                                <h6 id="posponer_person_heading">Datos del requerido</h6>
+
+                                        <div class="row g-2">
+                                            <div class="col-3">
+                                                <div class="form-floating">
+                                                <select id="cedula_tipoRequerido" name="cedula_tipo" class="form-select bg-white" required>
+                                                    <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
+                                                    <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
+                                                </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-floating">
-                                                <input id="cedulaRequerido" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)"> 
-                                                <label for="cedulaRequerido">Cédula del requerido</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="nombres" id="nombresRequerido" placeholder="Nombres" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                        <label for="nombresRequerido">Nombres</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="apellidos" id="apellidosRequerido" placeholder="Apellidos" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                        <label for="apellidosRequerido">Apellidos</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                            <div class="form-floating">
-                                                <input id="telefonoRequerido" type="number" name="telefono" class="form-control bg-white" placeholder="Teléfono" value="{{ old('telefono') }}" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)"> 
-                                                <label for="telefonoRequerido">Teléfono</label>
+                                            <div class="col">
+                                                <div class="form-floating">
+                                                    <input id="cedulaRequerido" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)"> 
+                                                    <label for="cedulaRequerido">Cédula del requerido</label>
+                                                </div>
                                             </div>
                                         </div>
 
-                                <div class="col-md-8">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="direccion" id="direccionRequerido" placeholder="Dirección" required>
-                                        <label for="direccionRequerido">Dirección</label>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control bg-white" name="nombres" id="nombresRequerido" placeholder="Nombres" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
+                                            <label for="nombresRequerido">Nombres</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control bg-white" name="apellidos" id="apellidosRequerido" placeholder="Apellidos" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
+                                            <label for="apellidosRequerido">Apellidos</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <input id="telefonoRequerido" type="number" name="telefono" class="form-control bg-white" placeholder="Teléfono" value="{{ old('telefono') }}" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
+                                            <label for="telefonoRequerido">Teléfono</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control bg-white" name="direccion" id="direccionRequerido" placeholder="Dirección" required>
+                                            <label for="direccionRequerido">Dirección</label>
+                                        </div>
                                     </div>
                                 </div>
 
+                                
                                 <div class="col-md-12 mb-3">
                                     <div class="form-floating">
                                         <input type="text" class="form-control bg-white" name="observaciones" id="observaciones" placeholder="Observaciones" required>

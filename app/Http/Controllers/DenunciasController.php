@@ -202,38 +202,42 @@ class DenunciasController extends Controller
 
     public function posponerCita(Request $request)
     {
+        $request->validate([
+            'expediente_id' => 'required|integer',
+            'fecha_citacion' => 'required',
+            'hora_citacion' => 'required',
+            'solicita_por' => 'required|in:denunciante,denunciado',
+        ]);
+
         DB::beginTransaction();
         try {
-            // 1. Guardar persona (si no existe)
-            $persona = Persona::firstOrCreate(
-                [
-                    'cedula_tipo' => $request->cedula_tipo,
-                    'cedula' => $request->cedula,
-                ],
-                [
-                    'nombres' => $request->nombres,
-                    'apellidos' => $request->apellidos,
-                    'telefono' => $request->telefono,
-                    'direccion' => $request->direccion,
-                ]
-            );
-
-            // 2. Modificar cita anterior
-            $cita = Citaciones::where('expediente_id', $request->expediente_id)->where('estatus', true)->first();
-            if ($cita) {
-                $cita->observaciones = $request->observaciones;
-                $cita->estatus = false;
-                $cita->save();
+            // Solo crear/obtener persona si se enviaron datos de persona (cedula)
+            $persona = null;
+            if ($request->filled('cedula')) {
+                $persona = Persona::firstOrCreate(
+                    [
+                        'cedula_tipo' => $request->cedula_tipo,
+                        'cedula' => $request->cedula,
+                    ],
+                    [
+                        'nombres' => $request->nombres,
+                        'apellidos' => $request->apellidos,
+                        'telefono' => $request->telefono,
+                        'direccion' => $request->direccion,
+                    ]
+                );
             }
 
-            // 3. Guardar nuevo involucrado (denunciado)
-            Involucrados::firstOrCreate([
-                'persona_id' => $persona->id,
-                'expediente_id' => $request->expediente_id,
-                'rol' => 'denunciado',
-            ]);
+            // Si se creó/tenemos persona y es necesario, relacionarla como 'denunciado'
+            if ($persona) {
+                Involucrados::firstOrCreate([
+                    'persona_id' => $persona->id,
+                    'expediente_id' => $request->expediente_id,
+                    'rol' => 'denunciado',
+                ]);
+            }
 
-            // 4. Crear nueva cita
+            // Crear nueva cita, pero primero validar hora
             $fecha = $request->fecha_citacion;
             $hora = $request->hora_citacion;
             $fecha = \Carbon\Carbon::createFromFormat('d-m-Y', $fecha)->format('Y-m-d');
@@ -245,6 +249,16 @@ class DenunciasController extends Controller
                 return redirect()->back()->with('validar', 'Ya existe una citación para esa fecha y hora.');
             }
 
+            // Determinar quién solicita el cambio y asignar su persona_id a solicita_cambio_id
+            $solicitaCambioId = null;
+            if ($request->solicita_por === 'denunciante') {
+                $invol = Involucrados::where('expediente_id', $request->expediente_id)->where('rol', 'denunciante')->first();
+                $solicitaCambioId = $invol ? $invol->persona_id : ($persona ? $persona->id : null);
+            } else { // 'denunciado'
+                $invol = Involucrados::where('expediente_id', $request->expediente_id)->where('rol', 'denunciado')->first();
+                $solicitaCambioId = $invol ? $invol->persona_id : ($persona ? $persona->id : null);
+            }
+
             Citaciones::create([
                 'expediente_id' => $request->expediente_id,
                 'fecha_citacion' => $fecha,
@@ -252,6 +266,14 @@ class DenunciasController extends Controller
                 'estatus' => true,
             ]);
 
+            // Modificar cita anterior
+            $cita = Citaciones::where('expediente_id', $request->expediente_id)->where('estatus', true)->first();
+            if ($cita) {
+                $cita->observaciones = $request->observaciones;
+                $cita->solicita_cambio_id = $solicitaCambioId;
+                $cita->estatus = false;
+                $cita->save();
+            }
 
             DB::commit();
 

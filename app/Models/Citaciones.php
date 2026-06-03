@@ -14,6 +14,7 @@ class Citaciones extends Model
         'fecha_citacion',
         'asistio',
         'observaciones',
+        'solicita_cambio_id',
         'estatus',
     ];
 
