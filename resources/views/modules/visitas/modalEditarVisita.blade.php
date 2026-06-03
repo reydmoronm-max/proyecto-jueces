@@ -38,6 +38,18 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <div class="form-floating">
+                            <input id="edit-telefono" type="text" name="telefono" class="form-control" placeholder="Teléfono" maxlength="20" inputmode="tel">
+                            <label for="edit-telefono">Teléfono</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <textarea id="edit-direccion" name="direccion" class="form-control" placeholder="Dirección" rows="2"></textarea>
+                            <label for="edit-direccion">Dirección</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="edit-proposito" class="form-label">Propósito</label>
                         <textarea id="edit-proposito" name="proposito" class="form-control" rows="4" placeholder="Propósito" required>{{ old('proposito') }}</textarea>
                     </div>

@@ -37,6 +37,18 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <div class="form-floating">
+                            <input id="telefono" type="text" name="telefono" class="form-control" placeholder="Teléfono" value="{{ old('telefono') }}" maxlength="20" inputmode="tel">
+                            <label for="telefono">Teléfono</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <textarea id="direccion" name="direccion" class="form-control" placeholder="Dirección" rows="2">{{ old('direccion') }}</textarea>
+                            <label for="direccion">Dirección</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="proposito" class="form-label">Propósito</label>
                         <textarea id="proposito" name="proposito" class="form-control" rows="4" placeholder="Propósito" required>{{ old('proposito') }}</textarea>
                     </div>
