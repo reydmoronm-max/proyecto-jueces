@@ -26,4 +26,9 @@ class Citaciones extends Model
     {
         return $this->belongsTo(Expediente::class, 'expediente_id');
     }
+
+    public function solicitaCambio()
+    {
+        return $this->belongsTo(Persona::class, 'solicita_cambio_id');
+    }
 }
