@@ -15,6 +15,9 @@
                         <i class=" ri-add-fill"></i> Recepcionar denuncia
                     </button>
                 </div>
+                <button id="btn-guide-denuncias" class="btn btn-outline-secondary btn-icon" type="button" aria-label="Ver guía de denuncias">
+                    <i class="ri-question-line"></i>
+                </button>
                 <!-- Botones de pestañas -->
                     <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -376,5 +379,97 @@
                 confirmButtonText: 'Aceptar'
             });
         @endif
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var guideButton = document.getElementById('btn-guide-denuncias');
+            if (guideButton && typeof introJs === 'function') {
+                guideButton.addEventListener('click', function() {
+                    introJs().setOptions({
+                        nextLabel: 'Siguiente',
+                        prevLabel: 'Anterior',
+                        skipLabel: 'Cerrar',
+                        doneLabel: 'Finalizar',
+                        exitOnOverlayClick: false,
+                        exitOnEsc: false,
+                        steps: [
+                            {
+                                element: 'button[data-bs-target="#modalRegistrarDenuncia"]',
+                                intro: 'Haz clic aquí para abrir el formulario de recepción de denuncias.'
+                            },
+                            {
+                                element: '#borderedTab',
+                                intro: 'Estas pestañas te permiten ver denuncias abiertas, en proceso o cerradas.'
+                            },
+                            {
+                                element: '#cedula_tipo',
+                                intro: 'Tipo de cédula: selecciona V o E según el requeriente.'
+                            },
+                            {
+                                element: '#cedula',
+                                intro: 'Cédula del requirente: ingresa el número de cédula con hasta 8 dígitos.'
+                            },
+                            {
+                                element: '#nombres',
+                                intro: 'Nombres: ingresa los nombres del requirente.'
+                            },
+                            {
+                                element: '#apellidos',
+                                intro: 'Apellidos: ingresa los apellidos del requirente.'
+                            },
+                            {
+                                element: '#telefono',
+                                intro: 'Teléfono: ingresa un número de contacto del requirente.'
+                            },
+                            {
+                                element: '#direccion',
+                                intro: 'Dirección: ingresa la dirección del requirente.'
+                            },
+                            {
+                                element: '#motivo_denuncia',
+                                intro: 'Motivo de denuncia: describe el motivo principal de la denuncia.'
+                            },
+                            {
+                                element: '#requirente',
+                                intro: 'El requirente expone: escribe lo que dice la persona que presenta la denuncia.'
+                            },
+                            {
+                                element: '#receptor',
+                                intro: 'El receptor expone: escribe la respuesta o registro hecho por el receptor.'
+                            },
+                            {
+                                element: '#acuerdos',
+                                intro: 'Acuerdos: registra los acuerdos o pasos a seguir tras recibir la denuncia.'
+                            },
+                            {
+                                element: '#basic-table',
+                                intro: 'Esta tabla muestra los expedientes de la pestaña activa.'
+                            }
+                        ]
+                    }).onbeforechange(function(targetElement) {
+                        var fieldSteps = ['cedula_tipo','cedula','nombres','apellidos','telefono','direccion','motivo_denuncia','requirente','receptor','acuerdos'];
+                        var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalRegistrarDenuncia'));
+                        if (fieldSteps.includes(targetElement.id)) {
+                            modal.show();
+                        } else {
+                            var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarDenuncia'));
+                            if (instance) {
+                                instance.hide();
+                            }
+                        }
+                    }).oncomplete(function() {
+                        var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarDenuncia'));
+                        if (instance) {
+                            instance.hide();
+                        }
+                    }).onexit(function() {
+                        var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarDenuncia'));
+                        if (instance) {
+                            instance.hide();
+                        }
+                    }).start();
+                });
+            }
+        });
     </script>
 @endpush

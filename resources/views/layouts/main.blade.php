@@ -27,6 +27,9 @@
         <!-- Customizer Css -->
         <link rel="stylesheet" href={{ asset('css/customizer.css') }} />
         
+        <!-- Intro.js Css -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+        
         <!-- RTL Css -->
         <link rel="stylesheet" href={{ asset('css/rtl.min.css') }} />
 
@@ -251,6 +254,9 @@
     
     <!-- App Script -->
     <script src={{ asset('js/hope-ui.js') }} defer></script>
+
+    <!-- Intro.js Script -->
+    <script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
 
     {{-- jQuery --}}
     <script src={{ asset('vendor/jQuery/jquery-4.0.0.js') }}></script>

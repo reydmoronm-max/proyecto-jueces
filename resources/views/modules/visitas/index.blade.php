@@ -14,6 +14,9 @@
                         <i class=" ri-add-fill"></i> Registrar Visita
                     </button>
                 </div>
+                <button id="btn-guide-visitas" class="btn btn-outline-secondary btn-icon" type="button" aria-label="Ver guía de visitas">
+                    <i class="ri-question-line"></i>
+                </button>
                 </div>
                 <div class="card-body p-0">
                 <div class="table-responsive mt-4">
@@ -269,6 +272,86 @@
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var guideButton = document.getElementById('btn-guide-visitas');
+            if (guideButton && typeof introJs === 'function') {
+                guideButton.addEventListener('click', function() {
+                    introJs().setOptions({
+                        nextLabel: 'Siguiente',
+                        prevLabel: 'Anterior',
+                        skipLabel: 'Cerrar',
+                        doneLabel: 'Finalizar',
+                        exitOnOverlayClick: false,
+                        exitOnEsc: false,
+                        steps: [
+                            {
+                                element: 'button[data-bs-target="#modalRegistrarVisita"]',
+                                intro: 'Haz clic aquí para abrir el formulario de registro de visitas.'
+                            },
+                            {
+                                element: '#nombre',
+                                intro: 'Nombre: ingresa el nombre de la persona que visita.'
+                            },
+                            {
+                                element: '#apellido',
+                                intro: 'Apellido: ingresa el apellido de la persona que visita.'
+                            },
+                            {
+                                element: '#cedula_tipo',
+                                intro: 'Tipo de cédula: selecciona V o E según corresponda.'
+                            },
+                            {
+                                element: '#cedula',
+                                intro: 'Cédula: ingresa el número de cédula (7 u 8 dígitos).'
+                            },
+                            {
+                                element: '#telefono',
+                                intro: 'Teléfono: ingresa un número de contacto.'
+                            },
+                            {
+                                element: '#direccion',
+                                intro: 'Dirección: ingresa la dirección de la visita.'
+                            },
+                            {
+                                element: '#proposito',
+                                intro: 'Propósito: describe el motivo de la visita.'
+                            },
+                            {
+                                element: '#de_parte',
+                                intro: 'De parte: indica de quién es la visita.'
+                            },
+                            {
+                                element: '#basic-table',
+                                intro: 'Esta tabla muestra las visitas registradas y sus detalles.'
+                            }
+                        ]
+                    }).onbeforechange(function(targetElement) {
+                        var fieldSteps = ['nombre','apellido','cedula_tipo','cedula','telefono','direccion','proposito','de_parte'];
+                        var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalRegistrarVisita'));
+                        if (fieldSteps.includes(targetElement.id)) {
+                            modal.show();
+                        } else {
+                            var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarVisita'));
+                            if (instance) {
+                                instance.hide();
+                            }
+                        }
+                    }).oncomplete(function() {
+                        var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarVisita'));
+                        if (instance) {
+                            instance.hide();
+                        }
+                    }).onexit(function() {
+                        var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarVisita'));
+                        if (instance) {
+                            instance.hide();
+                        }
+                    }).start();
+                });
+            }
         });
     </script>
 @endpush
