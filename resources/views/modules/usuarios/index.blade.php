@@ -15,6 +15,9 @@
                         <i class=" ri-add-fill"></i> Registrar Usuario
                     </button>
                 </div>
+                <button id="btn-guide-usuarios" class="btn btn-outline-secondary btn-icon" type="button" aria-label="Ver guía de usuarios">
+                    <i class="ri-question-line"></i>
+                </button>
                 </div>
                 <div class="card-body p-0">
                 <div class="table-responsive mt-4">
@@ -148,6 +151,78 @@
 
                 cambiar_estado(id, estado);
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var guideButton = document.getElementById('btn-guide-usuarios');
+            if (guideButton && typeof introJs === 'function') {
+                guideButton.addEventListener('click', function() {
+                    introJs().setOptions({
+                        nextLabel: 'Siguiente',
+                        prevLabel: 'Anterior',
+                        skipLabel: 'Cerrar',
+                        doneLabel: 'Finalizar',
+                        exitOnOverlayClick: false,
+                        exitOnEsc: false,
+                        steps: [
+                            {
+                                element: 'button[data-bs-target="#modalRegistrarUsuario"]',
+                                intro: 'Haz clic aquí para abrir el formulario de registro de usuarios.'
+                            },
+                            {
+                                element: '#nombre',
+                                intro: 'Nombre: ingresa los nombres del usuario. Solo se permiten letras y espacios.'
+                            },
+                            {
+                                element: '#apellido',
+                                intro: 'Apellido: ingresa los apellidos del usuario. Solo se permiten letras y espacios.'
+                            },
+                            {
+                                element: '#cedula_usuario',
+                                intro: 'Cédula de identidad: ingresa el número de cédula con hasta 8 dígitos.'
+                            },
+                            {
+                                element: '#user',
+                                intro: 'Nombre de usuario: el identificador con el que se iniciará sesión.'
+                            },
+                            {
+                                element: '#password',
+                                intro: 'Contraseña: define una clave segura para el acceso.'
+                            },
+                            {
+                                element: '#rol',
+                                intro: 'Rol: selecciona el perfil del usuario dentro del sistema.'
+                            },
+                            {
+                                element: '#basic-table',
+                                intro: 'Esta es la tabla de usuarios. Desde aquí puedes ver la información y editar cada registro.'
+                            }
+                        ]
+                    }).onbeforechange(function(targetElement) {
+                        var fieldSteps = ['nombre','apellido','cedula_usuario','user','password','rol'];
+                        var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalRegistrarUsuario'));
+                        if (fieldSteps.includes(targetElement.id)) {
+                            modal.show();
+                        } else {
+                            var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarUsuario'));
+                            if (instance) {
+                                instance.hide();
+                            }
+                        }
+                    }).oncomplete(function() {
+                        var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarUsuario'));
+                        if (instance) {
+                            instance.hide();
+                        }
+                    }).onexit(function() {
+                        var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarUsuario'));
+                        if (instance) {
+                            instance.hide();
+                        }
+                    }).start();
+                });
+            }
         });
     </script>
 @endpush
