@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CitacionesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DenunciasController;
+use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisitasController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,9 @@ Route::middleware('auth')->group(function() {
     Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
     Route::resource('denuncias', DenunciasController::class);
     Route::post('/denuncias/posponer-cita', [DenunciasController::class, 'posponerCita'])->name('denuncias.posponer-cita');
+
+    // Consulta de expedientes
+    Route::get('/consulta-expediente', [ExpedienteController::class, 'consulta'])->name('consulta.index');
 
     // Rutas para citaciones
     Route::resource('citaciones', CitacionesController::class);
