@@ -30,4 +30,9 @@ class Persona extends Model
     {
         return $this->belongsToMany(Expediente::class, 'involucrados');
     }
+
+    public function consejosComunales()
+    {
+        return $this->hasMany(ConsejoComunal::class, 'jefe_comando');
+    }
 }
