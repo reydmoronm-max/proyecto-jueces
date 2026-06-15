@@ -7,6 +7,7 @@ use App\Http\Controllers\DenunciasController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisitasController;
+use App\Http\Controllers\VocerosController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-admin');
@@ -15,7 +16,7 @@ Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-a
 Route::get('/', [AuthController::class, 'index'])->name('login');
 Route::post('/logear', [AuthController::class, 'login'])->name('logear');
 
-Route::middleware('auth')->group(function() {
+Route::middleware('auth')->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -45,7 +46,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/expedientes/{id}/tiene-denunciado', [CitacionesController::class, 'tieneDenunciado'])->name('expedientes.tiene-denunciado');
     Route::post('/citaciones/marcar-inasistente', [CitacionesController::class, 'marcarInasistente'])->name('citaciones.marcar-inasistente');
 
-
-
+    // Rutas para voceros
+    Route::get('/voceros/buscar-persona', [VocerosController::class, 'buscarPersona'])->name('voceros.buscar-persona');
+    Route::resource('voceros', VocerosController::class);
 });
 

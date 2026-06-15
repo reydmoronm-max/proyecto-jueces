@@ -483,10 +483,11 @@ window.addEventListener('load', function () {
   const wrap_flatpicker = document.querySelectorAll('.wrap_flatpicker')
   Array.from(wrap_flatpicker, (elem) => {
     if (typeof flatpickr !== typeof undefined) {
+      const minDateAttr = elem.getAttribute('data-min-date');
       flatpickr(elem, {
         locale: "Spanish",
         wrap: true,
-        minDate: "today",
+        minDate: minDateAttr === "none" ? null : (minDateAttr || "today"),
         dateFormat: "d-m-Y",
       })
     }
