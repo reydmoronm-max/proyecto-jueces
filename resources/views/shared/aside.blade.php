@@ -1,4 +1,4 @@
-<aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
+<aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all" style="background-color: #1b1b1b;">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
         <a href="{{ route('home') }}" class="navbar-brand">
             <!--Logo start-->
@@ -7,7 +7,7 @@
             <!--Logo start-->
             <div class="logo-main">
                 <div class="logo-normal">
-                    <img style="width: 2.3rem;" src="{{ asset('images/books.svg') }}" alt="">
+                    <img style="width: 6.2rem;" src="{{ asset('images/logo2.png') }}" alt="">
                 </div>
             </div>
             <!--logo End-->
@@ -15,7 +15,7 @@
 
 
 
-            <h4 class="logo-title">SGAC</h4>
+            <h2 class="logo-title text-white" style="font-style: italic; font-weight: bolder;">SGAC</h2>
         </a>
         <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
             <i class="icon">
@@ -52,7 +52,7 @@
                 {{-- <li><hr class="hr-horizontal"></li> --}}
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon">{{ Auth::user()->rol ?? 'Usuario' }}</span>
+                        <span class="default-icon text-white">{{ Auth::user()->rol ?? 'Usuario' }}</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>

@@ -17,9 +17,11 @@
                         </div>
                         <div class="d-flex align-items-center">
                             <form action="{{ route('voceros.index') }}" method="GET" class="d-flex gap-2">
-                                <input type="text" name="search" class="form-control" placeholder="Buscar por cédula, nombre o categoría..." value="{{ request('search') }}" style="min-width: 280px;">
+                                <input type="text" name="search" class="form-control"
+                                    placeholder="Buscar por cédula, nombre o categoría..." value="{{ request('search') }}"
+                                    style="min-width: 280px;">
                                 <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if(request('search'))
+                                @if (request('search'))
                                     <a href="{{ route('voceros.index') }}" class="btn btn-secondary">Limpiar</a>
                                 @endif
                             </form>
@@ -41,24 +43,30 @@
                                     @forelse($items as $item)
                                         <tr>
                                             <td>
-                                                <span class="badge bg-primary me-1">{{ $item->persona->cedula_tipo ?? 'V' }}</span>
+                                                <span
+                                                    class="badge bg-primary me-1">{{ $item->persona->cedula_tipo ?? 'V' }}</span>
                                                 {{ $item->persona->cedula }}
                                             </td>
                                             <td>{{ $item->persona->nombres }} {{ $item->persona->apellidos }}</td>
                                             <td>{{ $item->categoria_vocero }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->fecha_eleccion)->format('d-m-Y') }}</td>
                                             <td>
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-light" title="Consultar" onclick="consultarVocero({{ $item->id }})">
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-light" title="Consultar"
+                                                        onclick="consultarVocero({{ $item->id }})">
                                                         <i class="ri-eye-fill"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-warning" title="Editar" onclick="editarVocero({{ $item->id }})">
+                                                    <button type="button" class="btn btn-sm btn-warning" title="Editar"
+                                                        onclick="editarVocero({{ $item->id }})">
                                                         <i class="ri-pencil-fill"></i>
                                                     </button>
-                                                    <form action="{{ route('voceros.destroy', $item->id) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('voceros.destroy', $item->id) }}" method="POST"
+                                                        class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="button" class="btn btn-sm btn-danger btn-eliminar-vocero" title="Eliminar">
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-danger btn-eliminar-vocero"
+                                                            title="Eliminar">
                                                             <i class="ri-delete-bin-fill"></i>
                                                         </button>
                                                     </form>
@@ -67,7 +75,8 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center py-4">No se encontraron voceros registrados.</td>
+                                            <td colspan="5" class="text-center py-4">No se encontraron voceros
+                                                registrados.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -100,7 +109,7 @@
         @if ($errors->any())
             Swal.fire({
                 title: 'Errores en el formulario',
-                html: '{!! implode("<br>", $errors->all()) !!}',
+                html: '{!! implode('<br>', $errors->all()) !!}',
                 icon: 'error',
                 confirmButtonText: 'Corregir'
             });
