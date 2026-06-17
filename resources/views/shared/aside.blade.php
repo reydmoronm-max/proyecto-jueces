@@ -95,6 +95,24 @@
                         <span class="item-name">Censo</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('circulo-abuelos.*') ? 'active' : '' }}" href="{{ route('circulo-abuelos.index') }}">
+                        <i class="icon ri-heart-pulse-fill"></i>
+                        <span class="item-name">Círculo de Abuelos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('proyectos.*') ? 'active' : '' }}" href="{{ route('proyectos.index') }}">
+                        <i class="icon ri-folder-open-fill"></i>
+                        <span class="item-name">Proyectos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}" href="{{ route('reportes.index') }}">
+                        <i class="icon ri-file-chart-fill"></i>
+                        <span class="item-name">Reportes Demográficos</span>
+                    </a>
+                </li>
                 {{-- <li class="nav-item">
                             <a class="nav-link @yield('citacionesActive')" href="{{ route('citaciones.index') }}">
                                 <i class="icon ri-alarm-fill"></i>

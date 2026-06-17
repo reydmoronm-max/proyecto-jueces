@@ -154,6 +154,11 @@
                     if (data.mision_vivienda) $('#mision_vivienda').val(data.mision_vivienda);
                     if (data.clap) $('#clap').val(data.clap);
                     if (data.casa_alimentacion) $('#casa_alimentacion').val(data.casa_alimentacion);
+                    if (data.direccion) $('#direccion').val(data.direccion);
+                    if (data.estudia) $('#estudia').val(data.estudia);
+                    if (data.genero) $('#genero').val(data.genero);
+                    if (data.parentesco) $('#parentesco').val(data.parentesco);
+                    if (data.consejo_comunal_id) $('#consejo_comunal_id').val(data.consejo_comunal_id);
                 },
                 error: function(xhr) {
                     if (xhr.status === 404) {
@@ -210,6 +215,13 @@
             
             var fp = document.getElementById('fecha_nacimiento')._flatpickr;
             if (fp) fp.clear();
+
+            // Sane defaults or reset values
+            $('#genero').val('');
+            $('#estudia').val('');
+            $('#parentesco').val('');
+            $('#consejo_comunal_id').val('');
+            $('#direccion').val('');
 
             var modal = new bootstrap.Modal(document.getElementById('modalRegistrarIntegrante'));
             modal.show();
@@ -283,6 +295,11 @@
                     $('#view-mision_vivienda').val(data.mision_vivienda ?? '');
                     $('#view-clap').val(data.clap ?? '');
                     $('#view-casa_alimentacion').val(data.casa_alimentacion ?? '');
+                    $('#view-genero').val(data.genero ?? 'No registrado');
+                    $('#view-estudia').val(data.estudia ?? 'No registrado');
+                    $('#view-parentesco').val(data.parentesco ?? 'No registrado');
+                    $('#view-consejo_comunal').val(data.consejo_comunal ? data.consejo_comunal.nombre : 'Ninguno');
+                    $('#view-direccion').val(data.direccion ?? 'No registrada');
 
                     // Hide families list modal temporarily to avoid overlapping modal backdrops
                     var mFamilia = bootstrap.Modal.getInstance(document.getElementById('modalConsultarFamilia'));
@@ -336,6 +353,11 @@
                     $('#edit-mision_vivienda').val(data.mision_vivienda ?? '');
                     $('#edit-clap').val(data.clap ?? '');
                     $('#edit-casa_alimentacion').val(data.casa_alimentacion ?? '');
+                    $('#edit-genero').val(data.genero ?? '');
+                    $('#edit-estudia').val(data.estudia ?? '');
+                    $('#edit-parentesco').val(data.parentesco ?? '');
+                    $('#edit-consejo_comunal_id').val(data.consejo_comunal_id ?? '');
+                    $('#edit-direccion').val(data.direccion ?? '');
 
                     $('#edit-nombres').prop('readonly', true);
                     $('#edit-apellidos').prop('readonly', true);
@@ -435,6 +457,9 @@
                 var mision = $('#' + p + 'mision_vivienda').val();
                 var clap = $('#' + p + 'clap').val();
                 var casa = $('#' + p + 'casa_alimentacion').val();
+                var estudia = $('#' + p + 'estudia').val();
+                var genero = $('#' + p + 'genero').val();
+                var parentesco = $('#' + p + 'parentesco').val();
 
                 var errors = [];
                 var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s]/;
@@ -474,6 +499,15 @@
                 }
                 if (!casa) {
                     errors.push('Casa de alimentación: campo obligatorio.');
+                }
+                if (!genero) {
+                    errors.push('Género: campo obligatorio.');
+                }
+                if (!estudia) {
+                    errors.push('Estudia: campo obligatorio.');
+                }
+                if (!parentesco) {
+                    errors.push('Parentesco: campo obligatorio.');
                 }
 
                 return errors;

@@ -207,6 +207,68 @@
                                 <label for="casa_alimentacion">Casa de Alimentación</label>
                             </div>
                         </div>
+
+                        <!-- Género -->
+                        <div class="col-12 col-md-3">
+                            <div class="form-floating">
+                                <select name="genero" id="genero" class="form-select bg-white" required>
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                </select>
+                                <label for="genero">Género</label>
+                            </div>
+                        </div>
+
+                        <!-- Estudia -->
+                        <div class="col-12 col-md-3">
+                            <div class="form-floating">
+                                <select name="estudia" id="estudia" class="form-select bg-white" required>
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    <option value="Sí">Sí</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <label for="estudia">Estudia (Sí/No)</label>
+                            </div>
+                        </div>
+
+                        <!-- Parentesco -->
+                        <div class="col-12 col-md-3">
+                            <div class="form-floating">
+                                <select name="parentesco" id="parentesco" class="form-select bg-white" required>
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    <option value="Jefe de familia">Jefe de familia</option>
+                                    <option value="Hijo/a">Hijo/a</option>
+                                    <option value="Padre">Padre</option>
+                                    <option value="Madre">Madre</option>
+                                    <option value="Abuelo/a">Abuelo/a</option>
+                                    <option value="Tío/a">Tío/a</option>
+                                    <option value="Primo/a">Primo/a</option>
+                                </select>
+                                <label for="parentesco">Parentesco</label>
+                            </div>
+                        </div>
+
+                        <!-- Consejo Comunal -->
+                        <div class="col-12 col-md-3">
+                            <div class="form-floating">
+                                <select name="consejo_comunal_id" id="consejo_comunal_id" class="form-select bg-white">
+                                    <option value="" selected>Ninguno (Sin vincular)</option>
+                                    @foreach($consejosComunales as $cc)
+                                        <option value="{{ $cc->id }}">{{ $cc->nombre }}</option>
+                                    @endforeach
+                                </select>
+                                <label for="consejo_comunal_id">Consejo Comunal</label>
+                            </div>
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="col-12 col-md-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control bg-white" name="direccion" id="direccion" placeholder="Dirección">
+                                <label for="direccion">Dirección específica</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="modal-footer mt-4 pb-0 pe-0">

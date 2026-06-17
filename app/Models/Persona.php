@@ -34,7 +34,11 @@ class Persona extends Model
         'ayuda_tecnica',
         'mision_vivienda',
         'clap',
-        'casa_alimentacion'
+        'casa_alimentacion',
+        'estudia',
+        'genero',
+        'parentesco',
+        'consejo_comunal_id'
     ];
 
     public function visitas()
@@ -50,5 +54,10 @@ class Persona extends Model
     public function familia()
     {
         return $this->belongsTo(Familia::class, 'familia_id');
+    }
+
+    public function consejoComunal()
+    {
+        return $this->belongsTo(ConsejoComunal::class, 'consejo_comunal_id');
     }
 }

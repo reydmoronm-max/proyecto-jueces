@@ -9,6 +9,9 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisitasController;
 use App\Http\Controllers\VocerosController;
 use App\Http\Controllers\CensoController;
+use App\Http\Controllers\CirculoAbuelosController;
+use App\Http\Controllers\ProyectosController;
+use App\Http\Controllers\CensoDemograficoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-admin');
@@ -59,5 +62,20 @@ Route::middleware('auth')->group(function () {
     Route::put('/censo/integrante/{id}', [CensoController::class, 'updateIntegrante'])->name('censo.integrante.update');
     Route::delete('/censo/integrante/{id}', [CensoController::class, 'destroyIntegrante'])->name('censo.integrante.destroy');
     Route::resource('censo', CensoController::class);
+
+    // Rutas para Círculo de Abuelos
+    Route::get('/circulo-abuelos', [CirculoAbuelosController::class, 'index'])->name('circulo-abuelos.index');
+    Route::post('/circulo-abuelos/jornada', [CirculoAbuelosController::class, 'storeJornada'])->name('circulo-abuelos.store-jornada');
+    Route::get('/circulo-abuelos/jornada/{id}', [CirculoAbuelosController::class, 'showJornada'])->name('circulo-abuelos.show-jornada');
+    Route::get('/circulo-abuelos/jornada/{id}/edit', [CirculoAbuelosController::class, 'editJornada'])->name('circulo-abuelos.edit-jornada');
+    Route::put('/circulo-abuelos/jornada/{id}', [CirculoAbuelosController::class, 'updateJornada'])->name('circulo-abuelos.update-jornada');
+    Route::delete('/circulo-abuelos/jornada/{id}', [CirculoAbuelosController::class, 'destroyJornada'])->name('circulo-abuelos.destroy-jornada');
+
+    // Rutas para Proyectos
+    Route::resource('proyectos', ProyectosController::class);
+
+    // Rutas para Censo Demográfico y Reportes PDF
+    Route::get('/reportes', [CensoDemograficoController::class, 'index'])->name('reportes.index');
+    Route::get('/reportes/pdf', [CensoDemograficoController::class, 'exportPdf'])->name('reportes.pdf');
 });
 

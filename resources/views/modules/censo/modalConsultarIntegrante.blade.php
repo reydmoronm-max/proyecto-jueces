@@ -158,6 +158,46 @@
                             <input id="view-casa_alimentacion" type="text" class="form-control bg-light" readonly>
                         </div>
                     </div>
+
+                    <!-- Género -->
+                    <div class="col-12 col-md-3">
+                        <div class="form-group">
+                            <label class="small text-muted mb-1">Género</label>
+                            <input id="view-genero" type="text" class="form-control bg-light" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Estudia -->
+                    <div class="col-12 col-md-3">
+                        <div class="form-group">
+                            <label class="small text-muted mb-1">Estudia</label>
+                            <input id="view-estudia" type="text" class="form-control bg-light" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Parentesco -->
+                    <div class="col-12 col-md-3">
+                        <div class="form-group">
+                            <label class="small text-muted mb-1">Parentesco</label>
+                            <input id="view-parentesco" type="text" class="form-control bg-light" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Consejo Comunal -->
+                    <div class="col-12 col-md-3">
+                        <div class="form-group">
+                            <label class="small text-muted mb-1">Consejo Comunal</label>
+                            <input id="view-consejo_comunal" type="text" class="form-control bg-light" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="col-12 col-md-12">
+                        <div class="form-group">
+                            <label class="small text-muted mb-1">Dirección específica</label>
+                            <input id="view-direccion" type="text" class="form-control bg-light" readonly>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

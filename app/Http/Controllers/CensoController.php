@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Familia;
 use App\Models\Persona;
+use App\Models\ConsejoComunal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -34,8 +35,9 @@ class CensoController extends Controller
         }
 
         $items = $query->orderBy('created_at', 'desc')->get();
+        $consejosComunales = ConsejoComunal::all();
 
-        return view('modules.censo.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'censoActive', 'items'));
+        return view('modules.censo.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'censoActive', 'items', 'consejosComunales'));
     }
 
     /**
@@ -149,7 +151,21 @@ class CensoController extends Controller
             'mision_vivienda'     => ['required', 'string'],
             'clap'                => ['required', 'string'],
             'casa_alimentacion'   => ['required', 'string'],
+            'direccion'           => ['nullable', 'string', 'max:500'],
+            'estudia'             => ['required', 'string', 'in:Sí,No'],
+            'genero'              => ['required', 'string', 'in:Masculino,Femenino'],
+            'parentesco'          => ['required', 'string', 'in:Jefe de familia,Hijo/a,Padre,Madre,Abuelo/a,Tío/a,Primo/a'],
+            'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
         ]);
+
+        if ($request->parentesco === 'Jefe de familia') {
+            $jefeExiste = Persona::where('familia_id', $request->familia_id)
+                ->where('parentesco', 'Jefe de familia')
+                ->exists();
+            if ($jefeExiste) {
+                return back()->withErrors(['parentesco' => 'Ya existe un Jefe de familia registrado en esta familia.'])->withInput();
+            }
+        }
 
         DB::beginTransaction();
         try {
@@ -186,6 +202,11 @@ class CensoController extends Controller
                 'mision_vivienda'     => $request->mision_vivienda,
                 'clap'                => $request->clap,
                 'casa_alimentacion'   => $request->casa_alimentacion,
+                'direccion'           => $request->direccion,
+                'estudia'             => $request->estudia,
+                'genero'              => $request->genero,
+                'parentesco'          => $request->parentesco,
+                'consejo_comunal_id'  => $request->consejo_comunal_id,
             ]);
 
             DB::commit();
@@ -201,7 +222,7 @@ class CensoController extends Controller
      */
     public function showIntegrante(string $id)
     {
-        $persona = Persona::with('familia')->findOrFail($id);
+        $persona = Persona::with(['familia', 'consejoComunal'])->findOrFail($id);
         if ($persona->fecha_nacimiento) {
             $persona->fecha_nacimiento_formateada = \Carbon\Carbon::parse($persona->fecha_nacimiento)->format('d-m-Y');
         }
@@ -247,7 +268,22 @@ class CensoController extends Controller
             'mision_vivienda'     => ['required', 'string'],
             'clap'                => ['required', 'string'],
             'casa_alimentacion'   => ['required', 'string'],
+            'direccion'           => ['nullable', 'string', 'max:500'],
+            'estudia'             => ['required', 'string', 'in:Sí,No'],
+            'genero'              => ['required', 'string', 'in:Masculino,Femenino'],
+            'parentesco'          => ['required', 'string', 'in:Jefe de familia,Hijo/a,Padre,Madre,Abuelo/a,Tío/a,Primo/a'],
+            'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
         ]);
+
+        if ($request->parentesco === 'Jefe de familia') {
+            $jefeExiste = Persona::where('familia_id', $persona->familia_id)
+                ->where('parentesco', 'Jefe de familia')
+                ->where('id', '!=', $id)
+                ->exists();
+            if ($jefeExiste) {
+                return back()->withErrors(['parentesco' => 'Ya existe un Jefe de familia registrado en esta familia.'])->withInput();
+            }
+        }
 
         DB::beginTransaction();
         try {
@@ -273,6 +309,11 @@ class CensoController extends Controller
                 'mision_vivienda'     => $request->mision_vivienda,
                 'clap'                => $request->clap,
                 'casa_alimentacion'   => $request->casa_alimentacion,
+                'direccion'           => $request->direccion,
+                'estudia'             => $request->estudia,
+                'genero'              => $request->genero,
+                'parentesco'          => $request->parentesco,
+                'consejo_comunal_id'  => $request->consejo_comunal_id,
             ]);
 
             DB::commit();
