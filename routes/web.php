@@ -7,6 +7,7 @@ use App\Http\Controllers\DenunciasController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisitasController;
+use App\Http\Controllers\ConsejoComunalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-admin');
@@ -30,6 +31,11 @@ Route::middleware('auth')->group(function() {
     // Rutas para gestión de visitas
     Route::resource('/visitas', VisitasController::class);
     Route::get('/tbody-visitas', [VisitasController::class, 'tbody'])->name('tbody.visitas');
+
+    // Rutas para consejos comunales
+    Route::get('/consejos-comunales/buscar-persona/{cedula}', [ConsejoComunalController::class, 'buscarPersonaPorCedula'])->name('consejos-comunales.buscar-persona');
+    Route::get('/tbody-consejos', [ConsejoComunalController::class, 'tbody'])->name('tbody.consejos');
+    Route::resource('consejos-comunales', ConsejoComunalController::class);
 
     // Rutas para denuncias
     Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
