@@ -15,7 +15,7 @@
 
 
 
-            <h2 class="logo-title text-white" style="font-style: italic; font-weight: bolder;">SGAC</h2>
+            <h2 class="logo-title text-white" style="font-style: italic; font-weight: bolder;">SGIC</h2>
         </a>
         <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
             <i class="icon">
@@ -90,25 +90,29 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @yield('censoActive') {{ request()->routeIs('censo.*') ? 'active' : '' }}" href="{{ route('censo.index') }}">
+                    <a class="nav-link @yield('censoActive') {{ request()->routeIs('censo.*') ? 'active' : '' }}"
+                        href="{{ route('censo.index') }}">
                         <i class="icon ri-community-fill"></i>
                         <span class="item-name">Censo</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('circulo-abuelos.*') ? 'active' : '' }}" href="{{ route('circulo-abuelos.index') }}">
+                    <a class="nav-link {{ request()->routeIs('circulo-abuelos.*') ? 'active' : '' }}"
+                        href="{{ route('circulo-abuelos.index') }}">
                         <i class="icon ri-heart-pulse-fill"></i>
                         <span class="item-name">Círculo de Abuelos</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('proyectos.*') ? 'active' : '' }}" href="{{ route('proyectos.index') }}">
+                    <a class="nav-link {{ request()->routeIs('proyectos.*') ? 'active' : '' }}"
+                        href="{{ route('proyectos.index') }}">
                         <i class="icon ri-folder-open-fill"></i>
                         <span class="item-name">Proyectos</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}" href="{{ route('reportes.index') }}">
+                    <a class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}"
+                        href="{{ route('reportes.index') }}">
                         <i class="icon ri-file-chart-fill"></i>
                         <span class="item-name">Reportes Demográficos</span>
                     </a>
