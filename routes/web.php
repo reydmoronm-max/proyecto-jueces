@@ -8,6 +8,7 @@ use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisitasController;
 use App\Http\Controllers\VocerosController;
+use App\Http\Controllers\CensoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-admin');
@@ -49,5 +50,14 @@ Route::middleware('auth')->group(function () {
     // Rutas para voceros
     Route::get('/voceros/buscar-persona', [VocerosController::class, 'buscarPersona'])->name('voceros.buscar-persona');
     Route::resource('voceros', VocerosController::class);
+
+    // Rutas para censo
+    Route::get('/censo/buscar-persona', [CensoController::class, 'buscarPersona'])->name('censo.buscar-persona');
+    Route::post('/censo/integrante/store', [CensoController::class, 'storeIntegrante'])->name('censo.integrante.store');
+    Route::get('/censo/integrante/{id}', [CensoController::class, 'showIntegrante'])->name('censo.integrante.show');
+    Route::get('/censo/integrante/{id}/edit', [CensoController::class, 'editIntegrante'])->name('censo.integrante.edit');
+    Route::put('/censo/integrante/{id}', [CensoController::class, 'updateIntegrante'])->name('censo.integrante.update');
+    Route::delete('/censo/integrante/{id}', [CensoController::class, 'destroyIntegrante'])->name('censo.integrante.destroy');
+    Route::resource('censo', CensoController::class);
 });
 

@@ -89,6 +89,12 @@
                         <span class="item-name">Voceros</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link @yield('censoActive') {{ request()->routeIs('censo.*') ? 'active' : '' }}" href="{{ route('censo.index') }}">
+                        <i class="icon ri-community-fill"></i>
+                        <span class="item-name">Censo</span>
+                    </a>
+                </li>
                 {{-- <li class="nav-item">
                             <a class="nav-link @yield('citacionesActive')" href="{{ route('citaciones.index') }}">
                                 <i class="icon ri-alarm-fill"></i>
