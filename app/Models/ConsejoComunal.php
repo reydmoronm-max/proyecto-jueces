@@ -14,8 +14,13 @@ class ConsejoComunal extends Model
         'direccion',
     ];
 
-    public function jefe_comando()
+    public function jefe()
     {
         return $this->belongsTo(Persona::class, 'jefe_comando');
+    }
+
+    public function jefe_comando()
+    {
+        return $this->jefe();
     }
 }

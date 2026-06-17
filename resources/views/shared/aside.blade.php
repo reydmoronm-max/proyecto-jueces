@@ -84,6 +84,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('consejos-comunales.*') ? 'active' : '' }}"
+                        href="{{ route('consejos-comunales.index') }}">
+                        <i class="icon ri-community-fill"></i>
+                        <span class="item-name">Consejos Comunales</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link @yield('vocerosActive')" href="{{ route('voceros.index') }}">
                         <i class="icon ri-user-star-fill"></i>
                         <span class="item-name">Voceros</span>
