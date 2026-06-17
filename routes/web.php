@@ -7,6 +7,7 @@ use App\Http\Controllers\DenunciasController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisitasController;
+use App\Http\Controllers\ConsejoComunalController;
 use App\Http\Controllers\VocerosController;
 use App\Http\Controllers\CensoController;
 use App\Http\Controllers\CirculoAbuelosController;
@@ -35,6 +36,11 @@ Route::middleware('auth')->group(function () {
     // Rutas para gestión de visitas
     Route::resource('/visitas', VisitasController::class);
     Route::get('/tbody-visitas', [VisitasController::class, 'tbody'])->name('tbody.visitas');
+
+    // Rutas para consejos comunales
+    Route::get('/consejos-comunales/buscar-persona/{cedula}', [ConsejoComunalController::class, 'buscarPersonaPorCedula'])->name('consejos-comunales.buscar-persona');
+    Route::get('/tbody-consejos', [ConsejoComunalController::class, 'tbody'])->name('tbody.consejos');
+    Route::resource('consejos-comunales', ConsejoComunalController::class);
 
     // Rutas para denuncias
     Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
@@ -78,4 +84,3 @@ Route::middleware('auth')->group(function () {
     Route::get('/reportes', [CensoDemograficoController::class, 'index'])->name('reportes.index');
     Route::get('/reportes/pdf', [CensoDemograficoController::class, 'exportPdf'])->name('reportes.pdf');
 });
-
