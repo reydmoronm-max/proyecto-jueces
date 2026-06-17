@@ -29,24 +29,24 @@
 
                         <!-- Búsqueda de Jefe de Comando -->
                         <div class="col-12">
-    <label class="form-label text-secondary fw-bold">Jefe de Comando (Persona Registrada)</label>
-    <div class="input-group">
-        <span class="input-group-text bg-light">Cédula</span>
-        <input type="text"
-            class="form-control bg-white" 
-            id="buscar_jefe_cedula" 
-            placeholder="Ingrese la cédula de la persona y presione Buscar" 
-            minlength="7"
-            maxlength="8"
-            pattern="^[0-9]{7,8}$"
-            title="Ingrese entre 7 y 8 dígitos numéricos"
-            inputmode="numeric"
-            autocomplete="off">
-        <button class="btn btn-primary" type="button" id="btn_buscar_jefe">
-            <i class="ri-search-line"></i> Buscar
-        </button>
-    </div>
-</div>
+                            <label class="form-label text-secondary fw-bold">Jefe de Comando (Persona Registrada)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">Cédula</span>
+                                <input type="text"
+                                    class="form-control bg-white" 
+                                    id="buscar_jefe_cedula" 
+                                    placeholder="Ingrese la cédula de la persona y presione Buscar" 
+                                    minlength="7"
+                                    maxlength="8"
+                                    pattern="^[0-9]{7,8}$"
+                                    title="Ingrese entre 7 y 8 dígitos numéricos"
+                                    inputmode="numeric"
+                                    autocomplete="off">
+                                <button class="btn btn-primary" type="button" id="btn_buscar_jefe">
+                                    <i class="ri-search-line"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
                             
                             <!-- Contenedor para mostrar jefe seleccionado como input readonly -->
                             <div id="jefe_confirmacion_container" class="mt-2 d-none">
