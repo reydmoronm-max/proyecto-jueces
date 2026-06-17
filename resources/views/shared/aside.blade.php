@@ -69,12 +69,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('consejos-comunales.*') ? 'active' : '' }}" href="{{ route('consejos-comunales.index') }}">
-                                <i class="icon ri-community-fill"></i>
-                                <span class="item-name">Consejos Comunales</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link @yield('consultaActive')" href="{{ route('consulta.index') }}">
                                 <i class="icon ri-search-eye-line"></i>
                                 <span class="item-name">Consulta</span>
