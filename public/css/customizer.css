@@ -24,7 +24,7 @@ body {
 
 :root {
   --bs-heading-color: #0c112e;
-  --bs-primary: #3a57e8;
+  --bs-primary: #0090E4;
   --bs-primary-shade-80: #0c112e;
   --bs-primary-shade-60: #17235d;
   --bs-primary-shade-40: #23348b;
@@ -1048,8 +1048,8 @@ body {
   border-color: var(--bs-primary-shade-20);
 }
 .btn.btn-outline-primary {
-  color: var(--bs-primary-shade-20);
-  border-color: var(--bs-primary-shade-20);
+  color: var(--bs-primary);
+  border-color: var(--bs-primary);
 }
 .btn.btn-outline-primary:hover {
   color: var(--bs-white);
