@@ -18,7 +18,8 @@ class AuthController extends Controller
         return view('modules.auth.login', compact('titulo'));
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         // Validar
         $credenciales = $request->validate([
             'user' => 'required',
@@ -29,25 +30,28 @@ class AuthController extends Controller
         $user = User::where('user', $request->user)->first();
 
         // Validar usuario y contraseña
-        if(!$user || !Hash::check($request->password, $user->password)){
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return back()->withErrors(['user' => 'Credenciales incorrectas'])->withInput();
-
         }
 
         // El usuario está activo
-        if(!$user->activo){
+        if (!$user->activo) {
             return back()->withErrors(['user' => 'Tu usuario está inactivo'])->withInput();
-
         }
 
         // Crear sesión
         Auth::login($user);
         $request->session()->regenerate();
 
-        return to_route('home');
+        if (Auth::user()->rol == 'Jefe de comuna' || Auth::user()->rol == 'Jefe de Comando') {
+            return to_route('reportes.index');
+        } else if (Auth::user()->rol == 'Juez') {
+            return to_route('visitas.index');
+        }
     }
 
-    public function crearAdmin(){
+    public function crearAdmin()
+    {
         // Crear un admin
         User::create([
             'nombre' => 'Rey',
@@ -61,7 +65,8 @@ class AuthController extends Controller
         return 'Admin creado';
     }
 
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
         return to_route('login');
     }

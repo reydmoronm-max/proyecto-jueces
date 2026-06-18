@@ -22,12 +22,13 @@
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
-                <div class="card bg-warning text-dark" style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <div class="card text-white"
+                    style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: #ffbe0c;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-dark-50 text-uppercase mb-1 small fw-bold">En Planificación</h6>
-                                <h3 class="text-dark fw-bold mb-0">{{ $planificadosCount }}</h3>
+                                <h6 class="text-white-50 text-uppercase mb-1 small fw-bold">En Planificación</h6>
+                                <h3 class="text-white fw-bold mb-0">{{ $planificadosCount }}</h3>
                             </div>
                             <i class="ri-settings-4-fill opacity-50" style="font-size: 2.2rem;"></i>
                         </div>
@@ -35,7 +36,8 @@
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
-                <div class="card bg-success text-white" style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <div class="card bg-success text-white"
+                    style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -48,7 +50,8 @@
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
-                <div class="card bg-danger text-white" style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <div class="card text-white"
+                    style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: #ff2525;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -104,31 +107,36 @@
                                             <td class="fw-semibold">{{ $item->nombre }}</td>
                                             <td>{{ $item->sector_productivo }}</td>
                                             <td>
-                                                <span class="fw-bold text-dark">Bs. {{ number_format($item->presupuesto, 2, ',', '.') }}</span>
+                                                <span class="fw-bold text-dark">Bs.
+                                                    {{ number_format($item->presupuesto, 2, ',', '.') }}</span>
                                             </td>
                                             <td>{{ $item->responsable }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->fecha_inicio)->format('d-m-Y') }}</td>
                                             <td>
-                                                @if($item->estatus === 'En planificación')
-                                                    <span class="badge bg-warning text-dark"><i class="ri-time-line me-1"></i>En planificación</span>
+                                                @if ($item->estatus === 'En planificación')
+                                                    <span class="badge bg-warning text-dark"><i
+                                                            class="ri-time-line me-1"></i>En planificación</span>
                                                 @elseif($item->estatus === 'Completado')
-                                                    <span class="badge bg-success"><i class="ri-checkbox-circle-line me-1"></i>Completado</span>
+                                                    <span class="badge bg-success"><i
+                                                            class="ri-checkbox-circle-line me-1"></i>Completado</span>
                                                 @else
-                                                    <span class="badge bg-danger"><i class="ri-close-circle-line me-1"></i>Paralizado</span>
+                                                    <span class="badge bg-danger"><i
+                                                            class="ri-close-circle-line me-1"></i>Paralizado</span>
                                                 @endif
                                             </td>
                                             <td class="text-end">
                                                 <div>
-                                                    <button type="button" class="btn btn-sm btn-light me-1" title="Ver Detalles"
+                                                    <button type="button" class="btn btn-sm btn-light me-1"
+                                                        title="Ver Detalles"
                                                         onclick="consultarProyecto({{ $item->id }})">
                                                         <i class="ri-eye-fill"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-warning me-1" title="Editar"
-                                                        onclick="editarProyecto({{ $item->id }})">
+                                                    <button type="button" class="btn btn-sm btn-warning me-1"
+                                                        title="Editar" onclick="editarProyecto({{ $item->id }})">
                                                         <i class="ri-pencil-fill"></i>
                                                     </button>
-                                                    <form action="{{ route('proyectos.destroy', $item->id) }}" method="POST"
-                                                        class="d-inline">
+                                                    <form action="{{ route('proyectos.destroy', $item->id) }}"
+                                                        method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="button"
@@ -142,7 +150,8 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7" class="text-center py-4 text-muted">No se encontraron proyectos comunitarios registrados.</td>
+                                            <td colspan="7" class="text-center py-4 text-muted">No se encontraron
+                                                proyectos comunitarios registrados.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -157,7 +166,8 @@
     <!-- MODALES CRUD PROYECTOS -->
 
     <!-- Modal Registrar -->
-    <div class="modal fade" id="modalRegistrarProyecto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalRegistrarProyecto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -165,30 +175,35 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
-                    <form class="needs-validation" novalidate id="formProyecto" action="{{ route('proyectos.store') }}" autocomplete="off" method="POST">
+                    <form class="needs-validation" novalidate id="formProyecto" action="{{ route('proyectos.store') }}"
+                        autocomplete="off" method="POST">
                         @csrf
                         <div class="row g-3">
                             <div class="col-md-12">
                                 <div class="form-floating">
-                                    <input type="text" name="nombre" id="nombre" class="form-control bg-white" placeholder="Nombre del proyecto" required minlength="3">
+                                    <input type="text" name="nombre" id="nombre" class="form-control bg-white"
+                                        placeholder="Nombre del proyecto" required minlength="3">
                                     <label for="nombre">Nombre del Proyecto</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="text" name="sector_productivo" id="sector_productivo" class="form-control bg-white" placeholder="Sector productivo" required>
+                                    <input type="text" name="sector_productivo" id="sector_productivo"
+                                        class="form-control bg-white" placeholder="Sector productivo" required>
                                     <label for="sector_productivo">Sector Productivo</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="number" step="0.01" name="presupuesto" id="presupuesto" class="form-control bg-white" placeholder="Presupuesto" required min="0">
+                                    <input type="number" step="0.01" name="presupuesto" id="presupuesto"
+                                        class="form-control bg-white" placeholder="Presupuesto" required min="0">
                                     <label for="presupuesto">Presupuesto (Bs.)</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="text" name="responsable" id="responsable" class="form-control bg-white" placeholder="Responsable" required minlength="3">
+                                    <input type="text" name="responsable" id="responsable"
+                                        class="form-control bg-white" placeholder="Responsable" required minlength="3">
                                     <label for="responsable">Responsable del Proyecto</label>
                                 </div>
                             </div>
@@ -196,10 +211,14 @@
                                 <div class="form-group">
                                     <label class="mb-1 small text-muted" for="fecha_inicio">Fecha de Inicio</label>
                                     <div class="input-group wrap_flatpicker" data-min-date="none">
-                                        <input required type="text" name="fecha_inicio" id="fecha_inicio" class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
-                                        <a class="input-group-text input-button bg-white" title="limpiar" data-clear href="javascript:void(0)">
-                                            <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        <input required type="text" name="fecha_inicio" id="fecha_inicio"
+                                            class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
+                                        <a class="input-group-text input-button bg-white" title="limpiar" data-clear
+                                            href="javascript:void(0)">
+                                            <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12" />
                                             </svg>
                                         </a>
                                     </div>
@@ -207,7 +226,8 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <textarea name="descripcion" id="descripcion" class="form-control bg-white" placeholder="Descripción del proyecto" style="height: 150px;" required></textarea>
+                                    <textarea name="descripcion" id="descripcion" class="form-control bg-white" placeholder="Descripción del proyecto"
+                                        style="height: 150px;" required></textarea>
                                     <label for="descripcion">Descripción (Metas, objetivos, impacto)</label>
                                 </div>
                             </div>
@@ -223,7 +243,8 @@
     </div>
 
     <!-- Modal Editar -->
-    <div class="modal fade" id="modalEditarProyecto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalEditarProyecto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -231,42 +252,52 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
-                    <form class="needs-validation" novalidate id="formEditarProyecto" action="" autocomplete="off" method="POST">
+                    <form class="needs-validation" novalidate id="formEditarProyecto" action="" autocomplete="off"
+                        method="POST">
                         @csrf
                         @method('PUT')
                         <div class="row g-3">
                             <div class="col-md-12">
                                 <div class="form-floating">
-                                    <input type="text" name="nombre" id="edit-nombre" class="form-control bg-white" placeholder="Nombre del proyecto" required minlength="3">
+                                    <input type="text" name="nombre" id="edit-nombre" class="form-control bg-white"
+                                        placeholder="Nombre del proyecto" required minlength="3">
                                     <label for="edit-nombre">Nombre del Proyecto</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="text" name="sector_productivo" id="edit-sector_productivo" class="form-control bg-white" placeholder="Sector productivo" required>
+                                    <input type="text" name="sector_productivo" id="edit-sector_productivo"
+                                        class="form-control bg-white" placeholder="Sector productivo" required>
                                     <label for="edit-sector_productivo">Sector Productivo</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="number" step="0.01" name="presupuesto" id="edit-presupuesto" class="form-control bg-white" placeholder="Presupuesto" required min="0">
+                                    <input type="number" step="0.01" name="presupuesto" id="edit-presupuesto"
+                                        class="form-control bg-white" placeholder="Presupuesto" required min="0">
                                     <label for="edit-presupuesto">Presupuesto (Bs.)</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="text" name="responsable" id="edit-responsable" class="form-control bg-white" placeholder="Responsable" required minlength="3">
+                                    <input type="text" name="responsable" id="edit-responsable"
+                                        class="form-control bg-white" placeholder="Responsable" required minlength="3">
                                     <label for="edit-responsable">Responsable del Proyecto</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="mb-1 small text-muted" for="edit-fecha_inicio">Fecha de Inicio</label>
-                                    <div class="input-group wrap_flatpicker" id="edit-fecha_inicio_container" data-min-date="none">
-                                        <input required type="text" name="fecha_inicio" id="edit-fecha_inicio" class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
-                                        <a class="input-group-text input-button bg-white" title="limpiar" data-clear href="javascript:void(0)">
-                                            <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    <div class="input-group wrap_flatpicker" id="edit-fecha_inicio_container"
+                                        data-min-date="none">
+                                        <input required type="text" name="fecha_inicio" id="edit-fecha_inicio"
+                                            class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
+                                        <a class="input-group-text input-button bg-white" title="limpiar" data-clear
+                                            href="javascript:void(0)">
+                                            <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12" />
                                             </svg>
                                         </a>
                                     </div>
@@ -284,7 +315,8 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <textarea name="descripcion" id="edit-descripcion" class="form-control bg-white" placeholder="Descripción del proyecto" style="height: 150px;" required></textarea>
+                                    <textarea name="descripcion" id="edit-descripcion" class="form-control bg-white"
+                                        placeholder="Descripción del proyecto" style="height: 150px;" required></textarea>
                                     <label for="edit-descripcion">Descripción (Metas, objetivos, impacto)</label>
                                 </div>
                             </div>

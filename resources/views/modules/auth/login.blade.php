@@ -22,7 +22,7 @@
                                         <h2 class="mb-2 fw-bold">Iniciar sesión</h2>
                                         <a style="pointer-events: none;" href="#"
                                             class="navbar-brand d-flex align-items-center mb-3">
-                                            <h5 style="color: #3a57e8;">Sistema de Gestión para la Atención Comunitaria</h5>
+                                            <h5 class="text-primary">Sistema de Gestión para la Atención Comunitaria</h5>
                                         </a>
                                         {{-- <p class="">Ingrese sus credenciales para acceder al sistema.</p> --}}
                                         <form class="needs-validation" novalidate action="{{ route('logear') }}"

@@ -593,3 +593,31 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+/*--------------------------------------------------------------
+# Sidebar nav-link hover — tema por defecto (sidebar-default)
+--------------------------------------------------------------*/
+
+/* Hover estándar en tema blanco/default */
+.sidebar.sidebar-default .nav-link:not(.static-item):hover:not(.active):not([aria-expanded=true]) {
+  background: rgba(18, 50, 230, 0.12) !important; /* fondo verde suave */
+  color: #ffffff !important;                       /* texto verde esmeralda */
+  box-shadow: unset !important;
+}
+
+/* Hover en sidebar oscuro (sidebar-dark) */
+.sidebar.sidebar-dark.sidebar-default .nav-link:hover:not(.active) {
+  color: #ffffff !important;
+  background: rgba(18, 50, 230, 0.12) !important;
+}
+
+/* Hover en sidebar de color (sidebar-color) */
+.sidebar.sidebar-color.sidebar-default .nav-link:hover:not(.active):not([aria-expanded=true]) {
+  color: #ffffff !important;
+  background: rgba(25, 135, 84, 0.25) !important;
+}
+
+/* Color del icono y texto al hacer hover (base) */
+.sidebar-base .nav-item .nav-link:hover {
+  color: #ffffff !important;
+}
