@@ -5,48 +5,48 @@
 @section('paginaSubtitulo', $paginaSubtitulo)
 
 @section('contenido')
-<div class="conatiner-fluid content-inner mt-n5 py-0">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                <div class="header-title">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarUsuario">
-                        <i class=" ri-add-fill"></i> Registrar Usuario
-                    </button>
-                </div>
-                <button id="btn-guide-usuarios" class="btn btn-outline-secondary btn-icon" type="button" aria-label="Ver guía de usuarios">
+    <div class="conatiner-fluid content-inner mt-n5 py-0">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarUsuario">
+                                <i class=" ri-add-fill"></i> Registrar Usuario
+                            </button>
+                        </div>
+                        {{-- <button id="btn-guide-usuarios" class="btn btn-outline-secondary btn-icon" type="button" aria-label="Ver guía de usuarios">
                     <i class="ri-question-line"></i>
-                </button>
-                </div>
-                <div class="card-body p-0">
-                <div class="table-responsive mt-4">
-                    <table id="basic-table" class="table table-striped mb-0" role="grid">
-                        <thead>
-                            <tr>
-                                <th>Nombre y Apellido</th>
-                                <th>Cédula</th>
-                                <th>Usuario</th>
-                                <th>Contraseña</th>
-                                <th>Activo</th>
-                                <th>Rol</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-usuarios">
-                            @include('modules.usuarios.tbody')
-                        </tbody>
-                    </table>
-                </div>
+                </button> --}}
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive mt-4">
+                            <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre y Apellido</th>
+                                        <th>Cédula</th>
+                                        <th>Usuario</th>
+                                        <th>Contraseña</th>
+                                        <th>Activo</th>
+                                        <th>Rol</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-usuarios">
+                                    @include('modules.usuarios.tbody')
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-@include('modules.usuarios.modalUsuario')
-@include('modules.usuarios.modalPassword')
-@include('modules.usuarios.modalEditarUsuario')
+    @include('modules.usuarios.modalUsuario')
+    @include('modules.usuarios.modalPassword')
+    @include('modules.usuarios.modalEditarUsuario')
 
 
 @endsection
@@ -55,7 +55,7 @@
 
 @push('scripts')
     <script>
-        @if (session('success')) 
+        @if (session('success'))
 
             Swal.fire({
                 title: '¡Éxito!',
@@ -63,10 +63,9 @@
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             });
-            
         @endif
-        
-        @if (session('update')) 
+
+        @if (session('update'))
 
             Swal.fire({
                 title: '¡Éxito!',
@@ -74,45 +73,45 @@
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             });
-            
         @endif
     </script>
     <script>
-        function recargar_tbody(){
+        function recargar_tbody() {
             $.ajax({
-                type : "GET",
+                type: "GET",
                 url: "{{ route('tbody') }}",
-                success: function(respuesta){
+                success: function(respuesta) {
                     console.log(respuesta);
                 }
             });
         }
 
-        function cambiar_estado(id, estado){
+        function cambiar_estado(id, estado) {
             $.ajax({
-                type : "GET",
-                url : "usuarios/cambiar-estado/" + id + "/" + estado,
-                success: function(respuesta){
+                type: "GET",
+                url: "usuarios/cambiar-estado/" + id + "/" + estado,
+                success: function(respuesta) {
                     console.log(respuesta);
                 }
             });
         }
 
-        function agregar_id_usuario(id){
+        function agregar_id_usuario(id) {
             $('#id_usuario').val(id);
         }
 
-        function cambio_password(){
+        function cambio_password() {
             let id = $('#id_usuario').val();
             let password = $('#newPassword').val();
 
             $.ajax({
-                type : "GET",
-                url : "usuarios/cambiar-password/" + id + "/" + password,
-                success: function(respuesta){
-                    if (respuesta == 1){
+                type: "GET",
+                url: "usuarios/cambiar-password/" + id + "/" + password,
+                success: function(respuesta) {
+                    if (respuesta == 1) {
                         // alert("Contraseña actualizada correctamente.");
-                        var modal = bootstrap.Modal.getInstance(document.getElementById('modalCambiarPassword'));
+                        var modal = bootstrap.Modal.getInstance(document.getElementById(
+                        'modalCambiarPassword'));
                         modal.hide();
                         Swal.fire({
                             title: '¡Éxito!',
@@ -144,8 +143,8 @@
             });
         }
 
-        $(document).ready(function(){
-            $('.form-check-input').on("change", function(){
+        $(document).ready(function() {
+            $('.form-check-input').on("change", function() {
                 let id = $(this).attr("id");
                 let estado = $(this).is(":checked") ? 1 : 0;
 
@@ -165,8 +164,7 @@
                         doneLabel: 'Finalizar',
                         exitOnOverlayClick: false,
                         exitOnEsc: false,
-                        steps: [
-                            {
+                        steps: [{
                                 element: 'button[data-bs-target="#modalRegistrarUsuario"]',
                                 intro: 'Haz clic aquí para abrir el formulario de registro de usuarios.'
                             },
@@ -200,23 +198,29 @@
                             }
                         ]
                     }).onbeforechange(function(targetElement) {
-                        var fieldSteps = ['nombre','apellido','cedula_usuario','user','password','rol'];
-                        var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalRegistrarUsuario'));
+                        var fieldSteps = ['nombre', 'apellido', 'cedula_usuario', 'user',
+                            'password', 'rol'
+                        ];
+                        var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById(
+                            'modalRegistrarUsuario'));
                         if (fieldSteps.includes(targetElement.id)) {
                             modal.show();
                         } else {
-                            var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarUsuario'));
+                            var instance = bootstrap.Modal.getInstance(document.getElementById(
+                                'modalRegistrarUsuario'));
                             if (instance) {
                                 instance.hide();
                             }
                         }
                     }).oncomplete(function() {
-                        var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarUsuario'));
+                        var instance = bootstrap.Modal.getInstance(document.getElementById(
+                            'modalRegistrarUsuario'));
                         if (instance) {
                             instance.hide();
                         }
                     }).onexit(function() {
-                        var instance = bootstrap.Modal.getInstance(document.getElementById('modalRegistrarUsuario'));
+                        var instance = bootstrap.Modal.getInstance(document.getElementById(
+                            'modalRegistrarUsuario'));
                         if (instance) {
                             instance.hide();
                         }
