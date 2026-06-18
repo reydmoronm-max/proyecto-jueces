@@ -1,4 +1,4 @@
-<aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all" style="background-color: #1b1b1b;">
+<aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all" style="background-color: #151824;">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
         <a href="{{ route('home') }}" class="navbar-brand">
             <!--Logo start-->
@@ -33,7 +33,10 @@
         <div class="sidebar-list">
             <!-- Sidebar Menu Start -->
             <ul class="navbar-nav iq-main-menu" id="sidebar-menu">
-                <li class="nav-item mb-3">
+
+                {{-- Inicio comentado --}}
+
+                {{-- <li class="nav-item mt-3">
                     <a class="nav-link @yield('home')" aria-current="page" href="{{ route('home') }}">
                         <i class="icon">
                             <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -48,82 +51,128 @@
                         </i>
                         <span class="item-name">Inicio</span>
                     </a>
-                </li>
-                {{-- <li><hr class="hr-horizontal"></li> --}}
-                <li class="nav-item static-item">
-                    <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon text-white">{{ Auth::user()->rol ?? 'Usuario' }}</span>
-                        <span class="mini-icon">-</span>
-                    </a>
-                </li>
-                @if (Auth::user()->rol === 'Administrador')
-                    <li class="nav-item">
+                </li> --}}
+
+                @if (Auth::user()->rol === 'Jefe de comuna')
+                    <li class="nav-item mb-3 mt-3">
                         <a class="nav-link @yield('usuariosActive')" href="{{ route('usuarios.index') }}">
                             <i class="icon ri-user-fill"></i>
                             <span class="item-name">Usuarios</span>
                         </a>
                     </li>
                 @endif
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('visitas.*') ? 'active' : '' }}"
-                        href="{{ route('visitas.index') }}">
-                        <i class="icon ri-calendar-fill"></i>
-                        <span class="item-name">Visitas</span>
-                    </a>
+
+                <li>
+                    <hr class="hr-horizontal">
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link @yield('denunciasActive')" href="{{ route('denuncias.index') }}">
-                        <i class="icon  ri-ticket-2-fill"></i>
-                        <span class="item-name">Denuncias</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @yield('consultaActive')" href="{{ route('consulta.index') }}">
-                        <i class="icon ri-search-eye-line"></i>
-                        <span class="item-name">Consulta</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('consejos-comunales.*') ? 'active' : '' }}"
-                        href="{{ route('consejos-comunales.index') }}">
-                        <i class="icon ri-community-fill"></i>
-                        <span class="item-name">Consejos Comunales</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @yield('vocerosActive')" href="{{ route('voceros.index') }}">
-                        <i class="icon ri-user-star-fill"></i>
-                        <span class="item-name">Voceros</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @yield('censoActive') {{ request()->routeIs('censo.*') ? 'active' : '' }}"
-                        href="{{ route('censo.index') }}">
-                        <i class="icon ri-community-fill"></i>
-                        <span class="item-name">Censo</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('circulo-abuelos.*') ? 'active' : '' }}"
-                        href="{{ route('circulo-abuelos.index') }}">
-                        <i class="icon ri-heart-pulse-fill"></i>
-                        <span class="item-name">Círculo de Abuelos</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('proyectos.*') ? 'active' : '' }}"
-                        href="{{ route('proyectos.index') }}">
-                        <i class="icon ri-folder-open-fill"></i>
-                        <span class="item-name">Proyectos</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}"
-                        href="{{ route('reportes.index') }}">
-                        <i class="icon ri-file-chart-fill"></i>
-                        <span class="item-name">Reportes Demográficos</span>
-                    </a>
-                </li>
+
+                @if (Auth::user()->rol === 'Jefe de comuna' || Auth::user()->rol === 'Juez')
+
+                    <li class="nav-item static-item">
+                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                            <span class="default-icon text-white">Juzgado de paz</span>
+                            <span class="mini-icon">-</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('visitas.*') ? 'active' : '' }}"
+                            href="{{ route('visitas.index') }}">
+                            <i class="icon ri-calendar-fill"></i>
+                            <span class="item-name">Visitas</span>
+                        </a>
+                    </li>
+                    @if (Auth::user()->rol === 'Juez')
+                        <li class="nav-item">
+                            <a class="nav-link @yield('denunciasActive')" href="{{ route('denuncias.index') }}">
+                                <i class="icon  ri-ticket-2-fill"></i>
+                                <span class="item-name">Denuncias</span>
+                            </a>
+                        </li>
+                    @endif
+                    <li class="nav-item">
+                        <a class="nav-link @yield('consultaActive')" href="{{ route('consulta.index') }}">
+                            <i class="icon ri-search-eye-line"></i>
+                            <span class="item-name">Consulta</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <hr class="hr-horizontal">
+                    </li>
+                @endif
+
+                {{-- INICIO DE SECCION DE GESTION COMUNAL --}}
+
+                @if (Auth::user()->rol === 'Jefe de comuna' || Auth::user()->rol === 'Jefe de Comando')
+                    <li class="nav-item static-item">
+                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                            <span class="default-icon text-white">Gestión Comunal</span>
+                            <span class="mini-icon">-</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('consejos-comunales.*') ? 'active' : '' }}"
+                            href="{{ route('consejos-comunales.index') }}">
+                            <i class="icon ri-community-fill"></i>
+                            <span class="item-name">Consejos Comunales</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('vocerosActive')" href="{{ route('voceros.index') }}">
+                            <i class="icon ri-user-star-fill"></i>
+                            <span class="item-name">Voceros</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('censoActive') {{ request()->routeIs('censo.*') ? 'active' : '' }}"
+                            href="{{ route('censo.index') }}">
+                            <i class="icon ri-community-fill"></i>
+                            <span class="item-name">Censo</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('circulo-abuelos.*') ? 'active' : '' }}"
+                            href="{{ route('circulo-abuelos.index') }}">
+                            <i class="icon ri-heart-pulse-fill"></i>
+                            <span class="item-name">Círculo de Abuelos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('proyectos.*') ? 'active' : '' }}"
+                            href="{{ route('proyectos.index') }}">
+                            <i class="icon ri-folder-open-fill"></i>
+                            <span class="item-name">Proyectos</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <hr class="hr-horizontal">
+                    </li>
+
+                    <li class="nav-item static-item">
+                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                            <span class="default-icon text-white">Estadísticas y Reportes </span>
+                            <span class="mini-icon">-</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}"
+                            href="{{ route('reportes.index') }}">
+                            <i class="icon ri-file-chart-fill"></i>
+                            <span class="item-name">Reportes Demográficos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('actas.*') ? 'active' : '' }}"
+                            href="{{ route('actas.index') }}">
+                            <i class="icon ri-file-paper-2-fill"></i>
+                            <span class="item-name">Actas</span>
+                        </a>
+                    </li>
+                @endif
                 {{-- <li class="nav-item">
                             <a class="nav-link @yield('citacionesActive')" href="{{ route('citaciones.index') }}">
                                 <i class="icon ri-alarm-fill"></i>

@@ -9,14 +9,16 @@
         <!-- Tarjetas Estadísticas -->
         <div class="row mb-4">
             <div class="col-md-4">
-                <div class="card bg-primary text-white" style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+                <div class="card bg-primary text-white"
+                    style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="text-white-50 text-uppercase mb-1 small fw-bold">Abuelos Registrados</h6>
                                 <h2 class="text-white fw-bold mb-0">{{ $totalAbuelos }}</h2>
                             </div>
-                            <div class="bg-white-10 p-3 rounded-circle d-flex align-items-center justify-content-center" style="background: rgba(255,255,255,0.15); width: 60px; height: 60px;">
+                            <div class="bg-white-10 p-3 rounded-circle d-flex align-items-center justify-content-center"
+                                style="background: rgba(255,255,255,0.15); width: 60px; height: 60px;">
                                 <i class="ri-heart-pulse-fill text-white" style="font-size: 2rem;"></i>
                             </div>
                         </div>
@@ -24,14 +26,16 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card bg-success text-white" style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+                <div class="card bg-success text-white"
+                    style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="text-white-50 text-uppercase mb-1 small fw-bold">Jornadas Realizadas</h6>
                                 <h2 class="text-white fw-bold mb-0">{{ $jornadasRealizadas }}</h2>
                             </div>
-                            <div class="bg-white-10 p-3 rounded-circle d-flex align-items-center justify-content-center" style="background: rgba(255,255,255,0.15); width: 60px; height: 60px;">
+                            <div class="bg-white-10 p-3 rounded-circle d-flex align-items-center justify-content-center"
+                                style="background: rgba(255,255,255,0.15); width: 60px; height: 60px;">
                                 <i class="ri-checkbox-circle-fill text-white" style="font-size: 2rem;"></i>
                             </div>
                         </div>
@@ -39,14 +43,16 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card bg-warning text-white" style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+                <div class="card text-white"
+                    style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15); background-color: #ffbe0c;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="text-white-50 text-uppercase mb-1 small fw-bold">Jornadas Agendadas</h6>
                                 <h2 class="text-white fw-bold mb-0">{{ $jornadasAgendadas }}</h2>
                             </div>
-                            <div class="bg-white-10 p-3 rounded-circle d-flex align-items-center justify-content-center" style="background: rgba(255,255,255,0.15); width: 60px; height: 60px;">
+                            <div class="bg-white-10 p-3 rounded-circle d-flex align-items-center justify-content-center"
+                                style="background: rgba(255,255,255,0.15); width: 60px; height: 60px;">
                                 <i class="ri-calendar-event-fill text-white" style="font-size: 2rem;"></i>
                             </div>
                         </div>
@@ -60,48 +66,65 @@
                 <div class="card shadow-sm" style="border-radius: 15px;">
                     <div class="card-body p-4">
                         <!-- Pestañas (Tabs) -->
-                        <ul class="nav nav-tabs nav-fill mb-4 border-bottom-0" id="abuelosTabs" role="tablist" style="background: #f8f9fa; padding: 6px; border-radius: 10px;">
+                        <ul class="nav nav-tabs nav-fill mb-4 border-bottom-0" id="abuelosTabs" role="tablist"
+                            style="background: #f8f9fa; padding: 6px; border-radius: 10px;">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active py-2 fw-semibold d-flex align-items-center justify-content-center gap-2" id="abuelitos-tab" data-bs-toggle="tab" data-bs-target="#abuelitos-content" type="button" role="tab" aria-controls="abuelitos-content" aria-selected="true" style="border-radius: 8px;">
+                                <button
+                                    class="nav-link active py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+                                    id="abuelitos-tab" data-bs-toggle="tab" data-bs-target="#abuelitos-content"
+                                    type="button" role="tab" aria-controls="abuelitos-content" aria-selected="true"
+                                    style="border-radius: 8px;">
                                     <i class="ri-team-fill" style="font-size: 1.15rem;"></i> Listado de Abuelos
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link py-2 fw-semibold d-flex align-items-center justify-content-center gap-2" id="jornadas-tab" data-bs-toggle="tab" data-bs-target="#jornadas-content" type="button" role="tab" aria-controls="jornadas-content" aria-selected="false" style="border-radius: 8px;">
-                                    <i class="ri-calendar-todo-fill" style="font-size: 1.15rem;"></i> Planificación de Jornadas
+                                <button
+                                    class="nav-link py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+                                    id="jornadas-tab" data-bs-toggle="tab" data-bs-target="#jornadas-content" type="button"
+                                    role="tab" aria-controls="jornadas-content" aria-selected="false"
+                                    style="border-radius: 8px;">
+                                    <i class="ri-calendar-todo-fill" style="font-size: 1.15rem;"></i> Planificación de
+                                    Jornadas
                                 </button>
                             </li>
                         </ul>
 
                         <div class="tab-content" id="abuelosTabsContent">
-                            
+
                             <!-- TAB DE ABUELOS -->
-                            <div class="tab-pane fade show active" id="abuelitos-content" role="tabpanel" aria-labelledby="abuelitos-tab">
+                            <div class="tab-pane fade show active" id="abuelitos-content" role="tabpanel"
+                                aria-labelledby="abuelitos-tab">
                                 <!-- Filtros y Búsqueda -->
                                 <div class="row g-3 align-items-end mb-4">
                                     <div class="col-md-8">
                                         <form action="{{ route('circulo-abuelos.index') }}" method="GET" class="row g-2">
                                             <div class="col-md-5">
-                                                <input type="text" name="search" class="form-control" placeholder="Buscar por cédula o nombre..." value="{{ request('search') }}">
+                                                <input type="text" name="search" class="form-control"
+                                                    placeholder="Buscar por cédula o nombre..."
+                                                    value="{{ request('search') }}">
                                             </div>
                                             <div class="col-md-4">
                                                 <select name="consejo_comunal_id" class="form-select">
                                                     <option value="">Todas las comunidades</option>
-                                                    @foreach($consejosComunales as $cc)
-                                                        <option value="{{ $cc->id }}" {{ request('consejo_comunal_id') == $cc->id ? 'selected' : '' }}>{{ $cc->nombre }}</option>
+                                                    @foreach ($consejosComunales as $cc)
+                                                        <option value="{{ $cc->id }}"
+                                                            {{ request('consejo_comunal_id') == $cc->id ? 'selected' : '' }}>
+                                                            {{ $cc->nombre }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-md-3 d-flex gap-1">
                                                 <button type="submit" class="btn btn-primary w-100">Filtrar</button>
                                                 @if (request('search') || request('consejo_comunal_id'))
-                                                    <a href="{{ route('circulo-abuelos.index') }}" class="btn btn-secondary" title="Limpiar Filtros"><i class="ri-refresh-line"></i></a>
+                                                    <a href="{{ route('circulo-abuelos.index') }}" class="btn btn-secondary"
+                                                        title="Limpiar Filtros"><i class="ri-refresh-line"></i></a>
                                                 @endif
                                             </div>
                                         </form>
                                     </div>
                                     <div class="col-md-4 text-end">
-                                        <span class="text-muted fw-bold">Total Encontrados: <span class="badge bg-secondary">{{ $abuelos->count() }}</span></span>
+                                        <span class="text-muted fw-bold">Total Encontrados: <span
+                                                class="badge bg-secondary">{{ $abuelos->count() }}</span></span>
                                     </div>
                                 </div>
 
@@ -123,7 +146,8 @@
                                             @forelse($abuelos as $ab)
                                                 <tr>
                                                     <td>
-                                                        <span class="badge bg-primary me-1">{{ $ab->cedula_tipo ?? 'V' }}</span>
+                                                        <span
+                                                            class="badge bg-primary me-1">{{ $ab->cedula_tipo ?? 'V' }}</span>
                                                         {{ $ab->cedula }}
                                                     </td>
                                                     <td class="fw-semibold">{{ $ab->nombres }} {{ $ab->apellidos }}</td>
@@ -132,18 +156,23 @@
                                                     </td>
                                                     <td>{{ $ab->genero ?? 'No registrado' }}</td>
                                                     <td>
-                                                        @if($ab->tipo_enfermedad)
-                                                            <span class="badge bg-danger-subtle text-danger">{{ $ab->tipo_enfermedad }}</span>
+                                                        @if ($ab->tipo_enfermedad)
+                                                            <span
+                                                                class="badge bg-danger-subtle text-danger">{{ $ab->tipo_enfermedad }}</span>
                                                         @else
                                                             <span class="text-muted small">Ninguna</span>
                                                         @endif
                                                     </td>
                                                     <td>{{ $ab->consejoComunal->nombre ?? 'Sin vincular' }}</td>
-                                                    <td class="text-truncate" style="max-width: 200px;" title="{{ $ab->direccion }}">{{ $ab->direccion ?? 'No registrada' }}</td>
+                                                    <td class="text-truncate" style="max-width: 200px;"
+                                                        title="{{ $ab->direccion }}">
+                                                        {{ $ab->direccion ?? 'No registrada' }}</td>
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="7" class="text-center py-4 text-muted">No se encontraron adultos mayores censados (mayores o iguales a 60 años).</td>
+                                                    <td colspan="7" class="text-center py-4 text-muted">No se
+                                                        encontraron adultos mayores censados (mayores o iguales a 60 años).
+                                                    </td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
@@ -152,12 +181,15 @@
                             </div>
 
                             <!-- TAB DE JORNADAS -->
-                            <div class="tab-pane fade" id="jornadas-content" role="tabpanel" aria-labelledby="jornadas-tab">
+                            <div class="tab-pane fade" id="jornadas-content" role="tabpanel"
+                                aria-labelledby="jornadas-tab">
                                 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarJornada">
+                                    <button class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalRegistrarJornada">
                                         <i class="ri-add-fill"></i> Planificar Jornada de Atención
                                     </button>
-                                    <span class="text-muted fw-bold">Jornadas Registradas: <span class="badge bg-secondary">{{ $jornadas->count() }}</span></span>
+                                    <span class="text-muted fw-bold">Jornadas Registradas: <span
+                                            class="badge bg-secondary">{{ $jornadas->count() }}</span></span>
                                 </div>
 
                                 <!-- Tabla de Jornadas -->
@@ -176,29 +208,41 @@
                                             @forelse($jornadas as $jo)
                                                 <tr>
                                                     <td class="fw-semibold">{{ $jo->nombre_jornada }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($jo->fecha_programada)->format('d-m-Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($jo->fecha_programada)->format('d-m-Y') }}
+                                                    </td>
                                                     <td>{{ $jo->consejoComunal->nombre ?? 'Sin especificar' }}</td>
                                                     <td>
-                                                        @if($jo->estatus === 'Planificada')
-                                                            <span class="badge bg-warning text-dark"><i class="ri-time-line me-1"></i>Planificada</span>
+                                                        @if ($jo->estatus === 'Planificada')
+                                                            <span class="badge bg-warning text-dark"><i
+                                                                    class="ri-time-line me-1"></i>Planificada</span>
                                                         @elseif($jo->estatus === 'Completada')
-                                                            <span class="badge bg-success"><i class="ri-checkbox-circle-line me-1"></i>Completada</span>
+                                                            <span class="badge bg-success"><i
+                                                                    class="ri-checkbox-circle-line me-1"></i>Completada</span>
                                                         @else
-                                                            <span class="badge bg-danger"><i class="ri-close-circle-line me-1"></i>Suspendida</span>
+                                                            <span class="badge bg-danger"><i
+                                                                    class="ri-close-circle-line me-1"></i>Suspendida</span>
                                                         @endif
                                                     </td>
                                                     <td class="text-end">
                                                         <div>
-                                                            <button type="button" class="btn btn-sm btn-light me-1" title="Ver Detalles" onclick="consultarJornada({{ $jo->id }})">
+                                                            <button type="button" class="btn btn-sm btn-light me-1"
+                                                                title="Ver Detalles"
+                                                                onclick="consultarJornada({{ $jo->id }})">
                                                                 <i class="ri-eye-fill"></i>
                                                             </button>
-                                                            <button type="button" class="btn btn-sm btn-warning me-1" title="Editar" onclick="editarJornada({{ $jo->id }})">
+                                                            <button type="button" class="btn btn-sm btn-warning me-1"
+                                                                title="Editar"
+                                                                onclick="editarJornada({{ $jo->id }})">
                                                                 <i class="ri-pencil-fill"></i>
                                                             </button>
-                                                            <form action="{{ route('circulo-abuelos.destroy-jornada', $jo->id) }}" method="POST" class="d-inline">
+                                                            <form
+                                                                action="{{ route('circulo-abuelos.destroy-jornada', $jo->id) }}"
+                                                                method="POST" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
-                                                                <button type="button" class="btn btn-sm btn-danger btn-eliminar-jornada" title="Eliminar Jornada">
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-danger btn-eliminar-jornada"
+                                                                    title="Eliminar Jornada">
                                                                     <i class="ri-delete-bin-fill"></i>
                                                                 </button>
                                                             </form>
@@ -207,7 +251,8 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="5" class="text-center py-4 text-muted">No hay jornadas de atención planificadas.</td>
+                                                    <td colspan="5" class="text-center py-4 text-muted">No hay jornadas
+                                                        de atención planificadas.</td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
@@ -225,7 +270,8 @@
     <!-- MODALES DE JORNADAS -->
 
     <!-- Modal Registrar -->
-    <div class="modal fade" id="modalRegistrarJornada" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalRegistrarJornada" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -233,12 +279,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
-                    <form class="needs-validation" novalidate id="formJornada" action="{{ route('circulo-abuelos.store-jornada') }}" autocomplete="off" method="POST">
+                    <form class="needs-validation" novalidate id="formJornada"
+                        action="{{ route('circulo-abuelos.store-jornada') }}" autocomplete="off" method="POST">
                         @csrf
                         <div class="row g-3">
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <input type="text" name="nombre_jornada" id="nombre_jornada" class="form-control bg-white" placeholder="Nombre de Jornada" required minlength="3">
+                                    <input type="text" name="nombre_jornada" id="nombre_jornada"
+                                        class="form-control bg-white" placeholder="Nombre de Jornada" required
+                                        minlength="3">
                                     <label for="nombre_jornada">Nombre de la Jornada</label>
                                 </div>
                             </div>
@@ -246,10 +295,14 @@
                                 <div class="form-group">
                                     <label class="mb-1 small text-muted" for="fecha_programada">Fecha programada</label>
                                     <div class="input-group wrap_flatpicker" data-min-date="today">
-                                        <input required type="text" name="fecha_programada" id="fecha_programada" class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
-                                        <a class="input-group-text input-button bg-white" title="limpiar" data-clear href="javascript:void(0)">
-                                            <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        <input required type="text" name="fecha_programada" id="fecha_programada"
+                                            class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
+                                        <a class="input-group-text input-button bg-white" title="limpiar" data-clear
+                                            href="javascript:void(0)">
+                                            <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12" />
                                             </svg>
                                         </a>
                                     </div>
@@ -257,9 +310,10 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <select name="consejo_comunal_id" id="consejo_comunal_id" class="form-select bg-white" required>
+                                    <select name="consejo_comunal_id" id="consejo_comunal_id"
+                                        class="form-select bg-white" required>
                                         <option value="" selected disabled>Seleccione...</option>
-                                        @foreach($consejosComunales as $cc)
+                                        @foreach ($consejosComunales as $cc)
                                             <option value="{{ $cc->id }}">{{ $cc->nombre }}</option>
                                         @endforeach
                                     </select>
@@ -268,7 +322,8 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <textarea name="detalles" id="detalles" class="form-control bg-white" placeholder="Detalles de la actividad" style="height: 120px;"></textarea>
+                                    <textarea name="detalles" id="detalles" class="form-control bg-white" placeholder="Detalles de la actividad"
+                                        style="height: 120px;"></textarea>
                                     <label for="detalles">Detalles o Metas de la Jornada</label>
                                 </div>
                             </div>
@@ -284,7 +339,8 @@
     </div>
 
     <!-- Modal Editar -->
-    <div class="modal fade" id="modalEditarJornada" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalEditarJornada" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -292,24 +348,33 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
-                    <form class="needs-validation" novalidate id="formEditarJornada" action="" autocomplete="off" method="POST">
+                    <form class="needs-validation" novalidate id="formEditarJornada" action="" autocomplete="off"
+                        method="POST">
                         @csrf
                         @method('PUT')
                         <div class="row g-3">
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <input type="text" name="nombre_jornada" id="edit-nombre_jornada" class="form-control bg-white" placeholder="Nombre de Jornada" required minlength="3">
+                                    <input type="text" name="nombre_jornada" id="edit-nombre_jornada"
+                                        class="form-control bg-white" placeholder="Nombre de Jornada" required
+                                        minlength="3">
                                     <label for="edit-nombre_jornada">Nombre de la Jornada</label>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label class="mb-1 small text-muted" for="edit-fecha_programada">Fecha programada</label>
-                                    <div class="input-group wrap_flatpicker" id="edit-fecha_programada_container" data-min-date="none">
-                                        <input required type="text" name="fecha_programada" id="edit-fecha_programada" class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
-                                        <a class="input-group-text input-button bg-white" title="limpiar" data-clear href="javascript:void(0)">
-                                            <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    <label class="mb-1 small text-muted" for="edit-fecha_programada">Fecha
+                                        programada</label>
+                                    <div class="input-group wrap_flatpicker" id="edit-fecha_programada_container"
+                                        data-min-date="none">
+                                        <input required type="text" name="fecha_programada" id="edit-fecha_programada"
+                                            class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
+                                        <a class="input-group-text input-button bg-white" title="limpiar" data-clear
+                                            href="javascript:void(0)">
+                                            <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12" />
                                             </svg>
                                         </a>
                                     </div>
@@ -317,9 +382,10 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <select name="consejo_comunal_id" id="edit-consejo_comunal_id" class="form-select bg-white" required>
+                                    <select name="consejo_comunal_id" id="edit-consejo_comunal_id"
+                                        class="form-select bg-white" required>
                                         <option value="" selected disabled>Seleccione...</option>
-                                        @foreach($consejosComunales as $cc)
+                                        @foreach ($consejosComunales as $cc)
                                             <option value="{{ $cc->id }}">{{ $cc->nombre }}</option>
                                         @endforeach
                                     </select>
@@ -338,7 +404,8 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <textarea name="detalles" id="edit-detalles" class="form-control bg-white" placeholder="Detalles de la actividad" style="height: 120px;"></textarea>
+                                    <textarea name="detalles" id="edit-detalles" class="form-control bg-white" placeholder="Detalles de la actividad"
+                                        style="height: 120px;"></textarea>
                                     <label for="edit-detalles">Detalles o Metas de la Jornada</label>
                                 </div>
                             </div>
@@ -459,7 +526,8 @@
                     $('#view-nombre_jornada').val(data.nombre_jornada ?? '');
                     $('#view-fecha_programada').val(data.fecha_programada_formateada ?? '');
                     $('#view-estatus').val(data.estatus ?? '');
-                    $('#view-comunidad').val(data.consejo_comunal ? data.consejo_comunal.nombre : 'No especificada');
+                    $('#view-comunidad').val(data.consejo_comunal ? data.consejo_comunal.nombre :
+                        'No especificada');
                     $('#view-detalles').val(data.detalles ?? 'Sin detalles registrados.');
 
                     var modal = new bootstrap.Modal(document.getElementById('modalConsultarJornada'));

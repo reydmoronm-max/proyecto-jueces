@@ -20,7 +20,7 @@ return new class extends Migration
             // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('activo')->default(true);
-            $table->enum('rol', ['Administrador', 'Juez', 'Recepcionista'])->default('Administrador');
+            $table->enum('rol', ['Jefe de comuna', 'Juez', 'Jefe de Comando'])->default('Jefe de comuna');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -83,4 +83,11 @@ Route::middleware('auth')->group(function () {
     // Rutas para Censo Demográfico y Reportes PDF
     Route::get('/reportes', [CensoDemograficoController::class, 'index'])->name('reportes.index');
     Route::get('/reportes/pdf', [CensoDemograficoController::class, 'exportPdf'])->name('reportes.pdf');
+
+    // Rutas para el módulo Actas (Generador de Cartas/Constancias)
+    Route::get('/actas-cartas', [\App\Http\Controllers\ActasCartasController::class, 'index'])->name('actas.index');
+    Route::get('/actas-cartas/buscar-persona', [\App\Http\Controllers\ActasCartasController::class, 'buscarPersona'])->name('actas.buscar-persona');
+    Route::post('/actas-cartas/residencia-pdf', [\App\Http\Controllers\ActasCartasController::class, 'exportResidenciaPdf'])->name('actas.residencia-pdf');
+    Route::post('/actas-cartas/buena-conducta-pdf', [\App\Http\Controllers\ActasCartasController::class, 'exportBuenaConductaPdf'])->name('actas.buena-conducta-pdf');
 });
+

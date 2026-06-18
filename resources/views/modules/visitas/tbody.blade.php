@@ -7,7 +7,8 @@
         </td>
         <td>
             <h6>
-                <span class="badge {{ optional($item->persona)->cedula_tipo == 'V' ? 'bg-primary' : 'bg-warning text-dark' }} me-1">{{ optional($item->persona)->cedula_tipo }}</span>
+                <span
+                    class="badge {{ optional($item->persona)->cedula_tipo == 'V' ? 'bg-primary' : 'bg-warning text-dark' }} me-1">{{ optional($item->persona)->cedula_tipo }}</span>
                 {{ optional($item->persona)->cedula }}
             </h6>
         </td>
@@ -15,13 +16,15 @@
             <h6>{{ optional($item->persona)->telefono ?? '-' }}</h6>
         </td>
         <td>
-            <h6 style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ optional($item->persona)->direccion ?? '-' }}" data-bs-toggle="tooltip">{{ optional($item->persona)->direccion ?? '-' }}</h6>
+            <h6 style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
+                title="{{ optional($item->persona)->direccion ?? '-' }}" data-bs-toggle="tooltip">
+                {{ optional($item->persona)->direccion ?? '-' }}</h6>
         </td>
         <td>
             <h6>{{ $item->de_parte }}</h6>
         </td>
         <td>
-            <button class="btn btn-sm btn-info" style="background-color: #007bff; border-color: #007bff;" onclick="mostrarProposito({{ $item->id }})">
+            <button class="btn btn-sm btn-info bg-primary" onclick="mostrarProposito({{ $item->id }})">
                 <i class="ri-eye-fill"></i> Ver
             </button>
             <div id="proposito-text-{{ $item->id }}" class="d-none">{{ $item->proposito }}</div>
