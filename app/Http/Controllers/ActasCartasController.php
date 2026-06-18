@@ -53,10 +53,16 @@ class ActasCartasController extends Controller
             return response()->json(['message' => 'El ciudadano no tiene registrada una dirección de domicilio en el censo. Para continuar, debe completar este dato en el censo.'], 422);
         }
 
+        $esDenunciado = \DB::table('involucrados')
+            ->where('persona_id', $persona->id)
+            ->where('rol', 'denunciado')
+            ->exists();
+
         return response()->json([
             'persona' => $persona,
             'consejo_comunal' => $persona->consejoComunal,
             'jefe_comando' => $persona->consejoComunal->jefe,
+            'es_denunciado' => $esDenunciado,
         ]);
     }
 
@@ -107,6 +113,15 @@ class ActasCartasController extends Controller
 
         if (!$persona || !$persona->consejoComunal || !$persona->consejoComunal->jefe || empty($persona->direccion)) {
             return back()->withErrors(['error' => 'Los datos del ciudadano están incompletos en el censo.']);
+        }
+
+        $esDenunciado = \DB::table('involucrados')
+            ->where('persona_id', $persona->id)
+            ->where('rol', 'denunciado')
+            ->exists();
+
+        if ($esDenunciado) {
+            return back()->withErrors(['error' => 'No se puede generar la carta de buena conducta porque el ciudadano figura como denunciado en un expediente del sistema.']);
         }
 
         // Date formatting in Spanish
