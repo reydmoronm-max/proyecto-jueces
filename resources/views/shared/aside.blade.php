@@ -124,6 +124,13 @@
                         <span class="item-name">Reportes Demográficos</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('actas.*') ? 'active' : '' }}"
+                        href="{{ route('actas.index') }}">
+                        <i class="icon ri-file-paper-2-fill"></i>
+                        <span class="item-name">Actas</span>
+                    </a>
+                </li>
                 {{-- <li class="nav-item">
                             <a class="nav-link @yield('citacionesActive')" href="{{ route('citaciones.index') }}">
                                 <i class="icon ri-alarm-fill"></i>
