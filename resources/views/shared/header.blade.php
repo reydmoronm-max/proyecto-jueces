@@ -173,7 +173,7 @@
                 </div>
             </div>
             <div class="iq-header-img">
-                <img src={{ asset('images/dashboard/top-header3.png') }} alt="header"
+                <img src={{ asset('images/dashboard/top-headerPrueba.png') }} alt="header"
                     class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
                 <img src={{ asset('images/dashboard/top-header1.png') }} alt="header"
                     class="theme-color-purple-img img-fluid w-100 h-100 animated-scaleX">

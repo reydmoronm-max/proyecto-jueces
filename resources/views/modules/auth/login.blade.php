@@ -19,10 +19,13 @@
                             <div class="col-md-10">
                                 <div class="card card-transparent shadow-none d-flex justify-content-center mb-0 auth-card">
                                     <div class="card-body">
-                                        <h2 class="mb-2 fw-bold">Iniciar sesión</h2>
+                                        <img src="{{ asset('images/logo.png') }}" alt=""
+                                            class="w-25 h-25 mb-4 opacity-50">
+                                        <h1 class="mb-2 fw-bolder">INICIAR SESIÓN</h1>
                                         <a style="pointer-events: none;" href="#"
                                             class="navbar-brand d-flex align-items-center mb-3">
-                                            <h5 class="text-primary">Sistema de Gestión para la Atención Comunitaria</h5>
+                                            <h4 class="text-primary fst-italic">Sistema de Gestión Integral Comunal
+                                            </h4>
                                         </a>
                                         {{-- <p class="">Ingrese sus credenciales para acceder al sistema.</p> --}}
                                         <form class="needs-validation" novalidate action="{{ route('logear') }}"
@@ -82,7 +85,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 d-md-block d-none bg-primary p-0 mt-n1 vh-100 overflow-hidden">
-                        <img src="{{ asset('images/auth/01.png') }}" class="img-fluid gradient-main animated-scaleX"
+                        <img src="{{ asset('images/auth/prueba.png') }}" class="img-fluid gradient-main animated-scaleX"
                             alt="images">
                     </div>
                 </div>
