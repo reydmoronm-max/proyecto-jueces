@@ -1,4 +1,5 @@
-<div class="modal fade" id="modalEditarIntegrante" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalEditarIntegrante" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,7 +7,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-2">
-                <form class="needs-validation" novalidate id="formEditarIntegrante" action="" autocomplete="off" method="POST">
+                <form class="needs-validation" novalidate id="formEditarIntegrante" action="" autocomplete="off"
+                    method="POST">
                     @csrf
                     @method('PUT')
 
@@ -14,7 +16,8 @@
                         <!-- Cédula -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <input id="edit-cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" required
+                                <input id="edit-cedula" type="number" name="cedula" class="form-control bg-white"
+                                    placeholder="Cédula" required
                                     oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                                 <label for="edit-cedula">Cédula</label>
                             </div>
@@ -23,8 +26,9 @@
                         <!-- Nombres -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="nombres" id="edit-nombres" placeholder="Nombres" required
-                                    pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$" title="Solo letras y espacios"
+                                <input type="text" class="form-control bg-white" name="nombres" id="edit-nombres"
+                                    placeholder="Nombres" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$"
+                                    title="Solo letras y espacios"
                                     oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]+/g, '')">
                                 <label for="edit-nombres">Nombres</label>
                             </div>
@@ -33,8 +37,9 @@
                         <!-- Apellidos -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="apellidos" id="edit-apellidos" placeholder="Apellidos" required
-                                    pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$" title="Solo letras y espacios"
+                                <input type="text" class="form-control bg-white" name="apellidos" id="edit-apellidos"
+                                    placeholder="Apellidos" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$"
+                                    title="Solo letras y espacios"
                                     oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]+/g, '')">
                                 <label for="edit-apellidos">Apellidos</label>
                             </div>
@@ -43,38 +48,38 @@
                         <!-- Teléfono -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="telefono" id="edit-telefono" placeholder="Teléfono">
+                                <input type="text" class="form-control bg-white" name="telefono" id="edit-telefono"
+                                    placeholder="Teléfono">
                                 <label for="edit-telefono">Teléfono</label>
                             </div>
                         </div>
 
                         <!-- Fecha de Nacimiento -->
-                        <div class="col-12 col-md-4">
+                        <div class="col-12 col-md-8">
                             <div class="form-group">
-                                <label class="mb-1 small text-muted" for="edit-fecha_nacimiento">Fecha de nacimiento</label>
-                                <div class="input-group wrap_flatpicker" id="edit-fecha_nacimiento_container" data-min-date="none">
-                                    <input required type="text" name="fecha_nacimiento" id="edit-fecha_nacimiento" class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
-                                    <a class="input-group-text input-button bg-white" title="limpiar" data-clear href="javascript:void(0)">
-                                        <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                <label class="mb-1 small text-muted" for="edit-fecha_nacimiento">Fecha de
+                                    nacimiento</label>
+                                <div class="input-group wrap_flatpicker" id="edit-fecha_nacimiento_container"
+                                    data-min-date="none">
+                                    <input required type="text" name="fecha_nacimiento" id="edit-fecha_nacimiento"
+                                        class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
+                                    <a class="input-group-text input-button bg-white" title="limpiar" data-clear
+                                        href="javascript:void(0)">
+                                        <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Cantidad de Integrantes -->
-                        <div class="col-12 col-md-4">
-                            <div class="form-floating" style="margin-top: 24px;">
-                                <input type="number" class="form-control bg-white" name="cantidad_integrantes" id="edit-cantidad_integrantes" placeholder="Cant. integrantes" required min="1">
-                                <label for="edit-cantidad_integrantes">Cantidad de integrantes núcleo</label>
-                            </div>
-                        </div>
-
                         <!-- Centro Votación -->
                         <div class="col-12 col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="centro_votacion" id="edit-centro_votacion" placeholder="Centro de Votación">
+                                <input type="text" class="form-control bg-white" name="centro_votacion"
+                                    id="edit-centro_votacion" placeholder="Centro de Votación">
                                 <label for="edit-centro_votacion">Centro de Votación</label>
                             </div>
                         </div>
@@ -82,7 +87,8 @@
                         <!-- Carnet de la patria -->
                         <div class="col-12 col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="carnet_patria" id="edit-carnet_patria" placeholder="Carnet de la Patria">
+                                <input type="text" class="form-control bg-white" name="carnet_patria"
+                                    id="edit-carnet_patria" placeholder="Carnet de la Patria">
                                 <label for="edit-carnet_patria">Carnet de la Patria</label>
                             </div>
                         </div>
@@ -90,7 +96,8 @@
                         <!-- Nivel Académico -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <select name="nivel_academico" id="edit-nivel_academico" class="form-select bg-white" required>
+                                <select name="nivel_academico" id="edit-nivel_academico" class="form-select bg-white"
+                                    required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Primaria">Primaria</option>
@@ -106,7 +113,8 @@
                         <!-- Profesión -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="profesion" id="edit-profesion" placeholder="Profesión">
+                                <input type="text" class="form-control bg-white" name="profesion"
+                                    id="edit-profesion" placeholder="Profesión">
                                 <label for="edit-profesion">Profesión</label>
                             </div>
                         </div>
@@ -114,7 +122,8 @@
                         <!-- Situación Laboral -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="situacion_laboral" id="edit-situacion_laboral" placeholder="Situación laboral">
+                                <input type="text" class="form-control bg-white" name="situacion_laboral"
+                                    id="edit-situacion_laboral" placeholder="Situación laboral">
                                 <label for="edit-situacion_laboral">Situación Laboral</label>
                             </div>
                         </div>
@@ -135,7 +144,8 @@
                         <!-- Tipo Enfermedad -->
                         <div class="col-12 col-md-8">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="tipo_enfermedad" id="edit-tipo_enfermedad" placeholder="Tipo de enfermedad">
+                                <input type="text" class="form-control bg-white" name="tipo_enfermedad"
+                                    id="edit-tipo_enfermedad" placeholder="Tipo de enfermedad">
                                 <label for="edit-tipo_enfermedad">Tipo de Enfermedad (si posee)</label>
                             </div>
                         </div>
@@ -143,7 +153,8 @@
                         <!-- Ayuda Técnica Mencionada -->
                         <div class="col-12 col-md-8">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="ayuda_tecnica" id="edit-ayuda_tecnica" placeholder="Ayuda técnica mencionada">
+                                <input type="text" class="form-control bg-white" name="ayuda_tecnica"
+                                    id="edit-ayuda_tecnica" placeholder="Ayuda técnica mencionada">
                                 <label for="edit-ayuda_tecnica">Ayuda Técnica Mencionada</label>
                             </div>
                         </div>
@@ -151,7 +162,8 @@
                         <!-- Bono Único Familiar -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <select name="bono_unico_familiar" id="edit-bono_unico_familiar" class="form-select bg-white" required>
+                                <select name="bono_unico_familiar" id="edit-bono_unico_familiar"
+                                    class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
@@ -163,7 +175,8 @@
                         <!-- Pensionado/Jubilado -->
                         <div class="col-12 col-md-3">
                             <div class="form-floating">
-                                <select name="pensionado_jubilado" id="edit-pensionado_jubilado" class="form-select bg-white" required>
+                                <select name="pensionado_jubilado" id="edit-pensionado_jubilado"
+                                    class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
@@ -175,7 +188,8 @@
                         <!-- Misión Vivienda -->
                         <div class="col-12 col-md-3">
                             <div class="form-floating">
-                                <select name="mision_vivienda" id="edit-mision_vivienda" class="form-select bg-white" required>
+                                <select name="mision_vivienda" id="edit-mision_vivienda" class="form-select bg-white"
+                                    required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
@@ -199,7 +213,8 @@
                         <!-- Casa Alimentación -->
                         <div class="col-12 col-md-3">
                             <div class="form-floating">
-                                <select name="casa_alimentacion" id="edit-casa_alimentacion" class="form-select bg-white" required>
+                                <select name="casa_alimentacion" id="edit-casa_alimentacion"
+                                    class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
@@ -252,9 +267,10 @@
                         <!-- Consejo Comunal -->
                         <div class="col-12 col-md-3">
                             <div class="form-floating">
-                                <select name="consejo_comunal_id" id="edit-consejo_comunal_id" class="form-select bg-white">
+                                <select name="consejo_comunal_id" id="edit-consejo_comunal_id"
+                                    class="form-select bg-white">
                                     <option value="" selected>Ninguno (Sin vincular)</option>
-                                    @foreach($consejosComunales as $cc)
+                                    @foreach ($consejosComunales as $cc)
                                         <option value="{{ $cc->id }}">{{ $cc->nombre }}</option>
                                     @endforeach
                                 </select>
@@ -265,7 +281,8 @@
                         <!-- Dirección -->
                         <div class="col-12 col-md-12">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="direccion" id="edit-direccion" placeholder="Dirección">
+                                <input type="text" class="form-control bg-white" name="direccion"
+                                    id="edit-direccion" placeholder="Dirección">
                                 <label for="edit-direccion">Dirección específica</label>
                             </div>
                         </div>

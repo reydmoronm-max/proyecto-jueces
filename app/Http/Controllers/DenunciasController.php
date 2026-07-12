@@ -10,6 +10,9 @@ use App\Models\Expediente;
 use App\Models\Involucrados;
 use App\Models\Actas;
 use App\Models\Citaciones;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DenunciasController extends Controller
 {
@@ -22,19 +25,19 @@ class DenunciasController extends Controller
         $paginaTitulo = 'Denuncias';
         $paginaSubtitulo = 'Listado de denuncias registradas';
         $denunciasActive = 'active';
-        
+
         // Obtener expedientes abiertos con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
-        $expedientesAbiertos = Expediente::with(['personas' => function($q) {
+        $expedientesAbiertos = Expediente::with(['personas' => function ($q) {
             $q->wherePivot('rol', 'denunciante');
         }])->where('estatus', 'Abierto')->orderBy('created_at', 'desc')->get();
 
         // Obtener expedientes en proceso con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
-        $expedientesEnProceso = Expediente::with(['personas' => function($q) {
+        $expedientesEnProceso = Expediente::with(['personas' => function ($q) {
             $q->wherePivot('rol', 'denunciante');
         }])->where('estatus', 'En proceso')->orderBy('created_at', 'desc')->get();
 
         // Obtener expedientes cerrados con persona denunciante (relación involucrados) y ordenados por fecha de creación descendente
-        $expedientesCerrados = Expediente::with(['personas' => function($q) {
+        $expedientesCerrados = Expediente::with(['personas' => function ($q) {
             $q->wherePivot('rol', 'denunciante');
         }])->where('estatus', 'Cerrado')->orderBy('created_at', 'desc')->get();
 
@@ -96,13 +99,14 @@ class DenunciasController extends Controller
 
             // 4. Guardar acta
             $contenido = "Requirente: " . ($request->requirente ?? '') . "\n" .
-                        "Receptor: " . ($request->receptor ?? '') . "\n" .
-                        "Acuerdos: " . ($request->acuerdos ?? '');
+                "Receptor: " . ($request->receptor ?? '') . "\n" .
+                "Acuerdos: " . ($request->acuerdos ?? '');
 
             Actas::create([
                 'expediente_id' => $expediente->id,
                 'tipo_acta' => 'recepcion',
                 'contenido' => $contenido,
+                'lo_atiende_juez_id' => Auth::user()->id,
             ]);
 
             DB::commit();
@@ -114,13 +118,13 @@ class DenunciasController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+    /*
+        Display the specified resource.
+    
     public function show($id)
     {
         $expediente = \App\Models\Expediente::with([
-            'personas' => function($q) {
+            'personas' => function ($q) {
                 $q->wherePivot('rol', 'denunciante');
             },
             'actas'
@@ -142,6 +146,7 @@ class DenunciasController extends Controller
             'acuerdos' => $acta ? $this->extraerCampoActa($acta->contenido, 'Acuerdos') : '',
         ]);
     }
+        */
 
     public function buscarPersona(Request $request)
     {
@@ -282,5 +287,56 @@ class DenunciasController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', 'Ocurrió un error al posponer la citación.');
         }
+    }
+
+    /**
+     * Exportar Acta de Recepcion de Denuncia en PDF.
+     */
+    public function exportarActaRecepcionPdf($id)
+    {
+        $expediente = \App\Models\Expediente::with([
+            'personas' => function ($q) {
+                $q->wherePivot('rol', 'denunciante');
+            },
+            'actas'
+        ])->findOrFail($id);
+
+        $denunciante = $expediente->personas->first();
+        $acta = $expediente->actas->first();
+        $idJuez = $acta->lo_atiende_juez_id;
+        $juez = User::findOrFail($idJuez);
+
+        $nombreJuez = $juez->nombre;
+        $apellidoJuez = $juez->apellido;
+        $cedulaJuez = $juez->cedula_usuario;
+
+        $requirente = $acta ? $this->extraerCampoActa($acta->contenido, 'Requirente') : '';
+        $receptor = $acta ? $this->extraerCampoActa($acta->contenido, 'Receptor') : '';
+        $acuerdos = $acta ? $this->extraerCampoActa($acta->contenido, 'Acuerdos') : '';
+
+        // Date formatting in Spanish
+        $fecha = $acta->created_at;
+        $hora = $acta->created_at->format('h:i A');
+        $dia = $fecha->day;
+        $meses = [
+            1 => 'enero',
+            2 => 'febrero',
+            3 => 'marzo',
+            4 => 'abril',
+            5 => 'mayo',
+            6 => 'junio',
+            7 => 'julio',
+            8 => 'agosto',
+            9 => 'septiembre',
+            10 => 'octubre',
+            11 => 'noviembre',
+            12 => 'diciembre'
+        ];
+        $mes = $meses[$fecha->month];
+        $anio = $fecha->year;
+
+        $pdf = Pdf::loadView('modules.denuncias.pdf_acta_recepcion_denuncia', compact('denunciante', 'requirente', 'receptor', 'acuerdos', 'dia', 'mes', 'anio', 'hora', 'nombreJuez', 'apellidoJuez', 'cedulaJuez'));
+
+        return $pdf->stream('acta_recepcion_' . $expediente->id . '.pdf');
     }
 }

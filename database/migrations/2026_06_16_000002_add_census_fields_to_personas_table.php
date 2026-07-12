@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::table('personas', function (Blueprint $table) {
             $table->foreignId('familia_id')
-                  ->nullable()
-                  ->constrained('familias')
-                  ->onDelete('set null');
+                ->nullable()
+                ->constrained('familias')
+                ->onDelete('set null');
             $table->date('fecha_nacimiento')->nullable();
-            $table->integer('cantidad_integrantes')->nullable();
             $table->string('centro_votacion')->nullable();
             $table->string('carnet_patria')->nullable();
             $table->string('nivel_academico')->nullable();

@@ -15,7 +15,7 @@
             @if ($item->jefe)
                 <h6>
                     <span class="badge bg-primary me-1">{{ $item->jefe->cedula_tipo }}</span>
-                    {{ $item->jefe->cedula }} - 
+                    {{ $item->jefe->cedula }} -
                     {{ $item->jefe->nombres }} {{ $item->jefe->apellidos }}
                 </h6>
             @else
@@ -23,16 +23,19 @@
             @endif
         </td>
         <td>
-            <h6 style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $item->direccion }}" data-bs-toggle="tooltip">
+            <h6 style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
+                title="{{ $item->direccion }}" data-bs-toggle="tooltip">
                 {{ $item->direccion }}
             </h6>
         </td>
         <td>
-            <div class="btn-group" role="group">
-                <button class="btn btn-sm btn-warning me-1" onclick="editarConsejo({{ $item->id }})" title="Editar consejo">
+            <div>
+                <button class="btn btn-sm btn-warning me-1" onclick="editarConsejo({{ $item->id }})"
+                    title="Editar consejo">
                     <i class="ri-edit-fill"></i>
                 </button>
-                <form action="{{ route('consejos-comunales.destroy', $item->id) }}" method="POST" class="d-inline form-eliminar">
+                <form action="{{ route('consejos-comunales.destroy', $item->id) }}" method="POST"
+                    class="d-inline form-eliminar">
                     @csrf
                     @method('DELETE')
                     <button type="button" class="btn btn-sm btn-danger btn-eliminar-consejo" title="Eliminar consejo">

@@ -21,7 +21,6 @@ class Persona extends Model
         'direccion',
         'familia_id',
         'fecha_nacimiento',
-        'cantidad_integrantes',
         'centro_votacion',
         'carnet_patria',
         'nivel_academico',

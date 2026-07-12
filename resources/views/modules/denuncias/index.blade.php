@@ -76,10 +76,9 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-sm btn-light"
-                                                                onclick="consultarDenuncia({{ $expediente->id }})">
+                                                            <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}">
                                                                 <i class="ri-eye-fill"></i>
-                                                            </button>
+                                                            </a>
                                                             <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                                                 data-bs-target="#modalCita"
                                                                 onclick="agregar_id_expediente({{ $expediente->id }})">
@@ -130,10 +129,9 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-sm btn-light"
-                                                                onclick="consultarDenuncia({{ $expediente->id }})">
+                                                            <a type="button" class="btn btn-sm btn-light"href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}">
                                                                 <i class="ri-eye-fill"></i>
-                                                            </button>
+                                                            </a>
                                                             <button type="button" class="btn btn-sm btn-warning"
                                                                 data-bs-toggle="modal" data-bs-target="#modalPosponerCita"
                                                                 onclick="agregar_id_expediente_posponer({{ $expediente->id }})">
@@ -244,7 +242,7 @@
 
 @push('scripts')
     <script>
-        function consultarDenuncia(id) {
+        /*function consultarDenuncia(id) {
             $.ajax({
                 url: 'denuncias/' + id,
                 type: 'GET',
@@ -265,6 +263,7 @@
                 }
             });
         }
+        */
 
         function agregar_id_expediente(id) {
             $('#cita_expediente_id').val(id);

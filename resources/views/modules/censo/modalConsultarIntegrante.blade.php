@@ -40,18 +40,10 @@
                     </div>
 
                     <!-- Fecha de Nacimiento -->
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-8">
                         <div class="form-group">
                             <label class="small text-muted mb-1">Fecha de nacimiento</label>
                             <input id="view-fecha_nacimiento" type="text" class="form-control bg-light" readonly>
-                        </div>
-                    </div>
-
-                    <!-- Cantidad de Integrantes -->
-                    <div class="col-12 col-md-4">
-                        <div class="form-group">
-                            <label class="small text-muted mb-1">Integrantes en núcleo familiar</label>
-                            <input id="view-cantidad_integrantes" type="text" class="form-control bg-light" readonly>
                         </div>
                     </div>
 
@@ -131,7 +123,8 @@
                     <div class="col-12 col-md-3">
                         <div class="form-group">
                             <label class="small text-muted mb-1">Pensionado / Jubilado</label>
-                            <input id="view-pensionado_jubilado" type="text" class="form-control bg-light" readonly>
+                            <input id="view-pensionado_jubilado" type="text" class="form-control bg-light"
+                                readonly>
                         </div>
                     </div>
 
