@@ -339,4 +339,73 @@ class DenunciasController extends Controller
 
         return $pdf->stream('acta_recepcion_' . $expediente->id . '.pdf');
     }
+
+    /**
+     * Exportar Acta de Conciliacion de Denuncia en PDF.
+     */
+    public function exportarActaConciliacionPdf($id)
+    {
+        $expediente = \App\Models\Expediente::findOrFail($id);
+
+        // Buscar el acta específica de conciliación
+        $acta = $expediente->actas()->where('tipo_acta', 'conciliacion')->first();
+        if (!$acta) {
+            return redirect()->back()->with('error', 'El acta de conciliación no ha sido registrada para este expediente.');
+        }
+
+        // Obtener el denunciante y el denunciado
+        $denunciante = $expediente->personas()->wherePivot('rol', 'denunciante')->first();
+        $denunciado = $expediente->personas()->wherePivot('rol', 'denunciado')->first();
+
+        $idJuez = $acta->lo_atiende_juez_id;
+        $juez = User::findOrFail($idJuez);
+
+        $nombreJuez = $juez->nombre;
+        $apellidoJuez = $juez->apellido;
+        $cedulaJuez = $juez->cedula_usuario;
+
+        $requirente = $this->extraerCampoActa($acta->contenido, 'Requirente');
+        $requerido = $this->extraerCampoActa($acta->contenido, 'Requerido');
+        $coordinador = $this->extraerCampoActa($acta->contenido, 'Coordinador');
+        $acuerdos = $this->extraerCampoActa($acta->contenido, 'Acuerdos');
+
+        // Date formatting in Spanish
+        $fecha = $acta->created_at;
+        $hora = $acta->created_at->format('h:i A');
+        $dia = $fecha->day;
+        $meses = [
+            1 => 'enero',
+            2 => 'febrero',
+            3 => 'marzo',
+            4 => 'abril',
+            5 => 'mayo',
+            6 => 'junio',
+            7 => 'julio',
+            8 => 'agosto',
+            9 => 'septiembre',
+            10 => 'octubre',
+            11 => 'noviembre',
+            12 => 'diciembre'
+        ];
+        $mes = $meses[$fecha->month];
+        $anio = $fecha->year;
+
+        $pdf = Pdf::loadView('modules.denuncias.pdf_acta_conciliacion', compact(
+            'denunciante',
+            'denunciado',
+            'requirente',
+            'requerido',
+            'coordinador',
+            'acuerdos',
+            'dia',
+            'mes',
+            'anio',
+            'hora',
+            'nombreJuez',
+            'apellidoJuez',
+            'cedulaJuez'
+        ));
+
+        return $pdf->stream('acta_conciliacion_' . $expediente->id . '.pdf');
+    }
 }

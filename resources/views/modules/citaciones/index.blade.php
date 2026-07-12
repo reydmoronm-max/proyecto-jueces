@@ -49,9 +49,9 @@
                                 <td>{{ $citacion->hora_citacion }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-light" title="Ver denuncia" onclick="consultarDenuncia({{ $citacion->expediente_id }})">
-                                            <i class="ri-eye-fill"></i>
-                                        </button>
+                                        <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $citacion->expediente_id) }}" title="Ver acta de recepción de denuncia">
+                                            <i class="ri-file-pdf-2-line"></i>
+                                        </a>
                                         <button type="button" class="btn btn-sm btn-primary" title="Conciliar" data-bs-toggle="modal" data-bs-target="#modalConciliacion" onclick="agregar_id_expediente_conciliar({{ $citacion->expediente_id }})">
                                             <i class=" ri-check-fill"></i>
                                         </button>
@@ -198,6 +198,15 @@
                 title: '¡Éxito!',
                 text: '{{ session('success') }}',
                 icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        @endif
+
+        @if (session('error')) 
+            Swal.fire({
+                title: '¡Error!',
+                text: '{{ session('error') }}',
+                icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
         @endif

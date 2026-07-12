@@ -517,4 +517,20 @@ window.addEventListener('load', function () {
     }
   })
 
+
+
+
+
+  // Inicialización manual de dropdowns para evitar conflictos con jQuery
+  // y problemas de overflow en tablas
+  document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function (el) {
+          new bootstrap.Dropdown(el, {
+              popperConfig: {
+                  strategy: 'fixed'
+              }
+          });
+      });
+  });
+
 })();

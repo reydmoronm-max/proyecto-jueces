@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('denuncias', DenunciasController::class);
     Route::post('/denuncias/posponer-cita', [DenunciasController::class, 'posponerCita'])->name('denuncias.posponer-cita');
     Route::get('denuncias/acta-recepcion-pdf/{id}', [DenunciasController::class, 'exportarActaRecepcionPdf'])->name('denuncias.exportar-acta-recepcion');
+    Route::get('denuncias/acta-conciliacion-pdf/{id}', [DenunciasController::class, 'exportarActaConciliacionPdf'])->name('denuncias.exportar-acta-conciliacion');
 
     // Consulta de expedientes
     Route::get('/consulta-expediente', [ExpedienteController::class, 'consulta'])->name('consulta.index');
