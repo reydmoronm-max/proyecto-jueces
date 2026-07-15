@@ -24,7 +24,8 @@
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="ri-id-card-line text-muted"></i></span>
                                 <input type="number" id="buscar_cedula" class="form-control" placeholder="Ej. 12345678"
-                                    min="1000000" max="99999999">
+                                    min="1000000" max="99999999"
+                                    oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                                 <button class="btn btn-primary" type="button" id="btn_buscar"><i
                                         class="ri-search-line"></i> Buscar</button>
                             </div>

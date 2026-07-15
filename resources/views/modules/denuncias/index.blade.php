@@ -76,13 +76,10 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-sm btn-light"
-                                                                onclick="consultarDenuncia({{ $expediente->id }})">
-                                                                <i class="ri-eye-fill"></i>
-                                                            </button>
-                                                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                                                data-bs-target="#modalCita"
-                                                                onclick="agregar_id_expediente({{ $expediente->id }})">
+                                                            <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia">
+                                                                <i class="ri-file-pdf-2-line"></i>
+                                                            </a>
+                                                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCita" onclick="agregar_id_expediente({{ $expediente->id }})" title="Agendar cita">
                                                                 <i class="ri-calendar-2-fill"></i>
                                                             </button>
                                                         </div>
@@ -130,10 +127,9 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-sm btn-light"
-                                                                onclick="consultarDenuncia({{ $expediente->id }})">
-                                                                <i class="ri-eye-fill"></i>
-                                                            </button>
+                                                            <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia">
+                                                                <i class="ri-file-pdf-2-line"></i>
+                                                            </a>
                                                             <button type="button" class="btn btn-sm btn-warning"
                                                                 data-bs-toggle="modal" data-bs-target="#modalPosponerCita"
                                                                 onclick="agregar_id_expediente_posponer({{ $expediente->id }})">
@@ -183,11 +179,22 @@
                                                             class="badge bg-light text-dark">{{ $expediente->estatus }}</span>
                                                     </td>
                                                     <td>
-                                                        <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-sm btn-light"
-                                                                onclick="consultarDenuncia({{ $expediente->id }})">
-                                                                <i class="ri-eye-fill"></i>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="ri-file-pdf-2-line"></i> Actas
                                                             </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                                <li>
+                                                                    <a type="button" class="dropdown-item" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}">
+                                                                        Ver acta de recepción
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a type="button" class="dropdown-item" href="{{ route('denuncias.exportar-acta-conciliacion', $expediente->id) }}">
+                                                                        Ver acta de conciliación
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -244,7 +251,7 @@
 
 @push('scripts')
     <script>
-        function consultarDenuncia(id) {
+        /*function consultarDenuncia(id) {
             $.ajax({
                 url: 'denuncias/' + id,
                 type: 'GET',
@@ -265,6 +272,7 @@
                 }
             });
         }
+        */
 
         function agregar_id_expediente(id) {
             $('#cita_expediente_id').val(id);

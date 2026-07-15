@@ -26,11 +26,11 @@ class CensoController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('numero_familia', 'LIKE', '%' . $search . '%')
-                  ->orWhereHas('personas', function ($qp) use ($search) {
-                      $qp->where('cedula', 'LIKE', '%' . $search . '%')
-                         ->orWhere('nombres', 'LIKE', '%' . $search . '%')
-                         ->orWhere('apellidos', 'LIKE', '%' . $search . '%');
-                  });
+                    ->orWhereHas('personas', function ($qp) use ($search) {
+                        $qp->where('cedula', 'LIKE', '%' . $search . '%')
+                            ->orWhere('nombres', 'LIKE', '%' . $search . '%')
+                            ->orWhere('apellidos', 'LIKE', '%' . $search . '%');
+                    });
             });
         }
 
@@ -86,7 +86,7 @@ class CensoController extends Controller
     public function destroy(string $id)
     {
         $familia = Familia::findOrFail($id);
-        
+
         // Note: DB foreign key cascade set null will handle setting persona's familia_id to null,
         // but we'll manually ensure they're disassociated if needed or let DB handle it.
         $familia->delete();
@@ -137,7 +137,6 @@ class CensoController extends Controller
             'apellidos'           => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'telefono'            => ['nullable', 'string', 'max:20'],
             'fecha_nacimiento'    => ['required', 'string'],
-            'cantidad_integrantes'=> ['required', 'integer', 'min:1'],
             'centro_votacion'     => ['nullable', 'string', 'max:150'],
             'carnet_patria'       => ['nullable', 'string', 'max:50'],
             'nivel_academico'     => ['required', 'string'],
@@ -188,7 +187,6 @@ class CensoController extends Controller
                 'telefono'            => $request->telefono,
                 'familia_id'          => $request->familia_id,
                 'fecha_nacimiento'    => $fecha,
-                'cantidad_integrantes'=> $request->cantidad_integrantes,
                 'centro_votacion'     => $request->centro_votacion,
                 'carnet_patria'       => $request->carnet_patria,
                 'nivel_academico'     => $request->nivel_academico,
@@ -254,7 +252,6 @@ class CensoController extends Controller
             'apellidos'           => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'telefono'            => ['nullable', 'string', 'max:20'],
             'fecha_nacimiento'    => ['required', 'string'],
-            'cantidad_integrantes'=> ['required', 'integer', 'min:1'],
             'centro_votacion'     => ['nullable', 'string', 'max:150'],
             'carnet_patria'       => ['nullable', 'string', 'max:50'],
             'nivel_academico'     => ['required', 'string'],
@@ -295,7 +292,6 @@ class CensoController extends Controller
                 'apellidos'           => $request->apellidos,
                 'telefono'            => $request->telefono,
                 'fecha_nacimiento'    => $fecha,
-                'cantidad_integrantes'=> $request->cantidad_integrantes,
                 'centro_votacion'     => $request->centro_votacion,
                 'carnet_patria'       => $request->carnet_patria,
                 'nivel_academico'     => $request->nivel_academico,
@@ -330,7 +326,7 @@ class CensoController extends Controller
     public function destroyIntegrante(string $id)
     {
         $persona = Persona::findOrFail($id);
-        
+
         $persona->update([
             'familia_id' => null
         ]);

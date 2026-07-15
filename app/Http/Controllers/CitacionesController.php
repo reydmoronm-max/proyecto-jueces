@@ -8,6 +8,7 @@ use App\Models\Involucrados;
 use App\Models\Persona;
 use App\Models\Actas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CitacionesController extends Controller
@@ -193,6 +194,7 @@ class CitacionesController extends Controller
                 'expediente_id' => $request->expediente_id,
                 'tipo_acta' => 'conciliacion',
                 'contenido' => $contenido,
+                'lo_atiende_juez_id' => Auth::user()->id,
             ]);
 
             $expediente = Expediente::find($request->expediente_id);

@@ -594,6 +594,10 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 /*--------------------------------------------------------------
 # Sidebar nav-link hover — tema por defecto (sidebar-default)
 --------------------------------------------------------------*/
@@ -620,4 +624,21 @@ input::-webkit-inner-spin-button {
 /* Color del icono y texto al hacer hover (base) */
 .sidebar-base .nav-item .nav-link:hover {
   color: #ffffff !important;
+}
+
+/* ── Logo sidebar: normal vs colapsado ── */
+/* Por defecto: muestra logo grande, oculta mini */
+.logo-main .logo-mini {
+  display: none;
+}
+.logo-main .logo-normal {
+  display: block;
+}
+
+/* Cuando el aside tiene .sidebar-mini (colapsado): muestra mini, oculta normal */
+.sidebar.sidebar-mini .logo-main .logo-mini {
+  display: block;
+}
+.sidebar.sidebar-mini .logo-main .logo-normal {
+  display: none;
 }

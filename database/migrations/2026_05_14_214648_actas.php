@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('tipo_acta', ['recepcion', 'conciliacion'])->default('recepcion');
             $table->text('contenido');
             // $table->string('codigo_acta')->unique(); // Este código aún no sé cómo hacerlo, pero me imagino que no debe ser manual, así que por ahora lo dejo fuera.
-            // $table->string('firma_juez')->nullable(); // Puede ser null si aún no se ha firmado el acta, aún no sé cómo manejar esto, así que por ahora lo dejo fuera.
+            $table->foreignId('lo_atiende_juez_id')->constrained('users')->onDelete('restrict'); // Restringir si el juez tiene alguna acta asociada.
             $table->timestamps();
         });
     }

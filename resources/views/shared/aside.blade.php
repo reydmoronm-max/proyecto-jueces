@@ -7,7 +7,10 @@
             <!--Logo start-->
             <div class="logo-main">
                 <div class="logo-normal">
-                    <img style="width: 6.2rem;" src="{{ asset('images/logo2.png') }}" alt="">
+                    <img style="width: 10.5rem; margin-left: 15%;" src="{{ asset('images/logo2.png') }}" alt="">
+                </div>
+                <div class="logo-mini">
+                    <img style="width: 3rem;" src="{{ asset('images/logoComuna.png') }}" alt="">
                 </div>
             </div>
             <!--logo End-->
@@ -15,7 +18,7 @@
 
 
 
-            <h2 class="logo-title text-white" style="font-style: italic; font-weight: bolder;">SGIC</h2>
+            {{-- <h2 class="logo-title text-white" style="font-style: italic; font-weight: bolder;">SGIC</h2> --}}
         </a>
         <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
             <i class="icon">

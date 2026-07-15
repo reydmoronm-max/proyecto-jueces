@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActasCartasController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CitacionesController;
 use App\Http\Controllers\DashboardController;
@@ -46,6 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
     Route::resource('denuncias', DenunciasController::class);
     Route::post('/denuncias/posponer-cita', [DenunciasController::class, 'posponerCita'])->name('denuncias.posponer-cita');
+    Route::get('denuncias/acta-recepcion-pdf/{id}', [DenunciasController::class, 'exportarActaRecepcionPdf'])->name('denuncias.exportar-acta-recepcion');
+    Route::get('denuncias/acta-conciliacion-pdf/{id}', [DenunciasController::class, 'exportarActaConciliacionPdf'])->name('denuncias.exportar-acta-conciliacion');
 
     // Consulta de expedientes
     Route::get('/consulta-expediente', [ExpedienteController::class, 'consulta'])->name('consulta.index');

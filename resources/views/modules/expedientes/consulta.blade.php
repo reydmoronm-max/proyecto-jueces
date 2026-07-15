@@ -367,23 +367,37 @@
                                                                 class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom py-2">
                                                                 <strong class="text-dark font-weight-bold">
                                                                     @if ($acta->tipo_acta == 'recepcion')
-                                                                        <i
-                                                                            class="ri-file-shield-2-line me-1 text-primary"></i>
+                                                                        <i class="ri-file-shield-2-line me-1 text-primary"></i>
                                                                         Acta de Recepción
+                                                                        
+                                                                        <span class="text-muted small ms-2">
+                                                                            Registrada:
+                                                                            {{ $acta->created_at->format('d/m/Y h:i A') }}
+                                                                        </span>
+
                                                                     @elseif($acta->tipo_acta == 'conciliacion')
-                                                                        <i
-                                                                            class="ri-hand-heart-line me-1 text-success"></i>
+                                                                        <i class="ri-hand-heart-line me-1 text-success"></i>
                                                                         Acta de Conciliación
+
+                                                                        <span class="text-muted small ms-2">
+                                                                            Registrada:
+                                                                            {{ $acta->created_at->format('d/m/Y h:i A') }}
+                                                                        </span>
                                                                     @else
-                                                                        <i
-                                                                            class="ri-file-text-line me-1 text-secondary"></i>
+                                                                        <i class="ri-file-text-line me-1 text-secondary"></i>
                                                                         Acta: {{ ucfirst($acta->tipo_acta) }}
                                                                     @endif
                                                                 </strong>
-                                                                <span class="text-muted small">
-                                                                    Registrada:
-                                                                    {{ $acta->created_at->format('d/m/Y h:i A') }}
-                                                                </span>
+                                                                @if ($acta->tipo_acta == 'recepcion')
+                                                                    <a type="button" class="btn btn-sm ms-2" style="background-color: rgb(212, 25, 25); color: white;" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia">
+                                                                        <i class="ri-file-pdf-2-line"></i> Exportar a PDF
+                                                                    </a>
+                                                                @else
+                                                                    <a type="button" class="btn btn-sm ms-2" style="background-color: rgb(212, 25, 25); color: white;" href="{{ route('denuncias.exportar-acta-conciliacion', $expediente->id) }}" title="Ver acta de conciliación">
+                                                                        <i class="ri-file-pdf-2-line"></i> Exportar a PDF
+                                                                    </a>
+                                                                @endif
+                                                                    
                                                             </div>
                                                             <div class="card-body p-3">
                                                                 <!-- Contenido formateado del acta -->
@@ -412,18 +426,18 @@
                                                                                         class="col-sm-3 text-muted small font-weight-bold text-uppercase">
                                                                                         {{ trim($parts[0]) }}:</div>
                                                                                     <div class="col-sm-9 text-dark mb-2 font-weight-bold"
-                                                                                        style="white-space: pre-wrap;">
+                                                                                        {{-- style="white-space: pre-wrap;" --}}>
                                                                                         {{ trim($parts[1]) }}</div>
                                                                                 @else
                                                                                     <div class="col-12 text-dark mb-2 font-weight-bold"
-                                                                                        style="white-space: pre-wrap;">
+                                                                                        {{-- style="white-space: pre-wrap;" --}}>
                                                                                         {{ trim($linea) }}</div>
                                                                                 @endif
                                                                             @endforeach
                                                                         </div>
                                                                     @else
                                                                         <p class="mb-0 text-dark"
-                                                                            style="white-space: pre-line; line-height: 1.6;">
+                                                                            {{-- style="white-space: pre-line; line-height: 1.6;" --}}>
                                                                             {{ $acta->contenido }}</p>
                                                                     @endif
                                                                 </div>

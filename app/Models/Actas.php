@@ -12,10 +12,16 @@ class Actas extends Model
         'expediente_id',
         'tipo_acta',
         'contenido',
+        'lo_atiende_juez_id'
     ];
 
     public function expediente()
     {
         return $this->belongsTo(Expediente::class, 'expediente_id');
+    }
+
+    public function juez()
+    {
+        return $this->belongsTo(User::class, 'lo_atiende_juez_id');
     }
 }
