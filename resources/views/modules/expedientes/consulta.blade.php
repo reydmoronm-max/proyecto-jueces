@@ -20,7 +20,7 @@
                     <div class="card-body">
                         <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation" novalidate>
                             <div class="row">
-                                <div class="col-md-4 mb-3">
+                                <div hidden class="col-md-4 mb-3">
                                     <label for="cedula_tipo" class="form-label font-weight-bold">Tipo</label>
                                     <select class="form-select border-primary" id="cedula_tipo" name="cedula_tipo" required>
                                         <option value="V"
@@ -29,7 +29,7 @@
                                             {{ request('cedula_tipo', $cedulaTipo) == 'E' ? 'selected' : '' }}>E</option>
                                     </select>
                                 </div>
-                                <div class="col-md-8 mb-3">
+                                <div class="col-md-12 mb-3">
                                     <label for="cedula" class="form-label font-weight-bold">Cédula de Identidad</label>
                                     <input type="number" class="form-control border-primary" id="cedula" name="cedula"
                                         value="{{ request('cedula', $cedula) }}" placeholder="Ingrese un número de cédula"

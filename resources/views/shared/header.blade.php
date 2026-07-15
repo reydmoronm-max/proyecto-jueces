@@ -1,6 +1,6 @@
     <div class="position-relative iq-banner">
         <!--Nav Start-->
-        <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar">
+        <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar" style="background-color: #151824;">
             <div class="container-fluid navbar-inner">
                 <a href="../dashboard/index.html" class="navbar-brand">
                     <!--Logo start-->
@@ -28,7 +28,7 @@
                     </i>
                 </div>
                 <div class="input-group search-input">
-                    <span class="input-group-text" id="search-input">
+                    <span class="input-group-text" id="search-input" style="background-color: #151824;">
                         <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5"
@@ -37,7 +37,10 @@
                                 stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
                     </span>
-                    <input type="search" class="form-control" placeholder="Buscar...">
+                    <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation" novalidate>
+                        <input type="number" class="form-control" placeholder="Buscar por cédula..." style="background-color: #151824;"
+                        oninput="if(this.value.length>8)this.value=this.value.slice(0,8)" id="cedula" name="cedula">
+                    </form>
                 </div>
                 @if (Auth::user()->rol === 'Juez')
                     <a href="{{ route('citaciones.index', ['hoy' => 1]) }}"
@@ -70,7 +73,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="mb-2 navbar-nav ms-auto align-items-center navbar-list mb-lg-0">
                         {{-- Color Mode Toggle --}}
-                        <li class="nav-item dropdown me-2">
+
+                        {{-- <li class="nav-item dropdown me-2">
                             <div class="btn btn-border active" data-setting="color-mode" data-name="color"
                                 data-value="light">
                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
@@ -88,9 +92,13 @@
                                         d="M9,2C7.95,2 6.95,2.16 6,2.46C10.06,3.73 13,7.5 13,12C13,16.5 10.06,20.27 6,21.54C6.95,21.84 7.95,22 9,22A10,10 0 0,0 19,12A10,10 0 0,0 9,2Z" />
                                 </svg>
                             </div>
-                        </li>
+                        </li> --}}
+
                         {{-- End Color Mode Toggle --}}
-                        <li class="nav-item dropdown">
+
+                        {{-- Notification Dropdown --}}
+
+                        {{-- <li class="nav-item dropdown">
                             <a href="#" class="nav-link" id="notification-drop" data-bs-toggle="dropdown"
                                 style="pointer-events: none;">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
@@ -128,7 +136,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
+
+                        {{-- End notification dropdown --}}
+
+
                         <li class="nav-item dropdown">
                             <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -145,9 +157,9 @@
                                 <img src={{ asset('images/avatars/avtar_3.png') }} alt="User-Profile"
                                     class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
                                 <div class="caption ms-3 d-none d-md-block ">
-                                    <h6 class="mb-0 caption-title">{{ Auth::user()->nombre }}
+                                    <h6 class="mb-0 caption-title" style="color: white;">{{ Auth::user()->nombre }}
                                         {{ Auth::user()->apellido }}</h6>
-                                    <p class="mb-0 caption-sub-title">{{ Auth::user()->rol }}</p>
+                                    <p class="mb-0 caption-sub-title" style="color: rgb(179, 179, 179);">{{ Auth::user()->rol }}</p>
                                 </div>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">

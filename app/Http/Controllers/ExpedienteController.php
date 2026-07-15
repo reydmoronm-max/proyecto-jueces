@@ -25,7 +25,7 @@ class ExpedienteController extends Controller
         $paginaSubtitulo = 'Buscar toda la información relacionada a un expediente';
         $consultaActive = 'active';
 
-        $cedulaTipo = $request->input('cedula_tipo');
+        $cedulaTipo = "V";
         $cedula = $request->input('cedula');
 
         $persona = null;
