@@ -15,13 +15,9 @@
                             <h6 class="text-primary mb-3 border-bottom pb-1">Datos del Requirente</h6>
                             <div class="row g-3">
                                 <div class="col-12">
-                                    <label for="cedula" class="form-label mb-1 fw-bold text-muted small">Cédula del requirente</label>
-                                    <div class="input-group">
-                                        <select id="cedula_tipo" name="cedula_tipo" class="form-select bg-white" style="max-width: 80px;" required>
-                                            <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
-                                            <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
-                                        </select>
+                                    <div class="form-floating">
                                         <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                        <label for="cedula">Cédula del requirente</label>
                                     </div>
                                 </div>
 
@@ -67,17 +63,17 @@
                             <div class="row g-2">
                                 <div class="col-12">
                                     <label for="requirente" class="form-label mb-1 fw-bold text-muted small">El requirente expone:</label>
-                                    <textarea name="requirente" id="requirente" class="form-control bg-white" rows="2" required></textarea>
+                                    <textarea name="requirente" id="requirente" class="form-control bg-white" rows="3" required></textarea>
                                 </div>
 
                                 <div class="col-12">
                                     <label for="receptor" class="form-label mb-1 fw-bold text-muted small">El receptor expone:</label>
-                                    <textarea name="receptor" id="receptor" class="form-control bg-white" rows="2" required></textarea>
+                                    <textarea name="receptor" id="receptor" class="form-control bg-white" rows="3" required></textarea>
                                 </div>
 
                                 <div class="col-12">
                                     <label for="acuerdos" class="form-label mb-1 fw-bold text-muted small">Acuerdos:</label>
-                                    <textarea name="acuerdos" id="acuerdos" class="form-control bg-white" rows="2" required></textarea>
+                                    <textarea name="acuerdos" id="acuerdos" class="form-control bg-white" rows="3" required></textarea>
                                 </div>
                             </div>
                         </div>

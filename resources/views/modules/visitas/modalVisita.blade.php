@@ -11,6 +11,20 @@
                     <section class="row g-3">
                         <div class="col-12 col-md-6">
                             <div class="form-floating">
+                                <input id="cedula" type="text" name="cedula" class="form-control" placeholder="Cédula" value="{{ old('cedula') }}" required maxlength="8" inputmode="numeric" pattern="^[0-9]{7,8}$" title="Solo números, hasta 8 dígitos" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)">
+                                <label for="cedula">Cédula</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="form-floating">
+                                <input id="telefono" type="text" name="telefono" class="form-control" placeholder="Teléfono" value="{{ old('telefono') }}" maxlength="11" minlength="11" inputmode="tel">
+                                <label for="telefono">Teléfono</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="form-floating">
                                 <input id="nombre" type="text" name="nombre" class="form-control" placeholder="Nombre" value="{{ old('nombre') }}" required maxlength="50" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                 <label for="nombre">Nombre</label>
                             </div>
@@ -20,24 +34,6 @@
                             <div class="form-floating">
                                 <input id="apellido" type="text" name="apellido" class="form-control" placeholder="Apellido" value="{{ old('apellido') }}" required maxlength="50" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                 <label for="apellido">Apellido</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6">
-                            <label for="cedula" class="form-label">Cédula</label>
-                            <div class="input-group">
-                                <select id="cedula_tipo" name="cedula_tipo" class="form-select">
-                                    <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
-                                    <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
-                                </select>
-                                <input id="cedula" type="text" name="cedula" class="form-control" placeholder="Cédula" value="{{ old('cedula') }}" required maxlength="8" inputmode="numeric" pattern="^[0-9]{7,8}$" title="Solo números, hasta 8 dígitos" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)">
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6">
-                            <div class="form-floating">
-                                <input id="telefono" type="text" name="telefono" class="form-control" placeholder="Teléfono" value="{{ old('telefono') }}" maxlength="11" minlength="11" inputmode="tel">
-                                <label for="telefono">Teléfono</label>
                             </div>
                         </div>
 

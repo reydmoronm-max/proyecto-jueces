@@ -533,4 +533,11 @@ window.addEventListener('load', function () {
       });
   });
 
+  // Evitar que los modales de Bootstrap capturen el foco e impidan escribir el año en Flatpickr
+  document.addEventListener('focusin', function (e) {
+      if (e.target.closest('.flatpickr-calendar') !== null) {
+          e.stopImmediatePropagation();
+      }
+  });
+
 })();

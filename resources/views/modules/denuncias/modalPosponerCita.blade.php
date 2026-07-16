@@ -22,16 +22,12 @@
 
                         <div id="posponer_person_fields" class="col-12">
                             <h6 id="posponer_person_heading">Datos del requerido</h6>
-
+                            <br>
                             <div class="row g-3">
                                 <div class="col-12 col-md-6">
-                                    <label for="cedulaRequerido" class="form-label">Cédula del requerido</label>
-                                    <div class="input-group">
-                                        <select id="cedula_tipoRequerido" name="cedula_tipo" class="form-select bg-white" required>
-                                            <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
-                                            <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
-                                        </select>
+                                    <div class="form-floating">
                                         <input id="cedulaRequerido" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                        <label for="cedulaRequerido">Cédula</label>
                                     </div>
                                 </div>
 
@@ -56,7 +52,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-6">
+                                <div class="col-12 col-md-12">
                                     <div class="form-floating">
                                         <input type="text" class="form-control bg-white" name="direccion" id="direccionRequerido" placeholder="Dirección" required>
                                         <label for="direccionRequerido">Dirección</label>

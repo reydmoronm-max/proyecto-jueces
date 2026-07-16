@@ -30,7 +30,7 @@ class VisitasController extends Controller
         $request->validate([
             'nombre'      => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            'cedula_tipo' => ['required', 'in:V,E'],
+            // 'cedula_tipo' => ['required', 'in:V,E'],
             'cedula'      => ['required', 'digits_between:7,8'],
             'telefono'    => ['nullable', 'string', 'max:20'],
             'direccion'   => ['nullable', 'string', 'min:5', 'max:255'],
@@ -56,7 +56,7 @@ class VisitasController extends Controller
         $persona = \App\Models\Persona::firstOrCreate(
             ['cedula' => $request->cedula],
             [
-                'cedula_tipo' => $request->cedula_tipo,
+                'cedula_tipo' => 'V',
                 'nombres' => $request->nombre,
                 'apellidos' => $request->apellido,
                 'telefono' => $request->telefono,
@@ -99,7 +99,7 @@ class VisitasController extends Controller
         $request->validate([
             'nombre'      => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            'cedula_tipo' => ['required', 'in:V,E'],
+            // 'cedula_tipo' => ['required', 'in:V,E'],
             'cedula'      => ['required', 'digits_between:7,8', Rule::unique('personas', 'cedula')->ignore($persona->id)],
             'telefono'    => ['nullable', 'string', 'max:20'],
             'direccion'   => ['nullable', 'string', 'min:5', 'max:255'],
@@ -108,7 +108,7 @@ class VisitasController extends Controller
         ]);
 
         $persona->update([
-            'cedula_tipo' => $request->cedula_tipo,
+            'cedula_tipo' => 'V',
             'cedula'      => $request->cedula,
             'nombres'     => $request->nombre,
             'apellidos'   => $request->apellido,

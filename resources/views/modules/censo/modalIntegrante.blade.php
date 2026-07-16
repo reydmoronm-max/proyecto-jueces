@@ -58,19 +58,19 @@
                         <!-- Fecha de Nacimiento -->
                         <div class="col-12 col-md-8">
                             <div class="form-group">
-                                <label class="mb-1 small text-muted" for="fecha_nacimiento">Fecha de nacimiento</label>
-                                <div class="input-group wrap_flatpicker" data-min-date="none">
+                                <div class="input-group wrap_flatpicker" data-min-date="none" style="height: 58px;">
                                     <input required type="text" name="fecha_nacimiento" id="fecha_nacimiento"
                                         class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
-                                    <a class="input-group-text input-button bg-white" title="limpiar" data-clear
+                                    {{-- <a class="input-group-text input-button bg-white" title="limpiar" data-clear
                                         href="javascript:void(0)">
                                         <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M6 18L18 6M6 6l12 12" />
                                         </svg>
-                                    </a>
+                                    </a> --}}
                                 </div>
+                                <label class="small text-muted" for="fecha_nacimiento">Fecha de nacimiento</label>
                             </div>
                         </div>
 
@@ -87,7 +87,7 @@
                         <div class="col-12 col-md-6">
                             <div class="form-floating">
                                 <input type="text" class="form-control bg-white" name="carnet_patria"
-                                    id="carnet_patria" placeholder="Carnet de la Patria">
+                                    id="carnet_patria" placeholder="Carnet de la Patria" oninput="if(this.value.length>10)this.value=this.value.slice(0,10)">
                                 <label for="carnet_patria">Carnet de la Patria</label>
                             </div>
                         </div>

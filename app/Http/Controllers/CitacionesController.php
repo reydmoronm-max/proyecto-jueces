@@ -167,7 +167,7 @@ class CitacionesController extends Controller
             if ($request->filled('cedula')) {
                 $persona = Persona::firstOrCreate(
                     [
-                        'cedula_tipo' => $request->cedula_tipo,
+                        'cedula_tipo' => 'V',
                         'cedula' => $request->cedula,
                     ],
                     [

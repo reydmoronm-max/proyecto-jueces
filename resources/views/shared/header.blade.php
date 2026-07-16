@@ -39,7 +39,7 @@
                     </span>
                     <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation" novalidate>
                         <input type="number" class="form-control" placeholder="Buscar por cédula..." style="background-color: #151824;"
-                        oninput="if(this.value.length>8)this.value=this.value.slice(0,8)" id="cedula" name="cedula">
+                        oninput="if(this.value.length>8)this.value=this.value.slice(0,8)" id="header_buscar_cedula" name="cedula">
                     </form>
                 </div>
                 @if (Auth::user()->rol === 'Juez')
