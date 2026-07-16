@@ -2451,7 +2451,7 @@ progress {
   background-color: #ffffff;
   -webkit-background-clip: padding-box;
           background-clip: padding-box;
-  border: 1px solid #eee;
+  border: 1px solid #808080;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -2646,9 +2646,9 @@ textarea.form-control-lg {
   background-position: right 1rem center;
   -webkit-background-size: 16px 12px;
           background-size: 16px 12px;
-  border: 1px solid #eee;
-  -webkit-border-radius: 0.5rem;
-          border-radius: 0.5rem;
+  border: 1px solid #808080;
+  -webkit-border-radius: 0.3rem;
+          border-radius: 0.3rem;
   -webkit-box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.16);
           box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.16);
   -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
@@ -3108,7 +3108,7 @@ textarea.form-control-lg {
   text-align: center;
   white-space: nowrap;
   background-color: #ffffff;
-  border: 1px solid #eee;
+  border: 1px solid #808080;
   -webkit-border-radius: 0.25rem;
           border-radius: 0.25rem;
 }
@@ -19808,7 +19808,7 @@ body.offcanvas-active {
   max-height: 92vh;
 }
 .sidebar .sidebar-header {
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid #272c30;
   margin-bottom: 0.5rem;
 }
 .sidebar .sidebar-logo {
@@ -21102,15 +21102,16 @@ button.bg-soft-gray-dark:focus {
   background-color: rgba(52, 58, 64, 0.3) !important;
 }
 
+/* AQUI MISMO ES PARA CAMBIAR EL COLOR DE LA MALDITA LINEA GRIS */
 .hr-horizontal {
   background: transparent;
   border: 0;
   height: 1px;
   margin: 0.5rem 0;
-  background-image: -webkit-gradient(linear, left top, right top, from(transparent), color-stop(rgba(0, 0, 0, 0.4)), to(transparent));
-  background-image: -webkit-linear-gradient(left, transparent, rgba(0, 0, 0, 0.4), transparent);
-  background-image: -o-linear-gradient(left, transparent, rgba(0, 0, 0, 0.4), transparent);
-  background-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4), transparent);
+  background-image: -webkit-gradient(linear, left top, right top, from(transparent), color-stop(#fff), to(transparent));
+  background-image: -webkit-linear-gradient(left, transparent, #fff, transparent);
+  background-image: -o-linear-gradient(left, transparent, #fff, transparent);
+  background-image: linear-gradient(90deg, transparent, #fff, transparent);
 }
 
 .hr-vertial {

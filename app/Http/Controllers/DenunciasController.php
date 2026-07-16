@@ -59,7 +59,7 @@ class DenunciasController extends Controller
     {
         // Validación básica
         $request->validate([
-            'cedula_tipo' => 'required',
+            // 'cedula_tipo' => 'required',
             'cedula' => 'required',
             'nombres' => 'required',
             'apellidos' => 'required',
@@ -73,7 +73,7 @@ class DenunciasController extends Controller
             // 1. Guardar persona (si no existe)
             $persona = Persona::firstOrCreate(
                 [
-                    'cedula_tipo' => $request->cedula_tipo,
+                    'cedula_tipo' => 'V',
                     'cedula' => $request->cedula,
                 ],
                 [
@@ -151,12 +151,12 @@ class DenunciasController extends Controller
     public function buscarPersona(Request $request)
     {
         $request->validate([
-            'cedula_tipo' => ['required', 'in:V,E'],
+            // 'cedula_tipo' => ['required', 'in:V,E'],
             'cedula' => ['required', 'digits_between:7,8'],
         ]);
 
         $persona = Persona::where('cedula', $request->cedula)
-            ->where('cedula_tipo', $request->cedula_tipo)
+            ->where('cedula_tipo', 'V')
             ->whereHas('visitas')
             ->first();
 
@@ -165,7 +165,7 @@ class DenunciasController extends Controller
         }
 
         return response()->json([
-            'cedula_tipo' => $persona->cedula_tipo,
+            'cedula_tipo' => 'V',
             'cedula' => $persona->cedula,
             'nombres' => $persona->nombres,
             'apellidos' => $persona->apellidos,
@@ -221,7 +221,7 @@ class DenunciasController extends Controller
             if ($request->filled('cedula')) {
                 $persona = Persona::firstOrCreate(
                     [
-                        'cedula_tipo' => $request->cedula_tipo,
+                        'cedula_tipo' => 'V',
                         'cedula' => $request->cedula,
                     ],
                     [

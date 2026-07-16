@@ -57,21 +57,19 @@
                         <!-- Fecha de Nacimiento -->
                         <div class="col-12 col-md-8">
                             <div class="form-group">
-                                <label class="mb-1 small text-muted" for="edit-fecha_nacimiento">Fecha de
-                                    nacimiento</label>
-                                <div class="input-group wrap_flatpicker" id="edit-fecha_nacimiento_container"
-                                    data-min-date="none">
+                                <div class="input-group wrap_flatpicker" id="edit-fecha_nacimiento_container" data-min-date="none" style="height: 58px;">
                                     <input required type="text" name="fecha_nacimiento" id="edit-fecha_nacimiento"
                                         class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
-                                    <a class="input-group-text input-button bg-white" title="limpiar" data-clear
+                                    {{-- <a class="input-group-text input-button bg-white" title="limpiar" data-clear
                                         href="javascript:void(0)">
                                         <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M6 18L18 6M6 6l12 12" />
                                         </svg>
-                                    </a>
+                                    </a> --}}
                                 </div>
+                                <label class="small text-muted" for="edit-fecha_nacimiento">Fecha de nacimiento</label>
                             </div>
                         </div>
 

@@ -16,7 +16,7 @@
         <link rel="stylesheet" href={{ asset('css/vendor/aos/dist/aos.css') }} />
         
         <!-- Hope Ui Design System Css -->
-        <link rel="stylesheet" href={{ asset('css/hope-ui.min.css') }} />
+        <link rel="stylesheet" href={{ asset('css/hope-ui.css') }} />
         
         <!-- Custom Css -->
         <link rel="stylesheet" href={{ asset('css/custom.css') }} />
