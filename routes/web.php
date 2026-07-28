@@ -21,6 +21,9 @@ Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-a
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
 Route::post('/logear', [AuthController::class, 'login'])->name('logear');
+Route::get('/recuperar-password', [AuthController::class, 'recuperarForm'])->name('recuperar.index');
+Route::post('/recuperar-password/buscar', [AuthController::class, 'recuperarBuscar'])->name('recuperar.buscar');
+Route::post('/recuperar-password/restablecer', [AuthController::class, 'recuperarRestablecer'])->name('recuperar.restablecer');
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');

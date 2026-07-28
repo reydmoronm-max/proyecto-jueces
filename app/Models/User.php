@@ -26,6 +26,8 @@ class User extends Authenticatable
         'password',
         'activo',
         'rol',
+        'pregunta_seguridad',
+        'respuesta_seguridad',
     ];
 
     /**

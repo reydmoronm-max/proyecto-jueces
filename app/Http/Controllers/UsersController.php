@@ -35,6 +35,8 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        $respuestaHash = $request->filled('respuesta_seguridad') ? Hash::make(mb_strtolower(trim($request->respuesta_seguridad))) : null;
+
         User::create([
             'nombre' => $request->nombre,
             'apellido' => $request->apellido,
@@ -42,7 +44,9 @@ class UsersController extends Controller
             'user' => $request->user,
             'password' => Hash::make($request->password),
             'activo' => true,
-            'rol' => $request->rol
+            'rol' => $request->rol,
+            'pregunta_seguridad' => $request->pregunta_seguridad,
+            'respuesta_seguridad' => $respuestaHash,
         ]);
 
         return to_route('usuarios.index')->with('success', 'Usuario registrado exitosamente.');
@@ -76,6 +80,12 @@ class UsersController extends Controller
         $usuario->cedula_usuario = $request->cedula_usuario;
         $usuario->user = $request->user;
         $usuario->rol = $request->rol;
+        if ($request->filled('pregunta_seguridad')) {
+            $usuario->pregunta_seguridad = $request->pregunta_seguridad;
+        }
+        if ($request->filled('respuesta_seguridad')) {
+            $usuario->respuesta_seguridad = Hash::make(mb_strtolower(trim($request->respuesta_seguridad)));
+        }
         $usuario->save();
 
         return to_route('usuarios.index')->with('update', 'Usuario actualizado exitosamente.');

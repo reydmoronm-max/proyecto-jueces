@@ -51,7 +51,7 @@
                             </div>
                         </div>
 
-                        <div class="col-12 col-md-12">
+                        <div class="col-12 col-md-6">
                             <div class="form-floating">
                                 <select class="form-select bg-white" name="rol" id="edit-rol" required>
                                     <option value="">Seleccione una opción</option>
@@ -60,6 +60,27 @@
                                     <option value="Juez">Juez</option>
                                 </select>
                                 <label for="edit-rol">Rol</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select bg-white" name="pregunta_seguridad" id="edit-pregunta_seguridad">
+                                    <option value="">Sin pregunta de seguridad</option>
+                                    <option value="¿Qué color le gusta más?">¿Qué color le gusta más?</option>
+                                    <option value="¿Cómo se llamaba su mascota favorita de la infancia?">¿Cómo se llamaba su mascota favorita de la infancia?</option>
+                                    <option value="¿Cuál es su deporte favorito?">¿Cuál es su deporte favorito?</option>
+                                    <option value="¿Qué raza de gato le gusta más?">¿Qué raza de gato le gusta más?</option>
+                                </select>
+                                <label for="edit-pregunta_seguridad">Pregunta de Seguridad</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control bg-white" name="respuesta_seguridad" id="edit-respuesta_seguridad"
+                                    placeholder="Dejar en blanco para no cambiar">
+                                <label for="edit-respuesta_seguridad">Nueva Respuesta de Seguridad</label>
                             </div>
                         </div>
                     </section>

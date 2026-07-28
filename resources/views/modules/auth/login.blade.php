@@ -47,13 +47,19 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="d-flex justify-content-start mt-2">
+                                            <div class="d-flex justify-content-between align-items-center mt-2">
                                                 <button type="submit" class="btn btn-md btn-primary rounded-pill"
                                                     style="font-weight: bold;">Acceder <i
                                                         class="ri-login-box-line"></i></button>
+                                                <a href="{{ route('recuperar.index') }}" class="text-primary small">¿Olvidaste tu contraseña?</a>
                                             </div>
                                         </form>
                                         <div>
+                                            @if (session('success'))
+                                                <div class="alert alert-success mt-4">
+                                                    {{ session('success') }}
+                                                </div>
+                                            @endif
                                             @if ($errors->any())
                                                 <div class="mt-4" style="color: rgb(158, 0, 0);">
                                                     <ul>

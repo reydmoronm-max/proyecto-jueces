@@ -59,7 +59,9 @@ class AuthController extends Controller
             'cedula_usuario' => '12312312',
             'user' => 'admin',
             'password' => Hash::make('admin'),
-            'activo' => true
+            'activo' => true,
+            'pregunta_seguridad' => '¿Qué color le gusta más?',
+            'respuesta_seguridad' => Hash::make('azul')
         ]);
 
         return 'Admin creado';
@@ -69,5 +71,60 @@ class AuthController extends Controller
     {
         Auth::logout();
         return to_route('login');
+    }
+
+    public function recuperarForm()
+    {
+        $titulo = 'Recuperar contraseña';
+        return view('modules.auth.recuperar', compact('titulo'));
+    }
+
+    public function recuperarBuscar(Request $request)
+    {
+        $request->validate([
+            'user' => 'required'
+        ]);
+
+        $user = User::where('user', $request->user)->first();
+
+        if (!$user) {
+            return back()->withErrors(['user' => 'El usuario no existe'])->withInput();
+        }
+
+        if (empty($user->pregunta_seguridad) || empty($user->respuesta_seguridad)) {
+            return back()->withErrors(['user' => 'El usuario no tiene una pregunta de seguridad configurada. Por favor, contacte al administrador.'])->withInput();
+        }
+
+        $titulo = 'Recuperar contraseña';
+        $paso = 2;
+        return view('modules.auth.recuperar', compact('titulo', 'paso', 'user'));
+    }
+
+    public function recuperarRestablecer(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'respuesta_seguridad' => 'required',
+            'password' => 'required|min:4|confirmed'
+        ], [
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+            'password.min' => 'La contraseña debe tener al menos 4 caracteres.'
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+
+        $respuestaIngresada = mb_strtolower(trim($request->respuesta_seguridad));
+
+        if (!Hash::check($respuestaIngresada, $user->respuesta_seguridad)) {
+            $titulo = 'Recuperar contraseña';
+            $paso = 2;
+            return view('modules.auth.recuperar', compact('titulo', 'paso', 'user'))
+                ->withErrors(['respuesta_seguridad' => 'La respuesta a la pregunta de seguridad es incorrecta.']);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('login')->with('success', 'Contraseña restablecida exitosamente. Ya puedes iniciar sesión con tu nueva clave.');
     }
 }

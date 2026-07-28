@@ -138,6 +138,8 @@
                     $('#edit-cedula_usuario').val(usuario.cedula_usuario);
                     $('#edit-user').val(usuario.user);
                     $('#edit-rol').val(usuario.rol);
+                    $('#edit-pregunta_seguridad').val(usuario.pregunta_seguridad || '');
+                    $('#edit-respuesta_seguridad').val('');
                     $('#modalEditarUsuario').modal('show');
                 }
             });

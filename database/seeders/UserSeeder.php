@@ -20,7 +20,9 @@ class UserSeeder extends Seeder
             'cedula_usuario' => '28510329',
             'user' => 'jefe',
             'password' => Hash::make('jefe'),
-            'activo' => true
+            'activo' => true,
+            'pregunta_seguridad' => '¿Qué color le gusta más?',
+            'respuesta_seguridad' => Hash::make('azul')
         ]);
 
         User::create([
@@ -30,7 +32,9 @@ class UserSeeder extends Seeder
             'user' => 'juez',
             'password' => Hash::make('juez'),
             'activo' => true,
-            'rol' => 'Juez'
+            'rol' => 'Juez',
+            'pregunta_seguridad' => '¿Qué color le gusta más?',
+            'respuesta_seguridad' => Hash::make('azul')
         ]);
     }
 }
