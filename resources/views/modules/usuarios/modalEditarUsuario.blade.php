@@ -56,7 +56,7 @@
                                 <select class="form-select bg-white" name="rol" id="edit-rol" required>
                                     <option value="">Seleccione una opción</option>
                                     <option value="Jefe de comuna">Jefe de comuna</option>
-                                    <option value="Jefe de comando">Jefe de comando</option>
+                                    <option value="Jefe de Comando">Jefe de Comando</option>
                                     <option value="Juez">Juez</option>
                                 </select>
                                 <label for="edit-rol">Rol</label>

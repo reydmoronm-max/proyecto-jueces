@@ -69,7 +69,7 @@
                     <hr class="hr-horizontal">
                 </li>
 
-                @if (Auth::user()->rol === 'Jefe de comuna' || Auth::user()->rol === 'Juez')
+                @if (Auth::user()->rol === 'Jefe de comuna' || Auth::user()->rol === 'Juez' || Auth::user()->rol === 'Jefe de Comando')
 
                     <li class="nav-item static-item">
                         <a class="nav-link static-item disabled" href="#" tabindex="-1">
