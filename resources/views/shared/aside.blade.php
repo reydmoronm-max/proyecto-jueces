@@ -1,6 +1,6 @@
 <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all" style="background-color: #151824;">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
-        <a href="{{ route('home') }}" class="navbar-brand">
+        <a href="{{-- route('home') --}}" class="navbar-brand" style="pointer-events: none;">
             <!--Logo start-->
             <!--logo End-->
 
@@ -69,7 +69,7 @@
                     <hr class="hr-horizontal">
                 </li>
 
-                @if (Auth::user()->rol === 'Jefe de comuna' || Auth::user()->rol === 'Juez')
+                @if (Auth::user()->rol === 'Jefe de comuna' || Auth::user()->rol === 'Juez' || Auth::user()->rol === 'Jefe de Comando')
 
                     <li class="nav-item static-item">
                         <a class="nav-link static-item disabled" href="#" tabindex="-1">

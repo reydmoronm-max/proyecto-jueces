@@ -2,7 +2,7 @@
         <!--Nav Start-->
         <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar" style="background-color: #151824;">
             <div class="container-fluid navbar-inner">
-                <a href="../dashboard/index.html" class="navbar-brand">
+                <a href="" class="navbar-brand">
                     <!--Logo start-->
                     <!--logo End-->
 
