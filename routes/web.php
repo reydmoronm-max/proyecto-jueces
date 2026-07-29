@@ -26,7 +26,7 @@ Route::post('/recuperar-password/buscar', [AuthController::class, 'recuperarBusc
 Route::post('/recuperar-password/restablecer', [AuthController::class, 'recuperarRestablecer'])->name('recuperar.restablecer');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/home', [DashboardController::class, 'index'])->name('home');
+    // Route::get('/home', [DashboardController::class, 'index'])->name('home');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Rutas para gestión de usuarios

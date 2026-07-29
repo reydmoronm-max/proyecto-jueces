@@ -1,6 +1,6 @@
 <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all" style="background-color: #151824;">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
-        <a href="{{ route('home') }}" class="navbar-brand">
+        <a href="{{-- route('home') --}}" class="navbar-brand" style="pointer-events: none;">
             <!--Logo start-->
             <!--logo End-->
 
