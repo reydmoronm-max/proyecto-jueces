@@ -92,13 +92,13 @@
                                 <span class="item-name">Denuncias</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link @yield('consultaActive')" href="{{ route('consulta.index') }}">
+                                <i class="icon ri-search-eye-line"></i>
+                                <span class="item-name">Consulta</span>
+                            </a>
+                        </li>
                     @endif
-                    <li class="nav-item">
-                        <a class="nav-link @yield('consultaActive')" href="{{ route('consulta.index') }}">
-                            <i class="icon ri-search-eye-line"></i>
-                            <span class="item-name">Consulta</span>
-                        </a>
-                    </li>
 
                     <li>
                         <hr class="hr-horizontal">
