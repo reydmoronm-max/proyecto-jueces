@@ -118,24 +118,22 @@
 
     REQUIRENTE:
     <div class="body-text" style="text-indent: 0; text-align: justify; margin-top: 5px; margin-bottom: 20px;">
-        <u>{{ $requirente }}</u>, es todo.
+        <u>{!! nl2br(e($requirente)) !!}</u>, es todo.
     </div>
 
     REQUERIDO:
     <div class="body-text" style="text-indent: 0; text-align: justify; margin-top: 5px; margin-bottom: 20px;">
-        <u>{{ $requerido }}</u>, es todo.
+        <u>{!! nl2br(e($requerido)) !!}</u>, es todo.
     </div>
 
-    @if(!empty($coordinador))
     SEGUIDAMENTE EL COORDINADOR UNA VEZ ESCUCHADO LOS HECHOS EXPONE:
     <div class="body-text" style="text-indent: 0; text-align: justify; margin-top: 5px; margin-bottom: 20px;">
-        <u>{{ $coordinador }}</u>
+        <u>{!! nl2br(e($coordinador)) !!}</u>
     </div>
-    @endif
 
     ACUERDOS PARA EL CUMPLIMIENTO ACORDADO LIBRE Y VOLUNTARIO POR LAS PARTES:
     <div class="body-text" style="text-indent: 0; text-align: justify; margin-top: 5px; margin-bottom: 40px;">
-        <u>{{ $acuerdos }}</u>
+        <u>{!! nl2br(e($acuerdos)) !!}</u>
     </div>
 
     <div class="body-text" style="font-weight: bold; margin-bottom: 60px">

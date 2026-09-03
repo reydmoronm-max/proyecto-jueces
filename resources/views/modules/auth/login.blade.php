@@ -34,9 +34,9 @@
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <div class="form-floating mt-4 mb-4">
-                                                        <input type="text" class="form-control" name="user"
-                                                            id="user" placeholder="" required>
-                                                        <label for="user" class="form-label">Usuario</label>
+                                                        <input type="number" class="form-control" name="cedula_usuario"
+                                                            id="cedula_usuario" placeholder="" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                                        <label for="cedula_usuario" class="form-label">Cédula de usuario</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12">

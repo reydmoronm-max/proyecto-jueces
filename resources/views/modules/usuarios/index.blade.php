@@ -26,7 +26,6 @@
                                     <tr>
                                         <th>Nombre y Apellido</th>
                                         <th>Cédula</th>
-                                        <th>Usuario</th>
                                         <th>Contraseña</th>
                                         <th>Activo</th>
                                         <th>Rol</th>
@@ -136,7 +135,7 @@
                     $('#edit-nombre').val(usuario.nombre);
                     $('#edit-apellido').val(usuario.apellido);
                     $('#edit-cedula_usuario').val(usuario.cedula_usuario);
-                    $('#edit-user').val(usuario.user);
+                    // $('#edit-user').val(usuario.user);
                     $('#edit-rol').val(usuario.rol);
                     $('#edit-pregunta_seguridad').val(usuario.pregunta_seguridad || '');
                     $('#edit-respuesta_seguridad').val('');
@@ -200,8 +199,8 @@
                             }
                         ]
                     }).onbeforechange(function(targetElement) {
-                        var fieldSteps = ['nombre', 'apellido', 'cedula_usuario', 'user',
-                            'password', 'rol'
+                        var fieldSteps = ['nombre', 'apellido', 'cedula_usuario', 'password',
+                            'rol'
                         ];
                         var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById(
                             'modalRegistrarUsuario'));

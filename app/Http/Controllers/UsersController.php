@@ -41,7 +41,7 @@ class UsersController extends Controller
             'nombre' => $request->nombre,
             'apellido' => $request->apellido,
             'cedula_usuario' => $request->cedula_usuario,
-            'user' => $request->user,
+            // 'user' => $request->user,
             'password' => Hash::make($request->password),
             'activo' => true,
             'rol' => $request->rol,
@@ -78,7 +78,7 @@ class UsersController extends Controller
         $usuario->nombre = $request->nombre;
         $usuario->apellido = $request->apellido;
         $usuario->cedula_usuario = $request->cedula_usuario;
-        $usuario->user = $request->user;
+        // $usuario->user = $request->user;
         $usuario->rol = $request->rol;
         if ($request->filled('pregunta_seguridad')) {
             $usuario->pregunta_seguridad = $request->pregunta_seguridad;

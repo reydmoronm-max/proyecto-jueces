@@ -14,11 +14,10 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['user' => 'jefe'],
+            ['cedula_usuario' => '11123456'],
             [
                 'nombre'              => 'Juan',
                 'apellido'            => 'Pérez',
-                'cedula_usuario'      => '28510329',
                 'password'            => Hash::make('jefe'),
                 'activo'              => true,
                 'rol'                 => 'Jefe de comuna',
@@ -28,11 +27,10 @@ class UserSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['user' => 'juez'],
+            ['cedula_usuario' => '22123456'],
             [
                 'nombre'              => 'Julieta',
                 'apellido'            => 'Gonzáles',
-                'cedula_usuario'      => '15674876',
                 'password'            => Hash::make('juez'),
                 'activo'              => true,
                 'rol'                 => 'Juez',
@@ -42,11 +40,10 @@ class UserSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['user' => 'comando'],
+            ['cedula_usuario' => '33123456'],
             [
                 'nombre'              => 'Pedro',
                 'apellido'            => 'Ramírez',
-                'cedula_usuario'      => '19876543',
                 'password'            => Hash::make('comando'),
                 'activo'              => true,
                 'rol'                 => 'Jefe de Comando',

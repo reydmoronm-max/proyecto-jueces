@@ -30,16 +30,16 @@
 
                                         @if (!isset($paso) || $paso == 1)
                                             {{-- Paso 1: Buscar usuario --}}
-                                            <p class="text-muted mb-3">Ingrese su nombre de usuario para buscar su pregunta de seguridad.</p>
+                                            <p class="text-muted mb-3">Ingrese su cédula de identidad para buscar su pregunta de seguridad.</p>
                                             <form class="needs-validation" novalidate action="{{ route('recuperar.buscar') }}"
                                                 method="POST" autocomplete="off">
                                                 @csrf
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-floating mt-2 mb-4">
-                                                            <input type="text" class="form-control" name="user"
-                                                                id="user" placeholder="Nombre de usuario" value="{{ old('user') }}" required>
-                                                            <label for="user" class="form-label">Nombre de usuario</label>
+                                                            <input type="text" class="form-control" name="cedula_usuario"
+                                                                id="cedula_usuario" placeholder="Cédula de usuario" value="{{ old('cedula_usuario') }}" required>
+                                                            <label for="cedula_usuario" class="form-label">Cédula de usuario</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -51,7 +51,7 @@
                                             </form>
                                         @else
                                             {{-- Paso 2: Responder pregunta de seguridad y colocar nueva contraseña --}}
-                                            <p class="text-muted mb-3">Usuario: <strong>{{ $user->user }}</strong></p>
+                                            <p class="text-muted mb-3">Usuario: <strong>{{ $user->cedula_usuario }}</strong></p>
                                             <form class="needs-validation" novalidate action="{{ route('recuperar.restablecer') }}"
                                                 method="POST" autocomplete="off">
                                                 @csrf
