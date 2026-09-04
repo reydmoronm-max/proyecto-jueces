@@ -86,13 +86,15 @@ Route::middleware('auth')->group(function () {
         Route::delete('/censo/integrante/{id}', [CensoController::class, 'destroyIntegrante'])->name('censo.integrante.destroy');
         Route::resource('censo', CensoController::class);
 
-        // Círculo de Abuelos
-        Route::get('/circulo-abuelos', [CirculoAbuelosController::class, 'index'])->name('circulo-abuelos.index');
-        Route::post('/circulo-abuelos/jornada', [CirculoAbuelosController::class, 'storeJornada'])->name('circulo-abuelos.store-jornada');
-        Route::get('/circulo-abuelos/jornada/{id}', [CirculoAbuelosController::class, 'showJornada'])->name('circulo-abuelos.show-jornada');
-        Route::get('/circulo-abuelos/jornada/{id}/edit', [CirculoAbuelosController::class, 'editJornada'])->name('circulo-abuelos.edit-jornada');
-        Route::put('/circulo-abuelos/jornada/{id}', [CirculoAbuelosController::class, 'updateJornada'])->name('circulo-abuelos.update-jornada');
-        Route::delete('/circulo-abuelos/jornada/{id}', [CirculoAbuelosController::class, 'destroyJornada'])->name('circulo-abuelos.destroy-jornada');
+        // Círculo de Abuelos (solo Jefe de comuna)
+        Route::middleware('role:Jefe de comuna')->group(function () {
+            Route::get('/circulo-abuelos', [CirculoAbuelosController::class, 'index'])->name('circulo-abuelos.index');
+            Route::post('/circulo-abuelos/jornada', [CirculoAbuelosController::class, 'storeJornada'])->name('circulo-abuelos.store-jornada');
+            Route::get('/circulo-abuelos/jornada/{id}', [CirculoAbuelosController::class, 'showJornada'])->name('circulo-abuelos.show-jornada');
+            Route::get('/circulo-abuelos/jornada/{id}/edit', [CirculoAbuelosController::class, 'editJornada'])->name('circulo-abuelos.edit-jornada');
+            Route::put('/circulo-abuelos/jornada/{id}', [CirculoAbuelosController::class, 'updateJornada'])->name('circulo-abuelos.update-jornada');
+            Route::delete('/circulo-abuelos/jornada/{id}', [CirculoAbuelosController::class, 'destroyJornada'])->name('circulo-abuelos.destroy-jornada');
+        });
 
         // Proyectos
         Route::resource('proyectos', ProyectosController::class);

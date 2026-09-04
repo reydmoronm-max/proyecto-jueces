@@ -135,13 +135,15 @@
                             <span class="item-name">Censo</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('circulo-abuelos.*') ? 'active' : '' }}"
-                            href="{{ route('circulo-abuelos.index') }}">
-                            <i class="icon ri-heart-pulse-fill"></i>
-                            <span class="item-name">Círculo de Abuelos</span>
-                        </a>
-                    </li>
+                    @if (Auth::user()->rol === 'Jefe de comuna')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('circulo-abuelos.*') ? 'active' : '' }}"
+                                href="{{ route('circulo-abuelos.index') }}">
+                                <i class="icon ri-heart-pulse-fill"></i>
+                                <span class="item-name">Círculo de Abuelos</span>
+                            </a>
+                        </li>
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('proyectos.*') ? 'active' : '' }}"
                             href="{{ route('proyectos.index') }}">
