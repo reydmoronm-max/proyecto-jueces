@@ -33,15 +33,15 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:Juez,Jefe de comuna,Jefe de Comando')->group(function () {
         Route::resource('/visitas', VisitasController::class);
         Route::get('/tbody-visitas', [VisitasController::class, 'tbody'])->name('tbody.visitas');
-        Route::get('/consulta-expediente', [ExpedienteController::class, 'consulta'])->name('consulta.index');
         Route::get('denuncias/acta-recepcion-pdf/{id}', [DenunciasController::class, 'exportarActaRecepcionPdf'])->name('denuncias.exportar-acta-recepcion');
         Route::get('denuncias/acta-conciliacion-pdf/{id}', [DenunciasController::class, 'exportarActaConciliacionPdf'])->name('denuncias.exportar-acta-conciliacion');
     });
 
     // -------------------------------------------------------------
-    // 2. RUTAS DE DENUNCIAS Y CITACIONES (Solo Juez)
+    // 2. RUTAS DE DENUNCIAS, CITACIONES Y CONSULTA (Solo Juez)
     // -------------------------------------------------------------
     Route::middleware('role:Juez')->group(function () {
+        Route::get('/consulta-expediente', [ExpedienteController::class, 'consulta'])->name('consulta.index');
         Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
         Route::resource('denuncias', DenunciasController::class);
         Route::post('/denuncias/posponer-cita', [DenunciasController::class, 'posponerCita'])->name('denuncias.posponer-cita');
