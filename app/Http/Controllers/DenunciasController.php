@@ -65,7 +65,9 @@ class DenunciasController extends Controller
             'apellidos' => 'required',
             'telefono' => 'required',
             'direccion' => 'required',
-            'motivo_denuncia' => 'required',
+            'caso' => 'required',
+            'tipo_caso' => 'required',
+            'categoria' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -86,7 +88,9 @@ class DenunciasController extends Controller
 
             // 2. Guardar expediente
             $expediente = Expediente::create([
-                'motivo_denuncia' => $request->motivo_denuncia,
+                'caso' => $request->caso,
+                'tipo_caso' => $request->tipo_caso,
+                'categoria' => $request->categoria,
                 'estatus' => 'Abierto',
             ]);
 
@@ -177,8 +181,24 @@ class DenunciasController extends Controller
     // Helper para extraer los campos del contenido del acta
     private function extraerCampoActa($contenido, $campo)
     {
-        preg_match('/' . $campo . ': (.*?)(\\n|$)/', $contenido, $matches);
-        return $matches[1] ?? '';
+        if (empty($contenido)) {
+            return '';
+        }
+
+        $campoLimpio = rtrim(trim($campo), ':');
+
+        // Buscar desde la etiqueta del campo hasta la siguiente etiqueta conocida o el fin de la cadena, soportando multilínea (/s)
+        $pattern = '/(?:^|\n)\s*' . preg_quote($campoLimpio, '/') . ':\s*(.*?)(?=\n\s*(?:Requirente|Requerido|Receptor|Coordinador|Acuerdos):|\z)/si';
+        if (preg_match($pattern, $contenido, $matches)) {
+            return trim($matches[1]);
+        }
+
+        // Fallback por si la estructura fuera simple
+        if (preg_match('/' . preg_quote($campoLimpio, '/') . ':\s*(.*?)(\n|$)/i', $contenido, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return '';
     }
 
     /**
@@ -302,7 +322,7 @@ class DenunciasController extends Controller
         ])->findOrFail($id);
 
         $denunciante = $expediente->personas->first();
-        $acta = $expediente->actas->first();
+        $acta = $expediente->actas->where('tipo_acta', 'recepcion')->first() ?? $expediente->actas->first();
         $idJuez = $acta->lo_atiende_juez_id;
         $juez = User::findOrFail($idJuez);
 
@@ -347,8 +367,8 @@ class DenunciasController extends Controller
     {
         $expediente = \App\Models\Expediente::findOrFail($id);
 
-        // Buscar el acta específica de conciliación
-        $acta = $expediente->actas()->where('tipo_acta', 'conciliacion')->first();
+        // Buscar el acta específica de conciliación (la más reciente)
+        $acta = $expediente->actas()->where('tipo_acta', 'conciliacion')->latest()->first();
         if (!$acta) {
             return redirect()->back()->with('error', 'El acta de conciliación no ha sido registrada para este expediente.');
         }
@@ -364,10 +384,10 @@ class DenunciasController extends Controller
         $apellidoJuez = $juez->apellido;
         $cedulaJuez = $juez->cedula_usuario;
 
-        $requirente = $this->extraerCampoActa($acta->contenido, 'Requirente');
-        $requerido = $this->extraerCampoActa($acta->contenido, 'Requerido');
-        $coordinador = $this->extraerCampoActa($acta->contenido, 'Coordinador');
-        $acuerdos = $this->extraerCampoActa($acta->contenido, 'Acuerdos');
+        $requirente = $acta ? $this->extraerCampoActa($acta->contenido, 'Requirente') : '';
+        $requerido = $acta ? $this->extraerCampoActa($acta->contenido, 'Requerido') : '';
+        $coordinador = $acta ? $this->extraerCampoActa($acta->contenido, 'Coordinador') : '';
+        $acuerdos = $acta ? $this->extraerCampoActa($acta->contenido, 'Acuerdos') : '';
 
         // Date formatting in Spanish
         $fecha = $acta->created_at;

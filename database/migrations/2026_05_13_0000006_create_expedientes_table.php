@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('expedientes', function (Blueprint $table) {
             $table->id();
             // $table->string('codigo_expediente')->unique(); //Este código aún no sé cómmo hacerlo, pero me imagino que no debe ser manual, asi que por ahora lo dejo fuera.
-            $table->text('motivo_denuncia');
+            $table->string('caso');
+            $table->string('tipo_caso');
+            $table->string('categoria');
             $table->enum('estatus', ['Abierto', 'En proceso', 'Cerrado'])->default('Abierto');
             $table->timestamps();
         });

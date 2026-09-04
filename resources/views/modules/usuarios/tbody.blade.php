@@ -11,9 +11,6 @@
             <h6><span class="badge bg-primary me-1">V</span> {{ $item->cedula_usuario }}</h6>
         </td>
         <td>
-            <h6>{{ $item->user }}</h6>
-        </td>
-        <td>
             <button href="#" onclick="agregar_id_usuario({{ $item->id }})" class="btn btn-sm btn-primary" data-bs-toggle="modal" title="Cambiar contraseña" data-bs-target="#modalCambiarPassword">
                 <i class="ri-pencil-fill"></i>
             </button>

@@ -22,21 +22,21 @@ class AuthController extends Controller
     {
         // Validar
         $credenciales = $request->validate([
-            'user' => 'required',
+            'cedula_usuario' => 'required',
             'password' => 'required'
         ]);
 
         // Buscar usuario
-        $user = User::where('user', $request->user)->first();
+        $user = User::where('cedula_usuario', $request->cedula_usuario)->first();
 
         // Validar usuario y contraseña
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return back()->withErrors(['user' => 'Credenciales incorrectas'])->withInput();
+            return back()->withErrors(['cedula_usuario' => 'Credenciales incorrectas'])->withInput();
         }
 
         // El usuario está activo
         if (!$user->activo) {
-            return back()->withErrors(['user' => 'Tu usuario está inactivo'])->withInput();
+            return back()->withErrors(['cedula_usuario' => 'Tu usuario está inactivo'])->withInput();
         }
 
         // Crear sesión
@@ -50,22 +50,22 @@ class AuthController extends Controller
         }
     }
 
-    public function crearAdmin()
-    {
-        // Crear un admin
-        User::create([
-            'nombre' => 'Rey',
-            'apellido' => 'Morón',
-            'cedula_usuario' => '12312312',
-            'user' => 'admin',
-            'password' => Hash::make('admin'),
-            'activo' => true,
-            'pregunta_seguridad' => '¿Qué color le gusta más?',
-            'respuesta_seguridad' => Hash::make('azul')
-        ]);
+    // public function crearAdmin()
+    // {
+    //     // Crear un admin
+    //     User::create([
+    //         'nombre' => 'Rey',
+    //         'apellido' => 'Morón',
+    //         'cedula_usuario' => '12312312',
+    //         'user' => 'admin',
+    //         'password' => Hash::make('admin'),
+    //         'activo' => true,
+    //         'pregunta_seguridad' => '¿Qué color le gusta más?',
+    //         'respuesta_seguridad' => Hash::make('azul')
+    //     ]);
 
-        return 'Admin creado';
-    }
+    //     return 'Admin creado';
+    // }
 
     public function logout()
     {
@@ -82,17 +82,17 @@ class AuthController extends Controller
     public function recuperarBuscar(Request $request)
     {
         $request->validate([
-            'user' => 'required'
+            'cedula_usuario' => 'required'
         ]);
 
-        $user = User::where('user', $request->user)->first();
+        $user = User::where('cedula_usuario', $request->cedula_usuario)->first();
 
         if (!$user) {
-            return back()->withErrors(['user' => 'El usuario no existe'])->withInput();
+            return back()->withErrors(['cedula_usuario' => 'El usuario no existe'])->withInput();
         }
 
         if (empty($user->pregunta_seguridad) || empty($user->respuesta_seguridad)) {
-            return back()->withErrors(['user' => 'El usuario no tiene una pregunta de seguridad configurada. Por favor, contacte al administrador.'])->withInput();
+            return back()->withErrors(['cedula_usuario' => 'El usuario no tiene una pregunta de seguridad configurada. Por favor, contacte al administrador.'])->withInput();
         }
 
         $titulo = 'Recuperar contraseña';

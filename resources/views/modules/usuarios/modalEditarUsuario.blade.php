@@ -43,13 +43,13 @@
                             </div>
                         </div>
 
-                        <div class="col-12 col-md-6">
+                        {{-- <div class="col-12 col-md-6">
                             <div class="form-floating">
                                 <input type="text" class="form-control bg-white" name="user" id="edit-user"
                                     placeholder="Nombre de Usuario" required>
                                 <label for="edit-user">Nombre de usuario</label>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-12 col-md-6">
                             <div class="form-floating">

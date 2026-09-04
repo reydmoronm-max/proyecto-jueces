@@ -188,10 +188,8 @@
                                 <!-- Motivo de la denuncia -->
                                 <div class="mb-4 p-3 rounded border-start border-primary border-3"
                                     style="background-color: #f8f9faf1;">
-                                    <h6 class="font-weight-bold text-primary mb-1"><i
-                                            class="ri-information-fill me-1"></i> Motivo de la denuncia:</h6>
-                                    <p class="mb-0 text-dark" style="font-size: 0.95rem;">
-                                        {{ $expediente->motivo_denuncia }}</p>
+                                    <h6 class="font-weight-bold mb-1">
+                                        <i class="text-primary ri-information-fill me-1"></i> {{ $expediente->caso }}    <span class="text-muted">/</span>    <i class="text-primary ri-bookmark-fill me-1"></i> {{ $expediente->tipo_caso }}     <span class="text-muted">/</span>    <i class="text-primary ri-archive-stack-fill me-1"></i> {{ $expediente->categoria }} </h6>
                                 </div>
 
                                 <!-- Tabs de Detalles del Expediente -->
