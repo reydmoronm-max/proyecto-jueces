@@ -75,7 +75,8 @@ Route::middleware('auth')->group(function () {
 
         // Voceros
         Route::get('/voceros/buscar-persona', [VocerosController::class, 'buscarPersona'])->name('voceros.buscar-persona');
-        Route::resource('voceros', VocerosController::class);
+        Route::get('/voceros/cambiar-estado/{id}/{estado}', [VocerosController::class, 'cambiarEstado'])->name('voceros.cambiar-estado');
+        Route::resource('voceros', VocerosController::class)->except(['destroy']);
 
         // Censo
         Route::get('/censo/buscar-persona', [CensoController::class, 'buscarPersona'])->name('censo.buscar-persona');

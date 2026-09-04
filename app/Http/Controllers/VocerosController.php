@@ -93,6 +93,7 @@ class VocerosController extends Controller
                 'persona_id'       => $persona->id,
                 'categoria_vocero' => $request->categoria_vocero,
                 'fecha_eleccion'   => $fecha,
+                'activo'           => true,
             ]);
 
             DB::commit();
@@ -185,13 +186,15 @@ class VocerosController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Activate or deactivate the specified resource.
      */
-    public function destroy(string $id)
+    public function cambiarEstado(string $id, int $estado)
     {
         $vocero = Vocero::findOrFail($id);
-        $vocero->delete();
-        return to_route('voceros.index')->with('success', 'Vocero eliminado correctamente.');
+        $vocero->activo = (bool) $estado;
+        $vocero->save();
+
+        return response()->json(['activo' => $vocero->activo]);
     }
 
     /**
