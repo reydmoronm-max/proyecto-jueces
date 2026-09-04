@@ -485,8 +485,10 @@ class BDSeeder extends Seeder
             ]);
 
             $exp1 = Expediente::create([
-                'motivo_denuncia' => 'Contaminación acústica y perturbación de la tranquilidad',
-                'estatus'         => 'Abierto',
+                'caso' => 'Contaminación acústica y perturbación de la tranquilidad',
+                'tipo_caso' => 'Convivencia vecinal',
+                'categoria' => 'Ruido',
+                'estatus'   => 'Abierto',
             ]);
 
             Involucrados::create([
@@ -523,8 +525,10 @@ class BDSeeder extends Seeder
             ]);
 
             $exp2 = Expediente::create([
-                'motivo_denuncia' => 'Disputa de linderos y cercado no autorizado de terreno',
-                'estatus'         => 'En proceso',
+                'caso' => 'Disputa de linderos y cercado no autorizado de terreno',
+                'tipo_caso' => 'Vivienda y propiedad',
+                'categoria' => 'Linderos',
+                'estatus'   => 'En proceso',
             ]);
 
             Involucrados::create([
@@ -578,8 +582,10 @@ class BDSeeder extends Seeder
             ]);
 
             $exp3 = Expediente::create([
-                'motivo_denuncia' => 'Incumplimiento de acuerdo de pago por venta de mercancía',
-                'estatus'         => 'Cerrado',
+                'caso' => 'Abuso sexual',
+                'tipo_caso' => 'Violencia y grupos vulnerables',
+                'categoria' => 'Violencia de género',
+                'estatus'   => 'Cerrado',
             ]);
 
             Involucrados::create([
@@ -608,14 +614,14 @@ class BDSeeder extends Seeder
                 'expediente_id'      => $exp3->id,
                 'tipo_acta'          => 'recepcion',
                 'lo_atiende_juez_id' => 2,
-                'contenido'          => 'Requirente: Gregorio Díaz expone saldo pendiente en concepto de mercancía agrícola.',
+                'contenido'          => 'Requirente: Gregorio Díaz expone que su pareja le pega y lo insulta.',
             ]);
 
             Actas::create([
                 'expediente_id'      => $exp3->id,
                 'tipo_acta'          => 'conciliacion',
                 'lo_atiende_juez_id' => 2,
-                'contenido'          => 'Acuerdos: La parte denunciada acepta la obligación y se compromete al pago total en tres cuotas mensuales consecutivas. Ambas partes expresan satisfacción y se declara el asunto resuelto y finalizado.',
+                'contenido'          => 'Acuerdos: La parte denunciada se disculpó.',
             ]);
 
             DB::commit();

@@ -38,6 +38,9 @@
 
         {{-- Flatpickr --}}
         <link href="{{ asset('vendor/flatpickr/dist/flatpickr.min.css') }}" rel="stylesheet">
+
+        {{-- Tom Select --}}
+        <link href="{{ asset('vendor/tomselect/tom-select.default.min.css') }}" rel="stylesheet">
         
     </head>
     <body class="fase-animada">
@@ -266,6 +269,9 @@
 
     {{-- Flatpickr --}}
     <script src={{ asset('vendor/flatpickr/dist/flatpickr.min.js') }}></script>
+
+    <!-- Tom Select -->
+    <script src={{ asset('vendor/tomselect/tom-select.complete.min.js') }}></script>
 
     @stack('scripts')
     

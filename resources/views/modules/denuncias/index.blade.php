@@ -51,7 +51,9 @@
                                                 <th>Requirente</th>
                                                 <th>Cédula</th>
                                                 <th>Fecha de apertura</th>
-                                                <th>Motivo</th>
+                                                <th>Descripción del caso</th>
+                                                <th>Tipo de caso</th>
+                                                <th>Categoría</th>
                                                 <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
@@ -70,7 +72,9 @@
                                                         {{ $denunciante ? $denunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
-                                                    <td>{{ $expediente->motivo_denuncia }}</td>
+                                                    <td>{{ $expediente->caso }}</td>
+                                                    <td>{{ $expediente->tipo_caso }}</td>
+                                                    <td>{{ $expediente->categoria }}</td>
                                                     <td>
                                                         <span class="badge bg-success">{{ $expediente->estatus }}</span>
                                                     </td>
@@ -102,7 +106,9 @@
                                                 <th>Requirente</th>
                                                 <th>Cédula</th>
                                                 <th>Fecha de apertura</th>
-                                                <th>Motivo</th>
+                                                <th>Descripción del caso</th>
+                                                <th>Tipo de caso</th>
+                                                <th>Categoría</th>
                                                 <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
@@ -121,7 +127,9 @@
                                                         {{ $denunciante ? $denunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
-                                                    <td>{{ $expediente->motivo_denuncia }}</td>
+                                                    <td>{{ $expediente->caso }}</td>
+                                                    <td>{{ $expediente->tipo_caso }}</td>
+                                                    <td>{{ $expediente->categoria }}</td>
                                                     <td>
                                                         <span class="badge bg-warning">{{ $expediente->estatus }}</span>
                                                     </td>
@@ -154,7 +162,9 @@
                                                 <th>Requirente</th>
                                                 <th>Cédula</th>
                                                 <th>Fecha de apertura</th>
-                                                <th>Motivo</th>
+                                                <th>Descripción del caso</th>
+                                                <th>Tipo de caso</th>
+                                                <th>Categoría</th>
                                                 <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
@@ -173,7 +183,9 @@
                                                         {{ $denunciante ? $denunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
-                                                    <td>{{ $expediente->motivo_denuncia }}</td>
+                                                    <td>{{ $expediente->caso }}</td>
+                                                    <td>{{ $expediente->tipo_caso }}</td>
+                                                    <td>{{ $expediente->categoria }}</td>
                                                     <td>
                                                         <span
                                                             class="badge bg-light text-dark">{{ $expediente->estatus }}</span>
@@ -505,4 +517,19 @@
             }
         });
     </script>
+
+    {{-- <script>
+        new TomSelect("#tipo_caso",{
+            sortField: {
+                field: "text"
+            }
+        });
+
+        new TomSelect("#descripcion",{
+            sortField: {
+                field: "text",
+                direction: "asc"
+            }
+        });
+    </script> --}}
 @endpush

@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Expediente extends Model
 {
     protected $fillable = [
-        'motivo_denuncia',
+        'caso',
+        'tipo_caso',
+        'categoria',
         'estatus',
     ];
 

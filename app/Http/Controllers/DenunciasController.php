@@ -65,7 +65,9 @@ class DenunciasController extends Controller
             'apellidos' => 'required',
             'telefono' => 'required',
             'direccion' => 'required',
-            'motivo_denuncia' => 'required',
+            'caso' => 'required',
+            'tipo_caso' => 'required',
+            'categoria' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -86,7 +88,9 @@ class DenunciasController extends Controller
 
             // 2. Guardar expediente
             $expediente = Expediente::create([
-                'motivo_denuncia' => $request->motivo_denuncia,
+                'caso' => $request->caso,
+                'tipo_caso' => $request->tipo_caso,
+                'categoria' => $request->categoria,
                 'estatus' => 'Abierto',
             ]);
 
