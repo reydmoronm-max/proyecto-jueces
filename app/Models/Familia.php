@@ -13,11 +13,21 @@ class Familia extends Model
     protected $table = 'familias';
 
     protected $fillable = [
-        'numero_familia'
+        'numero_familia',
+        'consejo_comunal_id',
+        'vivienda',
+        'mision_vivienda',
+        'bono_unico_familiar',
+        'clap'
     ];
 
     public function personas()
     {
         return $this->hasMany(Persona::class, 'familia_id');
+    }
+
+    public function consejoComunal()
+    {
+        return $this->belongsTo(ConsejoComunal::class, 'consejo_comunal_id');
     }
 }

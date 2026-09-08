@@ -53,7 +53,9 @@ class CensoDemograficoController extends Controller
         // Base query
         $query = Persona::query();
         if ($consejoComunalId) {
-            $query->where('consejo_comunal_id', $consejoComunalId);
+            $query->whereHas('familia', function ($q) use ($consejoComunalId) {
+                $q->where('consejo_comunal_id', $consejoComunalId);
+            });
         }
 
         // 1. Total Citizens
@@ -128,23 +130,22 @@ class CensoDemograficoController extends Controller
         ];
 
         // 7. Socioeconomic stats
-        $viviendaDb = (clone $query)->select('vivienda', DB::raw('count(*) as total'))
-            ->whereNotNull('vivienda')
-            ->groupBy('vivienda')
-            ->get()
-            ->pluck('total', 'vivienda')
-            ->toArray();
-
         $viviendas = [
-            'Propia' => $viviendaDb['Propia'] ?? 0,
-            'Prestada' => $viviendaDb['Prestada'] ?? 0,
-            'Alquilada' => $viviendaDb['Alquilada'] ?? 0,
+            'Propia'   => (clone $query)->whereHas('familia', fn($q) => $q->where('vivienda', 'Propia'))->count(),
+            'Prestada' => (clone $query)->whereHas('familia', fn($q) => $q->where('vivienda', 'Prestada'))->count(),
+            'Alquilada'=> (clone $query)->whereHas('familia', fn($q) => $q->where('vivienda', 'Alquilada'))->count(),
         ];
 
         $pensionadosCount = (clone $query)->where('pensionado_jubilado', 'Sí')->count();
-        $bonoFamiliarCount = (clone $query)->where('bono_unico_familiar', 'Sí')->count();
-        $recibeClapCount = (clone $query)->where('clap', 'Sí')->count();
-        $casaAlimentacionCount = (clone $query)->where('casa_alimentacion', 'Sí')->count();
+        $bonoFamiliarCount = (clone $query)->whereHas('familia', function ($q) {
+            $q->where('bono_unico_familiar', 'Sí');
+        })->count();
+        $recibeClapCount = (clone $query)->whereHas('familia', function ($q) {
+            $q->where('clap', 'Sí');
+        })->count();
+        $misionViviendaCount = (clone $query)->whereHas('familia', function ($q) {
+            $q->where('mision_vivienda', 'Sí');
+        })->count();
 
         // Extra info
         $consejosComunales = ConsejoComunal::all();
@@ -156,7 +157,7 @@ class CensoDemograficoController extends Controller
             'menoresCount', 'adultosCount', 'abuelosCount', 'sinFechaCount',
             'estudianCount', 'noEstudianCount', 'conEnfermedadCount', 'enfermedades',
             'niveles', 'viviendas', 'pensionadosCount', 'bonoFamiliarCount',
-            'recibeClapCount', 'casaAlimentacionCount', 'consejosComunales', 'comunidadSeleccionada'
+            'recibeClapCount', 'misionViviendaCount', 'consejosComunales', 'comunidadSeleccionada'
         );
     }
 }

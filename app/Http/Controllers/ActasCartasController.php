@@ -32,15 +32,15 @@ class ActasCartasController extends Controller
             'cedula' => ['required', 'digits_between:7,8'],
         ]);
 
-        $persona = Persona::with(['consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
+        $persona = Persona::with(['familia.consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
 
         if (!$persona) {
             return response()->json(['message' => 'El ciudadano no está registrado en el Censo.'], 404);
         }
 
-        // Validate the relationship with Consejo Comunal
-        if (!$persona->consejo_comunal_id || !$persona->consejoComunal) {
-            return response()->json(['message' => 'El ciudadano no está vinculado a ningún Consejo Comunal en el censo. Para generar la carta, debe registrar esta vinculación en el censo primero.'], 422);
+        // Validate the relationship with Consejo Comunal through Familia
+        if (!$persona->familia || !$persona->familia->consejo_comunal_id || !$persona->consejoComunal) {
+            return response()->json(['message' => 'El núcleo familiar del ciudadano no está vinculado a ningún Consejo Comunal en el censo. Para generar la carta, debe registrar esta vinculación en el censo primero.'], 422);
         }
 
         // Validate that Consejo Comunal has a Jefe de Comando
@@ -70,7 +70,7 @@ class ActasCartasController extends Controller
             'anios_residencia' => ['required', 'integer', 'min:0'],
         ]);
 
-        $persona = Persona::with(['consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
+        $persona = Persona::with(['familia.consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
 
         if (!$persona || !$persona->consejoComunal || !$persona->consejoComunal->jefe || empty($persona->direccion)) {
             return back()->withErrors(['error' => 'Los datos del ciudadano están incompletos en el censo.']);
@@ -112,7 +112,7 @@ class ActasCartasController extends Controller
             'cedula' => ['required', 'digits_between:7,8'],
         ]);
 
-        $persona = Persona::with(['consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
+        $persona = Persona::with(['familia.consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
 
         if (!$persona || !$persona->consejoComunal || !$persona->consejoComunal->jefe || empty($persona->direccion)) {
             return back()->withErrors(['error' => 'Los datos del ciudadano están incompletos en el censo.']);
