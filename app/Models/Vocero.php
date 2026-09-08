@@ -11,7 +11,15 @@ class Vocero extends Model
         'persona_id',
         'categoria_vocero',
         'fecha_eleccion',
+        'activo',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'activo' => 'boolean',
+        ];
+    }
 
     public function persona()
     {

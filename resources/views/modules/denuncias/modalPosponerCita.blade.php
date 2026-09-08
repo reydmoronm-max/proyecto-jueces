@@ -15,13 +15,13 @@
                         <div class="col-12">
                             <label for="solicita_por_posponer" class="form-label">Solicita el cambio</label>
                             <select id="solicita_por_posponer" name="solicita_por" class="form-select bg-white">
-                                <option value="denunciante">Requirente (Denunciante)</option>
-                                <option value="denunciado">Requerido (Denunciado)</option>
+                                <option value="denunciante">Denunciante</option>
+                                <option value="denunciado">Denunciado</option>
                             </select>
                         </div>
 
                         <div id="posponer_person_fields" class="col-12">
-                            <h6 id="posponer_person_heading">Datos del requerido</h6>
+                            <h6 id="posponer_person_heading">Datos del Denunciado</h6>
                             <br>
                             <div class="row g-3">
                                 <div class="col-12 col-md-6">

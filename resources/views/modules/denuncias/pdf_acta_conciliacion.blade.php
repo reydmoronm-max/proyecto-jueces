@@ -97,10 +97,10 @@
         siendo las <u><span class="highlight">{{ $hora }}</span></u>, comparecen ante este Juzgado De Paz Comunal, la (los), ciudadanos, (as), <u><span class="highlight">{{ mb_strtoupper($denunciante->nombres ?? '') }} 
         {{ mb_strtoupper($denunciante->apellidos ?? '') }}</span></u>, de nacionalidad <u class="highlight">Venezolana</u>, titular de la cédula de identidad N° V-<u><span class="highlight">{{ $denunciante->cedula ?? '' }}</span></u>,
         jurídicamente hábil, domiciliada, (os), <u><span class="highlight">{{ $denunciante->direccion ?? '' }}</span></u>, con jurisdicción en el Municipio, <u class="highlight">Bruzual</u>, Parroquia <u class="highlight">Chivacoa</u>,
-        Estado <u class="highlight">Yaracuy</u>, Teléfono <u><span class="highlight">{{ $denunciante->telefono ?? '' }}</span></u>. En adelante (el,los), Requirentes, y (el, los), ciudadanos, (as), <u><span class="highlight">{{ mb_strtoupper($denunciado->nombres ?? '') }} 
+        Estado <u class="highlight">Yaracuy</u>, Teléfono <u><span class="highlight">{{ $denunciante->telefono ?? '' }}</span></u>. En adelante (el,los), Denunciantes, y (el, los), ciudadanos, (as), <u><span class="highlight">{{ mb_strtoupper($denunciado->nombres ?? '') }} 
         {{ mb_strtoupper($denunciado->apellidos ?? '') }}</span></u>, de nacionalidad <u class="highlight">Venezolana</u>, titular de la cédula de identidad N° V-<u><span class="highlight">{{ $denunciado->cedula ?? '' }}</span></u>,
         jurídicamente hábil, domiciliados (as) en, <u><span class="highlight">{{ $denunciado->direccion ?? '' }}</span></u>, con jurisdicción en el Municipio <u class="highlight">Bruzual</u>, Parroquia <u class="highlight">Chivacoa</u>,
-        Estado <u class="highlight">Yaracuy</u>, Teléfono, <u><span class="highlight">{{ $denunciado->telefono ?? '' }}</span></u>, en carácter de Requerido, siendo atendido (as), por el (los), ciudadanos (a), <u class="highlight">{{ mb_strtoupper($nombreJuez) }}</u>
+        Estado <u class="highlight">Yaracuy</u>, Teléfono, <u><span class="highlight">{{ $denunciado->telefono ?? '' }}</span></u>, en carácter de Denunciado, siendo atendido (as), por el (los), ciudadanos (a), <u class="highlight">{{ mb_strtoupper($nombreJuez) }}</u>
         <u><span class="highlight">{{ mb_strtoupper($apellidoJuez) }}</span></u>, venezolanos (as), titular de la cédula de identidad N° V-<u><span class="highlight">{{ $cedulaJuez }}</span></u>, jurídicamente hábiles y de este domicilio, actuando en carácter
         de jueces de paz comunal, debidamente facultados para tomar denuncias y actuar como mediadores y conciliadores por esta comuna, con el objeto de resolver la controversia seguida entre las partes utilizando como instrumento la mediación, conciliación, como primera alternativa,
         para ello se deja constancia escrita, en la cual se asentarán las narrativas de los hechos que presentarán las partes y que permitan llegar a los acuerdos correspondientes, para solucionar la problemática que conllevó a tomar las medidas
@@ -116,12 +116,12 @@
         HECHOS
     </div>
 
-    REQUIRENTE:
+    DENUNCIANTE:
     <div class="body-text" style="text-indent: 0; text-align: justify; margin-top: 5px; margin-bottom: 20px;">
         <u>{!! nl2br(e($requirente)) !!}</u>, es todo.
     </div>
 
-    REQUERIDO:
+    DENUNCIADO:
     <div class="body-text" style="text-indent: 0; text-align: justify; margin-top: 5px; margin-bottom: 20px;">
         <u>{!! nl2br(e($requerido)) !!}</u>, es todo.
     </div>
@@ -145,16 +145,16 @@
     <!-- Sección de Firmas -->
     <table style="width: 100%; border-collapse: collapse; text-align: center; margin-top: 100px;">
         <tr>
-            <!-- Requirente -->
+            <!-- Denunciante -->
             <td style="width: 33.33%; vertical-align: bottom; padding: 0 10px;">
                 <div style="border-bottom: 1px solid #000; width: 85%; margin: 0 auto 10px auto;"></div>
-                <div style="font-weight: bold; font-size: 11px; margin-top: 5px;">REQUIRENTE</div>
+                <div style="font-weight: bold; font-size: 11px; margin-top: 5px;">DENUNCIANTE</div>
             </td>
             
-            <!-- Requerido -->
+            <!-- Denunciado -->
             <td style="width: 33.33%; vertical-align: bottom; padding: 0 10px;">
                 <div style="border-bottom: 1px solid #000; width: 85%; margin: 0 auto 10px auto;"></div>
-                <div style="font-weight: bold; font-size: 11px; margin-top: 5px;">REQUERIDO</div>
+                <div style="font-weight: bold; font-size: 11px; margin-top: 5px;">DENUNCIADO</div>
             </td>
             
             <!-- Coordinador -->

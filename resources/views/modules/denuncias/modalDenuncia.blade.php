@@ -12,12 +12,12 @@
                     
                     <div class="row g-4">
                         <div class="col-12 col-lg-5 border-end-lg">
-                            <h6 class="text-primary mb-3 border-bottom pb-1">Datos del Requirente</h6>
+                            <h6 class="text-primary mb-3 border-bottom pb-1">Datos del Denunciante</h6>
                             <div class="row g-3">
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
-                                        <label for="cedula">Cédula del requirente</label>
+                                        <label for="cedula">Cédula del denunciante</label>
                                     </div>
                                 </div>
 
@@ -131,7 +131,7 @@
                             <h6 class="text-primary mb-3 border-bottom pb-1">Declaraciones de la Denuncia</h6>
                             <div class="row g-2">
                                 <div class="col-12">
-                                    <label for="requirente" class="form-label mb-1 fw-bold text-muted small">El requirente expone:</label>
+                                    <label for="requirente" class="form-label mb-1 fw-bold text-muted small">El denunciante expone:</label>
                                     <textarea name="requirente" id="requirente" class="form-control bg-white" rows="5" required></textarea>
                                 </div>
 
