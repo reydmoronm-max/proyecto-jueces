@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // -------------------------------------------------------------
-    // 1. RUTAS DE VISITAS Y CONSULTA (Juez, Jefe de comuna, Jefe de Comando)
+    // 1. RUTAS DE VISITAS (Juez, Jefe de comuna, Jefe de Comando)
     // -------------------------------------------------------------
     Route::middleware('role:Juez,Jefe de comuna,Jefe de Comando')->group(function () {
         Route::resource('/visitas', VisitasController::class);

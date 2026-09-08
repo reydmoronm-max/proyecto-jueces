@@ -189,7 +189,11 @@
                                 <div class="mb-4 p-3 rounded border-start border-primary border-3"
                                     style="background-color: #f8f9faf1;">
                                     <h6 class="font-weight-bold mb-1">
-                                        <i class="text-primary ri-information-fill me-1"></i> {{ $expediente->caso }}    <span class="text-muted">/</span>    <i class="text-primary ri-bookmark-fill me-1"></i> {{ $expediente->tipo_caso }}     <span class="text-muted">/</span>    <i class="text-primary ri-archive-stack-fill me-1"></i> {{ $expediente->categoria }} </h6>
+                                        <i class="text-primary ri-information-fill me-1"></i> {{ $expediente->caso }}    <span class="text-muted">/</span>    <i class="text-primary ri-bookmark-fill me-1"></i> {{ $expediente->tipo_caso }}     <span class="text-muted">/</span>    <i class="text-primary ri-archive-stack-fill me-1"></i> {{ $expediente->categoria }} 
+                                        @if($expediente->denunciado_a)
+                                            <span class="text-muted">/</span> <i class="text-danger ri-user-unfollow-fill me-1"></i> Denunciado(a): {{ $expediente->denunciado_a }}
+                                        @endif
+                                    </h6>
                                 </div>
 
                                 <!-- Tabs de Detalles del Expediente -->

@@ -59,49 +59,52 @@ class DenunciasController extends Controller
     {
         // Validación básica
         $request->validate([
-            // 'cedula_tipo' => 'required',
-            'cedula' => 'required',
-            'nombres' => 'required',
-            'apellidos' => 'required',
-            'telefono' => 'required',
-            'direccion' => 'required',
+            'denunciantes' => 'required|array|min:1',
+            'denunciantes.*.cedula' => 'required',
+            'denunciantes.*.nombres' => 'required',
+            'denunciantes.*.apellidos' => 'required',
+            'denunciantes.*.telefono' => 'required',
+            'denunciantes.*.direccion' => 'required',
             'caso' => 'required',
             'tipo_caso' => 'required',
             'categoria' => 'required',
+            'denunciado_a' => 'nullable|string|max:255',
         ]);
 
         DB::beginTransaction();
         try {
-            // 1. Guardar persona (si no existe)
-            $persona = Persona::firstOrCreate(
-                [
-                    'cedula_tipo' => 'V',
-                    'cedula' => $request->cedula,
-                ],
-                [
-                    'nombres' => $request->nombres,
-                    'apellidos' => $request->apellidos,
-                    'telefono' => $request->telefono,
-                    'direccion' => $request->direccion,
-                ]
-            );
-
-            // 2. Guardar expediente
+            // 1. Guardar expediente
             $expediente = Expediente::create([
                 'caso' => $request->caso,
                 'tipo_caso' => $request->tipo_caso,
                 'categoria' => $request->categoria,
+                'denunciado_a' => $request->denunciado_a,
                 'estatus' => 'Abierto',
             ]);
 
-            // 3. Relacionar persona y expediente en tabla involucrados
-            Involucrados::create([
-                'persona_id' => $persona->id,
-                'expediente_id' => $expediente->id,
-                'rol' => 'denunciante',
-            ]);
+            // 2. Guardar cada denunciante (persona + involucrado)
+            foreach ($request->denunciantes as $denuncianteData) {
+                $persona = Persona::firstOrCreate(
+                    [
+                        'cedula_tipo' => 'V',
+                        'cedula' => $denuncianteData['cedula'],
+                    ],
+                    [
+                        'nombres' => $denuncianteData['nombres'],
+                        'apellidos' => $denuncianteData['apellidos'],
+                        'telefono' => $denuncianteData['telefono'],
+                        'direccion' => $denuncianteData['direccion'],
+                    ]
+                );
 
-            // 4. Guardar acta
+                Involucrados::create([
+                    'persona_id' => $persona->id,
+                    'expediente_id' => $expediente->id,
+                    'rol' => 'denunciante',
+                ]);
+            }
+
+            // 3. Guardar acta
             $contenido = "Requirente: " . ($request->requirente ?? '') . "\n" .
                 "Receptor: " . ($request->receptor ?? '') . "\n" .
                 "Acuerdos: " . ($request->acuerdos ?? '');
@@ -321,7 +324,8 @@ class DenunciasController extends Controller
             'actas'
         ])->findOrFail($id);
 
-        $denunciante = $expediente->personas->first();
+        $denunciantes = $expediente->personas;
+        $denunciante = $denunciantes->first(); // Para compatibilidad
         $acta = $expediente->actas->where('tipo_acta', 'recepcion')->first() ?? $expediente->actas->first();
         $idJuez = $acta->lo_atiende_juez_id;
         $juez = User::findOrFail($idJuez);
@@ -355,7 +359,7 @@ class DenunciasController extends Controller
         $mes = $meses[$fecha->month];
         $anio = $fecha->year;
 
-        $pdf = Pdf::loadView('modules.denuncias.pdf_acta_recepcion_denuncia', compact('denunciante', 'requirente', 'receptor', 'acuerdos', 'dia', 'mes', 'anio', 'hora', 'nombreJuez', 'apellidoJuez', 'cedulaJuez'));
+        $pdf = Pdf::loadView('modules.denuncias.pdf_acta_recepcion_denuncia', compact('expediente', 'denunciantes', 'denunciante', 'requirente', 'receptor', 'acuerdos', 'dia', 'mes', 'anio', 'hora', 'nombreJuez', 'apellidoJuez', 'cedulaJuez'));
 
         return $pdf->stream('acta_recepcion_' . $expediente->id . '.pdf');
     }
@@ -373,9 +377,11 @@ class DenunciasController extends Controller
             return redirect()->back()->with('error', 'El acta de conciliación no ha sido registrada para este expediente.');
         }
 
-        // Obtener el denunciante y el denunciado
-        $denunciante = $expediente->personas()->wherePivot('rol', 'denunciante')->first();
-        $denunciado = $expediente->personas()->wherePivot('rol', 'denunciado')->first();
+        // Obtener los denunciantes y denunciados (colecciones)
+        $denunciantes = $expediente->personas()->wherePivot('rol', 'denunciante')->get();
+        $denunciados = $expediente->personas()->wherePivot('rol', 'denunciado')->get();
+        $denunciante = $denunciantes->first(); // Para compatibilidad
+        $denunciado = $denunciados->first(); // Para compatibilidad
 
         $idJuez = $acta->lo_atiende_juez_id;
         $juez = User::findOrFail($idJuez);
@@ -411,6 +417,8 @@ class DenunciasController extends Controller
         $anio = $fecha->year;
 
         $pdf = Pdf::loadView('modules.denuncias.pdf_acta_conciliacion', compact(
+            'denunciantes',
+            'denunciados',
             'denunciante',
             'denunciado',
             'requirente',

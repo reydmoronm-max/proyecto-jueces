@@ -21,34 +21,55 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="nombres" id="nombres" placeholder="Nombres" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                        <label for="nombres">Nombres</label>
-                                    </div>
-                                </div>
+                            {{-- Contenedor de bloques de denunciantes --}}
+                            <div id="denunciantes-container">
+                                {{-- Bloque inicial (índice 0) --}}
+                                <div class="denunciante-block mb-3" data-index="0">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="number" name="denunciantes[0][cedula]" class="form-control bg-white denunciante-cedula" placeholder="Cédula" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                                <label>Cédula del requirente</label>
+                                            </div>
+                                        </div>
 
-                                <div class="col-12 col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="apellidos" id="apellidos" placeholder="Apellidos" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                        <label for="apellidos">Apellidos</label>
-                                    </div>
-                                </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control bg-white" name="denunciantes[0][nombres]" placeholder="Nombres" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
+                                                <label>Nombres</label>
+                                            </div>
+                                        </div>
 
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input id="telefono" type="number" name="telefono" class="form-control bg-white" placeholder="Teléfono" value="{{ old('telefono') }}" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
-                                        <label for="telefono">Teléfono</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="direccion" id="direccion" placeholder="Dirección" required></textarea>
-                                        <label for="direccion">Dirección</label>
-                                    </div>
-                                </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control bg-white" name="denunciantes[0][apellidos]" placeholder="Apellidos" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
+                                                <label>Apellidos</label>
+                                            </div>
+                                        </div>
 
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="number" name="denunciantes[0][telefono]" class="form-control bg-white" placeholder="Teléfono" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
+                                                <label>Teléfono</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control bg-white" name="denunciantes[0][direccion]" placeholder="Dirección" required>
+                                                <label>Dirección</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Botón para agregar otro requirente --}}
+                            <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-3" id="btn-agregar-denunciante">
+                                <i class="ri-user-add-line me-1"></i> Agregar otro requirente
+                            </button>
+
+                            <div class="row g-3">
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="text" class="form-control bg-white" name="caso" id="caso" placeholder="caso" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
@@ -122,8 +143,14 @@
                                         </select>
                                         <label for="categoria">Categoría</label>
                                     </div>
-                                </div>  
+                                </div>
 
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control bg-white" name="denunciado_a" id="denunciado_a" placeholder="A quién se va a denunciar" value="{{ old('denunciado_a') }}" required>
+                                        <label for="denunciado_a">A quién se va a denunciar</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -161,6 +188,120 @@
 
 <script>
 (function() {
+    // ==========================================
+    // Lógica de bloques repetibles de denunciantes
+    // ==========================================
+    function initDenunciantesRepetibles() {
+        var container = document.getElementById('denunciantes-container');
+        var btnAgregar = document.getElementById('btn-agregar-denunciante');
+        if (!container || !btnAgregar) return;
+
+        var denuncianteIndex = 1; // El bloque 0 ya existe
+
+        btnAgregar.addEventListener('click', function() {
+            var idx = denuncianteIndex++;
+            var block = document.createElement('div');
+            block.className = 'denunciante-block mb-3 border-top pt-3';
+            block.setAttribute('data-index', idx);
+            block.innerHTML =
+                '<div class="d-flex justify-content-between align-items-center mb-2">' +
+                    '<span class="fw-bold text-muted small"><i class="ri-user-line me-1"></i>Requirente #' + (idx + 1) + '</span>' +
+                    '<button type="button" class="btn btn-outline-danger btn-sm btn-remove-denunciante" title="Eliminar requirente"><i class="ri-delete-bin-line"></i></button>' +
+                '</div>' +
+                '<div class="row g-3">' +
+                    '<div class="col-12">' +
+                        '<div class="form-floating">' +
+                            '<input type="number" name="denunciantes[' + idx + '][cedula]" class="form-control bg-white denunciante-cedula" placeholder="Cédula" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">' +
+                            '<label>Cédula del requirente</label>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="col-12 col-md-6">' +
+                        '<div class="form-floating">' +
+                            '<input type="text" class="form-control bg-white" name="denunciantes[' + idx + '][nombres]" placeholder="Nombres" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
+                            '<label>Nombres</label>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="col-12 col-md-6">' +
+                        '<div class="form-floating">' +
+                            '<input type="text" class="form-control bg-white" name="denunciantes[' + idx + '][apellidos]" placeholder="Apellidos" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
+                            '<label>Apellidos</label>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="col-12">' +
+                        '<div class="form-floating">' +
+                            '<input type="number" name="denunciantes[' + idx + '][telefono]" class="form-control bg-white" placeholder="Teléfono" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">' +
+                            '<label>Teléfono</label>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="col-12">' +
+                        '<div class="form-floating">' +
+                            '<input type="text" class="form-control bg-white" name="denunciantes[' + idx + '][direccion]" placeholder="Dirección" required>' +
+                            '<label>Dirección</label>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            container.appendChild(block);
+
+            // Vincular evento de autocompletado en el campo cédula del nuevo bloque
+            var cedulaInput = block.querySelector('.denunciante-cedula');
+            if (cedulaInput) {
+                cedulaInput.addEventListener('blur', function() {
+                    buscarPersonaPorCedulaEnBloque(block);
+                });
+            }
+        });
+
+        // Delegación de evento para eliminar bloques
+        container.addEventListener('click', function(e) {
+            var btn = e.target.closest('.btn-remove-denunciante');
+            if (btn) {
+                var block = btn.closest('.denunciante-block');
+                if (block) block.remove();
+            }
+        });
+
+        // Autocompletado para el primer bloque (índice 0)
+        var primerCedula = container.querySelector('.denunciante-cedula');
+        if (primerCedula) {
+            primerCedula.addEventListener('blur', function() {
+                var block = this.closest('.denunciante-block');
+                if (block) buscarPersonaPorCedulaEnBloque(block);
+            });
+        }
+    }
+
+    // Buscar persona en visitas y autocompletar campos del bloque
+    function buscarPersonaPorCedulaEnBloque(block) {
+        var cedulaInput = block.querySelector('input[name$="[cedula]"]');
+        if (!cedulaInput) return;
+        var cedula = cedulaInput.value.trim();
+        if (!/^[0-9]{7,8}$/.test(cedula)) return;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '{{ route("denuncias.buscar-persona") }}?cedula=' + encodeURIComponent(cedula), true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    var nombresInput = block.querySelector('input[name$="[nombres]"]');
+                    var apellidosInput = block.querySelector('input[name$="[apellidos]"]');
+                    var telefonoInput = block.querySelector('input[name$="[telefono]"]');
+                    var direccionInput = block.querySelector('input[name$="[direccion]"]');
+                    if (nombresInput) nombresInput.value = data.nombres || '';
+                    if (apellidosInput) apellidosInput.value = data.apellidos || '';
+                    if (telefonoInput) telefonoInput.value = data.telefono || '';
+                    if (direccionInput) direccionInput.value = data.direccion || '';
+                } catch(e) {}
+            }
+        };
+        xhr.send();
+    }
+
+    // ==========================================
+    // Lógica de categorías dependientes (existente)
+    // ==========================================
     function initCategoriasDenuncia() {
         const tipoCasoSelect = document.getElementById('tipo_caso');
         const categoriaSelect = document.getElementById('categoria');
@@ -255,9 +396,13 @@
     }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCategoriasDenuncia);
+        document.addEventListener('DOMContentLoaded', function() {
+            initCategoriasDenuncia();
+            initDenunciantesRepetibles();
+        });
     } else {
         initCategoriasDenuncia();
+        initDenunciantesRepetibles();
     }
 })();
 </script>
