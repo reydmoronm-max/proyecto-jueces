@@ -11,11 +11,11 @@
                     @csrf
                     <div class="row g-4">
                         <div class="col-12 col-lg-5 border-end-lg">
-                            <h6 class="text-primary mb-3 border-bottom pb-1">Datos del Requirente</h6>
+                            <h6 class="text-primary mb-3 border-bottom pb-1">Datos del Denunciante</h6>
                             <div class="row g-3">
                                 
                                 <div class="col-12">
-                                    <label for="view-cedula" class="form-label mb-1 fw-bold text-muted small">Cédula del requirente</label>
+                                    <label for="view-cedula" class="form-label mb-1 fw-bold text-muted small">Cédula del denunciante</label>
                                     <div class="input-group">
                                         <select id="view-cedula_tipo" name="cedula_tipo" class="form-select bg-white" style="max-width: 80px;" disabled>
                                             <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
@@ -65,7 +65,7 @@
                             <h6 class="text-primary mb-3 border-bottom pb-1">Declaraciones Registradas</h6>
                             <div class="row g-2">
                                 <div class="col-12">
-                                    <label for="view-requirente" class="form-label mb-1 fw-bold text-muted small">El requirente expone:</label>
+                                    <label for="view-requirente" class="form-label mb-1 fw-bold text-muted small">El denunciante expone:</label>
                                     <textarea name="requirente" id="view-requirente" class="form-control bg-white" rows="2" disabled></textarea>
                                 </div>
 

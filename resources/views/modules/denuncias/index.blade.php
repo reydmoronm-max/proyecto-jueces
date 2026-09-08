@@ -48,7 +48,7 @@
                                     <table id="basic-table" class="table table-striped mb-0" role="grid">
                                         <thead>
                                             <tr>
-                                                <th>Requirente</th>
+                                                <th>Denunciante</th>
                                                 <th>Cédula</th>
                                                 <th>Fecha de apertura</th>
                                                 <th>Descripción del caso</th>
@@ -103,7 +103,7 @@
                                     <table id="basic-table" class="table table-striped mb-0" role="grid">
                                         <thead>
                                             <tr>
-                                                <th>Requirente</th>
+                                                <th>Denunciante</th>
                                                 <th>Cédula</th>
                                                 <th>Fecha de apertura</th>
                                                 <th>Descripción del caso</th>
@@ -159,7 +159,7 @@
                                     <table id="basic-table" class="table table-striped mb-0" role="grid">
                                         <thead>
                                             <tr>
-                                                <th>Requirente</th>
+                                                <th>Denunciante</th>
                                                 <th>Cédula</th>
                                                 <th>Fecha de apertura</th>
                                                 <th>Descripción del caso</th>
@@ -441,27 +441,27 @@
                             },
                             {
                                 element: '#cedula_tipo',
-                                intro: 'Tipo de cédula: selecciona V o E según el requeriente.'
+                                intro: 'Tipo de cédula: selecciona V o E según el denunciante.'
                             },
                             {
                                 element: '#cedula',
-                                intro: 'Cédula del requirente: ingresa el número de cédula con hasta 8 dígitos.'
+                                intro: 'Cédula del denunciante: ingresa el número de cédula con hasta 8 dígitos.'
                             },
                             {
                                 element: '#nombres',
-                                intro: 'Nombres: ingresa los nombres del requirente.'
+                                intro: 'Nombres: ingresa los nombres del denunciante.'
                             },
                             {
                                 element: '#apellidos',
-                                intro: 'Apellidos: ingresa los apellidos del requirente.'
+                                intro: 'Apellidos: ingresa los apellidos del denunciante.'
                             },
                             {
                                 element: '#telefono',
-                                intro: 'Teléfono: ingresa un número de contacto del requirente.'
+                                intro: 'Teléfono: ingresa un número de contacto del denunciante.'
                             },
                             {
                                 element: '#direccion',
-                                intro: 'Dirección: ingresa la dirección del requirente.'
+                                intro: 'Dirección: ingresa la dirección del denunciante.'
                             },
                             {
                                 element: '#motivo_denuncia',
@@ -469,7 +469,7 @@
                             },
                             {
                                 element: '#requirente',
-                                intro: 'El requirente expone: escribe lo que dice la persona que presenta la denuncia.'
+                                intro: 'El denunciante expone: escribe lo que dice la persona que presenta la denuncia.'
                             },
                             {
                                 element: '#receptor',

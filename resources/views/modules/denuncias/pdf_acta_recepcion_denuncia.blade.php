@@ -128,9 +128,9 @@
         siendo las <u><span class="highlight">{{ $hora }}</span></u>, comparecen ante este Juzgado De Paz Comunal, la (los), ciudadanos, (as), <u><span class="highlight">{{ mb_strtoupper($denunciante->nombres) }} 
         {{ mb_strtoupper($denunciante->apellidos) }}</span></u>, de nacionalidad <u class="highlight">Venezolana</u>, titular de la cédula de identidad N° V-<u><span class="highlight">{{ $denunciante->cedula }}</span></u>,
         Jurídicamente hábil, domiciliado(as) en <u><span class="highlight">{{ $denunciante->direccion }}</span></u>, con Jurisdicción en el Municipio <u class="highlight">Bruzual</u>, Parroquia <u class="highlight">Chivacoa</u>,
-        Estado <u class="highlight">Yaracuy</u>, Teléfono <u><span class="highlight">{{ $denunciante->telefono }}</span></u>, en adelante el, (los) requirente, siendo atendido (as), por el (los), ciudadano(a), <u class="highlight">{{ mb_strtoupper($nombreJuez) }}</u>
+        Estado <u class="highlight">Yaracuy</u>, Teléfono <u><span class="highlight">{{ $denunciante->telefono }}</span></u>, en adelante el, (los) denunciante, siendo atendido (as), por el (los), ciudadano(a), <u class="highlight">{{ mb_strtoupper($nombreJuez) }}</u>
         <u><span class="highlight">{{ mb_strtoupper($apellidoJuez) }}</span></u>, venezolano, (as), titular de la cédula de identidad N° V-<u><span class="highlight">{{ $cedulaJuez }}</span></u>, jurídicamente hábiles y de este domicilio, actuando en carácter
-        de jueces de paz comunal, debidamente facultados para tomar denuncias y actuar como mediadores u conciliadores por esta comuna, para ello se deja constancia escrita, de las narrativas de los hechos que presentara el requirente para formular la problemática existente
+        de jueces de paz comunal, debidamente facultados para tomar denuncias y actuar como mediadores u conciliadores por esta comuna, para ello se deja constancia escrita, de las narrativas de los hechos que presentara el denunciante para formular la problemática existente
         entre los particulares que más adelante se especificaran Transcripción que se realiza tomando en cuenta las disposiciones de los artículos 253 y 258 de la Constitución de la República Bolivariana de Venezuela, y en concordancia con los artículos 2, 3, 8, 12 de la
         Ley Orgánica De Justicia De Paz Comunal.
     </div>
@@ -141,7 +141,7 @@
         HECHOS
     </div>
 
-    Requirente (s),<br>
+    Denunciante (s),<br>
     <div class="body-text">
         <u>{{ $requirente }}</u>, es todo.
     </div>
@@ -163,7 +163,7 @@
     <div class="signature-section" style="float: left;">
         <div class="signature-line"></div>
         <div class="signature-name">
-            REQUIRENTE
+            DENUNCIANTE
         </div>
         <div class="signature-ci">
             C.I: {{ $denunciante->cedula }}
