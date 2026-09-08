@@ -136,12 +136,12 @@
         HECHOS
     </div>
 
-    REQUIRENTE:
+    DENUNCIANTE:
     <div class="body-text" style="text-indent: 0; text-align: justify; margin-top: 5px; margin-bottom: 20px;">
         <u>{!! nl2br(e($requirente)) !!}</u>, es todo.
     </div>
 
-    REQUERIDO:
+    DENUNCIADO:
     <div class="body-text" style="text-indent: 0; text-align: justify; margin-top: 5px; margin-bottom: 20px;">
         <u>{!! nl2br(e($requerido)) !!}</u>, es todo.
     </div>
@@ -165,16 +165,16 @@
     <!-- Sección de Firmas -->
     <table style="width: 100%; border-collapse: collapse; text-align: center; margin-top: 100px;">
         <tr>
-            <!-- Requirente -->
+            <!-- Denunciante -->
             <td style="width: 33.33%; vertical-align: bottom; padding: 0 10px;">
                 <div style="border-bottom: 1px solid #000; width: 85%; margin: 0 auto 10px auto;"></div>
-                <div style="font-weight: bold; font-size: 11px; margin-top: 5px;">REQUIRENTE</div>
+                <div style="font-weight: bold; font-size: 11px; margin-top: 5px;">DENUNCIANTE</div>
             </td>
             
-            <!-- Requerido -->
+            <!-- Denunciado -->
             <td style="width: 33.33%; vertical-align: bottom; padding: 0 10px;">
                 <div style="border-bottom: 1px solid #000; width: 85%; margin: 0 auto 10px auto;"></div>
-                <div style="font-weight: bold; font-size: 11px; margin-top: 5px;">REQUERIDO</div>
+                <div style="font-weight: bold; font-size: 11px; margin-top: 5px;">DENUNCIADO</div>
             </td>
             
             <!-- Coordinador -->

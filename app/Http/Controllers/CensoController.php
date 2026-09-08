@@ -21,7 +21,7 @@ class CensoController extends Controller
         $censoActive = 'active';
 
         $search = $request->input('search');
-        $query = Familia::with('personas');
+        $query = Familia::with(['personas', 'consejoComunal']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -30,6 +30,9 @@ class CensoController extends Controller
                         $qp->where('cedula', 'LIKE', '%' . $search . '%')
                             ->orWhere('nombres', 'LIKE', '%' . $search . '%')
                             ->orWhere('apellidos', 'LIKE', '%' . $search . '%');
+                    })
+                    ->orWhereHas('consejoComunal', function ($qc) use ($search) {
+                        $qc->where('nombre', 'LIKE', '%' . $search . '%');
                     });
             });
         }
@@ -46,14 +49,28 @@ class CensoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'numero_familia' => ['required', 'string', 'unique:familias,numero_familia', 'max:100'],
+            'numero_familia'      => ['required', 'string', 'unique:familias,numero_familia', 'max:100'],
+            'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
+            'vivienda'            => ['required', 'string', 'in:Propia,Prestada,Alquilada'],
+            'mision_vivienda'     => ['required', 'string', 'in:Sí,No'],
+            'bono_unico_familiar' => ['required', 'string', 'in:Sí,No'],
+            'clap'                => ['required', 'string', 'in:Sí,No'],
         ], [
-            'numero_familia.required' => 'El número de familia es obligatorio.',
-            'numero_familia.unique' => 'Esta familia ya está registrada.',
+            'numero_familia.required'      => 'El número de familia es obligatorio.',
+            'numero_familia.unique'        => 'Esta familia ya está registrada.',
+            'vivienda.required'            => 'El tipo de vivienda es obligatorio.',
+            'mision_vivienda.required'     => 'Indique si recibió vivienda por Misión Vivienda.',
+            'bono_unico_familiar.required' => 'Indique si la familia recibe Bono Único Familiar.',
+            'clap.required'                => 'Indique si la familia recibe CLAP.',
         ]);
 
         Familia::create([
-            'numero_familia' => $request->numero_familia
+            'numero_familia'      => $request->numero_familia,
+            'consejo_comunal_id'  => $request->consejo_comunal_id,
+            'vivienda'            => $request->vivienda,
+            'mision_vivienda'     => $request->mision_vivienda,
+            'bono_unico_familiar' => $request->bono_unico_familiar,
+            'clap'                => $request->clap,
         ]);
 
         return to_route('censo.index')->with('success', 'Familia registrada correctamente.');
@@ -67,14 +84,28 @@ class CensoController extends Controller
         $familia = Familia::findOrFail($id);
 
         $request->validate([
-            'numero_familia' => ['required', 'string', 'unique:familias,numero_familia,' . $id, 'max:100'],
+            'numero_familia'      => ['required', 'string', 'unique:familias,numero_familia,' . $id, 'max:100'],
+            'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
+            'vivienda'            => ['required', 'string', 'in:Propia,Prestada,Alquilada'],
+            'mision_vivienda'     => ['required', 'string', 'in:Sí,No'],
+            'bono_unico_familiar' => ['required', 'string', 'in:Sí,No'],
+            'clap'                => ['required', 'string', 'in:Sí,No'],
         ], [
-            'numero_familia.required' => 'El número de familia es obligatorio.',
-            'numero_familia.unique' => 'Esta familia ya está registrada.',
+            'numero_familia.required'      => 'El número de familia es obligatorio.',
+            'numero_familia.unique'        => 'Esta familia ya está registrada.',
+            'vivienda.required'            => 'El tipo de vivienda es obligatorio.',
+            'mision_vivienda.required'     => 'Indique si recibió vivienda por Misión Vivienda.',
+            'bono_unico_familiar.required' => 'Indique si la familia recibe Bono Único Familiar.',
+            'clap.required'                => 'Indique si la familia recibe CLAP.',
         ]);
 
         $familia->update([
-            'numero_familia' => $request->numero_familia
+            'numero_familia'      => $request->numero_familia,
+            'consejo_comunal_id'  => $request->consejo_comunal_id,
+            'vivienda'            => $request->vivienda,
+            'mision_vivienda'     => $request->mision_vivienda,
+            'bono_unico_familiar' => $request->bono_unico_familiar,
+            'clap'                => $request->clap,
         ]);
 
         return to_route('censo.index')->with('success', 'Familia actualizada correctamente.');
@@ -87,8 +118,6 @@ class CensoController extends Controller
     {
         $familia = Familia::findOrFail($id);
 
-        // Note: DB foreign key cascade set null will handle setting persona's familia_id to null,
-        // but we'll manually ensure they're disassociated if needed or let DB handle it.
         $familia->delete();
 
         return to_route('censo.index')->with('success', 'Familia eliminada correctamente.');
@@ -121,7 +150,7 @@ class CensoController extends Controller
      */
     public function show(string $id)
     {
-        $familia = Familia::with('personas')->findOrFail($id);
+        $familia = Familia::with(['personas', 'consejoComunal'])->findOrFail($id);
         return response()->json($familia);
     }
 
@@ -142,19 +171,12 @@ class CensoController extends Controller
             'nivel_academico'     => ['required', 'string'],
             'profesion'           => ['nullable', 'string', 'max:100'],
             'situacion_laboral'   => ['nullable', 'string', 'max:100'],
-            'vivienda'            => ['required', 'string'],
             'tipo_enfermedad'     => ['nullable', 'string', 'max:150'],
-            'bono_unico_familiar' => ['required', 'string'],
-            'pensionado_jubilado' => ['required', 'string'],
-            'ayuda_tecnica'       => ['nullable', 'string', 'max:150'],
-            'mision_vivienda'     => ['required', 'string'],
-            'clap'                => ['required', 'string'],
-            'casa_alimentacion'   => ['required', 'string'],
+            'pensionado_jubilado' => ['required', 'string', 'in:Sí,No'],
             'direccion'           => ['nullable', 'string', 'max:500'],
             'estudia'             => ['required', 'string', 'in:Sí,No'],
             'genero'              => ['required', 'string', 'in:Masculino,Femenino'],
             'parentesco'          => ['required', 'string', 'in:Jefe de familia,Hijo/a,Padre,Madre,Abuelo/a,Tío/a,Primo/a'],
-            'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
         ]);
 
         if ($request->parentesco === 'Jefe de familia') {
@@ -180,7 +202,7 @@ class CensoController extends Controller
                 ]
             );
 
-            // Update all census and basic fields
+            // Update all member census and basic fields
             $persona->update([
                 'nombres'             => $request->nombres,
                 'apellidos'           => $request->apellidos,
@@ -192,19 +214,12 @@ class CensoController extends Controller
                 'nivel_academico'     => $request->nivel_academico,
                 'profesion'           => $request->profesion,
                 'situacion_laboral'   => $request->situacion_laboral,
-                'vivienda'            => $request->vivienda,
                 'tipo_enfermedad'     => $request->tipo_enfermedad,
-                'bono_unico_familiar' => $request->bono_unico_familiar,
                 'pensionado_jubilado' => $request->pensionado_jubilado,
-                'ayuda_tecnica'       => $request->ayuda_tecnica,
-                'mision_vivienda'     => $request->mision_vivienda,
-                'clap'                => $request->clap,
-                'casa_alimentacion'   => $request->casa_alimentacion,
                 'direccion'           => $request->direccion,
                 'estudia'             => $request->estudia,
                 'genero'              => $request->genero,
                 'parentesco'          => $request->parentesco,
-                'consejo_comunal_id'  => $request->consejo_comunal_id,
             ]);
 
             DB::commit();
@@ -220,7 +235,7 @@ class CensoController extends Controller
      */
     public function showIntegrante(string $id)
     {
-        $persona = Persona::with(['familia', 'consejoComunal'])->findOrFail($id);
+        $persona = Persona::with(['familia.consejoComunal'])->findOrFail($id);
         if ($persona->fecha_nacimiento) {
             $persona->fecha_nacimiento_formateada = \Carbon\Carbon::parse($persona->fecha_nacimiento)->format('d-m-Y');
         }
@@ -232,7 +247,7 @@ class CensoController extends Controller
      */
     public function editIntegrante(string $id)
     {
-        $persona = Persona::findOrFail($id);
+        $persona = Persona::with(['familia.consejoComunal'])->findOrFail($id);
         if ($persona->fecha_nacimiento) {
             $persona->fecha_nacimiento_formateada = \Carbon\Carbon::parse($persona->fecha_nacimiento)->format('d-m-Y');
         }
@@ -257,19 +272,12 @@ class CensoController extends Controller
             'nivel_academico'     => ['required', 'string'],
             'profesion'           => ['nullable', 'string', 'max:100'],
             'situacion_laboral'   => ['nullable', 'string', 'max:100'],
-            'vivienda'            => ['required', 'string'],
             'tipo_enfermedad'     => ['nullable', 'string', 'max:150'],
-            'bono_unico_familiar' => ['required', 'string'],
-            'pensionado_jubilado' => ['required', 'string'],
-            'ayuda_tecnica'       => ['nullable', 'string', 'max:150'],
-            'mision_vivienda'     => ['required', 'string'],
-            'clap'                => ['required', 'string'],
-            'casa_alimentacion'   => ['required', 'string'],
+            'pensionado_jubilado' => ['required', 'string', 'in:Sí,No'],
             'direccion'           => ['nullable', 'string', 'max:500'],
             'estudia'             => ['required', 'string', 'in:Sí,No'],
             'genero'              => ['required', 'string', 'in:Masculino,Femenino'],
             'parentesco'          => ['required', 'string', 'in:Jefe de familia,Hijo/a,Padre,Madre,Abuelo/a,Tío/a,Primo/a'],
-            'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
         ]);
 
         if ($request->parentesco === 'Jefe de familia') {
@@ -297,19 +305,12 @@ class CensoController extends Controller
                 'nivel_academico'     => $request->nivel_academico,
                 'profesion'           => $request->profesion,
                 'situacion_laboral'   => $request->situacion_laboral,
-                'vivienda'            => $request->vivienda,
                 'tipo_enfermedad'     => $request->tipo_enfermedad,
-                'bono_unico_familiar' => $request->bono_unico_familiar,
                 'pensionado_jubilado' => $request->pensionado_jubilado,
-                'ayuda_tecnica'       => $request->ayuda_tecnica,
-                'mision_vivienda'     => $request->mision_vivienda,
-                'clap'                => $request->clap,
-                'casa_alimentacion'   => $request->casa_alimentacion,
                 'direccion'           => $request->direccion,
                 'estudia'             => $request->estudia,
                 'genero'              => $request->genero,
                 'parentesco'          => $request->parentesco,
-                'consejo_comunal_id'  => $request->consejo_comunal_id,
             ]);
 
             DB::commit();

@@ -258,10 +258,10 @@
                             </div>
                             <div class="col-6">
                                 <div class="p-3 border rounded text-center" style="background-color: #279eff">
-                                    <span class="small text-white d-block mb-1">Casa de Alimentación</span>
-                                    <span class="fw-bold fs-5 text-white">{{ $casaAlimentacionCount }}</span>
+                                    <span class="small text-white d-block mb-1">Misión Vivienda</span>
+                                    <span class="fw-bold fs-5 text-white">{{ $misionViviendaCount }}</span>
                                     <span
-                                        class="text-white d-block small">({{ $totalCiudadanos > 0 ? round(($casaAlimentacionCount / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
+                                        class="text-white d-block small">({{ $totalCiudadanos > 0 ? round(($misionViviendaCount / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
                                 </div>
                             </div>
                             <div class="col-6">

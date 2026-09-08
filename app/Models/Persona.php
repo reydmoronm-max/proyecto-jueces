@@ -26,18 +26,11 @@ class Persona extends Model
         'nivel_academico',
         'profesion',
         'situacion_laboral',
-        'vivienda',
         'tipo_enfermedad',
-        'bono_unico_familiar',
         'pensionado_jubilado',
-        'ayuda_tecnica',
-        'mision_vivienda',
-        'clap',
-        'casa_alimentacion',
         'estudia',
         'genero',
-        'parentesco',
-        'consejo_comunal_id'
+        'parentesco'
     ];
 
     public function visitas()
@@ -62,6 +55,38 @@ class Persona extends Model
 
     public function consejoComunal()
     {
-        return $this->belongsTo(ConsejoComunal::class, 'consejo_comunal_id');
+        return $this->hasOneThrough(
+            ConsejoComunal::class,
+            Familia::class,
+            'id',
+            'id',
+            'familia_id',
+            'consejo_comunal_id'
+        );
+    }
+
+    public function getConsejoComunalIdAttribute()
+    {
+        return $this->familia?->consejo_comunal_id;
+    }
+
+    public function getViviendaAttribute()
+    {
+        return $this->familia?->vivienda;
+    }
+
+    public function getMisionViviendaAttribute()
+    {
+        return $this->familia?->mision_vivienda;
+    }
+
+    public function getBonoUnicoFamiliarAttribute()
+    {
+        return $this->familia?->bono_unico_familiar;
+    }
+
+    public function getClapAttribute()
+    {
+        return $this->familia?->clap;
     }
 }

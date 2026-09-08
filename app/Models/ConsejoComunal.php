@@ -23,4 +23,9 @@ class ConsejoComunal extends Model
     {
         return $this->jefe();
     }
+
+    public function familias()
+    {
+        return $this->hasMany(Familia::class, 'consejo_comunal_id');
+    }
 }

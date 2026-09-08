@@ -36,6 +36,7 @@
                                         <th>Nombre y Apellido</th>
                                         <th>Categoría</th>
                                         <th>Fecha de elección</th>
+                                        <th>Activo</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -51,6 +52,13 @@
                                             <td>{{ $item->categoria_vocero }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->fecha_eleccion)->format('d-m-Y') }}</td>
                                             <td>
+                                                <div class="form-check form-switch form-check-inline">
+                                                    <input class="form-check-input estado-vocero" type="checkbox"
+                                                        id="vocero-{{ $item->id }}" data-id="{{ $item->id }}"
+                                                        {{ $item->activo ? 'checked' : '' }}>
+                                                </div>
+                                            </td>
+                                            <td>
                                                 <div>
                                                     <button type="button" class="btn btn-sm btn-light" title="Consultar"
                                                         onclick="consultarVocero({{ $item->id }})">
@@ -60,22 +68,12 @@
                                                         onclick="editarVocero({{ $item->id }})">
                                                         <i class="ri-pencil-fill"></i>
                                                     </button>
-                                                    <form action="{{ route('voceros.destroy', $item->id) }}" method="POST"
-                                                        class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-danger btn-eliminar-vocero"
-                                                            title="Eliminar">
-                                                            <i class="ri-delete-bin-fill"></i>
-                                                        </button>
-                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center py-4">No se encontraron voceros
+                                            <td colspan="6" class="text-center py-4">No se encontraron voceros
                                                 registrados.</td>
                                         </tr>
                                     @endforelse
@@ -242,22 +240,21 @@
             });
         }
 
-        // SweetAlert Delete Confirmation
-        $(document).on('click', '.btn-eliminar-vocero', function(e) {
-            e.preventDefault();
-            var form = $(this).closest('form');
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: "No podrás revertir esto.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
+        $(document).on('change', '.estado-vocero', function() {
+            var checkbox = $(this);
+            var estado = checkbox.is(':checked') ? 1 : 0;
+            var id = checkbox.data('id');
+
+            $.ajax({
+                type: 'GET',
+                url: '{{ url('/voceros/cambiar-estado') }}/' + id + '/' + estado,
+                error: function() {
+                    checkbox.prop('checked', !estado);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo actualizar el estado del vocero.',
+                        icon: 'error'
+                    });
                 }
             });
         });
