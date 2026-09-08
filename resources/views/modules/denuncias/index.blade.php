@@ -362,8 +362,54 @@
         */
 
         function agregar_id_expediente(id) {
-            $('#cita_expediente_id').val(id);
+            var el = document.getElementById('cita_expediente_id');
+            if (el) el.value = id;
         }
+
+        // Inicializar flatpickr para la modal de cita cuando se abre
+        (function() {
+            var fpTime = null;
+            var fpDate = null;
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var modalCitaEl = document.getElementById('modalCita');
+                if (!modalCitaEl) return;
+
+                modalCitaEl.addEventListener('shown.bs.modal', function() {
+                    // Inicializar picker de HORA si no está ya inicializado
+                    var timeInput = modalCitaEl.querySelector('.time_flatpicker');
+                    if (timeInput && !timeInput._flatpickr) {
+                        fpTime = flatpickr(timeInput, {
+                            enableTime: true,
+                            noCalendar: true,
+                            dateFormat: 'H:i',
+                            time_24hr: true,
+                            appendTo: document.body
+                        });
+                    }
+
+                    // Inicializar picker de FECHA con wrap si no está ya inicializado
+                    var wrapEl = modalCitaEl.querySelector('.wrap_flatpicker');
+                    var dateInput = wrapEl ? wrapEl.querySelector('[data-input]') : null;
+                    if (wrapEl && dateInput && !dateInput._flatpickr) {
+                        fpDate = flatpickr(wrapEl, {
+                            wrap: true,
+                            dateFormat: 'd/m/Y',
+                            locale: {
+                                firstDayOfWeek: 1
+                            },
+                            appendTo: document.body
+                        });
+                    }
+                });
+
+                modalCitaEl.addEventListener('hidden.bs.modal', function() {
+                    // Limpiar valores al cerrar
+                    if (fpTime) fpTime.clear();
+                    if (fpDate) fpDate.clear();
+                });
+            });
+        })();
 
         // Estado usado por la modal para saber si el expediente ya tiene un 'denunciado'
         window.posponer_has_denunciado = false;
