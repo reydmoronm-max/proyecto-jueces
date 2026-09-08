@@ -36,11 +36,28 @@
                         <tbody>
                         @foreach($citaciones as $citacion)
                             @php
-                                $denunciante = $citacion->expediente->personas->first();
+                                $denunciantesList = $citacion->expediente->personas;
+                                $denunciante = $denunciantesList->first();
                             @endphp
                             <tr>
                                 <td>
                                     {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                    @if ($denunciantesList->count() > 1)
+                                        <div class="dropdown d-inline-block ms-1">
+                                            <button class="btn btn-xs btn-outline-primary dropdown-toggle py-0 px-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.75rem; background-color: rgba(58, 87, 232, 0.1); border-radius: 4px;">
+                                                +{{ $denunciantesList->count() - 1 }} más
+                                            </button>
+                                            <ul class="dropdown-menu shadow-sm border-0 py-1" style="min-width: 220px; font-size: 0.85rem;">
+                                                <li class="dropdown-header text-muted py-1 px-3" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Otros Requirentes</li>
+                                                @foreach ($denunciantesList->skip(1) as $otro)
+                                                    <li class="px-3 py-1 d-flex justify-content-between align-items-center">
+                                                        <span><i class="ri-user-line me-1 text-primary"></i> {{ $otro->nombres }} {{ $otro->apellidos }}</span>
+                                                        <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">V-{{ $otro->cedula }}</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
                                 </td>
                                 <td>
                                     <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}

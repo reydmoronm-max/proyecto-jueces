@@ -163,8 +163,31 @@ class CitacionesController extends Controller
 
         DB::beginTransaction();
         try {
-            // Si vienen datos personales, crear/obtener persona y relacionarla como 'denunciado'
-            if ($request->filled('cedula')) {
+            // Procesar denunciados (soporta array denunciados[] o campos individuales)
+            if ($request->has('denunciados') && is_array($request->denunciados)) {
+                foreach ($request->denunciados as $denunciadoData) {
+                    if (!empty($denunciadoData['cedula'])) {
+                        $persona = Persona::firstOrCreate(
+                            [
+                                'cedula_tipo' => 'V',
+                                'cedula' => $denunciadoData['cedula'],
+                            ],
+                            [
+                                'nombres' => $denunciadoData['nombres'] ?? '',
+                                'apellidos' => $denunciadoData['apellidos'] ?? '',
+                                'telefono' => $denunciadoData['telefono'] ?? '',
+                                'direccion' => $denunciadoData['direccion'] ?? '',
+                            ]
+                        );
+
+                        Involucrados::firstOrCreate([
+                            'persona_id' => $persona->id,
+                            'expediente_id' => $request->expediente_id,
+                            'rol' => 'denunciado',
+                        ]);
+                    }
+                }
+            } elseif ($request->filled('cedula')) {
                 $persona = Persona::firstOrCreate(
                     [
                         'cedula_tipo' => 'V',

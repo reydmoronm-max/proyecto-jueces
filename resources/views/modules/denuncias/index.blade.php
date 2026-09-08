@@ -54,6 +54,7 @@
                                                 <th>Descripción del caso</th>
                                                 <th>Tipo de caso</th>
                                                 <th>Categoría</th>
+                                                <th>Denunciado(a)</th>
                                                 <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
@@ -63,18 +64,42 @@
                                                 <tr>
                                                     <td>
                                                         @php
-                                                            $denunciante = $expediente->personas->first();
+                                                            $denunciantesList = $expediente->personas;
+                                                            $primerDenunciante = $denunciantesList->first();
                                                         @endphp
-                                                        {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                                        {{ $primerDenunciante ? $primerDenunciante->nombres . ' ' . $primerDenunciante->apellidos : '-' }}
+                                                        @if ($denunciantesList->count() > 1)
+                                                            <div class="dropdown d-inline-block ms-1">
+                                                                <button class="btn btn-xs btn-outline-primary dropdown-toggle py-0 px-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.75rem; background-color: rgba(58, 87, 232, 0.1); border-radius: 4px;">
+                                                                    +{{ $denunciantesList->count() - 1 }} más
+                                                                </button>
+                                                                <ul class="dropdown-menu shadow-sm border-0 py-1" style="min-width: 220px; font-size: 0.85rem;">
+                                                                    <li class="dropdown-header text-muted py-1 px-3" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Otros Requirentes</li>
+                                                                    @foreach ($denunciantesList->skip(1) as $otro)
+                                                                        <li class="px-3 py-1 d-flex justify-content-between align-items-center">
+                                                                            <span><i class="ri-user-line me-1 text-primary"></i> {{ $otro->nombres }} {{ $otro->apellidos }}</span>
+                                                                            <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">V-{{ $otro->cedula }}</span>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                     <td>
                                                         <span class="badge bg-primary me-1">V</span>
-                                                        {{ $denunciante ? $denunciante->cedula : '-' }}
+                                                        {{ $primerDenunciante ? $primerDenunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                     <td>{{ $expediente->caso }}</td>
                                                     <td>{{ $expediente->tipo_caso }}</td>
                                                     <td>{{ $expediente->categoria }}</td>
+                                                    <td>
+                                                        @if($expediente->denunciado_a)
+                                                            <span class="text-dark fw-semibold">{{ $expediente->denunciado_a }}</span>
+                                                        @else
+                                                            <span class="text-muted small">No especificado</span>
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <span class="badge bg-success">{{ $expediente->estatus }}</span>
                                                     </td>
@@ -109,6 +134,7 @@
                                                 <th>Descripción del caso</th>
                                                 <th>Tipo de caso</th>
                                                 <th>Categoría</th>
+                                                <th>Denunciado(a)</th>
                                                 <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
@@ -118,18 +144,42 @@
                                                 <tr>
                                                     <td>
                                                         @php
-                                                            $denunciante = $expediente->personas->first();
+                                                            $denunciantesList = $expediente->personas;
+                                                            $primerDenunciante = $denunciantesList->first();
                                                         @endphp
-                                                        {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                                        {{ $primerDenunciante ? $primerDenunciante->nombres . ' ' . $primerDenunciante->apellidos : '-' }}
+                                                        @if ($denunciantesList->count() > 1)
+                                                            <div class="dropdown d-inline-block ms-1">
+                                                                <button class="btn btn-xs btn-outline-primary dropdown-toggle py-0 px-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.75rem; background-color: rgba(58, 87, 232, 0.1); border-radius: 4px;">
+                                                                    +{{ $denunciantesList->count() - 1 }} más
+                                                                </button>
+                                                                <ul class="dropdown-menu shadow-sm border-0 py-1" style="min-width: 220px; font-size: 0.85rem;">
+                                                                    <li class="dropdown-header text-muted py-1 px-3" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Otros Requirentes</li>
+                                                                    @foreach ($denunciantesList->skip(1) as $otro)
+                                                                        <li class="px-3 py-1 d-flex justify-content-between align-items-center">
+                                                                            <span><i class="ri-user-line me-1 text-primary"></i> {{ $otro->nombres }} {{ $otro->apellidos }}</span>
+                                                                            <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">V-{{ $otro->cedula }}</span>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                     <td>
                                                         <span class="badge bg-primary me-1">V</span>
-                                                        {{ $denunciante ? $denunciante->cedula : '-' }}
+                                                        {{ $primerDenunciante ? $primerDenunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                     <td>{{ $expediente->caso }}</td>
                                                     <td>{{ $expediente->tipo_caso }}</td>
                                                     <td>{{ $expediente->categoria }}</td>
+                                                    <td>
+                                                        @if($expediente->denunciado_a)
+                                                            <span class="text-dark fw-semibold">{{ $expediente->denunciado_a }}</span>
+                                                        @else
+                                                            <span class="text-muted small">No especificado</span>
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <span class="badge bg-warning">{{ $expediente->estatus }}</span>
                                                     </td>
@@ -165,6 +215,7 @@
                                                 <th>Descripción del caso</th>
                                                 <th>Tipo de caso</th>
                                                 <th>Categoría</th>
+                                                <th>Denunciado(a)</th>
                                                 <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
@@ -174,18 +225,42 @@
                                                 <tr>
                                                     <td>
                                                         @php
-                                                            $denunciante = $expediente->personas->first();
+                                                            $denunciantesList = $expediente->personas;
+                                                            $primerDenunciante = $denunciantesList->first();
                                                         @endphp
-                                                        {{ $denunciante ? $denunciante->nombres . ' ' . $denunciante->apellidos : '-' }}
+                                                        {{ $primerDenunciante ? $primerDenunciante->nombres . ' ' . $primerDenunciante->apellidos : '-' }}
+                                                        @if ($denunciantesList->count() > 1)
+                                                            <div class="dropdown d-inline-block ms-1">
+                                                                <button class="btn btn-xs btn-outline-primary dropdown-toggle py-0 px-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.75rem; background-color: rgba(58, 87, 232, 0.1); border-radius: 4px;">
+                                                                    +{{ $denunciantesList->count() - 1 }} más
+                                                                </button>
+                                                                <ul class="dropdown-menu shadow-sm border-0 py-1" style="min-width: 220px; font-size: 0.85rem;">
+                                                                    <li class="dropdown-header text-muted py-1 px-3" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Otros Requirentes</li>
+                                                                    @foreach ($denunciantesList->skip(1) as $otro)
+                                                                        <li class="px-3 py-1 d-flex justify-content-between align-items-center">
+                                                                            <span><i class="ri-user-line me-1 text-primary"></i> {{ $otro->nombres }} {{ $otro->apellidos }}</span>
+                                                                            <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">V-{{ $otro->cedula }}</span>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                     <td>
                                                         <span class="badge bg-primary me-1">V</span>
-                                                        {{ $denunciante ? $denunciante->cedula : '-' }}
+                                                        {{ $primerDenunciante ? $primerDenunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
                                                     <td>{{ $expediente->caso }}</td>
                                                     <td>{{ $expediente->tipo_caso }}</td>
                                                     <td>{{ $expediente->categoria }}</td>
+                                                    <td>
+                                                        @if($expediente->denunciado_a)
+                                                            <span class="text-dark fw-semibold">{{ $expediente->denunciado_a }}</span>
+                                                        @else
+                                                            <span class="text-muted small">No especificado</span>
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <span
                                                             class="badge bg-light text-dark">{{ $expediente->estatus }}</span>
@@ -328,77 +403,7 @@
             });
         }
 
-        function buscarPersonaEnVisitas() {
-            var cedula = $('#cedula').val().trim();
-            if (!/^[0-9]{7,8}$/.test(cedula)) {
-                return;
-            }
 
-            $.ajax({
-                url: '{{ route('denuncias.buscar-persona') }}',
-                method: 'GET',
-                data: {
-                    cedula_tipo: $('#cedula_tipo').val(),
-                    cedula: cedula
-                },
-                success: function(data) {
-                    $('#cedula_tipo').val(data.cedula_tipo);
-                    $('#nombres').val(data.nombres);
-                    $('#apellidos').val(data.apellidos);
-                    $('#telefono').val(data.telefono);
-                    $('#direccion').val(data.direccion);
-                },
-                error: function(xhr) {
-                    if (xhr.status === 404) {
-                        // No se encontró persona en visitas, el usuario puede completar manualmente.
-                    }
-                }
-            });
-        }
-
-        function buscarPersonaEnVisitasRequerido() {
-            var cedula = $('#cedulaRequerido').val().trim();
-            if (!/^[0-9]{7,8}$/.test(cedula)) {
-                return;
-            }
-
-            $.ajax({
-                url: '{{ route('denuncias.buscar-persona') }}',
-                method: 'GET',
-                data: {
-                    cedula_tipo: $('#cedula_tipoRequerido').val(),
-                    cedula: cedula
-                },
-                success: function(data) {
-                    $('#cedula_tipoRequerido').val(data.cedula_tipo);
-                    $('#nombresRequerido').val(data.nombres);
-                    $('#apellidosRequerido').val(data.apellidos);
-                    $('#telefonoRequerido').val(data.telefono);
-                    $('#direccionRequerido').val(data.direccion);
-                },
-                error: function(xhr) {
-                    if (xhr.status === 404) {
-                        // No se encontró persona en visitas, el usuario puede completar manualmente.
-                    }
-                }
-            });
-        }
-
-        $('#cedula').on('blur', function() {
-            buscarPersonaEnVisitas();
-        });
-
-        $('#cedula_tipo').on('change', function() {
-            buscarPersonaEnVisitas();
-        });
-
-        $('#cedulaRequerido').on('blur', function() {
-            buscarPersonaEnVisitasRequerido();
-        });
-
-        $('#cedula_tipoRequerido').on('change', function() {
-            buscarPersonaEnVisitasRequerido();
-        });
 
 
         @if (session('success'))

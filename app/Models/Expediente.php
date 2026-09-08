@@ -10,6 +10,7 @@ class Expediente extends Model
         'caso',
         'tipo_caso',
         'categoria',
+        'denunciado_a',
         'estatus',
     ];
 
