@@ -18,7 +18,7 @@
                         <div class="d-flex align-items-center">
                             <form action="{{ route('censo.index') }}" method="GET" class="d-flex gap-2">
                                 <input type="text" name="search" class="form-control"
-                                    placeholder="Buscar por familia, cédula, nombre..." value="{{ request('search') }}"
+                                    placeholder="Buscar por familia, cédula, nombre, comunidad..." value="{{ request('search') }}"
                                     style="min-width: 280px;">
                                 <button type="submit" class="btn btn-primary">Buscar</button>
                                 @if (request('search'))
@@ -33,7 +33,10 @@
                                 <thead>
                                     <tr>
                                         <th>Familia / Identificación</th>
-                                        <th>Cantidad de Integrantes</th>
+                                        <th>Comunidad (Consejo Comunal)</th>
+                                        <th>Vivienda</th>
+                                        <th>Beneficios</th>
+                                        <th>Integrantes</th>
                                         <th class="text-end">Acciones</th>
                                     </tr>
                                 </thead>
@@ -41,10 +44,34 @@
                                     @forelse($items as $item)
                                         <tr>
                                             <td>
-                                                <span class="fw-bold">{{ $item->numero_familia }}</span>
+                                                <span class="fw-bold text-dark">{{ $item->numero_familia }}</span>
                                             </td>
                                             <td>
-                                                <span class="badge bg-info">{{ $item->personas->count() }} integrantes</span>
+                                                <span class="text-muted">{{ $item->consejoComunal->nombre ?? 'Sin vincular' }}</span>
+                                            </td>
+                                            <td>
+                                                @if ($item->vivienda)
+                                                    <span class="badge bg-secondary">{{ $item->vivienda }}</span>
+                                                    @if ($item->mision_vivienda === 'Sí')
+                                                        <span class="badge bg-info ms-1" title="Misión Vivienda">GMVV</span>
+                                                    @endif
+                                                @else
+                                                    <span class="text-muted small">No registrada</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($item->clap === 'Sí')
+                                                    <span class="badge bg-success" title="Recibe CLAP">CLAP</span>
+                                                @endif
+                                                @if ($item->bono_unico_familiar === 'Sí')
+                                                    <span class="badge bg-danger ms-1" title="Recibe Bono Único Familiar">Bono Familiar</span>
+                                                @endif
+                                                @if ($item->clap !== 'Sí' && $item->bono_unico_familiar !== 'Sí')
+                                                    <span class="text-muted small">Ninguno</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">{{ $item->personas->count() }} integrantes</span>
                                             </td>
                                             <td class="text-end">
                                                 <div>
@@ -57,7 +84,7 @@
                                                         <i class="ri-team-fill"></i>
                                                     </button>
                                                     <button type="button" class="btn btn-sm btn-warning me-1" title="Editar Familia"
-                                                        onclick="editarFamilia({{ $item->id }}, '{{ $item->numero_familia }}')">
+                                                        onclick="editarFamilia({{ $item->id }})">
                                                         <i class="ri-pencil-fill"></i>
                                                     </button>
                                                     <form action="{{ route('censo.destroy', $item->id) }}" method="POST"
@@ -75,7 +102,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center py-4">No se encontraron familias registradas.</td>
+                                            <td colspan="6" class="text-center py-4">No se encontraron familias registradas.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -116,7 +143,26 @@
             });
         @endif
 
-        // AJAX search for Person globally by Cédula (Create Integrante)
+        // Flatpickr initializations
+        $(document).ready(function() {
+            if (typeof flatpickr !== 'undefined') {
+                flatpickr("#fecha_nacimiento", {
+                    dateFormat: "d-m-Y",
+                    maxDate: "today",
+                    locale: "es",
+                    allowInput: false
+                });
+
+                flatpickr("#edit-fecha_nacimiento", {
+                    dateFormat: "d-m-Y",
+                    maxDate: "today",
+                    locale: "es",
+                    allowInput: false
+                });
+            }
+        });
+
+        // AJAX search for Person globally by Cédula (Add Integrante)
         function buscarPersonaEnCenso() {
             var cedula = $('#cedula').val().trim();
             if (!/^\d{7,8}$/.test(cedula)) {
@@ -140,32 +186,23 @@
                         else $('#fecha_nacimiento').val(data.fecha_nacimiento_formateada);
                     }
                     
-                    if (data.cantidad_integrantes) $('#cantidad_integrantes').val(data.cantidad_integrantes);
                     if (data.centro_votacion) $('#centro_votacion').val(data.centro_votacion);
                     if (data.carnet_patria) $('#carnet_patria').val(data.carnet_patria);
                     if (data.nivel_academico) $('#nivel_academico').val(data.nivel_academico);
                     if (data.profesion) $('#profesion').val(data.profesion);
                     if (data.situacion_laboral) $('#situacion_laboral').val(data.situacion_laboral);
-                    if (data.vivienda) $('#vivienda').val(data.vivienda);
                     if (data.tipo_enfermedad) $('#tipo_enfermedad').val(data.tipo_enfermedad);
-                    if (data.bono_unico_familiar) $('#bono_unico_familiar').val(data.bono_unico_familiar);
                     if (data.pensionado_jubilado) $('#pensionado_jubilado').val(data.pensionado_jubilado);
-                    if (data.ayuda_tecnica) $('#ayuda_tecnica').val(data.ayuda_tecnica);
-                    if (data.mision_vivienda) $('#mision_vivienda').val(data.mision_vivienda);
-                    if (data.clap) $('#clap').val(data.clap);
-                    if (data.casa_alimentacion) $('#casa_alimentacion').val(data.casa_alimentacion);
                     if (data.direccion) $('#direccion').val(data.direccion);
                     if (data.estudia) $('#estudia').val(data.estudia);
                     if (data.genero) $('#genero').val(data.genero);
                     if (data.parentesco) $('#parentesco').val(data.parentesco);
-                    if (data.consejo_comunal_id) $('#consejo_comunal_id').val(data.consejo_comunal_id);
                 },
                 error: function(xhr) {
                     if (xhr.status === 404) {
                         $('#nombres').val('').prop('readonly', false);
                         $('#apellidos').val('').prop('readonly', false);
                         $('#telefono').val('');
-                        // Leave other fields as blank for input
                     }
                 }
             });
@@ -207,7 +244,6 @@
 
         // Open Add Member Modal
         function abrirAñadirIntegrante(familiaId) {
-            // Reset form
             $('#formIntegrante')[0].reset();
             $('#nombres').prop('readonly', false);
             $('#apellidos').prop('readonly', false);
@@ -216,11 +252,11 @@
             var fp = document.getElementById('fecha_nacimiento')._flatpickr;
             if (fp) fp.clear();
 
-            // Sane defaults or reset values
             $('#genero').val('');
             $('#estudia').val('');
             $('#parentesco').val('');
-            $('#consejo_comunal_id').val('');
+            $('#pensionado_jubilado').val('');
+            $('#nivel_academico').val('');
             $('#direccion').val('');
 
             var modal = new bootstrap.Modal(document.getElementById('modalRegistrarIntegrante'));
@@ -230,7 +266,12 @@
         // Open Family Members List Modal
         function verIntegrantesFamilia(id, numeroFamilia) {
             $('#lbl_numero_familia').text(numeroFamilia);
-            $('#lista-integrantes-body').html('<tr><td colspan="4" class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Cargando...</td></tr>');
+            $('#view_fam_consejo_comunal').text('Cargando...');
+            $('#view_fam_vivienda').text('Cargando...');
+            $('#view_fam_mision_vivienda').text('...');
+            $('#view_fam_bono').text('...');
+            $('#view_fam_clap').text('...');
+            $('#lista-integrantes-body').html('<tr><td colspan="5" class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Cargando...</td></tr>');
             
             var modal = new bootstrap.Modal(document.getElementById('modalConsultarFamilia'));
             modal.show();
@@ -239,12 +280,19 @@
                 url: '/censo/' + id,
                 type: 'GET',
                 success: function(data) {
+                    $('#view_fam_consejo_comunal').text(data.consejo_comunal ? data.consejo_comunal.nombre : 'Sin vincular');
+                    $('#view_fam_vivienda').text(data.vivienda ?? 'No registrada');
+                    $('#view_fam_mision_vivienda').text(data.mision_vivienda ?? 'No');
+                    $('#view_fam_bono').text(data.bono_unico_familiar ?? 'No');
+                    $('#view_fam_clap').text(data.clap ?? 'No');
+
                     var html = '';
                     if (data.personas && data.personas.length > 0) {
                         data.personas.forEach(function(p) {
                             html += `<tr>
                                 <td>${p.cedula}</td>
                                 <td>${p.nombres} ${p.apellidos}</td>
+                                <td><span class="badge bg-secondary">${p.parentesco ?? 'No registrado'}</span></td>
                                 <td>${p.telefono || 'No registrado'}</td>
                                 <td class="text-end">
                                     <button type="button" class="btn btn-sm btn-light py-0 px-1" title="Ver" onclick="consultarIntegrante(${p.id})">
@@ -260,12 +308,12 @@
                             </tr>`;
                         });
                     } else {
-                        html = '<tr><td colspan="4" class="text-center py-3">No hay integrantes registrados en esta familia.</td></tr>';
+                        html = '<tr><td colspan="5" class="text-center py-3">No hay integrantes registrados en esta familia.</td></tr>';
                     }
                     $('#lista-integrantes-body').html(html);
                 },
                 error: function() {
-                    $('#lista-integrantes-body').html('<tr><td colspan="4" class="text-center py-3 text-danger">Error al cargar integrantes.</td></tr>');
+                    $('#lista-integrantes-body').html('<tr><td colspan="5" class="text-center py-3 text-danger">Error al cargar integrantes.</td></tr>');
                 }
             });
         }
@@ -281,24 +329,16 @@
                     $('#view-apellidos').val(data.apellidos ?? '');
                     $('#view-telefono').val(data.telefono ?? 'No registrado');
                     $('#view-fecha_nacimiento').val(data.fecha_nacimiento_formateada ?? '');
-                    $('#view-cantidad_integrantes').val(data.cantidad_integrantes ?? '');
                     $('#view-centro_votacion').val(data.centro_votacion ?? 'No registrado');
                     $('#view-carnet_patria').val(data.carnet_patria ?? 'No registrado');
                     $('#view-nivel_academico').val(data.nivel_academico ?? '');
                     $('#view-profesion').val(data.profesion ?? 'No registrado');
                     $('#view-situacion_laboral').val(data.situacion_laboral ?? 'No registrado');
-                    $('#view-vivienda').val(data.vivienda ?? '');
                     $('#view-tipo_enfermedad').val(data.tipo_enfermedad ?? 'Ninguna');
-                    $('#view-ayuda_tecnica').val(data.ayuda_tecnica ?? 'Ninguna');
-                    $('#view-bono_unico_familiar').val(data.bono_unico_familiar ?? '');
                     $('#view-pensionado_jubilado').val(data.pensionado_jubilado ?? '');
-                    $('#view-mision_vivienda').val(data.mision_vivienda ?? '');
-                    $('#view-clap').val(data.clap ?? '');
-                    $('#view-casa_alimentacion').val(data.casa_alimentacion ?? '');
                     $('#view-genero').val(data.genero ?? 'No registrado');
                     $('#view-estudia').val(data.estudia ?? 'No registrado');
                     $('#view-parentesco').val(data.parentesco ?? 'No registrado');
-                    $('#view-consejo_comunal').val(data.consejo_comunal ? data.consejo_comunal.nombre : 'Ninguno');
                     $('#view-direccion').val(data.direccion ?? 'No registrada');
 
                     // Hide families list modal temporarily to avoid overlapping modal backdrops
@@ -339,24 +379,16 @@
                         $('#edit-fecha_nacimiento').val(data.fecha_nacimiento_formateada);
                     }
                     
-                    $('#edit-cantidad_integrantes').val(data.cantidad_integrantes ?? '');
                     $('#edit-centro_votacion').val(data.centro_votacion ?? '');
                     $('#edit-carnet_patria').val(data.carnet_patria ?? '');
                     $('#edit-nivel_academico').val(data.nivel_academico ?? '');
                     $('#edit-profesion').val(data.profesion ?? '');
                     $('#edit-situacion_laboral').val(data.situacion_laboral ?? '');
-                    $('#edit-vivienda').val(data.vivienda ?? '');
                     $('#edit-tipo_enfermedad').val(data.tipo_enfermedad ?? '');
-                    $('#edit-ayuda_tecnica').val(data.ayuda_tecnica ?? '');
-                    $('#edit-bono_unico_familiar').val(data.bono_unico_familiar ?? '');
                     $('#edit-pensionado_jubilado').val(data.pensionado_jubilado ?? '');
-                    $('#edit-mision_vivienda').val(data.mision_vivienda ?? '');
-                    $('#edit-clap').val(data.clap ?? '');
-                    $('#edit-casa_alimentacion').val(data.casa_alimentacion ?? '');
                     $('#edit-genero').val(data.genero ?? '');
                     $('#edit-estudia').val(data.estudia ?? '');
                     $('#edit-parentesco').val(data.parentesco ?? '');
-                    $('#edit-consejo_comunal_id').val(data.consejo_comunal_id ?? '');
                     $('#edit-direccion').val(data.direccion ?? '');
 
                     $('#edit-nombres').prop('readonly', true);
@@ -382,11 +414,25 @@
         }
 
         // Edit Family info
-        function editarFamilia(id, numeroFamilia) {
-            $('#formEditarFamilia').attr('action', '/censo/' + id);
-            $('#edit_numero_familia').val(numeroFamilia);
-            var modal = new bootstrap.Modal(document.getElementById('modalEditarFamilia'));
-            modal.show();
+        function editarFamilia(id) {
+            $.ajax({
+                url: '/censo/' + id,
+                type: 'GET',
+                success: function(data) {
+                    $('#formEditarFamilia').attr('action', '/censo/' + data.id);
+                    $('#edit_numero_familia').val(data.numero_familia ?? '');
+                    $('#edit_consejo_comunal_id').val(data.consejo_comunal_id ?? '');
+                    $('#edit_vivienda').val(data.vivienda ?? '');
+                    $('#edit_mision_vivienda').val(data.mision_vivienda ?? '');
+                    $('#edit_bono_unico_familiar').val(data.bono_unico_familiar ?? '');
+                    $('#edit_clap').val(data.clap ?? '');
+                    var modal = new bootstrap.Modal(document.getElementById('modalEditarFamilia'));
+                    modal.show();
+                },
+                error: function() {
+                    Swal.fire('Error', 'No se pudo cargar la información de la familia.', 'error');
+                }
+            });
         }
 
         // SweetAlert Delete Confirmation (Family)
@@ -422,7 +468,6 @@
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Create dynamic form to submit DELETE request to disassociate route
                     var form = $('<form>', {
                         action: '/censo/integrante/' + id,
                         method: 'POST'
@@ -441,7 +486,7 @@
             });
         }
 
-        // Client-side validation for Integrante forms
+        // Client-side validation for Family and Member forms
         $(document).ready(function() {
             function validateIntegranteForm(prefix) {
                 var p = prefix ? prefix + '-' : '';
@@ -449,17 +494,11 @@
                 var nombres = $('#' + p + 'nombres').val().trim();
                 var apellidos = $('#' + p + 'apellidos').val().trim();
                 var fecha = $('#' + p + 'fecha_nacimiento').val().trim();
-                var cant = $('#' + p + 'cantidad_integrantes').val().trim();
-                var nivel = $('#' + p + 'nivel_academico').val();
-                var vivienda = $('#' + p + 'vivienda').val();
-                var bono = $('#' + p + 'bono_unico_familiar').val();
-                var pension = $('#' + p + 'pensionado_jubilado').val();
-                var mision = $('#' + p + 'mision_vivienda').val();
-                var clap = $('#' + p + 'clap').val();
-                var casa = $('#' + p + 'casa_alimentacion').val();
-                var estudia = $('#' + p + 'estudia').val();
                 var genero = $('#' + p + 'genero').val();
                 var parentesco = $('#' + p + 'parentesco').val();
+                var estudia = $('#' + p + 'estudia').val();
+                var pension = $('#' + p + 'pensionado_jubilado').val();
+                var nivel = $('#' + p + 'nivel_academico').val();
 
                 var errors = [];
                 var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s]/;
@@ -476,42 +515,77 @@
                 if (!fecha) {
                     errors.push('Fecha de nacimiento: campo obligatorio.');
                 }
-                if (!cant || isNaN(cant) || parseInt(cant) < 1) {
-                    errors.push('Cantidad de integrantes: debe ser un número mayor o igual a 1.');
-                }
-                if (!nivel) {
-                    errors.push('Nivel académico: campo obligatorio.');
-                }
-                if (!vivienda) {
-                    errors.push('Vivienda: campo obligatorio.');
-                }
-                if (!bono) {
-                    errors.push('Bono único familiar: campo obligatorio.');
-                }
-                if (!pension) {
-                    errors.push('Pensionado / Jubilado: campo obligatorio.');
-                }
-                if (!mision) {
-                    errors.push('Misión vivienda: campo obligatorio.');
-                }
-                if (!clap) {
-                    errors.push('CLAP: campo obligatorio.');
-                }
-                if (!casa) {
-                    errors.push('Casa de alimentación: campo obligatorio.');
-                }
                 if (!genero) {
                     errors.push('Género: campo obligatorio.');
-                }
-                if (!estudia) {
-                    errors.push('Estudia: campo obligatorio.');
                 }
                 if (!parentesco) {
                     errors.push('Parentesco: campo obligatorio.');
                 }
+                if (!estudia) {
+                    errors.push('Estudia: campo obligatorio.');
+                }
+                if (!pension) {
+                    errors.push('Pensionado / Jubilado: campo obligatorio.');
+                }
+                if (!nivel) {
+                    errors.push('Nivel académico: campo obligatorio.');
+                }
 
                 return errors;
             }
+
+            function validateFamiliaForm(prefix) {
+                var p = prefix ? prefix + '_' : '';
+                var num = $('#' + p + 'numero_familia').val().trim();
+                var viv = $('#' + (prefix ? 'edit_vivienda' : 'vivienda_fam')).val();
+                var mision = $('#' + (prefix ? 'edit_mision_vivienda' : 'mision_vivienda_fam')).val();
+                var bono = $('#' + (prefix ? 'edit_bono_unico_familiar' : 'bono_unico_familiar_fam')).val();
+                var clap = $('#' + (prefix ? 'edit_clap' : 'clap_fam')).val();
+
+                var errors = [];
+                if (!num) {
+                    errors.push('Identificación / Número de Familia: campo obligatorio.');
+                }
+                if (!viv) {
+                    errors.push('Tipo de vivienda: campo obligatorio.');
+                }
+                if (!mision) {
+                    errors.push('Misión Vivienda: campo obligatorio.');
+                }
+                if (!bono) {
+                    errors.push('Bono Único Familiar: campo obligatorio.');
+                }
+                if (!clap) {
+                    errors.push('CLAP: campo obligatorio.');
+                }
+                return errors;
+            }
+
+            $('#formFamilia').on('submit', function(e) {
+                var errors = validateFamiliaForm('');
+                if (errors.length > 0) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Errores en el formulario',
+                        html: errors.join('<br>'),
+                        icon: 'error'
+                    });
+                    return false;
+                }
+            });
+
+            $('#formEditarFamilia').on('submit', function(e) {
+                var errors = validateFamiliaForm('edit');
+                if (errors.length > 0) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Errores en el formulario',
+                        html: errors.join('<br>'),
+                        icon: 'error'
+                    });
+                    return false;
+                }
+            });
 
             $('#formIntegrante').on('submit', function(e) {
                 var errors = validateIntegranteForm('');

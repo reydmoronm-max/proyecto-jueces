@@ -30,12 +30,48 @@ class BDSeeder extends Seeder
             // 1. FAMILIAS
             // -------------------------------------------------------------
             $familias = [
-                1 => Familia::firstOrCreate(['id' => 1], ['numero_familia' => 'Familia 1']),
-                2 => Familia::firstOrCreate(['id' => 2], ['numero_familia' => 'Familia 2']),
-                3 => Familia::firstOrCreate(['id' => 3], ['numero_familia' => 'Familia 3']),
-                4 => Familia::firstOrCreate(['id' => 4], ['numero_familia' => 'Familia 4']),
-                5 => Familia::firstOrCreate(['id' => 5], ['numero_familia' => 'Familia 5']),
-                6 => Familia::firstOrCreate(['id' => 6], ['numero_familia' => 'Familia 6']),
+                1 => Familia::updateOrCreate(['id' => 1], [
+                    'numero_familia'      => 'Familia 1',
+                    'vivienda'            => 'Propia',
+                    'mision_vivienda'     => 'No',
+                    'bono_unico_familiar' => 'No',
+                    'clap'                => 'Sí',
+                ]),
+                2 => Familia::updateOrCreate(['id' => 2], [
+                    'numero_familia'      => 'Familia 2',
+                    'vivienda'            => 'Alquilada',
+                    'mision_vivienda'     => 'No',
+                    'bono_unico_familiar' => 'No',
+                    'clap'                => 'Sí',
+                ]),
+                3 => Familia::updateOrCreate(['id' => 3], [
+                    'numero_familia'      => 'Familia 3',
+                    'vivienda'            => 'Propia',
+                    'mision_vivienda'     => 'No',
+                    'bono_unico_familiar' => 'Sí',
+                    'clap'                => 'Sí',
+                ]),
+                4 => Familia::updateOrCreate(['id' => 4], [
+                    'numero_familia'      => 'Familia 4',
+                    'vivienda'            => 'Alquilada',
+                    'mision_vivienda'     => 'No',
+                    'bono_unico_familiar' => 'No',
+                    'clap'                => 'Sí',
+                ]),
+                5 => Familia::updateOrCreate(['id' => 5], [
+                    'numero_familia'      => 'Familia 5',
+                    'vivienda'            => 'Propia',
+                    'mision_vivienda'     => 'No',
+                    'bono_unico_familiar' => 'No',
+                    'clap'                => 'Sí',
+                ]),
+                6 => Familia::updateOrCreate(['id' => 6], [
+                    'numero_familia'      => 'Familia 6',
+                    'vivienda'            => 'Propia',
+                    'mision_vivienda'     => 'No',
+                    'bono_unico_familiar' => 'No',
+                    'clap'                => 'Sí',
+                ]),
             ];
 
             // -------------------------------------------------------------
@@ -55,14 +91,8 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Técnico',
                     'profesion'           => 'Obrero',
                     'situacion_laboral'   => 'Empleado',
-                    'vivienda'            => 'Propia',
                     'tipo_enfermedad'     => null,
-                    'bono_unico_familiar' => 'No',
                     'pensionado_jubilado' => 'No',
-                    'ayuda_tecnica'       => 'No',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Avenida 2, entre Calles 1 y 2, Casa #4',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
@@ -81,14 +111,8 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Secundaria',
                     'profesion'           => 'Comerciante',
                     'situacion_laboral'   => 'Cuenta propia',
-                    'vivienda'            => 'Alquilada',
                     'tipo_enfermedad'     => 'Diabetes',
-                    'bono_unico_familiar' => 'No',
                     'pensionado_jubilado' => 'Sí',
-                    'ayuda_tecnica'       => 'Silla de ruedas',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Calle 1, entre Av. 1 y 2, Casa #12',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
@@ -107,14 +131,8 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Universitario',
                     'profesion'           => 'Electricista',
                     'situacion_laboral'   => 'Empleado',
-                    'vivienda'            => 'Compartida',
                     'tipo_enfermedad'     => null,
-                    'bono_unico_familiar' => 'No',
                     'pensionado_jubilado' => 'No',
-                    'ayuda_tecnica'       => 'No',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Calle 1, entre Av. 1 y 2, Casa #12',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
@@ -133,14 +151,8 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Universitario',
                     'profesion'           => 'Docente Jubilada',
                     'situacion_laboral'   => 'Jubilado',
-                    'vivienda'            => 'Propia',
                     'tipo_enfermedad'     => 'Hipertensión',
-                    'bono_unico_familiar' => 'Sí',
                     'pensionado_jubilado' => 'Sí',
-                    'ayuda_tecnica'       => 'Bastón',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Sector Valles del Sol, Manzana B, Casa 8',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
@@ -159,18 +171,12 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Bachiller',
                     'profesion'           => 'Carpintero',
                     'situacion_laboral'   => 'Jubilado',
-                    'vivienda'            => 'Propia',
                     'tipo_enfermedad'     => 'Artritis',
-                    'bono_unico_familiar' => 'No',
                     'pensionado_jubilado' => 'Sí',
-                    'ayuda_tecnica'       => 'Andadera',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Sector Valles del Sol, Manzana B, Casa 8',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
-                    'parentesco'          => 'Cónyuge',
+                    'parentesco'          => 'Hijo/a',
                 ],
                 [
                     'cedula'              => '14555666',
@@ -185,14 +191,8 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Técnico Superior',
                     'profesion'           => 'Enfermera Jubilada',
                     'situacion_laboral'   => 'Jubilado',
-                    'vivienda'            => 'Propia',
                     'tipo_enfermedad'     => null,
-                    'bono_unico_familiar' => 'No',
                     'pensionado_jubilado' => 'Sí',
-                    'ayuda_tecnica'       => 'Lentes formulados',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Urbanización Los Delirios, Calle Principal #23',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
@@ -211,14 +211,8 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Universitario',
                     'profesion'           => 'Ingeniero Agrónomo',
                     'situacion_laboral'   => 'Empleado',
-                    'vivienda'            => 'Alquilada',
                     'tipo_enfermedad'     => null,
-                    'bono_unico_familiar' => 'No',
                     'pensionado_jubilado' => 'No',
-                    'ayuda_tecnica'       => 'No',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Sector Valles del Sol, Calle 3, Casa #15',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
@@ -237,18 +231,12 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Universitario',
                     'profesion'           => 'Contadora',
                     'situacion_laboral'   => 'Empleado',
-                    'vivienda'            => 'Alquilada',
                     'tipo_enfermedad'     => null,
-                    'bono_unico_familiar' => 'No',
                     'pensionado_jubilado' => 'No',
-                    'ayuda_tecnica'       => 'No',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Sector Valles del Sol, Calle 3, Casa #15',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
-                    'parentesco'          => 'Cónyuge',
+                    'parentesco'          => 'Hijo/a',
                 ],
                 [
                     'cedula'              => '10444555',
@@ -263,14 +251,8 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Bachiller',
                     'profesion'           => 'Mecánico',
                     'situacion_laboral'   => 'Cuenta propia',
-                    'vivienda'            => 'Propia',
                     'tipo_enfermedad'     => 'Hipertensión',
-                    'bono_unico_familiar' => 'No',
                     'pensionado_jubilado' => 'Sí',
-                    'ayuda_tecnica'       => 'No',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Urbanización Los Delirios, Bloque 4, Apto 2-B',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
@@ -289,14 +271,8 @@ class BDSeeder extends Seeder
                     'nivel_academico'     => 'Técnico',
                     'profesion'           => 'Administradora',
                     'situacion_laboral'   => 'Empleado',
-                    'vivienda'            => 'Propia',
                     'tipo_enfermedad'     => null,
-                    'bono_unico_familiar' => 'No',
                     'pensionado_jubilado' => 'No',
-                    'ayuda_tecnica'       => 'No',
-                    'mision_vivienda'     => 'No',
-                    'clap'                => 'Sí',
-                    'casa_alimentacion'   => 'No',
                     'direccion'           => 'Urbanización Los Delirios, Bloque 4, Apto 2-B',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
@@ -343,19 +319,13 @@ class BDSeeder extends Seeder
                 ]
             );
 
-            // Asignar Consejo Comunal a cada persona
-            $personasInstancias['12345678']->update(['consejo_comunal_id' => $cc1->id]); // Gregorio Díaz
-            $personasInstancias['15389854']->update(['consejo_comunal_id' => $cc1->id]); // María Gracia
-            $personasInstancias['87654321']->update(['consejo_comunal_id' => $cc1->id]); // Carlos Ávila
-
-            $personasInstancias['11223344']->update(['consejo_comunal_id' => $cc2->id]); // Elena Mendoza
-            $personasInstancias['9876543']->update(['consejo_comunal_id' => $cc2->id]);  // José Mendoza
-            $personasInstancias['18999888']->update(['consejo_comunal_id' => $cc2->id]); // Pedro Pérez
-            $personasInstancias['20111222']->update(['consejo_comunal_id' => $cc2->id]); // Ana Lucía Pérez
-
-            $personasInstancias['14555666']->update(['consejo_comunal_id' => $cc3->id]); // Rosa Rojas
-            $personasInstancias['10444555']->update(['consejo_comunal_id' => $cc3->id]); // Roberto Gómez
-            $personasInstancias['16777888']->update(['consejo_comunal_id' => $cc3->id]); // Carmen Fernández
+            // Asignar Consejo Comunal a cada familia
+            $familias[1]->update(['consejo_comunal_id' => $cc1->id]);
+            $familias[2]->update(['consejo_comunal_id' => $cc1->id]);
+            $familias[3]->update(['consejo_comunal_id' => $cc2->id]);
+            $familias[4]->update(['consejo_comunal_id' => $cc2->id]);
+            $familias[5]->update(['consejo_comunal_id' => $cc3->id]);
+            $familias[6]->update(['consejo_comunal_id' => $cc3->id]);
 
             // -------------------------------------------------------------
             // 4. VOCEROS

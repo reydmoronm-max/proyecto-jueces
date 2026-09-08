@@ -364,9 +364,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Casa de Alimentación</td>
-                            <td>{{ $casaAlimentacionCount }}</td>
-                            <td>{{ $totalCiudadanos > 0 ? round(($casaAlimentacionCount / $totalCiudadanos) * 100, 1) : 0 }}%
+                            <td>Misión Vivienda</td>
+                            <td>{{ $misionViviendaCount }}</td>
+                            <td>{{ $totalCiudadanos > 0 ? round(($misionViviendaCount / $totalCiudadanos) * 100, 1) : 0 }}%
                             </td>
                         </tr>
                         <tr>

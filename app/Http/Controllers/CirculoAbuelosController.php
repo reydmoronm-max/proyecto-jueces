@@ -40,7 +40,9 @@ class CirculoAbuelosController extends Controller
         }
 
         if ($consejoComunalId) {
-            $queryAbuelos->where('consejo_comunal_id', $consejoComunalId);
+            $queryAbuelos->whereHas('familia', function ($q) use ($consejoComunalId) {
+                $q->where('consejo_comunal_id', $consejoComunalId);
+            });
         }
 
         $abuelos = $queryAbuelos->orderBy('nombres', 'asc')->get();
