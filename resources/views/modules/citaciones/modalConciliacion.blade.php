@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalConciliacionLabel">Conciliar denuncia</h5>
+                <h5 class="modal-title fw-bold" id="modalConciliacionLabel">CONCILIAR DENUNCIA</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-2">
@@ -17,90 +17,86 @@
                     <div class="row g-4">
 
 
-                        <div class="col-12 col-lg-5 border-end-lg" id="datos_denunciado_container">
-                            <h6 class="text-primary mb-3 border-bottom pb-1">Datos del Requerido / Denunciado</h6>
+                        <div class="col-12 col-lg-6 border-end-lg" id="datos_denunciado_container">
+                            {{-- <h6 class="text-primary mb-3 border-bottom pb-1">Datos del denunciado</h6> --}}
 
                             {{-- Contenedor de bloques de denunciados --}}
                             <div id="denunciados-container">
                                 <div class="denunciado-block mb-3" data-index="0">
                                     <div class="row g-3">
-                                        <div class="col-12">
-                                            <div class="form-floating">
-                                                <input type="number" name="denunciados[0][cedula]" class="form-control bg-white denunciado-cedula" placeholder="Cédula" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
-                                                <label>Cédula del requerido</label>
+                                        <div class="col-12 col-md-6">
+                                            <label class="text-primary fw-bold mb-1">CÉDULA DEL DENUNCIADO</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                                                <input type="number" name="denunciados[0][cedula]" class="form-control bg-white denunciado-cedula" placeholder="15000100" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                                             </div>
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control bg-white" name="denunciados[0][nombres]"
-                                                    placeholder="Nombres" required
-                                                    pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios"
-                                                    oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                                <label>Nombres</label>
+                                            <label class="text-primary fw-bold mb-1">TELÉFONO</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                                <input type="number" name="denunciados[0][telefono]" class="form-control bg-white" placeholder="0412XXXXXXX" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
                                             </div>
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control bg-white" name="denunciados[0][apellidos]"
-                                                    placeholder="Apellidos" required
-                                                    pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios"
-                                                    oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                                <label>Apellidos</label>
+                                            <label class="text-primary fw-bold mb-1">NOMBRE</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                                <input type="text" class="form-control bg-white" name="denunciados[0][nombres]" placeholder="Juan" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label class="text-primary fw-bold mb-1">APELLIDO</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                                <input type="text" class="form-control bg-white" name="denunciados[0][apellidos]" placeholder="García" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                             </div>
                                         </div>
 
                                         <div class="col-12">
-                                            <div class="form-floating">
-                                                <input type="number" name="denunciados[0][telefono]"
-                                                    class="form-control bg-white" placeholder="Teléfono" required
-                                                    oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
-                                                <label>Teléfono</label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <div class="form-floating">
-                                                <textarea class="form-control bg-white" name="denunciados[0][direccion]" placeholder="Dirección" style="height: 85px;"
-                                                    required></textarea>
-                                                <label>Dirección</label>
+                                            <label class="text-primary fw-bold mb-1">DIRECCIÓN</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fa-solid fa-house-chimney"></i></span>
+                                                <input type="text" class="form-control bg-white" name="denunciados[0][direccion]" placeholder="Calle 1, Casa N° 23, Sector 4" required>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-2" id="btn-agregar-denunciado">
+                            <button type="button" class="btn btn-primary btn-sm w-100 mb-2" id="btn-agregar-denunciado">
                                 <i class="ri-user-add-line me-1"></i> Agregar otro requerido
                             </button>
                         </div>
 
-                        <div class="col-12 col-lg-7">
-                            <h6 class="text-primary mb-3 border-bottom pb-1">Hechos y Conclusiones</h6>
+                        <div class="col-12 col-lg-6" id="hechos_conclusiones_container">
+                            {{-- <h6 class="text-primary mb-3 border-bottom pb-1">Hechos y Conclusiones</h6> --}}
                             <div class="row g-2">
                                 <div class="col-12 col-md-6">
                                     <label for="requirente"
-                                        class="form-label mb-1 fw-bold text-muted small">Requirente:</label>
-                                    <textarea name="requirente" id="requirente" class="form-control bg-white" rows="2" required></textarea>
+                                        class="form-label mb-1 fw-bold text-primary small">EL DENUNCIANTE EXPONE:</label>
+                                    <textarea name="requirente" id="requirente" class="form-control bg-white" rows="2" placeholder="Transcriba los hechos relatados por el denunciante." required></textarea>
                                 </div>
 
                                 <div class="col-12 col-md-6">
                                     <label for="requerido"
-                                        class="form-label mb-1 fw-bold text-muted small">Requerido:</label>
-                                    <textarea name="requerido" id="requerido" class="form-control bg-white" rows="2" required></textarea>
+                                        class="form-label mb-1 fw-bold text-primary small">EL DENUNCIADO EXPONE:</label>
+                                    <textarea name="requerido" id="requerido" class="form-control bg-white" rows="2" placeholder="Transcriba los hechos relatados por el denunciado." required></textarea>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="coordinador" class="form-label mb-1 fw-bold text-muted small">El
-                                        coordinador una vez escuchados los hechos expone:</label>
-                                    <textarea name="coordinador" id="coordinador" class="form-control bg-white" rows="2" required></textarea>
+                                    <label for="coordinador" class="form-label mb-1 fw-bold text-primary small">EL
+                                        COORDINADOR UNA VEZ ESCUCHADOS LOS HECHOS EXPONE:</label>
+                                    <textarea name="coordinador" id="coordinador" class="form-control bg-white" rows="2" placeholder="Transcriba el punto de vista del coordinador presente." required></textarea>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="acuerdos" class="form-label mb-1 fw-bold text-muted small">Acuerdos
-                                        para el cumplimiento voluntario:</label>
-                                    <textarea name="acuerdos" id="acuerdos" class="form-control bg-white" rows="2" required></textarea>
+                                    <label for="acuerdos" class="form-label mb-1 fw-bold text-primary small">ACUERDOS
+                                        PARA EL CUMPLIMIENTO VOLUNTARIO:</label>
+                                    <textarea name="acuerdos" id="acuerdos" class="form-control bg-white" rows="2" placeholder="Describa la conclusión a la que se llegó para solucionar el conflicto entre ambas partes." required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -134,40 +130,45 @@
             block.innerHTML =
                 '<div class="d-flex justify-content-between align-items-center mb-2">' +
                     '<span class="fw-bold text-muted small"><i class="ri-user-line me-1"></i>Requerido #' + (idx + 1) + '</span>' +
-                    '<button type="button" class="btn btn-outline-danger btn-sm btn-remove-denunciado" title="Eliminar"><i class="ri-delete-bin-line"></i></button>' +
+                    '<button type="button" class="btn btn-danger btn-sm btn-remove-denunciado" title="Eliminar"><i class="ri-delete-bin-line"></i></button>' +
                 '</div>' +
                 '<div class="row g-3">' +
-                    '<div class="col-12">' +
-                        '<div class="form-floating">' +
-                            '<input type="number" name="denunciados[' + idx + '][cedula]" class="form-control bg-white denunciado-cedula" placeholder="Cédula" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">' +
-                            '<label>Cédula del requerido</label>' +
+                    '<div class="col-12 col-md-6">' +
+                        '<label class="text-primary fw-bold mb-1">CÉDULA DEL REQUERIDO</label>' +
+                        '<div class="input-group">' +
+                            '<span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>' +
+                            '<input type="number" name="denunciados[' + idx + '][cedula]" class="form-control bg-white denunciado-cedula" placeholder="15000100" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">' +
                         '</div>' +
                     '</div>' +
                     '<div class="col-12 col-md-6">' +
-                        '<div class="form-floating">' +
-                            '<input type="text" class="form-control bg-white" name="denunciados[' + idx + '][nombres]" placeholder="Nombres" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
-                            '<label>Nombres</label>' +
+                        '<label class="text-primary fw-bold mb-1">TELÉFONO</label>' +
+                        '<div class="input-group">' +
+                            '<span class="input-group-text"><i class="fa-solid fa-phone"></i></span>' +
+                            '<input type="number" name="denunciados[' + idx + '][telefono]" class="form-control bg-white" placeholder="0412XXXXXXX" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">' +
                         '</div>' +
                     '</div>' +
                     '<div class="col-12 col-md-6">' +
-                        '<div class="form-floating">' +
-                            '<input type="text" class="form-control bg-white" name="denunciados[' + idx + '][apellidos]" placeholder="Apellidos" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
-                            '<label>Apellidos</label>' +
+                        '<label class="text-primary fw-bold mb-1">NOMBRE</label>' +
+                        '<div class="input-group">' +
+                            '<span class="input-group-text"><i class="fa-solid fa-user"></i></span>' +
+                            '<input type="text" class="form-control bg-white" name="denunciados[' + idx + '][nombres]" placeholder="Juan" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="col-12 col-md-6">' +
+                        '<label class="text-primary fw-bold mb-1">APELLIDO</label>' +
+                        '<div class="input-group">' +
+                            '<span class="input-group-text"><i class="fa-solid fa-user"></i></span>' +
+                            '<input type="text" class="form-control bg-white" name="denunciados[' + idx + '][apellidos]" placeholder="García" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
                         '</div>' +
                     '</div>' +
                     '<div class="col-12">' +
-                        '<div class="form-floating">' +
-                            '<input type="number" name="denunciados[' + idx + '][telefono]" class="form-control bg-white" placeholder="Teléfono" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">' +
-                            '<label>Teléfono</label>' +
+                        '<label class="text-primary fw-bold mb-1">DIRECCIÓN</label>' +
+                        '<div class="input-group">' +
+                            '<span class="input-group-text"><i class="fa-solid fa-house-chimney"></i></span>' +
+                            '<input type="text" class="form-control bg-white" name="denunciados[' + idx + '][direccion]" placeholder="Calle 1, Casa N° 23, Sector 4" required>' +
                         '</div>' +
                     '</div>' +
-                    '<div class="col-12">' +
-                        '<div class="form-floating">' +
-                            '<textarea class="form-control bg-white" name="denunciados[' + idx + '][direccion]" placeholder="Dirección" style="height: 85px;" required></textarea>' +
-                            '<label>Dirección</label>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
+                    '</div>';
 
             container.appendChild(block);
 

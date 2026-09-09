@@ -63,18 +63,29 @@
                                     <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
                                 </td>
                                 <td>{{ $citacion->fecha_citacion->format('d/m/Y') }}</td>
-                                <td>{{ $citacion->hora_citacion->format('H:i') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($citacion->hora_citacion)->format('h:i A') }}</td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $citacion->expediente_id) }}" title="Ver acta de recepción de denuncia">
-                                            <i class="ri-file-pdf-2-line"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-sm btn-primary" title="Conciliar" data-bs-toggle="modal" data-bs-target="#modalConciliacion" onclick="agregar_id_expediente_conciliar({{ $citacion->expediente_id }})">
-                                            <i class=" ri-check-fill"></i>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Acciones
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-warning" title="Marcar como inasistente" data-bs-toggle="modal" data-bs-target="#modalCitaNueva" onclick="agregar_id_expediente({{ $citacion->expediente_id }})">
-                                            <i class="ri-alert-fill"></i>
-                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li>
+                                                <a type="button" class="dropdown-item" href="{{ route('denuncias.exportar-acta-recepcion', $citacion->expediente_id) }}" title="Ver acta de recepción de denuncia">
+                                                    Ver acta de recepción
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item" title="Conciliar" data-bs-toggle="modal" data-bs-target="#modalConciliacion" onclick="agregar_id_expediente_conciliar({{ $citacion->expediente_id }})">
+                                                    Conciliar
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item" title="Marcar como inasistente" data-bs-toggle="modal" data-bs-target="#modalCitaNueva" onclick="agregar_id_expediente({{ $citacion->expediente_id }})">
+                                                    Marcar como inasistente
+                                                </button>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </td>
                             </tr>
@@ -133,14 +144,19 @@
                     // Ocultar y deshabilitar campos de datos personales si ya existe denunciado
                     $('#datos_denunciado_container').hide();
                     $('#datos_denunciado_container').find('input, select, textarea').prop('disabled', true).prop('required', false);
+                    // Expandir el panel de hechos a ancho completo
+                    $('#hechos_conclusiones_container').removeClass('col-lg-6').addClass('col-lg-12');
                 } else {
                     $('#datos_denunciado_container').show();
                     $('#datos_denunciado_container').find('input, select, textarea').prop('disabled', false).prop('required', true);
+                    // Volver al ancho mitad
+                    $('#hechos_conclusiones_container').removeClass('col-lg-12').addClass('col-lg-6');
                 }
             }).fail(function() {
                 // En caso de error, mostrar y habilitar los campos para permitir captura
                 $('#datos_denunciado_container').show();
                 $('#datos_denunciado_container').find('input, select, textarea').prop('disabled', false).prop('required', true);
+                $('#hechos_conclusiones_container').removeClass('col-lg-12').addClass('col-lg-6');
             });
         }
 

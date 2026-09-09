@@ -268,7 +268,8 @@ class DenunciasController extends Controller
             // Crear nueva cita, pero primero validar hora
             $fecha = $request->fecha_citacion;
             $hora = $request->hora_citacion;
-            $fecha = \Carbon\Carbon::createFromFormat('d-m-Y', $fecha)->format('Y-m-d');
+            $fecha = \Carbon\Carbon::parse(str_replace('/', '-', $fecha))->format('Y-m-d');
+            $hora  = \Carbon\Carbon::parse($hora)->format('H:i');
 
             $validarHora = Citaciones::where('fecha_citacion', $fecha)->where('hora_citacion', $hora)->where('estatus', true)->first();
 

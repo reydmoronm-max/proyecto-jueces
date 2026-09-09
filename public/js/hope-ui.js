@@ -500,7 +500,8 @@ window.addEventListener('load', function () {
         locale: "Spanish",
         enableTime: true,
         noCalendar: true,
-        dateFormat: "H:i",
+        dateFormat: "h:i K",
+        time_24hr: false,
       })
     }
   })

@@ -382,8 +382,8 @@
                         fpTime = flatpickr(timeInput, {
                             enableTime: true,
                             noCalendar: true,
-                            dateFormat: 'H:i',
-                            time_24hr: true,
+                            dateFormat: 'h:i K',
+                            time_24hr: false,
                             appendTo: document.body
                         });
                     }
@@ -395,6 +395,7 @@
                         fpDate = flatpickr(wrapEl, {
                             wrap: true,
                             dateFormat: 'd/m/Y',
+                            minDate: 'today',
                             locale: {
                                 firstDayOfWeek: 1
                             },
