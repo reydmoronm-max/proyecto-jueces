@@ -2448,10 +2448,10 @@ progress {
   font-weight: 400;
   line-height: 1.5;
   color: #8A92A6;
-  background-color: #ffffff;
+  background-color: #f6fcff;
   -webkit-background-clip: padding-box;
           background-clip: padding-box;
-  border: 1px solid #808080;
+  border: 1px solid #646464;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -2481,7 +2481,7 @@ progress {
 .form-control:focus {
   color: #8A92A6;
   background-color: #ffffff;
-  border-color: #9dabf4;
+  border-color: #00a2ff;
   outline: 0;
   -webkit-box-shadow: 0 0 0 0, 0 0.125rem 0.25rem 0rem rgba(58, 87, 232, 0.15);
           box-shadow: 0 0 0 0, 0 0.125rem 0.25rem 0rem rgba(58, 87, 232, 0.15);
@@ -2490,20 +2490,21 @@ progress {
   height: 1.5em;
 }
 .form-control::-webkit-input-placeholder {
-  color: #6c757d;
+  color: #b8b8b8;
   opacity: 1;
 }
 .form-control::-moz-placeholder {
-  color: #6c757d;
+  color: #b8b8b8;
   opacity: 1;
 }
 .form-control::-ms-input-placeholder {
-  color: #6c757d;
+  color: #b8b8b8;
   opacity: 1;
 }
 .form-control::placeholder {
-  color: #6c757d;
+  color: #b8b8b8;
   opacity: 1;
+  font-style: italic;
 }
 .form-control:disabled {
   background-color: #e9ecef;
@@ -3107,7 +3108,7 @@ textarea.form-control-lg {
   color: #8A92A6;
   text-align: center;
   white-space: nowrap;
-  background-color: #ffffff;
+  background-color: #f7f7f7;
   border: 1px solid #808080;
   -webkit-border-radius: 0.25rem;
           border-radius: 0.25rem;

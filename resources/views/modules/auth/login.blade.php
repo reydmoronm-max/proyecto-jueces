@@ -24,7 +24,7 @@
                                         <h1 class="mb-2 fw-bolder">INICIAR SESIÓN</h1>
                                         <a style="pointer-events: none;" href="#"
                                             class="navbar-brand d-flex align-items-center mb-3">
-                                            <h4 class="text-primary fst-italic">Sistema de Gestión Integral Comunal
+                                            <h4 class="text-secondary">Sistema de Gestión Integral Comunal
                                             </h4>
                                         </a>
                                         {{-- <p class="">Ingrese sus credenciales para acceder al sistema.</p> --}}
@@ -32,26 +32,20 @@
                                             method="POST" autocomplete="off">
                                             @csrf
                                             <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="form-floating mt-4 mb-4">
-                                                        <input type="number" class="form-control" name="cedula_usuario"
-                                                            id="cedula_usuario" placeholder="" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
-                                                        <label for="cedula_usuario" class="form-label">Cédula de usuario</label>
-                                                    </div>
+                                                <div class="col-lg-12 mt-4 mb-4">
+                                                        <label for="cedula_usuario" class="form-label text-primary fw-bold">CÉDULA DE USUARIO</label>
+                                                        <input type="number" class="form-control" name="cedula_usuario" id="cedula_usuario" placeholder='"12345678"' required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                                                 </div>
-                                                <div class="col-lg-12">
-                                                    <div class="form-floating mb-4">
-                                                        <input type="password" class="form-control" name="password"
-                                                            id="password" placeholder="" required>
-                                                        <label for="password" class="form-label">Contraseña</label>
-                                                    </div>
+                                                <div class="col-lg-12 mb-4">
+                                                        <label for="password" class="form-label text-primary fw-bold">CONTRASEÑA</label>
+                                                        <input type="password" class="form-control" name="password" id="password" placeholder="Ingrese su contraseña" required>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mt-2">
                                                 <button type="submit" class="btn btn-md btn-primary rounded-pill"
                                                     style="font-weight: bold;">Acceder <i
                                                         class="ri-login-box-line"></i></button>
-                                                <a href="{{ route('recuperar.index') }}" class="text-primary small">¿Olvidaste tu contraseña?</a>
+                                                <a href="{{ route('recuperar.index') }}" class="text-primary small fw-bold fst-italic">¿Olvidaste tu contraseña?</a>
                                             </div>
                                         </form>
                                         <div>

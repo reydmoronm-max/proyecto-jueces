@@ -7,17 +7,20 @@
         </td>
         <td>
             <h6>
-                <span
-                    class="badge {{ optional($item->persona)->cedula_tipo == 'V' ? 'bg-primary' : 'bg-warning text-dark' }} me-1">{{ optional($item->persona)->cedula_tipo }}</span>
+                <span class="badge {{ optional($item->persona)->cedula_tipo == 'V' ? 'bg-primary' : 'bg-warning text-dark' }} me-1">{{ optional($item->persona)->cedula_tipo }}</span>
                 {{ optional($item->persona)->cedula }}
             </h6>
         </td>
         <td>
-            <h6>{{ optional($item->persona)->telefono ?? '-' }}</h6>
+            <h6>
+                <span class="badge bg-success me-1"><i class="fa-solid fa-phone"></i></span>
+                {{ optional($item->persona)->telefono ?? '-' }}
+            </h6>
         </td>
         <td>
-            <h6 style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
+            <h6 style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
                 title="{{ optional($item->persona)->direccion ?? '-' }}" data-bs-toggle="tooltip">
+                <span class="badge bg-danger me-1"><i class="fa-solid fa-house"></i></span>
                 {{ optional($item->persona)->direccion ?? '-' }}</h6>
         </td>
         <td>
