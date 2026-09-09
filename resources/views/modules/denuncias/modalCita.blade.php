@@ -1,6 +1,6 @@
 {{-- Modal --}}
 <div class="modal fade" id="modalCita" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalCitaLabel">Agendar citación</h5>
@@ -12,17 +12,21 @@
                     <section class="row g-3">
                         <input type="text" name="expediente_id" id="cita_expediente_id" hidden>
 
-                        <div class="col-12 col-md-6">
+                        <div class="col-12">
                             <div class="form-group">
-                                <label class="mb-2" for="start">Hora</label>
-                                <input required type="text" name="hora_citacion" class="form-control time_flatpicker" placeholder="Hora de la citación">
+                                <label class="text-primary fw-bold mb-1" for="start">HORA</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-clock"></i></span>
+                                    <input required type="text" name="hora_citacion" class="form-control time_flatpicker" placeholder="Hora de la citación">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-12 col-md-6">
+                        <div class="col-12">
                             <div class="form-group">
-                                <label class="mb-2" for="fecha_citacion">Fecha</label>
+                                <label class="text-primary fw-bold mb-1" for="fecha_citacion">FECHA</label>
                                 <div class="input-group wrap_flatpicker">
+                                    <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                     <input required type="text" name="fecha_citacion" class="form-control" placeholder="Fecha de la citación" data-input>
                                     <a class="input-group-text input-button" title="limpiar" data-clear href="javascript:void(0)">
                                         <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

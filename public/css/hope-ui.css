@@ -2490,18 +2490,22 @@ progress {
   height: 1.5em;
 }
 .form-control::-webkit-input-placeholder {
+  font-size: 0.95rem;
   color: #b8b8b8;
   opacity: 1;
 }
 .form-control::-moz-placeholder {
+  font-size: 0.95rem;
   color: #b8b8b8;
   opacity: 1;
 }
 .form-control::-ms-input-placeholder {
+  font-size: 0.95rem;
   color: #b8b8b8;
   opacity: 1;
 }
 .form-control::placeholder {
+  font-size: 0.95rem;
   color: #b8b8b8;
   opacity: 1;
   font-style: italic;
@@ -2637,11 +2641,12 @@ textarea.form-control-lg {
   width: 100%;
   padding: 0.5rem 3rem 0.5rem 1rem;
   -moz-padding-start: calc(1rem - 3px);
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-style: italic;
   font-weight: 400;
   line-height: 1.5;
   color: #8A92A6;
-  background-color: #ffffff;
+  background-color: #f6fcff;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 1rem center;

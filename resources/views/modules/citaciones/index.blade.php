@@ -63,7 +63,7 @@
                                     <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
                                 </td>
                                 <td>{{ $citacion->fecha_citacion->format('d/m/Y') }}</td>
-                                <td>{{ $citacion->hora_citacion }}</td>
+                                <td>{{ $citacion->hora_citacion->format('H:i') }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $citacion->expediente_id) }}" title="Ver acta de recepción de denuncia">
