@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalPosponerCitaLabel">Posponer citación</h5>
+                <h5 class="modal-title fw-bold" id="modalPosponerCitaLabel">POSPONER CITACIÓN</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -13,76 +13,89 @@
                         <input type="text" name="expediente_id" id="cita_expediente_id_posponer" hidden>
 
                         <div class="col-12">
-                            <label for="solicita_por_posponer" class="form-label">Solicita el cambio</label>
-                            <select id="solicita_por_posponer" name="solicita_por" class="form-select bg-white">
-                                <option value="denunciante">Denunciante</option>
-                                <option value="denunciado">Denunciado</option>
-                            </select>
+                            <label for="solicita_por_posponer" class="text-primary fw-bold mb-1">SOLICITA EL CAMBIO</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-person-circle-question"></i></span>
+                                <select id="solicita_por_posponer" name="solicita_por" class="form-select bg-white">
+                                    <option value="denunciante">Denunciante</option>
+                                    <option value="denunciado">Denunciado</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div id="posponer_person_fields" class="col-12">
-                            <h6 id="posponer_person_heading">Datos del Denunciado</h6>
+                            <h6 id="posponer_person_heading" class="border-bottom pb-1 fw-bold">DATOS DEL DENUNCIADO</h6>
                             <br>
                             <div class="row g-3">
                                 <div class="col-12 col-md-6">
-                                    <div class="form-floating">
-                                        <input id="cedulaRequerido" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
-                                        <label for="cedulaRequerido">Cédula</label>
+                                    <label for="cedulaRequerido" class="text-primary fw-bold mb-1">CÉDULA DEL DENUNCIADO</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                                        <input id="cedulaRequerido" type="number" name="cedula" class="form-control bg-white" placeholder="15000100" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="nombres" id="nombresRequerido" placeholder="Nombres" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                        <label for="nombresRequerido">Nombres</label>
+                                    <label for="telefonoRequerido" class="text-primary fw-bold mb-1">TELÉFONO</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                        <input id="telefonoRequerido" type="number" name="telefono" class="form-control bg-white" placeholder="0412XXXXXXX" value="{{ old('telefono') }}" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="apellidos" id="apellidosRequerido" placeholder="Apellidos" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                        <label for="apellidosRequerido">Apellidos</label>
+                                    <label for="nombresRequerido" class="text-primary fw-bold mb-1">NOMBRE</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                        <input type="text" class="form-control bg-white" name="nombres" id="nombresRequerido" placeholder="Juan" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
-                                    <div class="form-floating">
-                                        <input id="telefonoRequerido" type="number" name="telefono" class="form-control bg-white" placeholder="Teléfono" value="{{ old('telefono') }}" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
-                                        <label for="telefonoRequerido">Teléfono</label>
+                                    <label for="apellidosRequerido" class="text-primary fw-bold mb-1">APELLIDO</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                        <input type="text" class="form-control bg-white" name="apellidos" id="apellidosRequerido" placeholder="García" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="direccion" id="direccionRequerido" placeholder="Dirección" required>
-                                        <label for="direccionRequerido">Dirección</label>
+                                    <label for="direccionRequerido" class="text-primary fw-bold mb-1">DIRECCIÓN</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-house-chimney"></i></span>
+                                        <input type="text" class="form-control bg-white" name="direccion" id="direccionRequerido" placeholder="Calle 1, Casa N° 23, Sector 4" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="observaciones" id="observaciones" placeholder="Observaciones" required>
-                                <label for="observaciones">Observaciones</label>
+                            <label for="observaciones" class="text-primary fw-bold mb-1">OBSERVACIONES</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-pen-to-square"></i></span>
+                                <input type="text" class="form-control bg-white" name="observaciones" id="observaciones" placeholder="¿Por qué se pospone la cita?" required>
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <h6>Nueva cita</h6>
+                            <h6 class="border-bottom pb-1 fw-bold">NUEVA CITA</h6>
                         </div>
 
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label class="mb-2" for="start">Hora</label>
-                                <input required type="text" name="hora_citacion" class="form-control time_flatpicker" placeholder="Hora de la citación">
+                                <label class="text-primary fw-bold mb-1" for="start">HORA</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-clock"></i></span>
+                                    <input required type="text" name="hora_citacion" class="form-control time_flatpicker" placeholder="Hora de la citación">
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label class="mb-2" for="fecha_citacion">Fecha</label>
+                                <label class="text-primary fw-bold mb-1" for="fecha_citacion">FECHA</label>
                                 <div class="input-group wrap_flatpicker">
+                                    <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                     <input required type="text" name="fecha_citacion" class="form-control" placeholder="Fecha de la citación" data-input>
                                     <a class="input-group-text input-button" title="limpiar" data-clear href="javascript:void(0)">
                                         <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

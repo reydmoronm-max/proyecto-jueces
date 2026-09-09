@@ -41,6 +41,9 @@
 
         {{-- Tom Select --}}
         <link href="{{ asset('vendor/tomselect/tom-select.default.min.css') }}" rel="stylesheet">
+
+        {{-- Fonts Awesome --}}
+        <link href="{{ asset('vendor/fontawesome/css/all.css') }}" rel="stylesheet">
         
     </head>
     <body class="fase-animada">

@@ -90,9 +90,9 @@
                                                         {{ $primerDenunciante ? $primerDenunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
-                                                    <td>{{ $expediente->caso }}</td>
-                                                    <td>{{ $expediente->tipo_caso }}</td>
-                                                    <td>{{ $expediente->categoria }}</td>
+                                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $expediente->caso }}" data-bs-toggle="tooltip">{{ $expediente->caso }}</td>
+                                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $expediente->tipo_caso }}" data-bs-toggle="tooltip">{{ $expediente->tipo_caso }}</td>
+                                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $expediente->categoria }}" data-bs-toggle="tooltip">{{ $expediente->categoria }}</td>
                                                     <td>
                                                         @if($expediente->denunciado_a)
                                                             <span class="text-dark fw-semibold">{{ $expediente->denunciado_a }}</span>
@@ -170,9 +170,9 @@
                                                         {{ $primerDenunciante ? $primerDenunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
-                                                    <td>{{ $expediente->caso }}</td>
-                                                    <td>{{ $expediente->tipo_caso }}</td>
-                                                    <td>{{ $expediente->categoria }}</td>
+                                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $expediente->caso }}" data-bs-toggle="tooltip">{{ $expediente->caso }}</td>
+                                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $expediente->tipo_caso }}" data-bs-toggle="tooltip">{{ $expediente->tipo_caso }}</td>
+                                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $expediente->categoria }}" data-bs-toggle="tooltip">{{ $expediente->categoria }}</td>
                                                     <td>
                                                         @if($expediente->denunciado_a)
                                                             <span class="text-dark fw-semibold">{{ $expediente->denunciado_a }}</span>
@@ -251,9 +251,9 @@
                                                         {{ $primerDenunciante ? $primerDenunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
-                                                    <td>{{ $expediente->caso }}</td>
-                                                    <td>{{ $expediente->tipo_caso }}</td>
-                                                    <td>{{ $expediente->categoria }}</td>
+                                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $expediente->caso }}" data-bs-toggle="tooltip">{{ $expediente->caso }}</td>
+                                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $expediente->tipo_caso }}" data-bs-toggle="tooltip">{{ $expediente->tipo_caso }}</td>
+                                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $expediente->categoria }}" data-bs-toggle="tooltip">{{ $expediente->categoria }}</td>
                                                     <td>
                                                         @if($expediente->denunciado_a)
                                                             <span class="text-dark fw-semibold">{{ $expediente->denunciado_a }}</span>
@@ -382,8 +382,8 @@
                         fpTime = flatpickr(timeInput, {
                             enableTime: true,
                             noCalendar: true,
-                            dateFormat: 'H:i',
-                            time_24hr: true,
+                            dateFormat: 'h:i K',
+                            time_24hr: false,
                             appendTo: document.body
                         });
                     }
@@ -395,6 +395,7 @@
                         fpDate = flatpickr(wrapEl, {
                             wrap: true,
                             dateFormat: 'd/m/Y',
+                            minDate: 'today',
                             locale: {
                                 firstDayOfWeek: 1
                             },

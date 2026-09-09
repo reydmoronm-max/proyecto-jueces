@@ -54,7 +54,8 @@ class CitacionesController extends Controller
     {
 
         $data = $request->all();
-        $data['fecha_citacion'] = \Carbon\Carbon::createFromFormat('d-m-Y', $data['fecha_citacion'])->format('Y-m-d');
+        $data['fecha_citacion'] = \Carbon\Carbon::parse(str_replace('/', '-', $data['fecha_citacion']))->format('Y-m-d');
+        $data['hora_citacion']  = \Carbon\Carbon::parse($data['hora_citacion'])->format('H:i');
 
 
         $validarHora = Citaciones::where('fecha_citacion', $data['fecha_citacion'])
@@ -123,7 +124,8 @@ class CitacionesController extends Controller
         }
 
         $data = $request->all();
-        $data['fecha_citacion'] = \Carbon\Carbon::createFromFormat('d-m-Y', $data['fecha_citacion'])->format('Y-m-d');
+        $data['fecha_citacion'] = \Carbon\Carbon::parse(str_replace('/', '-', $data['fecha_citacion']))->format('Y-m-d');
+        $data['hora_citacion']  = \Carbon\Carbon::parse($data['hora_citacion'])->format('H:i');
 
         $validarHora = Citaciones::where('fecha_citacion', $data['fecha_citacion'])
             ->where('hora_citacion', $data['hora_citacion'])
@@ -136,8 +138,8 @@ class CitacionesController extends Controller
 
         Citaciones::create([
             'expediente_id' => $request->expediente_id,
-            'fecha_citacion' => $request->fecha_citacion,
-            'hora_citacion' => $request->hora_citacion,
+            'fecha_citacion' => $data['fecha_citacion'],
+            'hora_citacion' => $data['hora_citacion'],
             'estatus' => true,
         ]);
 

@@ -20,7 +20,7 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive mt-4">
-                            <table id="basic-table" class="table table-striped mb-0" role="grid">
+                            <table id="basic-table" class="table table-striped table-striped-columns mb-0" role="grid">
                                 <thead>
                                     <tr>
                                         <th>Nombre y Apellido</th>
