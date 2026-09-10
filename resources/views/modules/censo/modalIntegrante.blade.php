@@ -48,9 +48,9 @@
                         <!-- Teléfono -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="telefono" id="telefono"
-                                    placeholder="Teléfono"
-                                    oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
+                                <input type="text" inputmode="numeric" class="form-control bg-white" name="telefono" id="telefono"
+                                    placeholder="Teléfono" maxlength="11"
+                                    oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
                                 <label for="telefono">Teléfono</label>
                             </div>
                         </div>

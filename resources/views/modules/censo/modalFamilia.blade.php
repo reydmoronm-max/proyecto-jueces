@@ -47,6 +47,7 @@
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
+                                    <option value="NA">NA (No Aplica)</option>
                                 </select>
                                 <label for="mision_vivienda_fam">¿Adjudicada por Misión Vivienda? <span class="text-danger">*</span></label>
                             </div>
@@ -135,6 +136,7 @@
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
+                                    <option value="NA">NA</option>
                                 </select>
                                 <label for="edit_mision_vivienda">¿Adjudicada por Misión Vivienda? <span class="text-danger">*</span></label>
                             </div>

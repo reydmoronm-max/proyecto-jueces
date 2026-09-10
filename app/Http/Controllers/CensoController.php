@@ -48,11 +48,18 @@ class CensoController extends Controller
      */
     public function store(Request $request)
     {
+        $vivienda = $request->input('vivienda');
+        if ($vivienda !== 'Propia') {
+            $request->merge(['mision_vivienda' => 'NA']);
+        }
+
         $request->validate([
             'numero_familia'      => ['required', 'string', 'unique:familias,numero_familia', 'max:100'],
             'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
             'vivienda'            => ['required', 'string', 'in:Propia,Prestada,Alquilada'],
-            'mision_vivienda'     => ['required', 'string', 'in:Sí,No'],
+            'mision_vivienda'     => $vivienda === 'Propia'
+                ? ['required', 'string', 'in:Sí,No']
+                : ['required', 'string', 'in:NA'],
             'bono_unico_familiar' => ['required', 'string', 'in:Sí,No'],
             'clap'                => ['required', 'string', 'in:Sí,No'],
         ], [
@@ -82,12 +89,18 @@ class CensoController extends Controller
     public function update(Request $request, string $id)
     {
         $familia = Familia::findOrFail($id);
+        $vivienda = $request->input('vivienda');
+        if ($vivienda !== 'Propia') {
+            $request->merge(['mision_vivienda' => 'NA']);
+        }
 
         $request->validate([
             'numero_familia'      => ['required', 'string', 'unique:familias,numero_familia,' . $id, 'max:100'],
             'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
             'vivienda'            => ['required', 'string', 'in:Propia,Prestada,Alquilada'],
-            'mision_vivienda'     => ['required', 'string', 'in:Sí,No'],
+            'mision_vivienda'     => $vivienda === 'Propia'
+                ? ['required', 'string', 'in:Sí,No']
+                : ['required', 'string', 'in:NA'],
             'bono_unico_familiar' => ['required', 'string', 'in:Sí,No'],
             'clap'                => ['required', 'string', 'in:Sí,No'],
         ], [
@@ -164,7 +177,7 @@ class CensoController extends Controller
             'cedula'              => ['required', 'digits_between:7,8'],
             'nombres'             => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellidos'           => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            'telefono'            => ['nullable', 'string', 'max:20'],
+            'telefono'            => ['nullable', 'digits_between:1,11'],
             'fecha_nacimiento'    => ['required', 'string'],
             'centro_votacion'     => ['nullable', 'string', 'max:150'],
             'carnet_patria'       => ['nullable', 'string', 'max:50'],
@@ -265,7 +278,7 @@ class CensoController extends Controller
             'cedula'              => ['required', 'digits_between:7,8'],
             'nombres'             => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellidos'           => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            'telefono'            => ['nullable', 'string', 'max:20'],
+            'telefono'            => ['nullable', 'digits_between:1,11'],
             'fecha_nacimiento'    => ['required', 'string'],
             'centro_votacion'     => ['nullable', 'string', 'max:150'],
             'carnet_patria'       => ['nullable', 'string', 'max:50'],

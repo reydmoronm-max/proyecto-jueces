@@ -424,6 +424,7 @@
                     $('#edit_consejo_comunal_id').val(data.consejo_comunal_id ?? '');
                     $('#edit_vivienda').val(data.vivienda ?? '');
                     $('#edit_mision_vivienda').val(data.mision_vivienda ?? '');
+                    actualizarMisionVivienda('edit');
                     $('#edit_bono_unico_familiar').val(data.bono_unico_familiar ?? '');
                     $('#edit_clap').val(data.clap ?? '');
                     var modal = new bootstrap.Modal(document.getElementById('modalEditarFamilia'));
@@ -494,6 +495,7 @@
                 var nombres = $('#' + p + 'nombres').val().trim();
                 var apellidos = $('#' + p + 'apellidos').val().trim();
                 var fecha = $('#' + p + 'fecha_nacimiento').val().trim();
+                var telefono = $('#' + p + 'telefono').val().trim();
                 var genero = $('#' + p + 'genero').val();
                 var parentesco = $('#' + p + 'parentesco').val();
                 var estudia = $('#' + p + 'estudia').val();
@@ -511,6 +513,9 @@
                 }
                 if (apellidos.length < 3 || apellidos.length > 50 || invalidNameRegex.test(apellidos)) {
                     errors.push('Apellidos: debe tener entre 3 y 50 caracteres y contener solo letras.');
+                }
+                if (telefono && !/^\d{1,11}$/.test(telefono)) {
+                    errors.push('Teléfono: debe contener solo números y tener máximo 11 dígitos.');
                 }
                 if (!fecha) {
                     errors.push('Fecha de nacimiento: campo obligatorio.');
@@ -560,6 +565,22 @@
                 }
                 return errors;
             }
+
+            function actualizarMisionVivienda(prefix) {
+                var vivienda = $('#' + (prefix ? 'edit_vivienda' : 'vivienda_fam'));
+                var mision = $('#' + (prefix ? 'edit_mision_vivienda' : 'mision_vivienda_fam'));
+                var esPropia = vivienda.val() === 'Propia';
+
+                mision.prop('disabled', !esPropia).val(esPropia ? '' : 'NA');
+            }
+
+            $('#vivienda_fam').on('change', function() {
+                actualizarMisionVivienda('');
+            });
+
+            $('#edit_vivienda').on('change', function() {
+                actualizarMisionVivienda('edit');
+            });
 
             $('#formFamilia').on('submit', function(e) {
                 var errors = validateFamiliaForm('');
