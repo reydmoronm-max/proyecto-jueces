@@ -10,6 +10,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisitasController;
 use App\Http\Controllers\ConsejoComunalController;
 use App\Http\Controllers\VocerosController;
+use App\Http\Controllers\CategoriaVoceriaController;
 use App\Http\Controllers\CensoController;
 use App\Http\Controllers\CirculoAbuelosController;
 use App\Http\Controllers\ProyectosController;
@@ -73,10 +74,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/tbody-consejos', [ConsejoComunalController::class, 'tbody'])->name('tbody.consejos');
         Route::resource('consejos-comunales', ConsejoComunalController::class);
 
-        // Voceros
+        // Voceros y Categorías de Vocerías
         Route::get('/voceros/buscar-persona', [VocerosController::class, 'buscarPersona'])->name('voceros.buscar-persona');
         Route::get('/voceros/cambiar-estado/{id}/{estado}', [VocerosController::class, 'cambiarEstado'])->name('voceros.cambiar-estado');
         Route::resource('voceros', VocerosController::class)->except(['destroy']);
+
+        Route::get('/categoria-vocerias/cambiar-estado/{id}/{estado}', [CategoriaVoceriaController::class, 'cambiarEstado'])->name('categoria-vocerias.cambiar-estado');
+        Route::resource('categoria-vocerias', CategoriaVoceriaController::class);
 
         // Censo
         Route::get('/censo/buscar-persona', [CensoController::class, 'buscarPersona'])->name('censo.buscar-persona');
