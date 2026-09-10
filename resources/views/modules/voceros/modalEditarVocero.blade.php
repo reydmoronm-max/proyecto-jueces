@@ -51,13 +51,9 @@
                                         <select name="categoria_vocero" id="edit-categoria_vocero"
                                             class="form-select bg-white" required>
                                             <option value="" selected disabled>Seleccione una categoría</option>
-                                            <option value="Vocero Principal">Vocero Principal / Coordinador</option>
-                                            <option value="Vocero de Finanzas">Unidad Administrativa y Financiera</option>
-                                            <option value="Vocero de Contraloría">Unidad de Contraloría Social</option>
-                                            <option value="Comité de Alimentación">Comité de Alimentación (CLAP)</option>
-                                            <option value="Comité de Salud">Comité de Salud y Prevención</option>
-                                            <option value="Comité de Tierras Urbanas">Comité de Tierras Urbanas/Rurales</option>
-                                            <option value="Comité de Deporte y Cultura">Comité de Deporte, Recreación y Cultura</option>
+                                            @foreach ($categorias as $cat)
+                                                <option value="{{ $cat->nombre }}">{{ $cat->nombre }}</option>
+                                            @endforeach
                                         </select>
                                         <label for="edit-categoria_vocero">Categoría</label>
                                     </div>

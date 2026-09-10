@@ -1,5 +1,5 @@
-<aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all" style="background-color: #151824;">
-    <div class="sidebar-header d-flex align-items-center justify-content-start">
+<aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all" style="background-color: #151824; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
+    <div class="sidebar-header d-flex align-items-center justify-content-start flex-shrink-0">
         <a href="{{-- route('home') --}}" class="navbar-brand" style="pointer-events: none;">
             <!--Logo start-->
             <!--logo End-->
@@ -32,10 +32,10 @@
             </i>
         </div>
     </div>
-    <div class="sidebar-body pt-0 data-scrollbar">
-        <div class="sidebar-list">
+    <div class="sidebar-body pt-0 data-scrollbar" style="overflow-y: auto; flex-grow: 1; padding-bottom: 5rem;">
+        <div class="sidebar-list pb-5">
             <!-- Sidebar Menu Start -->
-            <ul class="navbar-nav iq-main-menu" id="sidebar-menu">
+            <ul class="navbar-nav iq-main-menu pb-5" id="sidebar-menu" style="padding-bottom: 4rem;">
 
                 {{-- Inicio comentado --}}
 
@@ -126,6 +126,13 @@
                         <a class="nav-link @yield('vocerosActive')" href="{{ route('voceros.index') }}">
                             <i class="icon ri-user-star-fill"></i>
                             <span class="item-name">Voceros</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('categoriaVoceriasActive') {{ request()->routeIs('categoria-vocerias.*') ? 'active' : '' }}"
+                            href="{{ route('categoria-vocerias.index') }}">
+                            <i class="icon ri-price-tag-3-fill"></i>
+                            <span class="item-name">Categoría de Vocerías</span>
                         </a>
                     </li>
                     <li class="nav-item">

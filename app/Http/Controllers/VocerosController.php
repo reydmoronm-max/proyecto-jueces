@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vocero;
 use App\Models\Persona;
+use App\Models\CategoriaVoceria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -34,8 +35,9 @@ class VocerosController extends Controller
         }
 
         $items = $query->orderBy('created_at', 'desc')->get();
+        $categorias = CategoriaVoceria::where('activo', true)->orderBy('nombre')->get();
 
-        return view('modules.voceros.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'vocerosActive', 'items'));
+        return view('modules.voceros.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'vocerosActive', 'items', 'categorias'));
     }
 
     /**
