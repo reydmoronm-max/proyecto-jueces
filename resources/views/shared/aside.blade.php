@@ -142,6 +142,13 @@
                             <span class="item-name">Censo</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('consultaActive') {{ request()->routeIs('consulta.*') ? 'active' : '' }}"
+                            href="{{ route('consulta.index') }}">
+                            <i class="icon ri-search-eye-line"></i>
+                            <span class="item-name">Consulta</span>
+                        </a>
+                    </li>
                     @if (Auth::user()->rol === 'Jefe de comuna')
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('circulo-abuelos.*') ? 'active' : '' }}"

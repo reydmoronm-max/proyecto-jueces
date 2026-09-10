@@ -27,7 +27,7 @@
                         </svg>
                     </i>
                 </div>
-                @if (Auth::user()->rol === 'Juez')
+                @if (Auth::user()->rol === 'Juez' || Auth::user()->rol === 'Jefe de comuna' || Auth::user()->rol === 'Jefe de Comando')
                     <div class="input-group search-input">
                         <span class="input-group-text" id="search-input" style="background-color: #151824;">
                             <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none"

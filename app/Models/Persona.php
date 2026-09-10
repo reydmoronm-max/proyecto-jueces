@@ -48,6 +48,23 @@ class Persona extends Model
         return $this->hasMany(ConsejoComunal::class, 'jefe_comando');
     }
 
+    public function vocerias()
+    {
+        return $this->hasMany(Vocero::class, 'persona_id');
+    }
+
+    public function getEdadAttribute()
+    {
+        if (!$this->fecha_nacimiento) {
+            return null;
+        }
+        try {
+            return \Carbon\Carbon::parse($this->fecha_nacimiento)->age;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
     public function familia()
     {
         return $this->belongsTo(Familia::class, 'familia_id');
