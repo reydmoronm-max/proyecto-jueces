@@ -118,6 +118,7 @@
                                 </select>
                                 <label for="pensionado_jubilado">Pensionado / Jubilado <span class="text-danger">*</span></label>
                             </div>
+                            <small id="aviso-pensionado-jubilado" class="text-danger d-none">no cumple los requisitos legales de edad</small>
                         </div>
 
                         <!-- Nivel Académico -->

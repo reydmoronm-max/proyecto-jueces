@@ -172,6 +172,10 @@ class CensoController extends Controller
      */
     public function storeIntegrante(Request $request)
     {
+        $this->normalizarPensionadoJubilado($request);
+        $this->normalizarCamposMenorEdad($request);
+        $this->normalizarNivelAcademicoMenorEdad($request);
+
         $request->validate([
             'familia_id'          => ['required', 'exists:familias,id'],
             'cedula'              => ['required', 'digits_between:7,8'],
@@ -273,6 +277,9 @@ class CensoController extends Controller
     public function updateIntegrante(Request $request, string $id)
     {
         $persona = Persona::findOrFail($id);
+        $this->normalizarPensionadoJubilado($request);
+        $this->normalizarCamposMenorEdad($request);
+        $this->normalizarNivelAcademicoMenorEdad($request);
 
         $request->validate([
             'cedula'              => ['required', 'digits_between:7,8'],
@@ -346,5 +353,50 @@ class CensoController extends Controller
         ]);
 
         return to_route('censo.index')->with('success', 'Integrante desvinculado de la familia.');
+    }
+
+    private function normalizarPensionadoJubilado(Request $request): void
+    {
+        try {
+            $fechaNacimiento = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento'));
+            $edad = $fechaNacimiento->diffInYears(now());
+            $edadMinima = $request->input('genero') === 'Masculino' ? 60 : 55;
+
+            if ($edad < $edadMinima) {
+                $request->merge(['pensionado_jubilado' => 'No']);
+            }
+        } catch (\Throwable $exception) {
+            // La validación y el procesamiento de la fecha informarán el formato inválido.
+        }
+    }
+
+    private function normalizarCamposMenorEdad(Request $request): void
+    {
+        try {
+            $fechaNacimiento = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento'));
+
+            if ($fechaNacimiento->age < 18) {
+                $request->merge([
+                    'profesion' => 'No aplica',
+                    'situacion_laboral' => 'No aplica',
+                    'centro_votacion' => 'No aplica',
+                ]);
+            }
+        } catch (\Throwable $exception) {
+            // La validación y el procesamiento de la fecha informarán el formato inválido.
+        }
+    }
+
+    private function normalizarNivelAcademicoMenorEdad(Request $request): void
+    {
+        try {
+            $fechaNacimiento = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento'));
+
+            if ($fechaNacimiento->age < 18 && in_array($request->input('nivel_academico'), ['Universitario', 'Postgrado'], true)) {
+                $request->merge(['nivel_academico' => 'Técnico']);
+            }
+        } catch (\Throwable $exception) {
+            // La validación y el procesamiento de la fecha informarán el formato inválido.
+        }
     }
 }
