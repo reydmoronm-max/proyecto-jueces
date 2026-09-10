@@ -48,11 +48,18 @@ class CensoController extends Controller
      */
     public function store(Request $request)
     {
+        $vivienda = $request->input('vivienda');
+        if ($vivienda !== 'Propia') {
+            $request->merge(['mision_vivienda' => 'NA']);
+        }
+
         $request->validate([
             'numero_familia'      => ['required', 'string', 'unique:familias,numero_familia', 'max:100'],
             'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
             'vivienda'            => ['required', 'string', 'in:Propia,Prestada,Alquilada'],
-            'mision_vivienda'     => ['required', 'string', 'in:Sí,No'],
+            'mision_vivienda'     => $vivienda === 'Propia'
+                ? ['required', 'string', 'in:Sí,No']
+                : ['required', 'string', 'in:NA'],
             'bono_unico_familiar' => ['required', 'string', 'in:Sí,No'],
             'clap'                => ['required', 'string', 'in:Sí,No'],
         ], [
@@ -82,12 +89,18 @@ class CensoController extends Controller
     public function update(Request $request, string $id)
     {
         $familia = Familia::findOrFail($id);
+        $vivienda = $request->input('vivienda');
+        if ($vivienda !== 'Propia') {
+            $request->merge(['mision_vivienda' => 'NA']);
+        }
 
         $request->validate([
             'numero_familia'      => ['required', 'string', 'unique:familias,numero_familia,' . $id, 'max:100'],
             'consejo_comunal_id'  => ['nullable', 'exists:consejos_comunales,id'],
             'vivienda'            => ['required', 'string', 'in:Propia,Prestada,Alquilada'],
-            'mision_vivienda'     => ['required', 'string', 'in:Sí,No'],
+            'mision_vivienda'     => $vivienda === 'Propia'
+                ? ['required', 'string', 'in:Sí,No']
+                : ['required', 'string', 'in:NA'],
             'bono_unico_familiar' => ['required', 'string', 'in:Sí,No'],
             'clap'                => ['required', 'string', 'in:Sí,No'],
         ], [
@@ -159,12 +172,16 @@ class CensoController extends Controller
      */
     public function storeIntegrante(Request $request)
     {
+        $this->normalizarPensionadoJubilado($request);
+        $this->normalizarCamposMenorEdad($request);
+        $this->normalizarNivelAcademicoMenorEdad($request);
+
         $request->validate([
             'familia_id'          => ['required', 'exists:familias,id'],
             'cedula'              => ['required', 'digits_between:7,8'],
             'nombres'             => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellidos'           => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            'telefono'            => ['nullable', 'string', 'max:20'],
+            'telefono'            => ['nullable', 'digits_between:1,11'],
             'fecha_nacimiento'    => ['required', 'string'],
             'centro_votacion'     => ['nullable', 'string', 'max:150'],
             'carnet_patria'       => ['nullable', 'string', 'max:50'],
@@ -260,12 +277,15 @@ class CensoController extends Controller
     public function updateIntegrante(Request $request, string $id)
     {
         $persona = Persona::findOrFail($id);
+        $this->normalizarPensionadoJubilado($request);
+        $this->normalizarCamposMenorEdad($request);
+        $this->normalizarNivelAcademicoMenorEdad($request);
 
         $request->validate([
             'cedula'              => ['required', 'digits_between:7,8'],
             'nombres'             => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellidos'           => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            'telefono'            => ['nullable', 'string', 'max:20'],
+            'telefono'            => ['nullable', 'digits_between:1,11'],
             'fecha_nacimiento'    => ['required', 'string'],
             'centro_votacion'     => ['nullable', 'string', 'max:150'],
             'carnet_patria'       => ['nullable', 'string', 'max:50'],
@@ -333,5 +353,50 @@ class CensoController extends Controller
         ]);
 
         return to_route('censo.index')->with('success', 'Integrante desvinculado de la familia.');
+    }
+
+    private function normalizarPensionadoJubilado(Request $request): void
+    {
+        try {
+            $fechaNacimiento = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento'));
+            $edad = $fechaNacimiento->diffInYears(now());
+            $edadMinima = $request->input('genero') === 'Masculino' ? 60 : 55;
+
+            if ($edad < $edadMinima) {
+                $request->merge(['pensionado_jubilado' => 'No']);
+            }
+        } catch (\Throwable $exception) {
+            // La validación y el procesamiento de la fecha informarán el formato inválido.
+        }
+    }
+
+    private function normalizarCamposMenorEdad(Request $request): void
+    {
+        try {
+            $fechaNacimiento = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento'));
+
+            if ($fechaNacimiento->age < 18) {
+                $request->merge([
+                    'profesion' => 'No aplica',
+                    'situacion_laboral' => 'No aplica',
+                    'centro_votacion' => 'No aplica',
+                ]);
+            }
+        } catch (\Throwable $exception) {
+            // La validación y el procesamiento de la fecha informarán el formato inválido.
+        }
+    }
+
+    private function normalizarNivelAcademicoMenorEdad(Request $request): void
+    {
+        try {
+            $fechaNacimiento = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento'));
+
+            if ($fechaNacimiento->age < 18 && in_array($request->input('nivel_academico'), ['Universitario', 'Postgrado'], true)) {
+                $request->merge(['nivel_academico' => 'Técnico']);
+            }
+        } catch (\Throwable $exception) {
+            // La validación y el procesamiento de la fecha informarán el formato inválido.
+        }
     }
 }

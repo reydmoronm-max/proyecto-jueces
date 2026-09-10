@@ -48,9 +48,9 @@
                         <!-- Teléfono -->
                         <div class="col-12 col-md-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white" name="telefono" id="edit-telefono"
-                                    placeholder="Teléfono"
-                                    oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
+                                <input type="text" inputmode="numeric" class="form-control bg-white" name="telefono" id="edit-telefono"
+                                    placeholder="Teléfono" maxlength="11"
+                                    oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
                                 <label for="edit-telefono">Teléfono</label>
                             </div>
                         </div>
@@ -118,6 +118,7 @@
                                 </select>
                                 <label for="edit-pensionado_jubilado">Pensionado / Jubilado <span class="text-danger">*</span></label>
                             </div>
+                            <small id="edit-aviso-pensionado-jubilado" class="text-danger d-none">no cumple los requisitos legales de edad</small>
                         </div>
 
                         <!-- Nivel Académico -->

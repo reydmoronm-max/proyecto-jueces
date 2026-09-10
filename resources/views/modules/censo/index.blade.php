@@ -143,6 +143,71 @@
             });
         @endif
 
+        function obtenerEdadIntegrante(prefix) {
+            var fecha = $('#' + (prefix ? 'edit-fecha_nacimiento' : 'fecha_nacimiento')).val();
+            var partes = fecha ? fecha.split('-') : [];
+            var fechaNacimiento = partes.length === 3
+                ? new Date(partes[2], partes[1] - 1, partes[0])
+                : null;
+            var hoy = new Date();
+            var edad = fechaNacimiento && !isNaN(fechaNacimiento.getTime())
+                ? hoy.getFullYear() - fechaNacimiento.getFullYear()
+                : -1;
+
+            if (fechaNacimiento && (hoy.getMonth() < fechaNacimiento.getMonth() ||
+                (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate()))) {
+                edad--;
+            }
+
+            if (!fechaNacimiento || isNaN(fechaNacimiento.getTime())) {
+                return -1;
+            }
+
+            return edad;
+        }
+
+        function actualizarPensionadoJubilado(prefix) {
+            var genero = $('#' + (prefix ? 'edit-genero' : 'genero')).val();
+            var pension = $('#' + (prefix ? 'edit-pensionado_jubilado' : 'pensionado_jubilado'));
+            var aviso = $('#' + (prefix ? 'edit-aviso-pensionado-jubilado' : 'aviso-pensionado-jubilado'));
+            var edad = obtenerEdadIntegrante(prefix);
+            var edadMinima = genero === 'Masculino' ? 60 : genero === 'Femenino' ? 55 : Infinity;
+            var tieneDatosSuficientes = edad >= 0 && genero;
+            var puedeSeleccionar = tieneDatosSuficientes && edad >= edadMinima;
+            pension.prop('disabled', !puedeSeleccionar);
+            aviso.toggleClass('d-none', !tieneDatosSuficientes || puedeSeleccionar);
+            if (!puedeSeleccionar) {
+                pension.val('No');
+            }
+        }
+
+        function actualizarCamposMenorEdad(prefix) {
+            var edad = obtenerEdadIntegrante(prefix);
+            var campos = prefix
+                ? '#edit-profesion, #edit-situacion_laboral, #edit-centro_votacion'
+                : '#profesion, #situacion_laboral, #centro_votacion';
+            var nivel = $('#' + (prefix ? 'edit-nivel_academico' : 'nivel_academico'));
+            var esMenor = edad >= 0 && edad < 18;
+
+            $(campos).prop('disabled', esMenor);
+            nivel.find('option[value="Universitario"], option[value="Postgrado"]').prop('disabled', esMenor);
+            if (esMenor && ['Universitario', 'Postgrado'].includes(nivel.val())) {
+                nivel.val('Técnico');
+            }
+            if (esMenor) {
+                $(campos).val('No aplica');
+            } else {
+                $(campos).filter(function() {
+                    return $(this).val() === 'No aplica';
+                }).val('');
+            }
+        }
+
+        function actualizarReglasPorEdad(prefix) {
+            actualizarPensionadoJubilado(prefix);
+            actualizarCamposMenorEdad(prefix);
+        }
+
         // Flatpickr initializations
         $(document).ready(function() {
             if (typeof flatpickr !== 'undefined') {
@@ -150,14 +215,20 @@
                     dateFormat: "d-m-Y",
                     maxDate: "today",
                     locale: "es",
-                    allowInput: false
+                    allowInput: false,
+                    onChange: function() {
+                        actualizarReglasPorEdad('');
+                    }
                 });
 
                 flatpickr("#edit-fecha_nacimiento", {
                     dateFormat: "d-m-Y",
                     maxDate: "today",
                     locale: "es",
-                    allowInput: false
+                    allowInput: false,
+                    onChange: function() {
+                        actualizarReglasPorEdad('edit');
+                    }
                 });
             }
         });
@@ -197,6 +268,7 @@
                     if (data.estudia) $('#estudia').val(data.estudia);
                     if (data.genero) $('#genero').val(data.genero);
                     if (data.parentesco) $('#parentesco').val(data.parentesco);
+                    actualizarReglasPorEdad('');
                 },
                 error: function(xhr) {
                     if (xhr.status === 404) {
@@ -256,6 +328,7 @@
             $('#estudia').val('');
             $('#parentesco').val('');
             $('#pensionado_jubilado').val('');
+            actualizarReglasPorEdad('');
             $('#nivel_academico').val('');
             $('#direccion').val('');
 
@@ -387,6 +460,7 @@
                     $('#edit-tipo_enfermedad').val(data.tipo_enfermedad ?? '');
                     $('#edit-pensionado_jubilado').val(data.pensionado_jubilado ?? '');
                     $('#edit-genero').val(data.genero ?? '');
+                    actualizarReglasPorEdad('edit');
                     $('#edit-estudia').val(data.estudia ?? '');
                     $('#edit-parentesco').val(data.parentesco ?? '');
                     $('#edit-direccion').val(data.direccion ?? '');
@@ -424,6 +498,7 @@
                     $('#edit_consejo_comunal_id').val(data.consejo_comunal_id ?? '');
                     $('#edit_vivienda').val(data.vivienda ?? '');
                     $('#edit_mision_vivienda').val(data.mision_vivienda ?? '');
+                    actualizarMisionVivienda('edit');
                     $('#edit_bono_unico_familiar').val(data.bono_unico_familiar ?? '');
                     $('#edit_clap').val(data.clap ?? '');
                     var modal = new bootstrap.Modal(document.getElementById('modalEditarFamilia'));
@@ -494,6 +569,7 @@
                 var nombres = $('#' + p + 'nombres').val().trim();
                 var apellidos = $('#' + p + 'apellidos').val().trim();
                 var fecha = $('#' + p + 'fecha_nacimiento').val().trim();
+                var telefono = $('#' + p + 'telefono').val().trim();
                 var genero = $('#' + p + 'genero').val();
                 var parentesco = $('#' + p + 'parentesco').val();
                 var estudia = $('#' + p + 'estudia').val();
@@ -511,6 +587,9 @@
                 }
                 if (apellidos.length < 3 || apellidos.length > 50 || invalidNameRegex.test(apellidos)) {
                     errors.push('Apellidos: debe tener entre 3 y 50 caracteres y contener solo letras.');
+                }
+                if (telefono && !/^\d{1,11}$/.test(telefono)) {
+                    errors.push('Teléfono: debe contener solo números y tener máximo 11 dígitos.');
                 }
                 if (!fecha) {
                     errors.push('Fecha de nacimiento: campo obligatorio.');
@@ -533,6 +612,10 @@
 
                 return errors;
             }
+
+            $('#genero, #edit-genero').on('change', function() {
+                actualizarReglasPorEdad(this.id === 'edit-genero' ? 'edit' : '');
+            });
 
             function validateFamiliaForm(prefix) {
                 var p = prefix ? prefix + '_' : '';
@@ -560,6 +643,22 @@
                 }
                 return errors;
             }
+
+            function actualizarMisionVivienda(prefix) {
+                var vivienda = $('#' + (prefix ? 'edit_vivienda' : 'vivienda_fam'));
+                var mision = $('#' + (prefix ? 'edit_mision_vivienda' : 'mision_vivienda_fam'));
+                var esPropia = vivienda.val() === 'Propia';
+
+                mision.prop('disabled', !esPropia).val(esPropia ? '' : 'NA');
+            }
+
+            $('#vivienda_fam').on('change', function() {
+                actualizarMisionVivienda('');
+            });
+
+            $('#edit_vivienda').on('change', function() {
+                actualizarMisionVivienda('edit');
+            });
 
             $('#formFamilia').on('submit', function(e) {
                 var errors = validateFamiliaForm('');
