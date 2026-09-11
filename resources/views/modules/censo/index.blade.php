@@ -208,6 +208,14 @@
             actualizarCamposMenorEdad(prefix);
         }
 
+        function actualizarMisionVivienda(prefix) {
+            var vivienda = $('#' + (prefix ? 'edit_vivienda' : 'vivienda_fam'));
+            var mision = $('#' + (prefix ? 'edit_mision_vivienda' : 'mision_vivienda_fam'));
+            var esPropia = vivienda.val() === 'Propia';
+
+            mision.prop('disabled', !esPropia).val(esPropia ? '' : 'NA');
+        }
+
         // Flatpickr initializations
         $(document).ready(function() {
             if (typeof flatpickr !== 'undefined') {
@@ -642,14 +650,6 @@
                     errors.push('CLAP: campo obligatorio.');
                 }
                 return errors;
-            }
-
-            function actualizarMisionVivienda(prefix) {
-                var vivienda = $('#' + (prefix ? 'edit_vivienda' : 'vivienda_fam'));
-                var mision = $('#' + (prefix ? 'edit_mision_vivienda' : 'mision_vivienda_fam'));
-                var esPropia = vivienda.val() === 'Propia';
-
-                mision.prop('disabled', !esPropia).val(esPropia ? '' : 'NA');
             }
 
             $('#vivienda_fam').on('change', function() {

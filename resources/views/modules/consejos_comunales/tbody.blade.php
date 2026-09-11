@@ -23,8 +23,8 @@
             @endif
         </td>
         <td>
-            <h6 style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
-                title="{{ $item->direccion }}" data-bs-toggle="tooltip">
+            <h6 style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $item->direccion }}" data-bs-toggle="tooltip">
+                <span class="badge bg-success me-1"><i class="fa-solid fa-location-dot"></i></span>
                 {{ $item->direccion }}
             </h6>
         </td>
