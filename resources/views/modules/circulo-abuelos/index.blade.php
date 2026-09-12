@@ -96,12 +96,13 @@
                                 aria-labelledby="abuelitos-tab">
                                 <!-- Filtros y Búsqueda -->
                                 <div class="row g-3 align-items-end mb-4">
-                                    <div class="col-md-8">
+                                    <div class="col-md-12">
                                         <form action="{{ route('circulo-abuelos.index') }}" method="GET" class="row g-2">
-                                            <div class="col-md-5">
-                                                <input type="text" name="search" class="form-control"
-                                                    placeholder="Buscar por cédula o nombre..."
-                                                    value="{{ request('search') }}">
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="ri-search-line"></i></span>
+                                                    <input type="text" name="search" class="form-control" placeholder="Buscar por cédula o nombre..." value="{{ request('search') }}">
+                                                </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <select name="consejo_comunal_id" class="form-select">
@@ -113,8 +114,8 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3 d-flex gap-1">
-                                                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                                            <div class="col-md-2 d-flex gap-1">
+                                                <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-filter"></i> Filtrar</button>
                                                 @if (request('search') || request('consejo_comunal_id'))
                                                     <a href="{{ route('circulo-abuelos.index') }}" class="btn btn-secondary"
                                                         title="Limpiar Filtros"><i class="ri-refresh-line"></i></a>
@@ -122,15 +123,15 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="col-md-4 text-end">
-                                        <span class="text-muted fw-bold">Total Encontrados: <span
+                                    {{-- <div class="col-md-4 text-end">
+                                        <span hidden class="text-muted fw-bold">Total Encontrados: <span
                                                 class="badge bg-secondary">{{ $abuelos->count() }}</span></span>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <!-- Tabla de Abuelitos -->
                                 <div class="table-responsive">
-                                    <table class="table table-striped align-middle mb-0">
+                                    <table class="table table-striped table-bordered table-striped-columns align-middle mb-0">
                                         <thead>
                                             <tr>
                                                 <th>Cédula</th>
@@ -154,18 +155,24 @@
                                                     <td>
                                                         <span class="badge bg-info">{{ $ab->edad }} años</span>
                                                     </td>
-                                                    <td>{{ $ab->genero ?? 'No registrado' }}</td>
+                                                    <td>
+                                                        @if ($ab->genero == 'Masculino')
+                                                            <span class="badge bg-primary"><i class="fa-solid fa-mars"></i></span> Masculino
+                                                        @else
+                                                            <span class="badge" style="background-color: rgb(255, 70, 172)"><i class="fa-solid fa-venus"></i></span> Femenino
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         @if ($ab->tipo_enfermedad)
                                                             <span
                                                                 class="badge bg-danger-subtle text-danger">{{ $ab->tipo_enfermedad }}</span>
                                                         @else
-                                                            <span class="text-muted small">Ninguna</span>
+                                                            <span class="text-muted small fst-italic">Ninguna</span>
                                                         @endif
                                                     </td>
                                                     <td>{{ $ab->consejoComunal->nombre ?? 'Sin vincular' }}</td>
-                                                    <td class="text-truncate" style="max-width: 200px;"
-                                                        title="{{ $ab->direccion }}">
+                                                    <td class="text-truncate" style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
+                                                        title="{{ $ab->direccion }}" data-bs-toggle="tooltip">
                                                         {{ $ab->direccion ?? 'No registrada' }}</td>
                                                 </tr>
                                             @empty
@@ -188,13 +195,13 @@
                                         data-bs-target="#modalRegistrarJornada">
                                         <i class="ri-add-fill"></i> Planificar Jornada de Atención
                                     </button>
-                                    <span class="text-muted fw-bold">Jornadas Registradas: <span
+                                    <span hidden class="text-muted fw-bold">Jornadas Registradas: <span
                                             class="badge bg-secondary">{{ $jornadas->count() }}</span></span>
                                 </div>
 
                                 <!-- Tabla de Jornadas -->
                                 <div class="table-responsive">
-                                    <table class="table table-striped align-middle mb-0">
+                                    <table class="table table-striped table-bordered table-striped-columns align-middle mb-0">
                                         <thead>
                                             <tr>
                                                 <th>Nombre de Jornada</th>
@@ -208,7 +215,7 @@
                                             @forelse($jornadas as $jo)
                                                 <tr>
                                                     <td class="fw-semibold">{{ $jo->nombre_jornada }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($jo->fecha_programada)->format('d-m-Y') }}
+                                                    <td><i class="fa-solid fa-calendar"></i> {{ \Carbon\Carbon::parse($jo->fecha_programada)->format('d-m-Y') }}
                                                     </td>
                                                     <td>{{ $jo->consejoComunal->nombre ?? 'Sin especificar' }}</td>
                                                     <td>
@@ -226,7 +233,7 @@
                                                     <td class="text-end">
                                                         <div>
                                                             <button type="button" class="btn btn-sm btn-light me-1"
-                                                                title="Ver Detalles"
+                                                                title="Ver detalles" data-bs-toggle="tooltip" tooltip-placement="top"
                                                                 onclick="consultarJornada({{ $jo->id }})">
                                                                 <i class="ri-eye-fill"></i>
                                                             </button>
@@ -275,7 +282,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Planificar Nueva Jornada</h5>
+                    <h5 class="modal-title fw-bold">PLANIFICAR NUEVA JORNADA</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
@@ -284,17 +291,17 @@
                         @csrf
                         <div class="row g-3">
                             <div class="col-12">
-                                <div class="form-floating">
-                                    <input type="text" name="nombre_jornada" id="nombre_jornada"
-                                        class="form-control bg-white" placeholder="Nombre de Jornada" required
-                                        minlength="3">
-                                    <label for="nombre_jornada">Nombre de la Jornada</label>
+                                <label class="text-primary fw-bold mb-1" for="nombre_jornada">NOMBRE DE LA JORNADA</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-pen"></i></span>
+                                    <input type="text" name="nombre_jornada" id="nombre_jornada" class="form-control bg-white" placeholder="Ej. Jornada de Recreación y..." required minlength="3">
                                 </div>
                             </div>
                             <div class="col-12">
+                                <label class="text-primary fw-bold mb-1" for="fecha_programada">FECHA PROGRAMADA</label>
                                 <div class="form-group">
-                                    <label class="mb-1 small text-muted" for="fecha_programada">Fecha programada</label>
                                     <div class="input-group wrap_flatpicker" data-min-date="today">
+                                        <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                         <input required type="text" name="fecha_programada" id="fecha_programada"
                                             class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
                                         <a class="input-group-text input-button bg-white" title="limpiar" data-clear
@@ -309,22 +316,22 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-floating">
-                                    <select name="consejo_comunal_id" id="consejo_comunal_id"
-                                        class="form-select bg-white" required>
+                                <label class="text-primary fw-bold mb-1" for="consejo_comunal_id">COMUNIDAD / CONSEJO COMUNAL</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-people-roof"></i></span>
+                                    <select name="consejo_comunal_id" id="consejo_comunal_id" class="form-select bg-white" required>
                                         <option value="" selected disabled>Seleccione...</option>
                                         @foreach ($consejosComunales as $cc)
                                             <option value="{{ $cc->id }}">{{ $cc->nombre }}</option>
                                         @endforeach
                                     </select>
-                                    <label for="consejo_comunal_id">Comunidad (Consejo Comunal)</label>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-floating">
-                                    <textarea name="detalles" id="detalles" class="form-control bg-white" placeholder="Detalles de la actividad"
-                                        style="height: 120px;"></textarea>
-                                    <label for="detalles">Detalles o Metas de la Jornada</label>
+                                <label class="text-primary fw-bold mb-1" for="detalles">DESCRIPCIÓN</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-note-sticky"></i></span>
+                                    <textarea name="detalles" id="detalles" class="form-control bg-white" placeholder="Detalles o metas de la jornada"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -344,7 +351,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modificar Jornada</h5>
+                    <h5 class="modal-title fw-bold">EDITAR JORNADA</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
@@ -354,19 +361,17 @@
                         @method('PUT')
                         <div class="row g-3">
                             <div class="col-12">
-                                <div class="form-floating">
-                                    <input type="text" name="nombre_jornada" id="edit-nombre_jornada"
-                                        class="form-control bg-white" placeholder="Nombre de Jornada" required
-                                        minlength="3">
-                                    <label for="edit-nombre_jornada">Nombre de la Jornada</label>
+                                <label class="text-primary fw-bold mb-1" for="edit-nombre_jornada">NOMBRE DE LA JORNADA</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-pen"></i></span>
+                                    <input type="text" name="nombre_jornada" id="edit-nombre_jornada" class="form-control bg-white" placeholder="Ej. Jornada de Recreación y..." required minlength="3">
                                 </div>
                             </div>
                             <div class="col-12">
+                                <label class="text-primary fw-bold mb-1" for="edit-fecha_programada">FECHA PROGRAMADA</label>
                                 <div class="form-group">
-                                    <label class="mb-1 small text-muted" for="edit-fecha_programada">Fecha
-                                        programada</label>
-                                    <div class="input-group wrap_flatpicker" id="edit-fecha_programada_container"
-                                        data-min-date="none">
+                                    <div class="input-group wrap_flatpicker" id="edit-fecha_programada_container" data-min-date="none">
+                                        <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                         <input required type="text" name="fecha_programada" id="edit-fecha_programada"
                                             class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
                                         <a class="input-group-text input-button bg-white" title="limpiar" data-clear
@@ -381,32 +386,33 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-floating">
-                                    <select name="consejo_comunal_id" id="edit-consejo_comunal_id"
-                                        class="form-select bg-white" required>
+                                <label class="text-primary fw-bold mb-1" for="edit-consejo_comunal_id">COMUNIDAD / CONSEJO COMUNAL</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-people-roof"></i></i></span>
+                                    <select name="consejo_comunal_id" id="edit-consejo_comunal_id" class="form-select bg-white" required>
                                         <option value="" selected disabled>Seleccione...</option>
                                         @foreach ($consejosComunales as $cc)
                                             <option value="{{ $cc->id }}">{{ $cc->nombre }}</option>
                                         @endforeach
                                     </select>
-                                    <label for="edit-consejo_comunal_id">Comunidad (Consejo Comunal)</label>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-floating">
+                                <label class="text-primary fw-bold mb-1" for="edit-estatus">ESTATUS</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-list-check"></i></span>
                                     <select name="estatus" id="edit-estatus" class="form-select bg-white" required>
                                         <option value="Planificada">Planificada</option>
                                         <option value="Completada">Completada</option>
                                         <option value="Suspendida">Suspendida</option>
                                     </select>
-                                    <label for="edit-estatus">Estatus de Ejecución</label>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-floating">
-                                    <textarea name="detalles" id="edit-detalles" class="form-control bg-white" placeholder="Detalles de la actividad"
-                                        style="height: 120px;"></textarea>
-                                    <label for="edit-detalles">Detalles o Metas de la Jornada</label>
+                                <label class="text-primary fw-bold mb-1" for="edit-detalles">DESCRIPCIÓN</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-note-sticky"></i></span>
+                                    <textarea name="detalles" id="edit-detalles" class="form-control bg-white" placeholder="Detalles o metas de la jornada"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -425,39 +431,40 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Detalles de la Jornada</h5>
+                    <h5 class="modal-title fw-bold">DETALLES</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
                     <div class="row g-3">
-                        <div class="col-12">
+                        <div class="col-12" hidden>
                             <div class="form-group">
                                 <label class="small text-muted mb-1">Nombre de la Jornada</label>
                                 <input id="view-nombre_jornada" type="text" class="form-control bg-light" readonly>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6" hidden>
                             <div class="form-group">
                                 <label class="small text-muted mb-1">Fecha Programada</label>
                                 <input id="view-fecha_programada" type="text" class="form-control bg-light" readonly>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6" hidden>
                             <div class="form-group">
                                 <label class="small text-muted mb-1">Estatus</label>
                                 <input id="view-estatus" type="text" class="form-control bg-light" readonly>
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12" hidden>
                             <div class="form-group">
                                 <label class="small text-muted mb-1">Comunidad</label>
                                 <input id="view-comunidad" type="text" class="form-control bg-light" readonly>
                             </div>
                         </div>
                         <div class="col-12">
-                            <div class="form-group">
-                                <label class="small text-muted mb-1">Detalles de la Actividad</label>
-                                <textarea id="view-detalles" class="form-control bg-light" style="height: 120px;" readonly></textarea>
+                            <label class="text-primary fw-bold mb-1">DETALLES DE LA JORNADA</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-note-sticky"></i></span>
+                                <textarea id="view-detalles" class="form-control bg-light" rows="4" readonly></textarea>
                             </div>
                         </div>
                     </div>

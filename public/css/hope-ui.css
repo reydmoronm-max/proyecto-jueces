@@ -61,8 +61,8 @@ hr {
   --bs-secondary-rgb: 0, 31, 77;
   --bs-success-rgb: 26, 160, 83;
   --bs-info-rgb: 7, 154, 162;
-  --bs-warning-rgb: 241, 106, 27;
-  --bs-danger-rgb: 192, 50, 33;
+  --bs-warning-rgb: 255, 179, 0;
+  --bs-danger-rgb: 226, 0, 0;
   --bs-light-rgb: 222, 226, 230;
   --bs-dark-rgb: 33, 37, 41;
   --bs-gray-rgb: 108, 117, 125;
@@ -2447,7 +2447,7 @@ progress {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #8A92A6;
+  color: #2e2e2e;
   background-color: #ffffff;
   -webkit-background-clip: padding-box;
           background-clip: padding-box;
@@ -2479,7 +2479,7 @@ progress {
   cursor: pointer;
 }
 .form-control:focus {
-  color: #8A92A6;
+  color: #2e2e2e  ;
   background-color: #ffffff;
   border-color: #00a2ff;
   outline: 0;
@@ -2645,8 +2645,8 @@ textarea.form-control-lg {
   font-style: italic;
   font-weight: 400;
   line-height: 1.5;
-  color: #8A92A6;
-  background-color: #f6fcff;
+  color: #2e2e2e;
+  background-color: #ffffff;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 1rem center;
@@ -14729,11 +14729,11 @@ textarea.form-control-lg {
 
 .btn-warning {
   --bs-btn-color: #ffffff;
-  --bs-btn-bg: #f16a1b;
-  --bs-btn-border-color: #f16a1b;
+  --bs-btn-bg: #ffb300;
+  --bs-btn-border-color: #ffb300;
   --bs-btn-hover-color: #ffffff;
-  --bs-btn-hover-bg: #cd5a17;
-  --bs-btn-hover-border-color: #c15516;
+  --bs-btn-hover-bg: #D69A00;
+  --bs-btn-hover-border-color: #D69A00;
   --bs-btn-focus-shadow-rgb: 243, 128, 61;
   --bs-btn-active-color: #ffffff;
   --bs-btn-active-bg: #c15516;
@@ -14746,11 +14746,11 @@ textarea.form-control-lg {
 
 .btn-danger {
   --bs-btn-color: #ffffff;
-  --bs-btn-bg: #c03221;
-  --bs-btn-border-color: #c03221;
+  --bs-btn-bg: #e20000;
+  --bs-btn-border-color: #e20000;
   --bs-btn-hover-color: #ffffff;
-  --bs-btn-hover-bg: #a32b1c;
-  --bs-btn-hover-border-color: #9a281a;
+  --bs-btn-hover-bg: #a80000;
+  --bs-btn-hover-border-color: #a80000;
   --bs-btn-focus-shadow-rgb: 201, 81, 66;
   --bs-btn-active-color: #ffffff;
   --bs-btn-active-bg: #9a281a;
