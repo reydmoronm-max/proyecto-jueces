@@ -1,16 +1,16 @@
 <div class="modal fade" id="modalConsultaFamilia" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content shadow-lg border-0">
-            <div class="modal-header bg-primary text-white py-3">
-                <h5 class="modal-title text-white d-flex align-items-center">
+            <div class="modal-header py-3" style="background-color: #f5f6fa;">
+                <h5 class="modal-title text-secondary fw-bold d-flex align-items-center">
                     <i class="ri-home-heart-fill me-2 fs-4"></i>
-                    <span>Núcleo Familiar: <strong id="modal_fam_numero" class="text-white">Cargando...</strong></span>
+                    <strong id="modal_fam_numero" class="">Cargando...</strong>
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 {{-- Resumen de datos de la vivienda y comunidad --}}
-                <div class="card border-0 bg-soft-primary mb-4" style="background-color: rgba(7, 154, 162, 0.08);">
+                <div class="card border-0 mb-4" style="background-color: #ecedf1;">
                     <div class="card-body p-3">
                         <div class="row g-3">
                             <div class="col-md-4 col-sm-6">
@@ -47,15 +47,15 @@
                 </div>
 
                 <div class="table-responsive rounded border">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
+                    <table class="table table-striped table-bordered table-striped-columns align-middle mb-0">
+                        <thead class="">
                             <tr>
                                 <th>Cédula</th>
                                 <th>Nombre y Apellido</th>
                                 <th>Parentesco</th>
                                 <th>Edad / Género</th>
                                 <th>Teléfono</th>
-                                <th>Ocupación</th>
+                                {{-- <th>Ocupación</th> --}}
                                 <th class="text-center">Acción</th>
                             </tr>
                         </thead>

@@ -7,7 +7,7 @@
 @section('contenido')
     <div class="container-fluid content-inner mt-n5 py-0">
         <!-- Tarjetas Estadísticas -->
-        <div class="row mb-4">
+        <div class="row mb-2">
             <div class="col-md-4">
                 <div class="card bg-primary text-white"
                     style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">

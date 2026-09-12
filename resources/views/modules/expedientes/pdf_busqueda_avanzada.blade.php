@@ -95,7 +95,7 @@
         }
 
         .metric-card {
-            width: 18.5%;
+            width: 17.3%;
             border: 1px solid #ccc;
             border-top: 3px solid #003366;
             background-color: #fff;
@@ -345,7 +345,7 @@
     @endif
 
     <div class="footer">
-        Documento oficial generado por el Sistema Comunal. Uso exclusivo para gestión comunal y toma de decisiones comunitarias.
+        
     </div>
 </body>
 

@@ -17,24 +17,24 @@
                 <div class="col-lg-4 col-md-12 mb-4">
                     <div class="card mb-4" data-aos="fade-up" data-aos-delay="200">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title mb-0"><i class="ri-search-eye-line text-primary me-2"></i>Buscador Judicial</h4>
+                            <h4 class="card-title fw-bold mb-0"><i class="ri-search-eye-line text-primary me-2"></i>BUSCADOR DE HISTORIAL</h4>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation" novalidate>
                                 <div class="row">
-                                    <div class="col-3 mb-3">
+                                    <div hidden class="col-3 mb-3">
                                         <label for="cedula_tipo" class="form-label fw-bold">Tipo</label>
                                         <select class="form-select border-primary" id="cedula_tipo" name="cedula_tipo" required>
                                             <option value="V" {{ request('cedula_tipo', $cedulaTipo) == 'V' ? 'selected' : '' }}>V</option>
                                             <option value="E" {{ request('cedula_tipo', $cedulaTipo) == 'E' ? 'selected' : '' }}>E</option>
                                         </select>
                                     </div>
-                                    <div class="col-9 mb-3">
+                                    <div class="col-12 mb-3">
                                         <label for="cedula" class="form-label fw-bold">Cédula de Identidad</label>
-                                        <input type="number" class="form-control border-primary" id="cedula" name="cedula"
-                                            value="{{ request('cedula', $cedula) }}" placeholder="Ej: 12345678"
-                                            required min="100000" max="999999999"
-                                            oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                                            <input type="number" class="form-control border-primary" id="cedula" name="cedula" value="{{ request('cedula', $cedula) }}" placeholder="Ej: 12345678" required min="100000" max="999999999" oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                        </div>
                                         <div class="invalid-feedback">
                                             Ingrese un número de cédula válido.
                                         </div>
@@ -42,11 +42,11 @@
                                 </div>
                                 <div class="d-grid gap-2 mt-2">
                                     <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center">
-                                        <i class="ri-search-2-line me-2"></i> Buscar Historial Judicial
+                                        <i class="ri-search-2-line me-2"></i> Buscar
                                     </button>
                                     @if ($busquedaRealizada)
-                                        <a href="{{ route('consulta.index') }}" class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
-                                            <i class="ri-refresh-line me-2"></i> Limpiar Filtros
+                                        <a href="{{ route('consulta.index') }}" class="btn btn-secondary d-flex align-items-center justify-content-center">
+                                            <i class="ri-refresh-line me-2"></i> Limpiar resultados
                                         </a>
                                     @endif
                                 </div>
@@ -57,8 +57,8 @@
                     <!-- Datos Básicos del Ciudadano Encontrado -->
                     @if ($persona)
                         <div class="card" data-aos="fade-up" data-aos-delay="300">
-                            <div class="card-header bg-soft-primary py-3">
-                                <h5 class="card-title mb-0 d-flex align-items-center text-primary">
+                            <div class="card-header bg-light py-3">
+                                <h5 class="card-title mb-0 d-flex align-items-center fw-bold">
                                     <i class="ri-user-search-line me-2"></i> Datos del Ciudadano
                                 </h5>
                             </div>
@@ -68,7 +68,7 @@
                                         style="width: 70px; height: 70px; background-color: rgba(7, 154, 162, 0.1);">
                                         <i class="ri-user-line text-primary" style="font-size: 2.5rem;"></i>
                                     </div>
-                                    <h5 class="mb-1 font-weight-bold">{{ $persona->nombres }} {{ $persona->apellidos }}</h5>
+                                    <h5 class="mb-1 fw-bold">{{ $persona->nombres }} {{ $persona->apellidos }}</h5>
                                     <span class="badge bg-primary text-white px-3 py-2 mt-1">
                                         Cédula: {{ $persona->cedula_tipo }}-{{ number_format($persona->cedula, 0, ',', '.') }}
                                     </span>
@@ -108,10 +108,10 @@
                                     style="width: 90px; height: 90px; background-color: rgba(7, 154, 162, 0.1);">
                                     <i class="ri-file-search-line text-primary" style="font-size: 3.5rem;"></i>
                                 </div>
-                                <h3 class="mb-2">Buscador de Expedientes</h3>
-                                <p class="text-muted mx-auto" style="max-width: 500px;">
+                                <h3 class="mb-2 fw-bold">Buscador de Expedientes</h3>
+                                <p class="text-muted mx-auto" style="max-width: 600px;">
                                     Ingrese la cédula de un ciudadano en el panel izquierdo para consultar todos sus
-                                    expedientes judiciales, actas redactadas y citaciones activas en el Juzgado de Paz.
+                                    expedientes, actas redactadas y citaciones registradas en el sistema.
                                 </p>
                             </div>
                         </div>
@@ -181,7 +181,7 @@
                                         </h6>
                                     </div>
 
-                                    <ul class="nav nav-pills mb-3 bg-light p-1 rounded" id="pills-tab-{{ $expediente->id }}" role="tablist">
+                                    <ul class="nav nav-pills mb-3 bg-light p-1 " id="pills-tab-{{ $expediente->id }}" role="tablist">
                                         <li class="nav-item flex-fill text-center" role="presentation">
                                             <button class="nav-link active w-100" id="pills-involucrados-tab-{{ $expediente->id }}" data-bs-toggle="pill"
                                                 data-bs-target="#pills-involucrados-{{ $expediente->id }}" type="button" role="tab">
@@ -206,7 +206,7 @@
                                         <!-- TAB Involucrados -->
                                         <div class="tab-pane fade show active" id="pills-involucrados-{{ $expediente->id }}" role="tabpanel">
                                             <div class="table-responsive">
-                                                <table class="table table-striped table-hover align-middle mb-0">
+                                                <table class="table table-striped table-bordered table-hover align-middle mb-0">
                                                     <thead class="table-light">
                                                         <tr>
                                                             <th>Nombre Completo</th>
@@ -266,7 +266,7 @@
                                                                         <br>
                                                                         <small class="text-muted"><i class="ri-time-line me-1"></i>{{ $citacion->hora_citacion }}</small>
                                                                     </td>
-                                                                    <td>
+                                                                    <td style="max-width:330px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ $citacion->observaciones ?? 'Sin observaciones' }}" data-bs-toggle="tooltip">
                                                                         <span class="text-dark small">{{ $citacion->observaciones ?? 'Sin observaciones' }}</span>
                                                                         @if ($citacion->solicitaCambio)
                                                                             <div class="mt-1 small p-1 rounded" style="background-color: rgba(254, 141, 0, 0.08); display: inline-block;">
@@ -301,7 +301,7 @@
                                                 <div class="row row-cols-1 g-3">
                                                     @foreach ($expediente->actas as $acta)
                                                         <div class="col">
-                                                            <div class="card shadow-none border mb-2" style="background-color: #fafafa;">
+                                                            <div class="card border shadow-none mb-2" style="background-color: #fafafa;">
                                                                 <div class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom py-2">
                                                                     <strong class="text-dark">
                                                                         @if ($acta->tipo_acta == 'recepcion')
@@ -349,19 +349,19 @@
         {{-- ========================================================================= --}}
         @if ($esComunal)
             {{-- Pestañas Superiores de Navegación --}}
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card rounded-5 shadow-sm mb-4">
                 <div class="card-body p-2">
                     <ul class="nav nav-pills nav-fill gap-2" id="consultaTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link py-2.5 fw-bold {{ $tabActiva === 'individual' ? 'active' : '' }}" 
                                 id="tab-individual-btn" data-bs-toggle="pill" data-bs-target="#tab-individual" type="button" role="tab">
-                                <i class="ri-user-search-line me-2 fs-5 align-middle"></i> Consulta Individual por Cédula
+                                <i class="ri-user-search-line me-2 fs-5 align-middle"></i> Consulta individual
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link py-2.5 fw-bold {{ $tabActiva === 'avanzada' ? 'active' : '' }}" 
                                 id="tab-avanzada-btn" data-bs-toggle="pill" data-bs-target="#tab-avanzada" type="button" role="tab">
-                                <i class="ri-filter-3-line me-2 fs-5 align-middle"></i> Búsqueda Avanzada del Censo y Reportes PDF
+                                <i class="ri-filter-3-line me-2 fs-5 align-middle"></i> Consulta avanzada
                             </button>
                         </li>
                     </ul>
@@ -377,28 +377,28 @@
                         <!-- Panel de Búsqueda -->
                         <div class="col-lg-4 col-md-12 mb-4">
                             <div class="card shadow-sm" data-aos="fade-up">
-                                <div class="card-header bg-soft-primary py-3">
-                                    <h5 class="card-title mb-0 text-primary d-flex align-items-center">
-                                        <i class="ri-user-search-fill me-2 fs-5"></i> Búsqueda de Ciudadano
+                                <div class="card-header py-3">
+                                    <h5 class="card-title fw-bold mb-0 text-secondary d-flex align-items-center">
+                                        <i class="ri-user-search-fill me-2 fs-5"></i> BÚSQUEDA DE CIUDADANO
                                     </h5>
                                 </div>
                                 <div class="card-body">
                                     <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation" novalidate id="formConsultaIndividual">
                                         <input type="hidden" name="tab" value="individual">
                                         <div class="row">
-                                            <div class="col-3 mb-3">
+                                            <div hidden class="col-3 mb-3">
                                                 <label for="comunal_cedula_tipo" class="form-label fw-bold">Tipo</label>
                                                 <select class="form-select border-primary" id="comunal_cedula_tipo" name="cedula_tipo" required>
                                                     <option value="V" {{ request('cedula_tipo', $cedulaTipo) == 'V' ? 'selected' : '' }}>V</option>
                                                     <option value="E" {{ request('cedula_tipo', $cedulaTipo) == 'E' ? 'selected' : '' }}>E</option>
                                                 </select>
                                             </div>
-                                            <div class="col-9 mb-3">
+                                            <div class="col-12 mb-3">
                                                 <label for="comunal_cedula" class="form-label fw-bold">Cédula de Identidad</label>
-                                                <input type="number" class="form-control border-primary" id="comunal_cedula" name="cedula"
-                                                    value="{{ request('cedula', $cedula) }}" placeholder="Ej: 12345678"
-                                                    required min="100000" max="999999999"
-                                                    oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                                                    <input type="number" class="form-control border-primary" id="comunal_cedula" name="cedula" value="{{ request('cedula', $cedula) }}" placeholder="Ej: 12345678" required min="100000" max="999999999" oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                                </div>
                                                 <div class="invalid-feedback">
                                                     Ingrese un número de cédula válido.
                                                 </div>
@@ -406,11 +406,11 @@
                                         </div>
                                         <div class="d-grid gap-2 mt-1">
                                             <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center">
-                                                <i class="ri-search-2-line me-2"></i> Consultar Censo Ciudadano
+                                                <i class="ri-search-2-line me-2"></i> Consultar
                                             </button>
                                             @if ($busquedaRealizada)
-                                                <a href="{{ route('consulta.index') }}?tab=individual" class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
-                                                    <i class="ri-refresh-line me-2"></i> Nueva Consulta
+                                                <a href="{{ route('consulta.index') }}?tab=individual" class="btn btn-secondary d-flex align-items-center justify-content-center">
+                                                    <i class="ri-refresh-line me-2"></i> Limpiar resultados
                                                 </a>
                                             @endif
                                         </div>
@@ -423,11 +423,11 @@
                                 <div class="card shadow-sm mt-4 border-0" data-aos="fade-up" data-aos-delay="200">
                                     <div class="card-body text-center p-4">
                                         <div class="avatar avatar-80 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow-sm"
-                                            style="width: 80px; height: 80px; background: linear-gradient(135deg, #079aa2 0%, #035257 100%); color: white;">
+                                            style="width: 80px; height: 80px; background: linear-gradient(135deg, #000327 0%, #0f0f42 100%); color: white;">
                                             <i class="ri-user-smile-line" style="font-size: 2.8rem;"></i>
                                         </div>
                                         <h5 class="fw-bold mb-1 text-dark">{{ $persona->nombres }} {{ $persona->apellidos }}</h5>
-                                        <div class="badge bg-primary px-3 py-2 text-white fs-7 mb-2">
+                                        <div class="badge bg-light px-3 py-2 text-dark fs-7 mb-2">
                                             {{ $persona->cedula_tipo }}-{{ number_format($persona->cedula, 0, ',', '.') }}
                                         </div>
 
@@ -487,8 +487,8 @@
                                             style="width: 90px; height: 90px; background-color: rgba(7, 154, 162, 0.1);">
                                             <i class="ri-user-search-line text-primary" style="font-size: 3.5rem;"></i>
                                         </div>
-                                        <h3 class="mb-2">Consulta Integral del Censo Ciudadano</h3>
-                                        <p class="text-muted mx-auto" style="max-width: 520px;">
+                                        <h3 class="mb-2 fw-bold">Consulta del censo ciudadano</h3>
+                                        <p class="text-muted mx-auto" style="max-width: 600px;">
                                             Ingrese el número de cédula en el panel izquierdo para consultar todo el expediente censal del ciudadano:
                                             núcleo familiar, vivienda, beneficios, liderazgo comunal y datos sociodemográficos.
                                         </p>
@@ -524,13 +524,13 @@
 
                                 {{-- SECCIÓN 1: NÚCLEO FAMILIAR Y VIVIENDA --}}
                                 <div class="card shadow-sm mb-4 border-0" data-aos="fade-up">
-                                    <div class="card-header bg-soft-primary d-flex justify-content-between align-items-center py-3">
-                                        <h5 class="card-title mb-0 text-primary d-flex align-items-center">
-                                            <i class="ri-home-smile-fill me-2 fs-5"></i> Núcleo Familiar y Vivienda
+                                    <div class="card-header d-flex justify-content-between align-items-center py-3" style="background-color: #f5f6fa;">
+                                        <h5 class="card-title mb-0 text-secondary fw-bold d-flex align-items-center">
+                                            <i class="ri-home-smile-fill me-2 fs-5"></i> NÚCLEO FAMILIAR Y VIVIENDA
                                         </h5>
                                         @if ($familia)
                                             <button type="button" class="btn btn-primary btn-sm d-flex align-items-center" onclick="cargarModalFamilia({{ $familia->id }})">
-                                                <i class="ri-team-fill me-1"></i> Ver Núcleo Familiar ({{ $familia->personas->count() }})
+                                                <i class="ri-team-fill me-1"></i> Ver núcleo familiar ({{ $familia->personas->count() }})
                                             </button>
                                         @endif
                                     </div>
@@ -538,7 +538,7 @@
                                         @if ($familia)
                                             <div class="row g-3">
                                                 <div class="col-md-6 col-sm-12">
-                                                    <div class="p-3 border rounded bg-light">
+                                                    <div class="p-3 border rounded" style="background-color: #f5f6fa;">
                                                         <span class="text-muted small fw-bold d-block text-uppercase">Comunidad / Consejo Comunal:</span>
                                                         <span class="fs-6 fw-bold text-dark">
                                                             <i class="ri-community-line text-primary me-1"></i> {{ $consejoComunal?->nombre ?: 'Sin comunidad vinculada' }}
@@ -550,7 +550,7 @@
                                                 </div>
 
                                                 <div class="col-md-6 col-sm-12">
-                                                    <div class="p-3 border rounded bg-light">
+                                                    <div class="p-3 border rounded" style="background-color: #f5f6fa;">
                                                         <span class="text-muted small fw-bold d-block text-uppercase">Identificación Familiar:</span>
                                                         <div class="d-flex justify-content-between align-items-center mt-1">
                                                             <span class="fs-6 fw-bold text-dark">{{ $familia->numero_familia }}</span>
@@ -602,9 +602,9 @@
 
                                 {{-- SECCIÓN 2: DATOS PERSONALES, DEMOGRÁFICOS Y ELECTORALES --}}
                                 <div class="card shadow-sm mb-4 border-0" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="card-header bg-soft-primary py-3">
-                                        <h5 class="card-title mb-0 text-primary d-flex align-items-center">
-                                            <i class="ri-id-card-fill me-2 fs-5"></i> Datos Personales y Demográficos
+                                    <div class="card-header py-3" style="background-color: #f5f6fa;">
+                                        <h5 class="card-title mb-0 text-secondary fw-bold d-flex align-items-center">
+                                            <i class="ri-id-card-fill me-2 fs-5"></i> DATOS PERSONALES Y DEMOGRÁFICOS
                                         </h5>
                                     </div>
                                     <div class="card-body">
@@ -624,13 +624,16 @@
                                                 <span class="fw-bold text-dark fs-6">{{ $persona->genero ?: 'No registrado' }}</span>
                                             </div>
 
-                                            <div class="col-md-6 col-sm-12">
+                                            <div class="col-md-4 col-sm-12">
                                                 <small class="text-muted fw-bold d-block">Centro de Votación:</small>
                                                 <span class="fw-semibold text-dark">{{ $persona->centro_votacion ?: 'No registrado' }}</span>
                                             </div>
-                                            <div class="col-md-6 col-sm-12">
+                                            <div class="col-md-4 col-sm-12">
                                                 <small class="text-muted fw-bold d-block">Carnet de la Patria:</small>
                                                 <span class="fw-semibold text-dark">{{ $persona->carnet_patria ?: 'No registrado' }}</span>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                {{-- Contenedor vacío --}}
                                             </div>
                                         </div>
                                     </div>
@@ -640,9 +643,9 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
                                         <div class="card shadow-sm h-100 border-0" data-aos="fade-up" data-aos-delay="150">
-                                            <div class="card-header bg-soft-primary py-3">
-                                                <h5 class="card-title mb-0 text-primary d-flex align-items-center">
-                                                    <i class="ri-graduation-cap-fill me-2 fs-5"></i> Educación y Ocupación
+                                            <div class="card-header py-3" style="background-color: #f5f6fa;">
+                                                <h5 class="card-title mb-0 text-secondary fw-bold d-flex align-items-center">
+                                                    <i class="ri-graduation-cap-fill me-2 fs-5"></i> EDUCACIÓN Y OCUPACIÓN
                                                 </h5>
                                             </div>
                                             <div class="card-body">
@@ -670,9 +673,9 @@
 
                                     <div class="col-md-6 mb-4">
                                         <div class="card shadow-sm h-100 border-0" data-aos="fade-up" data-aos-delay="200">
-                                            <div class="card-header bg-soft-primary py-3">
-                                                <h5 class="card-title mb-0 text-primary d-flex align-items-center">
-                                                    <i class="ri-heart-pulse-fill me-2 fs-5"></i> Salud y Bienestar
+                                            <div class="card-header py-3" style="background-color: #f5f6fa;">
+                                                <h5 class="card-title mb-0 text-secondary fw-bold d-flex align-items-center">
+                                                    <i class="ri-heart-pulse-fill me-2 fs-5"></i> SALUD Y BIENESTAR
                                                 </h5>
                                             </div>
                                             <div class="card-body">
@@ -694,9 +697,9 @@
                                 {{-- SECCIÓN 4: LIDERAZGO Y PARTICIPACIÓN COMUNITARIA --}}
                                 @if ($persona->consejosComunales->isNotEmpty() || $persona->vocerias->isNotEmpty())
                                     <div class="card shadow-sm mb-4 border-0" data-aos="fade-up" data-aos-delay="250">
-                                        <div class="card-header bg-soft-success py-3">
-                                            <h5 class="card-title mb-0 text-success d-flex align-items-center">
-                                                <i class="ri-award-fill me-2 fs-5"></i> Liderazgo y Participación Comunitaria
+                                        <div class="card-header py-3" style="background-color: #f5f6fa;">
+                                            <h5 class="card-title mb-0 text-secondary fw-bold  d-flex align-items-center">
+                                                <i class="ri-award-fill me-2 fs-5"></i> LIDERAZGO Y PARTICIPACIÓN COMUNITARIA
                                             </h5>
                                         </div>
                                         <div class="card-body">
@@ -750,19 +753,19 @@
                 <div class="tab-pane fade {{ $tabActiva === 'avanzada' ? 'show active' : '' }}" id="tab-avanzada" role="tabpanel">
                     <!-- Formulario de Filtros Multicriterio -->
                     <div class="card shadow-sm mb-4 border-0" data-aos="fade-up">
-                        <div class="card-header bg-soft-primary py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center flex-wrap gap-2" style="background-color: #f5f6fa;">
                             <div>
-                                <h5 class="card-title mb-0 text-primary d-flex align-items-center">
-                                    <i class="ri-filter-3-fill me-2 fs-5"></i> Filtros Multicriterio del Censo
+                                <h5 class="card-title mb-0 text-secondary fw-bold d-flex align-items-center">
+                                    <i class="ri-filter-3-fill me-2 fs-5"></i> FILTROS MULTICRITERIO DEL CENSO
                                 </h5>
-                                <small class="text-muted">Combine los parámetros que desee para generar consultas poblacionales específicas.</small>
+                                <small class="text-muted fst-italic">Combine los parámetros que desee para generar consultas poblacionales específicas.</small>
                             </div>
-                            @if ($busquedaAvanzadaRealizada && $resultadosAvanzados->isNotEmpty())
+                            {{-- @if ($busquedaAvanzadaRealizada && $resultadosAvanzados->isNotEmpty())
                                 <a href="{{ route('consulta.busqueda-avanzada.pdf') }}?{{ http_build_query(request()->all()) }}" 
                                     class="btn btn-danger btn-sm d-flex align-items-center shadow-sm" target="_blank">
                                     <i class="ri-file-pdf-2-line me-1 fs-6"></i> Exportar Resultados a PDF
                                 </a>
-                            @endif
+                            @endif --}}
                         </div>
                         <div class="card-body">
                             <form action="{{ route('consulta.index') }}" method="GET" id="formBusquedaAvanzada">
@@ -771,9 +774,9 @@
 
                                 <div class="row g-3">
                                     {{-- Fila 1: Comunidad y Demografía --}}
-                                    <div class="col-lg-4 col-md-6">
-                                        <label for="filtro_comunidad" class="form-label fw-bold small text-uppercase">Comunidad / Consejo Comunal</label>
-                                        <select class="form-select border-primary" id="filtro_comunidad" name="consejo_comunal_id">
+                                    <div class="col-lg-3 col-md-6">
+                                        <label for="filtro_comunidad" class="form-label fw-bold text-secondary small text-uppercase">Comunidad / Consejo Comunal</label>
+                                        <select class="form-select " id="filtro_comunidad" name="consejo_comunal_id">
                                             <option value="">-- Todas las comunidades --</option>
                                             @foreach ($consejosComunales as $cc)
                                                 <option value="{{ $cc->id }}" {{ request('consejo_comunal_id') == $cc->id ? 'selected' : '' }}>
@@ -783,9 +786,9 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-2 col-md-3">
-                                        <label for="filtro_genero" class="form-label fw-bold small text-uppercase">Género</label>
-                                        <select class="form-select border-primary" id="filtro_genero" name="genero">
+                                    <div class="col-lg-3 col-md-3">
+                                        <label for="filtro_genero" class="form-label fw-bold text-secondary small text-uppercase">Género</label>
+                                        <select class="form-select " id="filtro_genero" name="genero">
                                             <option value="">Todos</option>
                                             <option value="Masculino" {{ request('genero') == 'Masculino' ? 'selected' : '' }}>Masculino</option>
                                             <option value="Femenino" {{ request('genero') == 'Femenino' ? 'selected' : '' }}>Femenino</option>
@@ -793,35 +796,35 @@
                                     </div>
 
                                     <div class="col-lg-3 col-md-3">
-                                        <label class="form-label fw-bold small text-uppercase">Condición de Edad</label>
+                                        <label class="form-label fw-bold text-secondary small text-uppercase">Condición de Edad</label>
                                         <div class="input-group">
-                                            <select class="form-select border-primary" name="edad_operador" id="edad_operador">
+                                            <select class="form-select " name="edad_operador" id="edad_operador">
                                                 <option value="">Exacto / Libre</option>
                                                 <option value="menor" {{ request('edad_operador') == 'menor' ? 'selected' : '' }}>Menores de (&lt;)</option>
                                                 <option value="menor_o_igual" {{ request('edad_operador') == 'menor_o_igual' ? 'selected' : '' }}>Hasta (&le;)</option>
                                                 <option value="mayor_o_igual" {{ request('edad_operador') == 'mayor_o_igual' ? 'selected' : '' }}>Desde (&ge;)</option>
                                                 <option value="mayor" {{ request('edad_operador') == 'mayor' ? 'selected' : '' }}>Mayores de (&gt;)</option>
                                             </select>
-                                            <input type="number" class="form-control border-primary" name="edad_limite" placeholder="Años" 
+                                            <input type="number" class="form-control " name="edad_limite" placeholder="Años" 
                                                 value="{{ request('edad_limite') }}" min="0" max="120" style="max-width: 90px;">
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-md-6">
-                                        <label class="form-label fw-bold small text-uppercase">Rango de Edad (Min - Max)</label>
+                                        <label class="form-label fw-bold text-secondary small text-uppercase">Rango de Edad (Min - Max)</label>
                                         <div class="input-group">
-                                            <input type="number" class="form-control border-primary" name="edad_min" placeholder="Mín" 
+                                            <input type="number" class="form-control " name="edad_min" placeholder="Mín" 
                                                 value="{{ request('edad_min') }}" min="0" max="120">
                                             <span class="input-group-text bg-light">a</span>
-                                            <input type="number" class="form-control border-primary" name="edad_max" placeholder="Máx" 
+                                            <input type="number" class="form-control " name="edad_max" placeholder="Máx" 
                                                 value="{{ request('edad_max') }}" min="0" max="120">
                                         </div>
                                     </div>
 
                                     {{-- Fila 2: Socio-Laboral y Educativo --}}
                                     <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_pensionado" class="form-label fw-bold small text-uppercase">Pensionado / Jubilado</label>
-                                        <select class="form-select border-primary" id="filtro_pensionado" name="pensionado_jubilado">
+                                        <label for="filtro_pensionado" class="form-label fw-bold text-secondary small text-uppercase">Pensionado / Jubilado</label>
+                                        <select class="form-select " id="filtro_pensionado" name="pensionado_jubilado">
                                             <option value="">Todos</option>
                                             <option value="Sí" {{ request('pensionado_jubilado') == 'Sí' ? 'selected' : '' }}>Sí</option>
                                             <option value="No" {{ request('pensionado_jubilado') == 'No' ? 'selected' : '' }}>No</option>
@@ -829,8 +832,8 @@
                                     </div>
 
                                     <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_estudia" class="form-label fw-bold small text-uppercase">¿Estudia actualmente?</label>
-                                        <select class="form-select border-primary" id="filtro_estudia" name="estudia">
+                                        <label for="filtro_estudia" class="form-label fw-bold text-secondary small text-uppercase">¿Estudia actualmente?</label>
+                                        <select class="form-select " id="filtro_estudia" name="estudia">
                                             <option value="">Todos</option>
                                             <option value="Sí" {{ request('estudia') == 'Sí' ? 'selected' : '' }}>Sí</option>
                                             <option value="No" {{ request('estudia') == 'No' ? 'selected' : '' }}>No</option>
@@ -838,8 +841,8 @@
                                     </div>
 
                                     <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_nivel" class="form-label fw-bold small text-uppercase">Nivel Académico</label>
-                                        <select class="form-select border-primary" id="filtro_nivel" name="nivel_academico">
+                                        <label for="filtro_nivel" class="form-label fw-bold text-secondary small text-uppercase">Nivel Académico</label>
+                                        <select class="form-select " id="filtro_nivel" name="nivel_academico">
                                             <option value="Todos">Todos</option>
                                             <option value="Ninguno" {{ request('nivel_academico') == 'Ninguno' ? 'selected' : '' }}>Ninguno</option>
                                             <option value="Primaria" {{ request('nivel_academico') == 'Primaria' ? 'selected' : '' }}>Primaria</option>
@@ -851,8 +854,8 @@
                                     </div>
 
                                     <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_profesion" class="form-label fw-bold small text-uppercase">Profesión / Ocupación</label>
-                                        <input type="text" class="form-control border-primary" id="filtro_profesion" name="profesion" 
+                                        <label for="filtro_profesion" class="form-label fw-bold text-secondary small text-uppercase">Profesión / Ocupación</label>
+                                        <input type="text" class="form-control " id="filtro_profesion" name="profesion" 
                                             placeholder="Ej: Docente, Obrero, Ingeniero..." value="{{ request('profesion') }}" list="listaProfesiones">
                                         <datalist id="listaProfesiones">
                                             @foreach ($profesiones as $prof)
@@ -862,9 +865,9 @@
                                     </div>
 
                                     {{-- Fila 3: Vivienda y Beneficios --}}
-                                    <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_vivienda" class="form-label fw-bold small text-uppercase">Tipo de Vivienda</label>
-                                        <select class="form-select border-primary" id="filtro_vivienda" name="vivienda">
+                                    <div hidden class="col-lg-3 col-md-6">
+                                        <label for="filtro_vivienda" class="form-label fw-bold text-secondary small text-uppercase">Tipo de Vivienda</label>
+                                        <select class="form-select " id="filtro_vivienda" name="vivienda">
                                             <option value="">Todas</option>
                                             <option value="Propia" {{ request('vivienda') == 'Propia' ? 'selected' : '' }}>Propia</option>
                                             <option value="Prestada" {{ request('vivienda') == 'Prestada' ? 'selected' : '' }}>Prestada</option>
@@ -872,27 +875,27 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_mision" class="form-label fw-bold small text-uppercase">Misión Vivienda (GMVV)</label>
-                                        <select class="form-select border-primary" id="filtro_mision" name="mision_vivienda">
+                                    <div hidden class="col-lg-3 col-md-6">
+                                        <label for="filtro_mision" class="form-label fw-bold text-secondary small text-uppercase">Misión Vivienda (GMVV)</label>
+                                        <select class="form-select " id="filtro_mision" name="mision_vivienda">
                                             <option value="">Todos</option>
                                             <option value="Sí" {{ request('mision_vivienda') == 'Sí' ? 'selected' : '' }}>Sí (Beneficiario)</option>
                                             <option value="No" {{ request('mision_vivienda') == 'No' ? 'selected' : '' }}>No</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_clap" class="form-label fw-bold small text-uppercase">Recibe CLAP</label>
-                                        <select class="form-select border-primary" id="filtro_clap" name="clap">
+                                    <div hidden class="col-lg-3 col-md-6">
+                                        <label for="filtro_clap" class="form-label fw-bold text-secondary small text-uppercase">Recibe CLAP</label>
+                                        <select class="form-select " id="filtro_clap" name="clap">
                                             <option value="">Todos</option>
                                             <option value="Sí" {{ request('clap') == 'Sí' ? 'selected' : '' }}>Sí</option>
                                             <option value="No" {{ request('clap') == 'No' ? 'selected' : '' }}>No</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_bono" class="form-label fw-bold small text-uppercase">Bono Único Familiar</label>
-                                        <select class="form-select border-primary" id="filtro_bono" name="bono_unico_familiar">
+                                    <div hidden class="col-lg-3 col-md-6">
+                                        <label for="filtro_bono" class="form-label fw-bold text-secondary small text-uppercase">Bono Único Familiar</label>
+                                        <select class="form-select " id="filtro_bono" name="bono_unico_familiar">
                                             <option value="">Todos</option>
                                             <option value="Sí" {{ request('bono_unico_familiar') == 'Sí' ? 'selected' : '' }}>Sí</option>
                                             <option value="No" {{ request('bono_unico_familiar') == 'No' ? 'selected' : '' }}>No</option>
@@ -901,8 +904,8 @@
 
                                     {{-- Fila 4: Liderazgo y Roles Comunitarios --}}
                                     <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_parentesco" class="form-label fw-bold small text-uppercase">Rol / Parentesco</label>
-                                        <select class="form-select border-primary" id="filtro_parentesco" name="parentesco">
+                                        <label for="filtro_parentesco" class="form-label fw-bold text-secondary small text-uppercase">Rol / Parentesco</label>
+                                        <select class="form-select " id="filtro_parentesco" name="parentesco">
                                             <option value="">Todos los roles</option>
                                             <option value="Jefe de familia" {{ request('parentesco') == 'Jefe de familia' ? 'selected' : '' }}>Jefe de Familia</option>
                                             <option value="Hijo/a" {{ request('parentesco') == 'Hijo/a' ? 'selected' : '' }}>Hijo/a</option>
@@ -914,25 +917,25 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_jefe_comando" class="form-label fw-bold small text-uppercase">¿Es Jefe de Comando?</label>
-                                        <select class="form-select border-primary" id="filtro_jefe_comando" name="es_jefe_comando">
+                                    <div hidden class="col-lg-3 col-md-6">
+                                        <label for="filtro_jefe_comando" class="form-label fw-bold text-secondary small text-uppercase">¿Es Jefe de Comando?</label>
+                                        <select class="form-select " id="filtro_jefe_comando" name="es_jefe_comando">
                                             <option value="">Todos</option>
                                             <option value="Sí" {{ request('es_jefe_comando') == 'Sí' ? 'selected' : '' }}>Sí (Comandante de Comunidad)</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_vocero" class="form-label fw-bold small text-uppercase">¿Es Vocero Comunal?</label>
-                                        <select class="form-select border-primary" id="filtro_vocero" name="es_vocero">
+                                    <div hidden class="col-lg-3 col-md-6">
+                                        <label for="filtro_vocero" class="form-label fw-bold text-secondary small text-uppercase">¿Es Vocero Comunal?</label>
+                                        <select class="form-select " id="filtro_vocero" name="es_vocero">
                                             <option value="">Todos</option>
                                             <option value="Sí" {{ request('es_vocero') == 'Sí' ? 'selected' : '' }}>Sí</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-3 col-md-6">
-                                        <label for="filtro_cat_voceria" class="form-label fw-bold small text-uppercase">Comité de Vocería</label>
-                                        <select class="form-select border-primary" id="filtro_cat_voceria" name="categoria_voceria">
+                                    <div hidden class="col-lg-3 col-md-6">
+                                        <label for="filtro_cat_voceria" class="form-label fw-bold text-secondary small text-uppercase">Comité de Vocería</label>
+                                        <select class="form-select " id="filtro_cat_voceria" name="categoria_voceria">
                                             <option value="">Todas las vocerías</option>
                                             @foreach ($categoriasVoceria as $cat)
                                                 <option value="{{ $cat->nombre }}" {{ request('categoria_voceria') == $cat->nombre ? 'selected' : '' }}>
@@ -944,11 +947,11 @@
                                 </div>
 
                                 <div class="d-flex justify-content-end align-items-center gap-2 mt-4 pt-3 border-top">
-                                    <a href="{{ route('consulta.index') }}?tab=avanzada" class="btn btn-outline-secondary">
-                                        <i class="ri-refresh-line me-1"></i> Limpiar Filtros
+                                    <a href="{{ route('consulta.index') }}?tab=avanzada" class="btn btn-secondary">
+                                        <i class="ri-refresh-line me-1"></i> Limpiar filtros
                                     </a>
                                     <button type="submit" class="btn btn-primary px-4">
-                                        <i class="ri-search-2-line me-1"></i> Filtrar Ciudadanos
+                                        <i class="ri-search-2-line me-1"></i> Filtrar
                                     </button>
                                 </div>
                             </form>
@@ -959,45 +962,45 @@
                     @if ($busquedaAvanzadaRealizada)
                         <div class="row g-3 mb-4" data-aos="fade-up">
                             <div class="col-xl-2 col-md-4 col-6">
-                                <div class="card border-0 shadow-sm text-center p-3 h-100" style="background: linear-gradient(135deg, #079aa2 0%, #035257 100%); color: white;">
+                                <div class="card border-0 shadow-sm text-center p-3 h-100" style="background: linear-gradient(135deg, #002bb87e 0%, #000f50 100%); color: white;">
                                     <span class="small fw-bold text-uppercase opacity-75">Total Encontrados</span>
                                     <h3 class="fw-bold text-white mb-0 mt-1">{{ $metricasAvanzadas['total'] ?? 0 }}</h3>
                                     <small class="opacity-75">ciudadanos</small>
                                 </div>
                             </div>
                             <div class="col-xl-2 col-md-4 col-6">
-                                <div class="card border-0 shadow-sm text-center p-3 h-100 bg-soft-info">
-                                    <span class="small fw-bold text-uppercase text-info">Masculinos</span>
-                                    <h3 class="fw-bold text-dark mb-0 mt-1">{{ $metricasAvanzadas['masculinos'] ?? 0 }}</h3>
-                                    <small class="text-muted">hombres</small>
+                                <div class="card border-0 shadow-sm text-center p-3 h-100" style="background: linear-gradient(135deg, #0086dfc5 0%, #003050 100%); color: white;">
+                                    <span class="small fw-bold text-uppercase">Masculinos</span>
+                                    <h3 class="fw-bold text-white mb-0 mt-1">{{ $metricasAvanzadas['masculinos'] ?? 0 }}</h3>
+                                    <small class="opacity-75">hombres</small>
                                 </div>
                             </div>
                             <div class="col-xl-2 col-md-4 col-6">
-                                <div class="card border-0 shadow-sm text-center p-3 h-100 bg-soft-success">
-                                    <span class="small fw-bold text-uppercase text-success">Femeninos</span>
-                                    <h3 class="fw-bold text-dark mb-0 mt-1">{{ $metricasAvanzadas['femeninos'] ?? 0 }}</h3>
-                                    <small class="text-muted">mujeres</small>
+                                <div class="card border-0 shadow-sm text-center p-3 h-100" style="background: linear-gradient(135deg, #ff5fdce3 0%, #9e085f 100%); color: white;">
+                                    <span class="small fw-bold text-uppercase">Femeninos</span>
+                                    <h3 class="fw-bold text-white mb-0 mt-1">{{ $metricasAvanzadas['femeninos'] ?? 0 }}</h3>
+                                    <small class="opacity-75">mujeres</small>
                                 </div>
                             </div>
                             <div class="col-xl-2 col-md-4 col-6">
-                                <div class="card border-0 shadow-sm text-center p-3 h-100 bg-soft-warning">
-                                    <span class="small fw-bold text-uppercase text-warning">Menores (&lt;18)</span>
-                                    <h3 class="fw-bold text-dark mb-0 mt-1">{{ $metricasAvanzadas['menores18'] ?? 0 }}</h3>
-                                    <small class="text-muted">niños y jóvenes</small>
+                                <div class="card border-0 shadow-sm text-center p-3 h-100" style="background: linear-gradient(135deg, #5f24ff 0%, #6850d3 100%); color: white;">
+                                    <span class="small fw-bold text-uppercase">Menores (&lt;18)</span>
+                                    <h3 class="fw-bold text-white mb-0 mt-1">{{ $metricasAvanzadas['menores18'] ?? 0 }}</h3>
+                                    <small class="opacity-75">niños y jóvenes</small>
                                 </div>
                             </div>
                             <div class="col-xl-2 col-md-4 col-6">
-                                <div class="card border-0 shadow-sm text-center p-3 h-100 bg-soft-danger">
-                                    <span class="small fw-bold text-uppercase text-danger">Adultos 60+</span>
-                                    <h3 class="fw-bold text-dark mb-0 mt-1">{{ $metricasAvanzadas['adultosMayores60'] ?? 0 }}</h3>
-                                    <small class="text-muted">adultos mayores</small>
+                                <div class="card border-0 shadow-sm text-center p-3 h-100 " style="background: linear-gradient(135deg, #24b5f8 0%, #4369d1 100%); color: white;">
+                                    <span class="small fw-bold text-uppercase">Adultos 60+</span>
+                                    <h3 class="fw-bold text-white mb-0 mt-1">{{ $metricasAvanzadas['adultosMayores60'] ?? 0 }}</h3>
+                                    <small class="opacity-75">adultos mayores</small>
                                 </div>
                             </div>
                             <div class="col-xl-2 col-md-4 col-6">
-                                <div class="card border-0 shadow-sm text-center p-3 h-100 bg-soft-primary">
-                                    <span class="small fw-bold text-uppercase text-primary">Núcleos Familiares</span>
-                                    <h3 class="fw-bold text-dark mb-0 mt-1">{{ $metricasAvanzadas['totalFamilias'] ?? 0 }}</h3>
-                                    <small class="text-muted">familias impactadas</small>
+                                <div class="card border-0 shadow-sm text-center p-3 h-100" style="background: linear-gradient(135deg, #10d11aad 0%, #105000 100%); color: white;">
+                                    <span class="small fw-bold text-uppercase">Núcleos Familiares</span>
+                                    <h3 class="fw-bold text-white mb-0 mt-1">{{ $metricasAvanzadas['totalFamilias'] ?? 0 }}</h3>
+                                    <small class="opacity-75">familias impactadas</small>
                                 </div>
                             </div>
                         </div>
@@ -1007,7 +1010,7 @@
                             <div class="card-header bg-transparent d-flex justify-content-between align-items-center py-3">
                                 <div>
                                     <h5 class="card-title mb-0 fw-bold text-dark">
-                                        <i class="ri-user-follow-line text-primary me-2"></i> Ciudadanos Coincidentes ({{ $resultadosAvanzados->count() }})
+                                        <i class="ri-user-follow-line text-primary me-2"></i> RESULTADOS ({{ $resultadosAvanzados->count() }})
                                     </h5>
                                 </div>
                                 @if ($resultadosAvanzados->isNotEmpty())
@@ -1028,7 +1031,7 @@
                                     </div>
                                 @else
                                     <div class="table-responsive">
-                                        <table class="table table-hover align-middle mb-0">
+                                        <table class="table table-hover table-bordered table-striped-columns align-middle mb-0">
                                             <thead class="table-light">
                                                 <tr>
                                                     <th>Cédula</th>
@@ -1037,7 +1040,7 @@
                                                     <th>Comunidad / Familia</th>
                                                     <th>Profesión / Nivel</th>
                                                     <th>Condiciones</th>
-                                                    <th class="text-end">Acciones QoL</th>
+                                                    <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1048,20 +1051,21 @@
                                                         $famId = $item->familia_id;
                                                     @endphp
                                                     <tr>
-                                                        <td class="fw-bold text-primary">
+                                                        <td class="fw-bold text-secondary">
+                                                            <i class="fa-solid fa-id-card"></i>
                                                             {{ $item->cedula_tipo }}-{{ number_format($item->cedula, 0, ',', '.') }}
                                                         </td>
                                                         <td>
                                                             <span class="fw-bold text-dark d-block">{{ $item->apellidos }}, {{ $item->nombres }}</span>
                                                             <div class="d-flex gap-1 mt-0.5">
                                                                 @if($item->parentesco === 'Jefe de familia')
-                                                                    <span class="badge bg-warning text-dark fs-8">Jefe de Familia</span>
+                                                                    <span class="badge bg-light text-dark fs-8">Jefe de Familia</span>
                                                                 @endif
                                                                 @if($item->consejosComunales->isNotEmpty())
                                                                     <span class="badge bg-success text-white fs-8">Jefe de Comando</span>
                                                                 @endif
                                                                 @if($item->vocerias->isNotEmpty())
-                                                                    <span class="badge bg-info text-white fs-8">Vocero</span>
+                                                                    <span class="badge bg-warning text-white fs-8">Vocero</span>
                                                                 @endif
                                                             </div>
                                                         </td>
@@ -1097,12 +1101,12 @@
                                                             <div class="btn-group">
                                                                 {{-- Botón para consultar perfil individual directo --}}
                                                                 <a href="{{ route('consulta.index') }}?tab=individual&cedula={{ $item->cedula }}&cedula_tipo={{ $item->cedula_tipo }}" 
-                                                                    class="btn btn-sm btn-outline-primary" title="Ver Perfil Integral">
-                                                                    <i class="ri-user-line me-1"></i> Perfil
+                                                                    class="btn btn-sm btn-secondary" title="Ver perfil" data-bs-toggle="tooltip">
+                                                                    <i class="ri-user-line me-1"></i>
                                                                 </a>
                                                                 {{-- Botón para abrir modal de familia directo si tiene familia --}}
                                                                 @if ($famId)
-                                                                    <button type="button" class="btn btn-sm btn-primary" title="Ver Núcleo Familiar" onclick="cargarModalFamilia({{ $famId }})">
+                                                                    <button type="button" class="btn btn-sm btn-primary" title="Ver núcleo familiar" data-bs-toggle="tooltip" onclick="cargarModalFamilia({{ $famId }})">
                                                                         <i class="ri-team-line"></i>
                                                                     </button>
                                                                 @endif
@@ -1170,9 +1174,9 @@
                                 <td>${parentescoBadge}</td>
                                 <td>${edadTexto} <small class="text-muted">(${p.genero || 'S/R'})</small></td>
                                 <td>${p.telefono || 'No registrado'}</td>
-                                <td>${p.profesion || 'No aplica'}</td>
+                                {{-- <td>${p.profesion || 'No aplica'}</td> --}}
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2" title="Consultar a este ciudadano" onclick="consultarCiudadanoDesdeModal('${p.cedula}', '${p.cedula_tipo}')">
+                                    <button type="button" class="btn btn-sm btn-primary py-1 px-2" title="Consultar a este ciudadano" onclick="consultarCiudadanoDesdeModal('${p.cedula}', '${p.cedula_tipo}')">
                                         <i class="ri-user-search-line me-1"></i> Consultar
                                     </button>
                                 </td>

@@ -41,7 +41,13 @@ class DenunciasController extends Controller
             $q->wherePivot('rol', 'denunciante');
         }])->where('estatus', 'Cerrado')->orderBy('created_at', 'desc')->get();
 
-        return view('modules.denuncias.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'denunciasActive', 'expedientesAbiertos', 'expedientesEnProceso', 'expedientesCerrados'));
+        // Calcular cantidad de expedientes abiertos, en proceso y cerrados
+        $totalDenuncias = Expediente::count();
+        $abiertoCount = Expediente::where('estatus', 'Abierto')->count();
+        $enProcesoCount = Expediente::where('estatus', 'En proceso')->count();
+        $cerradoCount = Expediente::where('estatus', 'Cerrado')->count();
+
+        return view('modules.denuncias.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'denunciasActive', 'expedientesAbiertos', 'expedientesEnProceso', 'expedientesCerrados', 'totalDenuncias', 'abiertoCount', 'enProcesoCount', 'cerradoCount'));
     }
 
     /**

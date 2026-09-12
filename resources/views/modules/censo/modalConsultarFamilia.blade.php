@@ -36,7 +36,7 @@
 
                 <h6 class="fw-bold mb-2 text-dark"><i class="ri-team-line me-1"></i> Integrantes de la Familia</h6>
                 <div class="table-responsive">
-                    <table class="table table-striped mb-0" id="tabla-integrantes-familia">
+                    <table class="table table-striped table-bordered table-striped-columns mb-0" id="tabla-integrantes-familia">
                         <thead>
                             <tr>
                                 <th>Cédula</th>
