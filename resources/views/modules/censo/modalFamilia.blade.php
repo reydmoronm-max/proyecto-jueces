@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="ri-home-heart-line me-1 text-primary"></i> Registrar Familia</h5>
+                <h5 class="modal-title fw-bold"><i class="ri-home-heart-line me-1 text-primary"></i> REGISTRAR FAMILIA</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-3">
@@ -11,67 +11,73 @@
                     @csrf
                     <div class="row g-3">
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
-                                <input id="numero_familia" type="text" name="numero_familia" class="form-control bg-white" placeholder="Ej: Familia 1" required>
-                                <label for="numero_familia">Identificación / Número de Familia <span class="text-danger">*</span></label>
+                            <label class="text-primary fw-bold mb-1" for="numero_familia">IDENTIFICACIÓN <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-people-roof"></i></span>
+                                <input id="numero_familia" type="text" name="numero_familia" class="form-control bg-white" placeholder="Ej. Familia Gutierrez Rodríguez" required>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
-                                <select name="consejo_comunal_id" id="consejo_comunal_id_fam" class="form-select bg-white">
-                                    <option value="" selected>Ninguno (Sin vincular)</option>
+                            <label class="text-primary fw-bold mb-1" for="consejo_comunal_id_fam">COMUNIDAD/CONSEJO COMUNAL <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
+                                <select name="consejo_comunal_id" id="consejo_comunal_id_fam" class="form-select bg-white" required>
+                                    <option value="" selected>Seleccione...</option>
                                     @foreach ($consejosComunales as $cc)
                                         <option value="{{ $cc->id }}">{{ $cc->nombre }}</option>
                                     @endforeach
                                 </select>
-                                <label for="consejo_comunal_id_fam">Comunidad (Consejo Comunal)</label>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
+                            <label class="text-primary fw-bold mb-1" for="vivienda_fam">TIPO DE VIVIENDA  <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-house-user"></i></span>
                                 <select name="vivienda" id="vivienda_fam" class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Propia">Propia</option>
                                     <option value="Prestada">Prestada</option>
                                     <option value="Alquilada">Alquilada</option>
                                 </select>
-                                <label for="vivienda_fam">Tipo de Vivienda <span class="text-danger">*</span></label>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
+                            <label class="text-primary fw-bold mb-1" for="mision_vivienda_fam">¿ADJUDICADA POR MISIÓN VIVIENDA?  <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-circle-question"></i></span>
                                 <select name="mision_vivienda" id="mision_vivienda_fam" class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
                                     <option value="NA">NA (No Aplica)</option>
                                 </select>
-                                <label for="mision_vivienda_fam">¿Adjudicada por Misión Vivienda? <span class="text-danger">*</span></label>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
+                            <label class="text-primary fw-bold mb-1" for="bono_unico_familiar_fam">¿RECIBE BONO ÚNICO FAMILIAR?  <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-circle-question"></i></span>
                                 <select name="bono_unico_familiar" id="bono_unico_familiar_fam" class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
                                 </select>
-                                <label for="bono_unico_familiar_fam">¿Recibe Bono Único Familiar? <span class="text-danger">*</span></label>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
+                            <label class="text-primary fw-bold mb-1" for="clap_fam">¿RECIBE CLAP?  <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-circle-question"></i></span>
                                 <select name="clap" id="clap_fam" class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
                                 </select>
-                                <label for="clap_fam">¿La familia recibe CLAP? <span class="text-danger">*</span></label>
                             </div>
                         </div>
                     </div>
@@ -91,7 +97,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="ri-edit-box-line me-1 text-warning"></i> Editar Familia</h5>
+                <h5 class="modal-title fw-bold"><i class="ri-edit-box-line me-1 text-warning"></i> EDITAR FAMILIA</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-3">
@@ -100,67 +106,73 @@
                     @method('PUT')
                     <div class="row g-3">
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
-                                <input id="edit_numero_familia" type="text" name="numero_familia" class="form-control bg-white" placeholder="Ej: Familia 1" required>
-                                <label for="edit_numero_familia">Identificación / Número de Familia <span class="text-danger">*</span></label>
+                            <label class="text-primary fw-bold mb-1" for="edit_numero_familia">IDENTIFICACIÓN <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-people-roof"></i></span>
+                                <input id="edit_numero_familia" type="text" name="numero_familia" class="form-control bg-white" placeholder="Ej. Familia Gutierrez Rodríguez" required>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
-                                <select name="consejo_comunal_id" id="edit_consejo_comunal_id" class="form-select bg-white">
-                                    <option value="" selected>Ninguno (Sin vincular)</option>
+                            <label class="text-primary fw-bold mb-1" for="edit_consejo_comunal_id">COMUNIDAD/CONSEJO COMUNAL <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
+                                <select name="consejo_comunal_id" id="edit_consejo_comunal_id" class="form-select bg-white" required>
+                                    <option value="" selected>Seleccione...</option>
                                     @foreach ($consejosComunales as $cc)
                                         <option value="{{ $cc->id }}">{{ $cc->nombre }}</option>
                                     @endforeach
                                 </select>
-                                <label for="edit_consejo_comunal_id">Comunidad (Consejo Comunal)</label>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
+                            <label class="text-primary fw-bold mb-1" for="edit_vivienda">TIPO DE VIVIENDA <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-house-user"></i></span>
                                 <select name="vivienda" id="edit_vivienda" class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Propia">Propia</option>
                                     <option value="Prestada">Prestada</option>
                                     <option value="Alquilada">Alquilada</option>
                                 </select>
-                                <label for="edit_vivienda">Tipo de Vivienda <span class="text-danger">*</span></label>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
+                            <label class="text-primary fw-bold mb-1" for="edit_mision_vivienda">¿ADJUDICADA POR MISIÓN VIVIENDA? <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-circle-question"></i></span>
                                 <select name="mision_vivienda" id="edit_mision_vivienda" class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
                                     <option value="NA">NA</option>
                                 </select>
-                                <label for="edit_mision_vivienda">¿Adjudicada por Misión Vivienda? <span class="text-danger">*</span></label>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
+                            <label class="text-primary fw-bold mb-1" for="edit_bono_unico_familiar">¿RECIBE BONO ÚNICO FAMILIAR? <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-circle-question"></i></span>
                                 <select name="bono_unico_familiar" id="edit_bono_unico_familiar" class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
                                 </select>
-                                <label for="edit_bono_unico_familiar">¿Recibe Bono Único Familiar? <span class="text-danger">*</span></label>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <div class="form-floating">
+                            <label class="text-primary fw-bold mb-1" for="edit_clap">¿RECIBE CLAP? <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-circle-question"></i></span>
                                 <select name="clap" id="edit_clap" class="form-select bg-white" required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
                                 </select>
-                                <label for="edit_clap">¿La familia recibe CLAP? <span class="text-danger">*</span></label>
                             </div>
                         </div>
                     </div>

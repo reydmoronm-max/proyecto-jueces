@@ -53,7 +53,7 @@
             </h5>
             <a href="{{ route('reportes.pdf', request()->query()) }}"
                 class="btn btn-danger d-flex align-items-center gap-2">
-                <i class="ri-file-pdf-fill" style="font-size: 1.2rem;"></i> Exportar Reporte en PDF
+                <i class="fa-solid fa-file-pdf" style="font-size: 1.2rem;"></i> Exportar Reporte en PDF
             </a>
         </div>
 
