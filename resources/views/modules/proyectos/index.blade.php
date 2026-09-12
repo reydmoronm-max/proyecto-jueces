@@ -107,11 +107,11 @@
                                             <td class="fw-semibold">{{ $item->nombre }}</td>
                                             <td>{{ $item->sector_productivo }}</td>
                                             <td>
-                                                <span class="fw-bold text-dark">Bs.
+                                                <span class="fw-bold text-dark"><i class="fa-solid fa-money-bill-1-wave"></i> Bs.
                                                     {{ number_format($item->presupuesto, 2, ',', '.') }}</span>
                                             </td>
                                             <td>{{ $item->responsable }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->fecha_inicio)->format('d-m-Y') }}</td>
+                                            <td><i class="fa-solid fa-calendar"></i> {{ \Carbon\Carbon::parse($item->fecha_inicio)->format('d-m-Y') }}</td>
                                             <td>
                                                 @if ($item->estatus === 'En planificación')
                                                     <span class="badge bg-warning text-dark"><i
@@ -171,7 +171,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Registrar Nuevo Proyecto Comunitario</h5>
+                    <h5 class="modal-title fw-bold">REGISTRAR PROYECTO</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
@@ -180,37 +180,38 @@
                         @csrf
                         <div class="row g-3">
                             <div class="col-md-12">
-                                <div class="form-floating">
-                                    <input type="text" name="nombre" id="nombre" class="form-control bg-white"
-                                        placeholder="Nombre del proyecto" required minlength="3">
-                                    <label for="nombre">Nombre del Proyecto</label>
+                                <label class="text-primary fw-bold mb-1" for="nombre">NOMBRE DEL PROYECTO</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-pen"></i></span>
+                                    <input type="text" name="nombre" id="nombre" class="form-control bg-white" placeholder="Ej. Construcción de cancha de..." required minlength="3">
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" name="sector_productivo" id="sector_productivo"
-                                        class="form-control bg-white" placeholder="Sector productivo" required>
-                                    <label for="sector_productivo">Sector Productivo</label>
+                                <label class="text-primary fw-bold mb-1" for="sector_productivo">SECTOR PRODUCTIVO</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-industry"></i></span>
+                                    <input type="text" name="sector_productivo" id="sector_productivo" class="form-control bg-white" placeholder="Ej. Agricultura" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="number" step="0.01" name="presupuesto" id="presupuesto"
-                                        class="form-control bg-white" placeholder="Presupuesto" required min="0">
-                                    <label for="presupuesto">Presupuesto (Bs.)</label>
+                                <label class="text-primary fw-bold mb-1" for="presupuesto">PRESUPUESTO (Bs.)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-money-bill-1-wave"></i></span>
+                                    <input type="number" step="0.01" name="presupuesto" id="presupuesto" class="form-control bg-white" placeholder="Ej. 15000" required min="0" oninput="if(this.value.length>40)this.value=this.value.slice(0,40)">
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" name="responsable" id="responsable"
-                                        class="form-control bg-white" placeholder="Responsable" required minlength="3">
-                                    <label for="responsable">Responsable del Proyecto</label>
+                                <label class="text-primary fw-bold mb-1" for="responsable">RESPONSABLE DEL PROYECTO</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i><i class="fa-solid fa-user"></i></i></span>
+                                    <input type="text" name="responsable" id="responsable" class="form-control bg-white" placeholder="Indique el responsable del nuevo proyecto" required minlength="3">
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <label class="text-primary fw-bold mb-1" for="fecha_inicio">FECHA DE INICIO</label>
                                 <div class="form-group">
-                                    <label class="mb-1 small text-muted" for="fecha_inicio">Fecha de Inicio</label>
                                     <div class="input-group wrap_flatpicker" data-min-date="none">
+                                        <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                         <input required type="text" name="fecha_inicio" id="fecha_inicio"
                                             class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
                                         <a class="input-group-text input-button bg-white" title="limpiar" data-clear
@@ -225,10 +226,10 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-floating">
-                                    <textarea name="descripcion" id="descripcion" class="form-control bg-white" placeholder="Descripción del proyecto"
-                                        style="height: 150px;" required></textarea>
-                                    <label for="descripcion">Descripción (Metas, objetivos, impacto)</label>
+                                <label class="text-primary fw-bold mb-1" for="descripcion">DESCRIPCIÓN</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-note-sticky"></i></span>
+                                    <textarea name="descripcion" id="descripcion" class="form-control bg-white" placeholder="Metas, objetivos, impacto..." required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -248,7 +249,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modificar Proyecto Comunitario</h5>
+                    <h5 class="modal-title fw-bold">MODIFICAR PROYECTO</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
@@ -258,40 +259,39 @@
                         @method('PUT')
                         <div class="row g-3">
                             <div class="col-md-12">
-                                <div class="form-floating">
-                                    <input type="text" name="nombre" id="edit-nombre" class="form-control bg-white"
-                                        placeholder="Nombre del proyecto" required minlength="3">
-                                    <label for="edit-nombre">Nombre del Proyecto</label>
+                                <label class="text-primary fw-bold mb-1" for="edit-nombre">NOMBRE DEL PROYECTO</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-pen"></i></span>
+                                    <input type="text" name="nombre" id="edit-nombre" class="form-control bg-white" placeholder="Ej. Mejoramiento de ..." required minlength="3">
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" name="sector_productivo" id="edit-sector_productivo"
-                                        class="form-control bg-white" placeholder="Sector productivo" required>
-                                    <label for="edit-sector_productivo">Sector Productivo</label>
+                                <label class="text-primary fw-bold mb-1" for="edit-sector_productivo">SECTOR PRODUCTIVO</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-industry"></i></span>
+                                    <input type="text" name="sector_productivo" id="edit-sector_productivo" class="form-control bg-white" placeholder="Ej. Agricultura" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="number" step="0.01" name="presupuesto" id="edit-presupuesto"
-                                        class="form-control bg-white" placeholder="Presupuesto" required min="0">
-                                    <label for="edit-presupuesto">Presupuesto (Bs.)</label>
+                                <label class="text-primary fw-bold mb-1" for="edit-presupuesto">PRESUPUESTO (Bs.)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-money-bill-1-wave"></i></span>
+                                    <input type="number" step="0.01" name="presupuesto" id="edit-presupuesto" class="form-control bg-white" placeholder="Ej. 15000" required min="0" oninput="if(this.value.length>40)this.value=this.value.slice(0,40)">
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" name="responsable" id="edit-responsable"
-                                        class="form-control bg-white" placeholder="Responsable" required minlength="3">
-                                    <label for="edit-responsable">Responsable del Proyecto</label>
+                                <label class="text-primary fw-bold mb-1" for="edit-responsable">RESPONSABLE DEL PROYECTO</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i><i class="fa-solid fa-user"></i></i></span>
+                                    <input type="text" name="responsable" id="edit-responsable" class="form-control bg-white" placeholder="Indique el responsable del proyecto" required minlength="3">
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <label class="text-primary fw-bold mb-1" for="edit-fecha_inicio">FECHA DE INICIO</label>
                                 <div class="form-group">
-                                    <label class="mb-1 small text-muted" for="edit-fecha_inicio">Fecha de Inicio</label>
-                                    <div class="input-group wrap_flatpicker" id="edit-fecha_inicio_container"
-                                        data-min-date="none">
-                                        <input required type="text" name="fecha_inicio" id="edit-fecha_inicio"
-                                            class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
+                                    <div class="input-group wrap_flatpicker" id="edit-fecha_inicio_container" data-min-date="none">
+                                        <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
+                                        <input required type="text" name="fecha_inicio" id="edit-fecha_inicio" class="form-control bg-white" placeholder="dd-mm-aaaa" data-input>
                                         <a class="input-group-text input-button bg-white" title="limpiar" data-clear
                                             href="javascript:void(0)">
                                             <svg width="18" class="icon-18" fill="none" viewBox="0 0 24 24"
@@ -304,20 +304,21 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-floating">
+                                <label class="text-primary fw-bold mb-1" for="edit-estatus">ESTATUS</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-list-check"></i></span>
                                     <select name="estatus" id="edit-estatus" class="form-select bg-white" required>
                                         <option value="En planificación">En planificación</option>
                                         <option value="Completado">Completado</option>
                                         <option value="Paralizado">Paralizado</option>
                                     </select>
-                                    <label for="edit-estatus">Estatus del Proyecto</label>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-floating">
-                                    <textarea name="descripcion" id="edit-descripcion" class="form-control bg-white"
-                                        placeholder="Descripción del proyecto" style="height: 150px;" required></textarea>
-                                    <label for="edit-descripcion">Descripción (Metas, objetivos, impacto)</label>
+                                <label class="text-primary fw-bold mb-1" for="edit-descripcion">DESCRIPCIÓN</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-note-sticky"></i></span>
+                                    <textarea name="descripcion" id="edit-descripcion" class="form-control bg-white" placeholder="Metas, objetivos, impacto..." style="height: 150px;" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -336,12 +337,12 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Detalles del Proyecto Comunitario</h5>
+                    <h5 class="modal-title fw-bold">DETALLES</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-2">
                     <div class="row g-3">
-                        <div class="col-12">
+                        {{-- <div class="col-12">
                             <div class="form-group">
                                 <label class="small text-muted mb-1">Nombre del Proyecto</label>
                                 <input id="view-nombre" type="text" class="form-control bg-light" readonly>
@@ -376,11 +377,12 @@
                                 <label class="small text-muted mb-1">Estatus</label>
                                 <input id="view-estatus" type="text" class="form-control bg-light" readonly>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-12">
-                            <div class="form-group">
-                                <label class="small text-muted mb-1">Descripción y Objetivos</label>
-                                <textarea id="view-descripcion" class="form-control bg-light" style="height: 150px;" readonly></textarea>
+                            <label class="text-primary fw-bold mb-1">DETALLES DEL PROYECTO</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-note-sticky"></i></span>
+                                <textarea id="view-descripcion" class="form-control bg-light" rows="4" readonly></textarea>
                             </div>
                         </div>
                     </div>
