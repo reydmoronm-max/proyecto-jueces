@@ -16,6 +16,7 @@ use App\Http\Controllers\CensoController;
 use App\Http\Controllers\CirculoAbuelosController;
 use App\Http\Controllers\ProyectosController;
 use App\Http\Controllers\CensoDemograficoController;
+use App\Http\Controllers\DatabaseBackupController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-admin');
@@ -76,6 +77,14 @@ Route::middleware('auth')->group(function () {
         Route::get('usuarios/cambiar-password/{id}/{password}', [UsersController::class, 'cambiarPassword'])->name('cambiar-password');
         Route::get('/usuarios/{id}/edit', [UsersController::class, 'edit'])->name('usuarios.edit');
         Route::put('/usuarios/update/{id}', [UsersController::class, 'update'])->name('usuarios.update');
+
+        // Módulo de Base de Datos (Exportar e Importar)
+        Route::get('/base-datos', [DatabaseBackupController::class, 'index'])->name('database-backup.index');
+        Route::get('/base-datos/exportar', [DatabaseBackupController::class, 'export'])->name('database-backup.export');
+        Route::post('/base-datos/importar', [DatabaseBackupController::class, 'import'])->name('database-backup.import');
+        Route::post('/base-datos/restaurar/{filename}', [DatabaseBackupController::class, 'restore'])->name('database-backup.restore');
+        Route::get('/base-datos/descargar/{filename}', [DatabaseBackupController::class, 'download'])->name('database-backup.download');
+        Route::delete('/base-datos/eliminar/{filename}', [DatabaseBackupController::class, 'destroy'])->name('database-backup.destroy');
     });
 
     // -------------------------------------------------------------
