@@ -16,12 +16,23 @@
                             </button>
                         </div>
                         <div class="d-flex align-items-center">
-                            <form action="{{ route('categoria-vocerias.index') }}" method="GET" class="d-flex gap-2">
+                            <form action="{{ route('categoria-vocerias.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2">
+                                <div>
+                                    <label for="estado_categoria" class="form-label small text-muted fw-bold mb-1">Categoría Activa/Inactiva</label>
+                                    <select name="estado_categoria" id="estado_categoria" class="form-select">
+                                        <option value="">Todas las categorías</option>
+                                        <option value="1" {{ $estadoCategoria === '1' ? 'selected' : '' }}>Activas</option>
+                                        <option value="0" {{ $estadoCategoria === '0' ? 'selected' : '' }}>Inactivas</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="search" class="form-label small text-muted fw-bold mb-1">Buscar categoría</label>
                                 <input type="text" name="search" class="form-control"
                                     placeholder="Buscar por nombre o descripción..." value="{{ request('search') }}"
                                     style="min-width: 280px;">
+                                </div>
                                 <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if (request('search'))
+                                @if ($search !== '' || $estadoCategoria !== '')
                                     <a href="{{ route('categoria-vocerias.index') }}" class="btn btn-secondary">Limpiar</a>
                                 @endif
                             </form>

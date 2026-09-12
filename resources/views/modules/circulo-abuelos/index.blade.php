@@ -114,10 +114,10 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-3 d-flex gap-1">
-                                                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                                                <button type="submit" class="btn btn-primary w-100">Buscar</button>
                                                 @if (request('search') || request('consejo_comunal_id'))
                                                     <a href="{{ route('circulo-abuelos.index') }}" class="btn btn-secondary"
-                                                        title="Limpiar Filtros"><i class="ri-refresh-line"></i></a>
+                                                        title="Limpiar Filtros">Limpiar</a>
                                                 @endif
                                             </div>
                                         </form>

@@ -18,15 +18,22 @@ class ProyectosController extends Controller
         $paginaSubtitulo = 'Módulo para el registro y control de proyectos comunitarios.';
         $proyectosActive = 'active';
 
-        $search = $request->input('search');
+        $search = trim((string) $request->input('search', ''));
+        $estatusProyecto = (string) $request->input('estatus_proyecto', '');
         $query = Proyecto::query();
 
-        if ($search) {
+        if ($search !== '') {
             $query->where(function($q) use ($search) {
                 $q->where('nombre', 'LIKE', '%' . $search . '%')
                   ->orWhere('sector_productivo', 'LIKE', '%' . $search . '%')
                   ->orWhere('responsable', 'LIKE', '%' . $search . '%');
             });
+        }
+
+        if (in_array($estatusProyecto, ['En planificación', 'Completado', 'Paralizado'], true)) {
+            $query->where('estatus', $estatusProyecto);
+        } else {
+            $estatusProyecto = '';
         }
 
         $items = $query->orderBy('created_at', 'desc')->get();
@@ -39,7 +46,8 @@ class ProyectosController extends Controller
 
         return view('modules.proyectos.index', compact(
             'titulo', 'paginaTitulo', 'paginaSubtitulo', 'proyectosActive', 'items',
-            'totalProyectos', 'planificadosCount', 'completadosCount', 'paralizadosCount'
+            'totalProyectos', 'planificadosCount', 'completadosCount', 'paralizadosCount',
+            'search', 'estatusProyecto'
         ));
     }
 

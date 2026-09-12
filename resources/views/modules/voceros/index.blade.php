@@ -16,12 +16,34 @@
                             </button>
                         </div>
                         <div class="d-flex align-items-center">
-                            <form action="{{ route('voceros.index') }}" method="GET" class="d-flex gap-2">
-                                <input type="text" name="search" class="form-control"
-                                    placeholder="Buscar por cédula, nombre o categoría..." value="{{ request('search') }}"
-                                    style="min-width: 280px;">
+                            <form action="{{ route('voceros.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2">
+                                <div>
+                                    <label for="categoria_voceria" class="form-label small text-muted fw-bold mb-1">Categoría de Vocería</label>
+                                    <select name="categoria_voceria" id="categoria_voceria" class="form-select">
+                                        <option value="">Todas las categorías</option>
+                                        @foreach ($categorias as $categoria)
+                                            <option value="{{ $categoria->nombre }}" {{ $categoriaVoceria === $categoria->nombre ? 'selected' : '' }}>
+                                                {{ $categoria->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="buscar_cedula" class="form-label small text-muted fw-bold mb-1">Buscar por Cédula</label>
+                                    <input type="text" name="cedula" id="buscar_cedula" class="form-control"
+                                        placeholder="Ingrese la cédula" value="{{ $cedula }}" maxlength="8" inputmode="numeric"
+                                        style="min-width: 180px;">
+                                </div>
+                                <div>
+                                    <label for="estado_vocero" class="form-label small text-muted fw-bold mb-1">Vocero Activo/Inactivo</label>
+                                    <select name="estado_vocero" id="estado_vocero" class="form-select">
+                                        <option value="">Todos los voceros</option>
+                                        <option value="1" {{ $estadoVocero === '1' ? 'selected' : '' }}>Activos</option>
+                                        <option value="0" {{ $estadoVocero === '0' ? 'selected' : '' }}>Inactivos</option>
+                                    </select>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if (request('search'))
+                                @if ($categoriaVoceria !== '' || $cedula !== '' || $estadoVocero !== '')
                                     <a href="{{ route('voceros.index') }}" class="btn btn-secondary">Limpiar</a>
                                 @endif
                             </form>

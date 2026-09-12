@@ -20,10 +20,13 @@ class CensoController extends Controller
         $paginaSubtitulo = 'Módulo para la gestión y censo de núcleos familiares.';
         $censoActive = 'active';
 
-        $search = $request->input('search');
+        $search = trim((string) $request->input('search', ''));
+        $consejoComunalId = (string) $request->input('consejo_comunal_id', '');
+        $tipoVivienda = (string) $request->input('tipo_vivienda', '');
+        $beneficio = (string) $request->input('beneficio', '');
         $query = Familia::with(['personas', 'consejoComunal']);
 
-        if ($search) {
+        if ($search !== '') {
             $query->where(function ($q) use ($search) {
                 $q->where('numero_familia', 'LIKE', '%' . $search . '%')
                     ->orWhereHas('personas', function ($qp) use ($search) {
@@ -37,10 +40,46 @@ class CensoController extends Controller
             });
         }
 
+        if (ctype_digit($consejoComunalId) && $consejoComunalId !== '') {
+            $query->where('consejo_comunal_id', $consejoComunalId);
+        } else {
+            $consejoComunalId = '';
+        }
+
+        if (in_array($tipoVivienda, ['Propia', 'Prestada', 'Alquilada'], true)) {
+            $query->where('vivienda', $tipoVivienda);
+        } else {
+            $tipoVivienda = '';
+        }
+
+        if ($beneficio === 'clap') {
+            $query->where('clap', 'Sí');
+        } elseif ($beneficio === 'bono_familiar') {
+            $query->where('bono_unico_familiar', 'Sí');
+        } elseif ($beneficio === 'ninguno') {
+            $query->where(function ($beneficioQuery) {
+                $beneficioQuery->whereIn('clap', ['No', null, ''])
+                    ->whereIn('bono_unico_familiar', ['No', null, '']);
+            });
+        } else {
+            $beneficio = '';
+        }
+
         $items = $query->orderBy('created_at', 'desc')->get();
         $consejosComunales = ConsejoComunal::all();
 
-        return view('modules.censo.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'censoActive', 'items', 'consejosComunales'));
+        return view('modules.censo.index', compact(
+            'titulo',
+            'paginaTitulo',
+            'paginaSubtitulo',
+            'censoActive',
+            'items',
+            'consejosComunales',
+            'search',
+            'consejoComunalId',
+            'tipoVivienda',
+            'beneficio'
+        ));
     }
 
     /**

@@ -20,24 +20,44 @@ class VocerosController extends Controller
         $paginaSubtitulo = 'Listado de voceros registrados en el sistema.';
         $vocerosActive = 'active';
 
-        $search = $request->input('search');
+        $categoriaVoceria = trim((string) $request->input('categoria_voceria', ''));
+        $cedula = preg_replace('/\D+/', '', (string) $request->input('cedula', ''));
+        $estadoVocero = (string) $request->input('estado_vocero', '');
+        if ($categoriaVoceria === 'Todas las categorías') {
+            $categoriaVoceria = '';
+        }
         $query = Vocero::with('persona');
 
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('categoria_vocero', 'LIKE', '%' . $search . '%')
-                  ->orWhereHas('persona', function ($qp) use ($search) {
-                      $qp->where('cedula', 'LIKE', '%' . $search . '%')
-                         ->orWhere('nombres', 'LIKE', '%' . $search . '%')
-                         ->orWhere('apellidos', 'LIKE', '%' . $search . '%');
-                  });
+        if ($categoriaVoceria !== '') {
+            $query->where('categoria_vocero', $categoriaVoceria);
+        }
+
+        if ($cedula !== '') {
+            $query->whereHas('persona', function ($personaQuery) use ($cedula) {
+                $personaQuery->where('cedula', 'LIKE', '%' . $cedula . '%');
             });
+        }
+
+        if (in_array($estadoVocero, ['0', '1'], true)) {
+            $query->where('activo', $estadoVocero === '1');
+        } else {
+            $estadoVocero = '';
         }
 
         $items = $query->orderBy('created_at', 'desc')->get();
         $categorias = CategoriaVoceria::where('activo', true)->orderBy('nombre')->get();
 
-        return view('modules.voceros.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'vocerosActive', 'items', 'categorias'));
+        return view('modules.voceros.index', compact(
+            'titulo',
+            'paginaTitulo',
+            'paginaSubtitulo',
+            'vocerosActive',
+            'items',
+            'categorias',
+            'categoriaVoceria',
+            'cedula',
+            'estadoVocero'
+        ));
     }
 
     /**
