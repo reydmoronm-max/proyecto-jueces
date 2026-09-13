@@ -27,15 +27,14 @@
             <h6>{{ $item->de_parte }}</h6>
         </td>
         <td>
-            <button class="btn btn-sm btn-info bg-primary" onclick="mostrarProposito({{ $item->id }})">
-                <i class="ri-eye-fill"></i> Ver
-            </button>
-            <div id="proposito-text-{{ $item->id }}" class="d-none">{{ $item->proposito }}</div>
-        </td>
-        <td>
             <h6>{{ $item->created_at->format('d/m/Y h:i A') }}</h6>
         </td>
         <td>
+            <button class="btn btn-sm btn-light" title="Ver propósito de visita" data-bs-toggle="tooltip" onclick="mostrarProposito({{ $item->id }})">
+                <i class="ri-eye-fill"></i>
+            </button>
+            <div id="proposito-text-{{ $item->id }}" class="d-none">{{ $item->proposito }}</div>
+            
             <button class="btn btn-sm btn-warning" onclick="editarVisita({{ $item->id }})" title="Editar visita">
                 <i class="ri-edit-fill"></i>
             </button>

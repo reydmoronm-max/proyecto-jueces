@@ -82,10 +82,10 @@
                                             </td>
                                             <td>
                                                 <div>
-                                                    <button type="button" class="btn btn-sm btn-light" title="Consultar"
+                                                    {{-- <button type="button" class="btn btn-sm btn-light" title="Consultar"
                                                         onclick="consultarVocero({{ $item->id }})">
                                                         <i class="ri-eye-fill"></i>
-                                                    </button>
+                                                    </button> --}}
                                                     <button type="button" class="btn btn-sm btn-warning" title="Editar"
                                                         onclick="editarVocero({{ $item->id }})">
                                                         <i class="ri-pencil-fill"></i>

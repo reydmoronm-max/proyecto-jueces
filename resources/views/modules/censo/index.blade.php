@@ -61,11 +61,11 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive mt-4">
-                            <table id="basic-table" class="table table-striped mb-0" role="grid">
+                            <table id="basic-table" class="table table-striped table-bordered table-striped-columns mb-0" role="grid">
                                 <thead>
                                     <tr>
                                         <th>Familia / Identificación</th>
-                                        <th>Comunidad (Consejo Comunal)</th>
+                                        <th>Comunidad / Consejo Comunal</th>
                                         <th>Vivienda</th>
                                         <th>Beneficios</th>
                                         <th>Integrantes</th>
@@ -238,6 +238,14 @@
         function actualizarReglasPorEdad(prefix) {
             actualizarPensionadoJubilado(prefix);
             actualizarCamposMenorEdad(prefix);
+        }
+
+        function actualizarMisionVivienda(prefix) {
+            var vivienda = $('#' + (prefix ? 'edit_vivienda' : 'vivienda_fam'));
+            var mision = $('#' + (prefix ? 'edit_mision_vivienda' : 'mision_vivienda_fam'));
+            var esPropia = vivienda.val() === 'Propia';
+
+            mision.prop('disabled', !esPropia).val(esPropia ? '' : 'NA');
         }
 
         // Flatpickr initializations
@@ -674,14 +682,6 @@
                     errors.push('CLAP: campo obligatorio.');
                 }
                 return errors;
-            }
-
-            function actualizarMisionVivienda(prefix) {
-                var vivienda = $('#' + (prefix ? 'edit_vivienda' : 'vivienda_fam'));
-                var mision = $('#' + (prefix ? 'edit_mision_vivienda' : 'mision_vivienda_fam'));
-                var esPropia = vivienda.val() === 'Propia';
-
-                mision.prop('disabled', !esPropia).val(esPropia ? '' : 'NA');
             }
 
             $('#vivienda_fam').on('change', function() {

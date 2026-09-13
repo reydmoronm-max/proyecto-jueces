@@ -6,6 +6,7 @@ use App\Http\Controllers\CitacionesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DenunciasController;
 use App\Http\Controllers\ExpedienteController;
+use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisitasController;
 use App\Http\Controllers\ConsejoComunalController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\CensoController;
 use App\Http\Controllers\CirculoAbuelosController;
 use App\Http\Controllers\ProyectosController;
 use App\Http\Controllers\CensoDemograficoController;
+use App\Http\Controllers\DatabaseBackupController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-admin');
@@ -39,10 +41,22 @@ Route::middleware('auth')->group(function () {
     });
 
     // -------------------------------------------------------------
-    // 2. RUTAS DE DENUNCIAS, CITACIONES Y CONSULTA (Solo Juez)
+    // 2. RUTAS DE CONSULTA INTEGRAL (Juez, Jefe de comuna, Jefe de Comando)
+    // -------------------------------------------------------------
+    Route::middleware('role:Juez,Jefe de comuna,Jefe de Comando')->group(function () {
+        Route::get('/consulta', [ConsultaController::class, 'index'])->name('consulta.index');
+        Route::get('/consulta-expediente', [ConsultaController::class, 'index']);
+        Route::get('/consulta/familia/{id}', [ConsultaController::class, 'getFamiliaModal'])->name('consulta.familia');
+    });
+
+    Route::middleware('role:Jefe de comuna,Jefe de Comando')->group(function () {
+        Route::get('/consulta/busqueda-avanzada/pdf', [ConsultaController::class, 'exportarPdf'])->name('consulta.busqueda-avanzada.pdf');
+    });
+
+    // -------------------------------------------------------------
+    // 3. RUTAS DE DENUNCIAS Y CITACIONES (Solo Juez)
     // -------------------------------------------------------------
     Route::middleware('role:Juez')->group(function () {
-        Route::get('/consulta-expediente', [ExpedienteController::class, 'consulta'])->name('consulta.index');
         Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
         Route::resource('denuncias', DenunciasController::class);
         Route::post('/denuncias/posponer-cita', [DenunciasController::class, 'posponerCita'])->name('denuncias.posponer-cita');
@@ -63,6 +77,14 @@ Route::middleware('auth')->group(function () {
         Route::get('usuarios/cambiar-password/{id}/{password}', [UsersController::class, 'cambiarPassword'])->name('cambiar-password');
         Route::get('/usuarios/{id}/edit', [UsersController::class, 'edit'])->name('usuarios.edit');
         Route::put('/usuarios/update/{id}', [UsersController::class, 'update'])->name('usuarios.update');
+
+        // Módulo de Base de Datos (Exportar e Importar)
+        Route::get('/base-datos', [DatabaseBackupController::class, 'index'])->name('database-backup.index');
+        Route::get('/base-datos/exportar', [DatabaseBackupController::class, 'export'])->name('database-backup.export');
+        Route::post('/base-datos/importar', [DatabaseBackupController::class, 'import'])->name('database-backup.import');
+        Route::post('/base-datos/restaurar/{filename}', [DatabaseBackupController::class, 'restore'])->name('database-backup.restore');
+        Route::get('/base-datos/descargar/{filename}', [DatabaseBackupController::class, 'download'])->name('database-backup.download');
+        Route::delete('/base-datos/eliminar/{filename}', [DatabaseBackupController::class, 'destroy'])->name('database-backup.destroy');
     });
 
     // -------------------------------------------------------------

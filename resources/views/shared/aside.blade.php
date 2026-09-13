@@ -57,10 +57,16 @@
                 </li> --}}
 
                 @if (Auth::user()->rol === 'Jefe de comuna')
-                    <li class="nav-item mb-3 mt-3">
+                    <li class="nav-item mt-3">
                         <a class="nav-link @yield('usuariosActive')" href="{{ route('usuarios.index') }}">
                             <i class="icon ri-user-fill"></i>
                             <span class="item-name">Usuarios</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mb-3">
+                        <a class="nav-link @yield('baseDatosActive') {{ request()->routeIs('database-backup.*') ? 'active' : '' }}" href="{{ route('database-backup.index') }}">
+                            <i class="icon ri-database-2-fill"></i>
+                            <span class="item-name">Base de Datos</span>
                         </a>
                     </li>
                 @endif
@@ -140,6 +146,13 @@
                             href="{{ route('censo.index') }}">
                             <i class="icon ri-community-fill"></i>
                             <span class="item-name">Censo</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('consultaActive') {{ request()->routeIs('consulta.*') ? 'active' : '' }}"
+                            href="{{ route('consulta.index') }}">
+                            <i class="icon ri-search-eye-line"></i>
+                            <span class="item-name">Consulta</span>
                         </a>
                     </li>
                     @if (Auth::user()->rol === 'Jefe de comuna')

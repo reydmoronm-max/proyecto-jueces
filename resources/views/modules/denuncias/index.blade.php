@@ -6,10 +6,69 @@
 
 @section('contenido')
     <div class="conatiner-fluid content-inner mt-n5 py-0">
+        <!-- Tarjetas Estadísticas -->
+        <div class="row mb-2">
+            <div class="col-md-3 col-sm-6">
+                <div class="card bg-primary text-white" style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-white-50 text-uppercase mb-1 small fw-bold">Total Denuncias</h6>
+                                <h3 class="text-white fw-bold mb-0">{{ $totalDenuncias }}</h3>
+                            </div>
+                            <i class="fa-solid fa-folder-open opacity-50" style="font-size: 2.2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card text-white bg-success"
+                    style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-white-50 text-uppercase mb-1 small fw-bold">Abiertas</h6>
+                                <h3 class="text-white fw-bold mb-0">{{ $abiertoCount }}</h3>
+                            </div>
+                            <i class="fa-solid fa-ticket opacity-50" style="font-size: 2.2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card bg-warning text-white"
+                    style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-white-50 text-uppercase mb-1 small fw-bold">En proceso</h6>
+                                <h3 class="text-white fw-bold mb-0">{{ $enProcesoCount }}</h3>
+                            </div>
+                            <i class="fa-solid fa-clock opacity-50" style="font-size: 2.2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card bg-light"
+                    style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1 small fw-bold">Cerradas</h6>
+                                <h3 class="fw-bold mb-0">{{ $cerradoCount }}</h3>
+                            </div>
+                            <i class="fa-solid fa-circle-check opacity-50" style="font-size: 2.2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between">
+                    <div class="col-12 card-header d-flex justify-content-between">
                         <div class="header-title">
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarDenuncia">
                                 <i class=" ri-add-fill"></i> Recepcionar denuncia
@@ -19,21 +78,21 @@
                     <i class="ri-question-line"></i>
                 </button> --}}
                         <!-- Botones de pestañas -->
-                        <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                        <ul class="col-md-6 nav nav-tabs nav-fill" id="borderedTab" role="tablist" style="background: #f8f9fa; padding: 6px; border-radius: 10px;">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="abierto-tab" data-bs-toggle="tab"
                                     data-bs-target="#bordered-abierto" type="button" role="tab" aria-controls="abierto"
-                                    aria-selected="true">Abierto</button>
+                                    aria-selected="true"><i class="fa-solid fa-ticket"></i> Abierto</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="enProceso-tab" data-bs-toggle="tab"
                                     data-bs-target="#bordered-enProceso" type="button" role="tab"
-                                    aria-controls="enProceso" aria-selected="false">En proceso</button>
+                                    aria-controls="enProceso" aria-selected="false"><i class="fa-regular fa-clock"></i> En proceso</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="cerrado-tab" data-bs-toggle="tab"
                                     data-bs-target="#bordered-cerrado" type="button" role="tab" aria-controls="cerrado"
-                                    aria-selected="false">Cerrado</button>
+                                    aria-selected="false"><i class="fa-solid fa-circle-check"></i> Cerrado</button>
                             </li>
                         </ul>
                         {{-- Fin de botones de pestañas --}}
@@ -45,7 +104,7 @@
                             <div class="tab-pane fade show active" id="bordered-abierto" role="tabpanel"
                                 aria-labelledby="abierto-tab">
                                 <div class="table-responsive mt-4">
-                                    <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <table id="basic-table" class="table table-striped table-bordered table-striped-columns mb-0" role="grid">
                                         <thead>
                                             <tr>
                                                 <th>Denunciante</th>
@@ -125,7 +184,7 @@
                             <div class="tab-pane fade" id="bordered-enProceso" role="tabpanel"
                                 aria-labelledby="enProceso-tab">
                                 <div class="table-responsive mt-4">
-                                    <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <table id="basic-table" class="table table-striped table-bordered table-striped-columns mb-0" role="grid">
                                         <thead>
                                             <tr>
                                                 <th>Denunciante</th>
@@ -206,7 +265,7 @@
                             {{-- Pestaña "Cerrado" --}}
                             <div class="tab-pane fade" id="bordered-cerrado" role="tabpanel" aria-labelledby="cerrado-tab">
                                 <div class="table-responsive mt-4">
-                                    <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <table id="basic-table" class="table table-striped table-bordered table-striped-columns mb-0" role="grid">
                                         <thead>
                                             <tr>
                                                 <th>Denunciante</th>

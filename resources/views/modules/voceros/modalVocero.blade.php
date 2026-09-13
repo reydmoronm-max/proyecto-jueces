@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalRegistrarVoceroLabel">Registrar vocero</h5>
+                <h5 class="modal-title fw-bold" id="modalRegistrarVoceroLabel">REGISTRAR VOCERO</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-2">
@@ -16,57 +16,49 @@
                         <div class="col-12">
                             <div class="row g-3">
                                 <div class="col-12">
-                                    <div class="form-floating">
-                                        <input id="cedula" type="number" name="cedula"
-                                            class="form-control bg-white" placeholder="Cédula"
-                                            value="{{ old('cedula') }}" required
-                                            oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
-                                        <label for="cedula">Cédula</label>
+                                    <label class="text-primary fw-bold mb-1" for="cedula">CÉDULA</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
+                                        <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ingrese una cédula para buscar" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="nombres"
-                                            id="nombres" placeholder="Nombres" required
-                                            pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios"
-                                            oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                        <label for="nombres">Nombres</label>
+                                    <label class="text-primary fw-bold mb-1" for="nombres">NOMBRE</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                        <input type="text" class="form-control bg-white" name="nombres" id="nombres" placeholder="Juan" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-white" name="apellidos"
-                                            id="apellidos" placeholder="Apellidos" required
-                                            pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios"
-                                            oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
-                                        <label for="apellidos">Apellidos</label>
+                                    <label class="text-primary fw-bold mb-1" for="apellidos">APELLIDO</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                        <input type="text" class="form-control bg-white" name="apellidos" id="apellidos" placeholder="García" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-12">
-                                    <div class="form-floating">
-                                        <select name="categoria_vocero" id="categoria_vocero"
-                                            class="form-select bg-white" required>
-                                            <option value="" selected disabled>Seleccione una categoría</option>
+                                    <label class="text-primary fw-bold mb-1" for="categoria_vocero">CATEGORÍA</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-tag"></i></span>
+                                        <select name="categoria_vocero" id="categoria_vocero" class="form-select bg-white" required>
+                                            <option value="" selected disabled>Elija una categoría</option>
                                             @foreach ($categorias as $cat)
                                                 <option value="{{ $cat->nombre }}">{{ $cat->nombre }}</option>
                                             @endforeach
                                         </select>
-                                        <label for="categoria_vocero">Categoría</label>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-12">
+                                    <label class="text-primary fw-bold mb-1" for="fecha_eleccion">FECHA DE ELECCIÓN</label>
                                     <div class="form-group">
-                                        <label class="mb-2" for="fecha_eleccion">Fecha de elección</label>
                                         <div class="input-group wrap_flatpicker" data-min-date="none">
-                                            <input required type="text" name="fecha_eleccion"
-                                                class="form-control bg-white" placeholder="Fecha de elección"
-                                                data-input>
-                                            <a class="input-group-text input-button bg-white" title="limpiar" data-clear
-                                                href="javascript:void(0)">
+                                            <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
+                                            <input required type="text" name="fecha_eleccion" class="form-control bg-white" placeholder="Indique la fecha de elección" data-input>
+                                            <a class="input-group-text input-button bg-white" title="limpiar" data-clear href="javascript:void(0)">
                                                 <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg"
                                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
