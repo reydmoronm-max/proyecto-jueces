@@ -76,12 +76,24 @@
                             </button>
                         </div>
                         <div class="d-flex align-items-center">
-                            <form action="{{ route('proyectos.index') }}" method="GET" class="d-flex gap-2">
-                                <input type="text" name="search" class="form-control"
+                            <form action="{{ route('proyectos.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2">
+                                <div>
+                                    <label for="estatus_proyecto" class="form-label small text-muted fw-bold mb-1">Estatus del Proyecto</label>
+                                    <select name="estatus_proyecto" id="estatus_proyecto" class="form-select">
+                                        <option value="">Todos los estatus</option>
+                                        <option value="Completado" {{ $estatusProyecto === 'Completado' ? 'selected' : '' }}>Completados</option>
+                                        <option value="En planificación" {{ $estatusProyecto === 'En planificación' ? 'selected' : '' }}>En planificación</option>
+                                        <option value="Paralizado" {{ $estatusProyecto === 'Paralizado' ? 'selected' : '' }}>Paralizados</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="search" class="form-label small text-muted fw-bold mb-1">Buscar proyecto</label>
+                                <input type="text" name="search" id="search" class="form-control"
                                     placeholder="Buscar por nombre, sector, responsable..." value="{{ request('search') }}"
                                     style="min-width: 280px;">
+                                </div>
                                 <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if (request('search'))
+                                @if ($search !== '' || $estatusProyecto !== '')
                                     <a href="{{ route('proyectos.index') }}" class="btn btn-secondary">Limpiar</a>
                                 @endif
                             </form>

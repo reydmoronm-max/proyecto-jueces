@@ -8,12 +8,38 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div class="header-title">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarConsejo">
                             <i class="ri-add-fill"></i> Registrar Consejo Comunal
                         </button>
                     </div>
+                    <form action="{{ route('consejos-comunales.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2 ms-auto">
+                        <div>
+                            <label for="nombre_consejo" class="form-label small text-muted fw-bold">Nombre del Consejo</label>
+                            <select name="nombre_consejo" id="nombre_consejo" class="form-select bg-white">
+                                <option value="">Todos los consejos</option>
+                                @foreach ($consejos as $consejo)
+                                    <option value="{{ $consejo->nombre }}" {{ $nombreConsejo === $consejo->nombre ? 'selected' : '' }}>
+                                        {{ $consejo->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="cedula_jefe" class="form-label small text-muted fw-bold">Cédula del Jefe de Comando</label>
+                            <input type="text" name="cedula_jefe" id="cedula_jefe" class="form-control bg-white"
+                                placeholder="Buscar por cédula" value="{{ $cedulaJefe }}" maxlength="8" inputmode="numeric" style="min-width: 190px;">
+                        </div>
+                        <div class="d-flex gap-2 pb-1">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ri-search-line"></i> Buscar
+                            </button>
+                            @if ($nombreConsejo !== '' || $cedulaJefe !== '')
+                                <a href="{{ route('consejos-comunales.index') }}" class="btn btn-secondary">Limpiar</a>
+                            @endif
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive mt-4">

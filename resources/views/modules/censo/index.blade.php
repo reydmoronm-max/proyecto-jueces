@@ -16,12 +16,44 @@
                             </button>
                         </div>
                         <div class="d-flex align-items-center">
-                            <form action="{{ route('censo.index') }}" method="GET" class="d-flex gap-2">
-                                <input type="text" name="search" class="form-control"
+                            <form action="{{ route('censo.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2">
+                                <div>
+                                    <label for="consejo_comunal_id" class="form-label small text-muted fw-bold mb-1">Consejo Comunidad</label>
+                                    <select name="consejo_comunal_id" id="consejo_comunal_id" class="form-select">
+                                        <option value="">Todos los consejos</option>
+                                        @foreach ($consejosComunales as $consejo)
+                                            <option value="{{ $consejo->id }}" {{ $consejoComunalId === (string) $consejo->id ? 'selected' : '' }}>
+                                                {{ $consejo->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="tipo_vivienda" class="form-label small text-muted fw-bold mb-1">Tipo de vivienda</label>
+                                    <select name="tipo_vivienda" id="tipo_vivienda" class="form-select">
+                                        <option value="">Todos los tipos</option>
+                                        <option value="Propia" {{ $tipoVivienda === 'Propia' ? 'selected' : '' }}>Propias</option>
+                                        <option value="Prestada" {{ $tipoVivienda === 'Prestada' ? 'selected' : '' }}>Prestadas</option>
+                                        <option value="Alquilada" {{ $tipoVivienda === 'Alquilada' ? 'selected' : '' }}>Alquiladas</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="beneficio" class="form-label small text-muted fw-bold mb-1">Beneficios</label>
+                                    <select name="beneficio" id="beneficio" class="form-select">
+                                        <option value="">Todos los beneficios</option>
+                                        <option value="clap" {{ $beneficio === 'clap' ? 'selected' : '' }}>Recibe CLAP</option>
+                                        <option value="bono_familiar" {{ $beneficio === 'bono_familiar' ? 'selected' : '' }}>Recibe Bono Familiar</option>
+                                        <option value="ninguno" {{ $beneficio === 'ninguno' ? 'selected' : '' }}>Ningún beneficio</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="search" class="form-label small text-muted fw-bold mb-1">Buscar</label>
+                                <input type="text" name="search" id="search" class="form-control"
                                     placeholder="Buscar por familia, cédula, nombre, comunidad..." value="{{ request('search') }}"
                                     style="min-width: 280px;">
+                                </div>
                                 <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if (request('search'))
+                                @if ($search !== '' || $consejoComunalId !== '' || $tipoVivienda !== '' || $beneficio !== '')
                                     <a href="{{ route('censo.index') }}" class="btn btn-secondary">Limpiar</a>
                                 @endif
                             </form>

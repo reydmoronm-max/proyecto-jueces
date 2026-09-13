@@ -1,4 +1,4 @@
-@foreach ($items as $item)
+@forelse ($items as $item)
     <tr>
         <td>
             <div class="d-flex align-items-center">
@@ -45,4 +45,11 @@
             </div>
         </td>
     </tr>
-@endforeach
+@empty
+    <tr>
+        <td colspan="5" class="text-center py-4 text-muted">
+            <i class="ri-search-line fs-3 d-block mb-2"></i>
+            No se encontraron consejos comunales con los filtros indicados.
+        </td>
+    </tr>
+@endforelse

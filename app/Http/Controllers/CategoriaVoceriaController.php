@@ -18,14 +18,21 @@ class CategoriaVoceriaController extends Controller
         $paginaSubtitulo = 'Gestión de categorías para las vocerías comunitarias.';
         $categoriaVoceriasActive = 'active';
 
-        $search = $request->input('search');
+        $search = trim((string) $request->input('search', ''));
+        $estadoCategoria = (string) $request->input('estado_categoria', '');
         $query = CategoriaVoceria::query();
 
-        if ($search) {
+        if ($search !== '') {
             $query->where(function ($q) use ($search) {
                 $q->where('nombre', 'LIKE', '%' . $search . '%')
                   ->orWhere('descripcion', 'LIKE', '%' . $search . '%');
             });
+        }
+
+        if (in_array($estadoCategoria, ['0', '1'], true)) {
+            $query->where('activo', $estadoCategoria === '1');
+        } else {
+            $estadoCategoria = '';
         }
 
         $items = $query->orderBy('created_at', 'desc')->get();
@@ -35,7 +42,9 @@ class CategoriaVoceriaController extends Controller
             'paginaTitulo',
             'paginaSubtitulo',
             'categoriaVoceriasActive',
-            'items'
+            'items',
+            'search',
+            'estadoCategoria'
         ));
     }
 

@@ -118,7 +118,7 @@
                                                 <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-filter"></i> Filtrar</button>
                                                 @if (request('search') || request('consejo_comunal_id'))
                                                     <a href="{{ route('circulo-abuelos.index') }}" class="btn btn-secondary"
-                                                        title="Limpiar Filtros"><i class="ri-refresh-line"></i></a>
+                                                        title="Limpiar Filtros">Limpiar</a>
                                                 @endif
                                             </div>
                                         </form>

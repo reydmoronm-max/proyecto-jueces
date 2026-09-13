@@ -13,14 +13,26 @@ class ConsejoComunalController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $titulo = 'Consejos Comunales';
         $paginaTitulo = 'Consejos Comunales';
         $paginaSubtitulo = 'Listado de consejos comunales registrados.';
 
-        $items = ConsejoComunal::with('jefe')->orderBy('created_at', 'desc')->get();
-        return view('modules.consejos_comunales.index', compact('titulo', 'paginaTitulo', 'paginaSubtitulo', 'items'));
+        $items = $this->consultaConsejos($request)->get();
+        $consejos = ConsejoComunal::orderBy('nombre')->get(['nombre']);
+        $nombreConsejo = $request->input('nombre_consejo', '');
+        $cedulaJefe = $request->input('cedula_jefe', '');
+
+        return view('modules.consejos_comunales.index', compact(
+            'titulo',
+            'paginaTitulo',
+            'paginaSubtitulo',
+            'items',
+            'consejos',
+            'nombreConsejo',
+            'cedulaJefe'
+        ));
     }
 
     /**
@@ -126,10 +138,24 @@ class ConsejoComunalController extends Controller
     /**
      * Return tbody partial with items.
      */
-    public function tbody()
+    public function tbody(Request $request)
     {
-        $items = ConsejoComunal::with('jefe')->orderBy('created_at', 'desc')->get();
+        $items = $this->consultaConsejos($request)->get();
         return view('modules.consejos_comunales.tbody', compact('items'));
+    }
+
+    private function consultaConsejos(Request $request)
+    {
+        return ConsejoComunal::with('jefe')
+            ->when($request->filled('nombre_consejo'), function ($query) use ($request) {
+                $query->where('nombre', 'like', '%' . $request->input('nombre_consejo') . '%');
+            })
+            ->when($request->filled('cedula_jefe'), function ($query) use ($request) {
+                $query->whereHas('jefe', function ($jefeQuery) use ($request) {
+                    $jefeQuery->where('cedula', $request->input('cedula_jefe'));
+                });
+            })
+            ->orderBy('created_at', 'desc');
     }
 
     /**
