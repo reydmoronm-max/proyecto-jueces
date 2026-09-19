@@ -12,6 +12,7 @@ use App\Http\Controllers\VisitasController;
 use App\Http\Controllers\ConsejoComunalController;
 use App\Http\Controllers\VocerosController;
 use App\Http\Controllers\CategoriaVoceriaController;
+use App\Http\Controllers\CatalogoCensoController;
 use App\Http\Controllers\CensoController;
 use App\Http\Controllers\CirculoAbuelosController;
 use App\Http\Controllers\ProyectosController;
@@ -105,6 +106,15 @@ Route::middleware('auth')->group(function () {
         Route::resource('categoria-vocerias', CategoriaVoceriaController::class);
 
         // Censo
+        Route::get('/censo/catalogos', [CatalogoCensoController::class, 'index'])->name('censo.catalogos.index');
+        Route::post('/censo/catalogos/enfermedades', [CatalogoCensoController::class, 'storeEnfermedad'])->name('censo.enfermedades.store');
+        Route::put('/censo/catalogos/enfermedades/{id}', [CatalogoCensoController::class, 'updateEnfermedad'])->name('censo.enfermedades.update');
+        Route::delete('/censo/catalogos/enfermedades/{id}', [CatalogoCensoController::class, 'destroyEnfermedad'])->name('censo.enfermedades.destroy');
+
+        Route::post('/censo/catalogos/profesiones', [CatalogoCensoController::class, 'storeProfesion'])->name('censo.profesiones.store');
+        Route::put('/censo/catalogos/profesiones/{id}', [CatalogoCensoController::class, 'updateProfesion'])->name('censo.profesiones.update');
+        Route::delete('/censo/catalogos/profesiones/{id}', [CatalogoCensoController::class, 'destroyProfesion'])->name('censo.profesiones.destroy');
+
         Route::get('/censo/buscar-persona', [CensoController::class, 'buscarPersona'])->name('censo.buscar-persona');
         Route::post('/censo/integrante/store', [CensoController::class, 'storeIntegrante'])->name('censo.integrante.store');
         Route::get('/censo/integrante/{id}', [CensoController::class, 'showIntegrante'])->name('censo.integrante.show');
