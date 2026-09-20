@@ -23,11 +23,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-            $todayCount = Citaciones::whereDate('fecha_citacion', Carbon::today())
+            $todayCitations = Citaciones::whereDate('fecha_citacion', Carbon::today())
                 ->where('estatus', true)
-                ->count();
+                ->orderBy('hora_citacion')
+                ->get(['id', 'hora_citacion']);
 
-            $view->with('citacionesHoyPendientesCount', $todayCount);
+            $view->with('citacionesHoyPendientesCount', $todayCitations->count());
+            $view->with('citacionesHoyNotificaciones', $todayCitations);
         });
     }
 }

@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
     // -------------------------------------------------------------
     // 1. RUTAS DE VISITAS (Juez, Jefe de comuna, Jefe de Comando)
     // -------------------------------------------------------------
-    Route::middleware('role:Juez,Jefe de comuna,Jefe de Comando')->group(function () {
+    Route::middleware(['role:Juez,Jefe de comuna,Jefe de Comando', 'censo.juez'])->group(function () {
         Route::resource('/visitas', VisitasController::class);
         Route::get('/tbody-visitas', [VisitasController::class, 'tbody'])->name('tbody.visitas');
         Route::get('denuncias/acta-recepcion-pdf/{id}', [DenunciasController::class, 'exportarActaRecepcionPdf'])->name('denuncias.exportar-acta-recepcion');
@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
     // -------------------------------------------------------------
     // 2. RUTAS DE CONSULTA INTEGRAL (Juez, Jefe de comuna, Jefe de Comando)
     // -------------------------------------------------------------
-    Route::middleware('role:Juez,Jefe de comuna,Jefe de Comando')->group(function () {
+    Route::middleware(['role:Juez,Jefe de comuna,Jefe de Comando', 'censo.juez'])->group(function () {
         Route::get('/consulta', [ConsultaController::class, 'index'])->name('consulta.index');
         Route::get('/consulta-expediente', [ConsultaController::class, 'index']);
         Route::get('/consulta/familia/{id}', [ConsultaController::class, 'getFamiliaModal'])->name('consulta.familia');
@@ -56,7 +56,7 @@ Route::middleware('auth')->group(function () {
     // -------------------------------------------------------------
     // 3. RUTAS DE DENUNCIAS Y CITACIONES (Solo Juez)
     // -------------------------------------------------------------
-    Route::middleware('role:Juez')->group(function () {
+    Route::middleware(['role:Juez', 'censo.juez'])->group(function () {
         Route::get('/denuncias/buscar-persona', [DenunciasController::class, 'buscarPersona'])->name('denuncias.buscar-persona');
         Route::resource('denuncias', DenunciasController::class);
         Route::post('/denuncias/posponer-cita', [DenunciasController::class, 'posponerCita'])->name('denuncias.posponer-cita');

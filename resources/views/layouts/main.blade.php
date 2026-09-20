@@ -230,6 +230,8 @@
         </div>
     </div>
 
+        @include('shared.citaciones-notificaciones')
+
     <!-- Library Bundle Script -->
     <script src={{ asset('js/core/libs.min.js') }}></script>
     

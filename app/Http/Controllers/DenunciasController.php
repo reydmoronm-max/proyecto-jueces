@@ -10,6 +10,7 @@ use App\Models\Expediente;
 use App\Models\Involucrados;
 use App\Models\Actas;
 use App\Models\Citaciones;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -243,6 +244,13 @@ class DenunciasController extends Controller
             'solicita_por' => 'required|in:denunciante,denunciado',
         ]);
 
+        $fecha = Carbon::parse(str_replace('/', '-', $request->fecha_citacion))->format('Y-m-d');
+        $hora = Carbon::parse($request->hora_citacion)->format('H:i');
+
+        if (Carbon::createFromFormat('Y-m-d H:i', $fecha . ' ' . $hora)->isPast()) {
+            return redirect()->back()->with('validar', 'No se puede agendar una citación en una fecha u hora pasada.');
+        }
+
         DB::beginTransaction();
         try {
             // Solo crear/obtener persona si se enviaron datos de persona (cedula)
@@ -272,11 +280,6 @@ class DenunciasController extends Controller
             }
 
             // Crear nueva cita, pero primero validar hora
-            $fecha = $request->fecha_citacion;
-            $hora = $request->hora_citacion;
-            $fecha = \Carbon\Carbon::parse(str_replace('/', '-', $fecha))->format('Y-m-d');
-            $hora  = \Carbon\Carbon::parse($hora)->format('H:i');
-
             $validarHora = Citaciones::where('fecha_citacion', $fecha)->where('hora_citacion', $hora)->where('estatus', true)->first();
 
             if ($validarHora) {

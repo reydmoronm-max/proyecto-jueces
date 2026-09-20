@@ -34,7 +34,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach($citaciones as $citacion)
+                        @forelse($citaciones as $citacion)
                             @php
                                 $denunciantesList = $citacion->expediente->personas;
                                 $denunciante = $denunciantesList->first();
@@ -89,7 +89,14 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-5 text-center text-muted">
+                                    <i class="ri-calendar-close-line d-block mb-2" style="font-size: 2rem;"></i>
+                                    No hay citas agendadas para el dia de hoy
+                                </td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -193,6 +200,74 @@
         });
 
         $(document).ready(function() {
+            var modalCitaNueva = document.getElementById('modalCitaNueva');
+            var fpHoraNueva = null;
+            var fpFechaNueva = null;
+
+            if (modalCitaNueva) {
+                modalCitaNueva.addEventListener('shown.bs.modal', function() {
+                    var horaInput = modalCitaNueva.querySelector('.time_flatpicker');
+                    var fechaWrap = modalCitaNueva.querySelector('.wrap_flatpicker');
+                    var fechaInput = fechaWrap ? fechaWrap.querySelector('[data-input]') : null;
+
+                    if (horaInput && !horaInput._flatpickr) {
+                        fpHoraNueva = flatpickr(horaInput, {
+                            enableTime: true,
+                            noCalendar: true,
+                            dateFormat: 'h:i K',
+                            time_24hr: false,
+                            appendTo: document.body
+                        });
+                    }
+
+                    if (fechaWrap && fechaInput && !fechaInput._flatpickr) {
+                        fpFechaNueva = flatpickr(fechaWrap, {
+                            wrap: true,
+                            dateFormat: 'd/m/Y',
+                            minDate: 'today',
+                            locale: {
+                                firstDayOfWeek: 1
+                            },
+                            appendTo: document.body
+                        });
+                    }
+                });
+
+                modalCitaNueva.addEventListener('hidden.bs.modal', function() {
+                    if (fpHoraNueva) fpHoraNueva.clear();
+                    if (fpFechaNueva) fpFechaNueva.clear();
+                });
+            }
+
+            $('#formCitaNueva').on('submit', function(e) {
+                var formulario = this;
+                var fechaSeleccionada = fpFechaNueva && fpFechaNueva.selectedDates[0];
+                var horaSeleccionada = fpHoraNueva && fpHoraNueva.selectedDates[0];
+
+                if (!fechaSeleccionada || !horaSeleccionada) {
+                    return;
+                }
+
+                var fechaHoraCita = new Date(
+                    fechaSeleccionada.getFullYear(),
+                    fechaSeleccionada.getMonth(),
+                    fechaSeleccionada.getDate(),
+                    horaSeleccionada.getHours(),
+                    horaSeleccionada.getMinutes()
+                );
+
+                if (fechaHoraCita <= new Date()) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Fecha u hora no valida',
+                        text: 'La nueva citacion debe ser posterior a la fecha y hora actual.',
+                        icon: 'warning',
+                        confirmButtonText: 'Aceptar'
+                    });
+                    formulario.querySelector('[name="fecha_citacion"]').focus();
+                }
+            });
+
             $('#formCita').on('submit', function(e) {
                 var expedienteId = $('#cita_expediente_id').val().trim();
                 var fecha = $('[name="fecha_citacion"]').val().trim();
@@ -240,6 +315,15 @@
                 title: '¡Error!',
                 text: '{{ session('error') }}',
                 icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        @endif
+
+        @if (session('validar'))
+            Swal.fire({
+                title: 'Cita no valida',
+                text: '{{ session('validar') }}',
+                icon: 'warning',
                 confirmButtonText: 'Aceptar'
             });
         @endif
