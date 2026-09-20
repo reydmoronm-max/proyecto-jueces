@@ -17,6 +17,7 @@ use App\Http\Controllers\CirculoAbuelosController;
 use App\Http\Controllers\ProyectosController;
 use App\Http\Controllers\CensoDemograficoController;
 use App\Http\Controllers\DatabaseBackupController;
+use App\Http\Controllers\AuditoriaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/crear-admin', [AuthController::class, 'crearAdmin'])->name('crear-admin');
@@ -85,6 +86,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/base-datos/restaurar/{filename}', [DatabaseBackupController::class, 'restore'])->name('database-backup.restore');
         Route::get('/base-datos/descargar/{filename}', [DatabaseBackupController::class, 'download'])->name('database-backup.download');
         Route::delete('/base-datos/eliminar/{filename}', [DatabaseBackupController::class, 'destroy'])->name('database-backup.destroy');
+
+        // Módulo de Auditoría
+        Route::get('/auditoria', [AuditoriaController::class, 'index'])->name('auditoria.index');
+        Route::get('/auditoria/detalle/{id}', [AuditoriaController::class, 'show'])->name('auditoria.show');
+        Route::post('/auditoria/depurar', [AuditoriaController::class, 'purge'])->name('auditoria.purge');
+        Route::get('/auditoria/pdf', [AuditoriaController::class, 'exportPdf'])->name('auditoria.pdf');
     });
 
     // -------------------------------------------------------------

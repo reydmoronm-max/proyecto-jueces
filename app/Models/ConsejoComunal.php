@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class ConsejoComunal extends Model
+class ConsejoComunal extends Model implements Auditable
 {
+    use AuditableTrait;
+
     protected $table = 'consejos_comunales';
     protected $fillable = [
         'nombre',

@@ -63,10 +63,16 @@
                             <span class="item-name">Usuarios</span>
                         </a>
                     </li>
-                    <li class="nav-item mb-3">
+                    <li class="nav-item">
                         <a class="nav-link @yield('baseDatosActive') {{ request()->routeIs('database-backup.*') ? 'active' : '' }}" href="{{ route('database-backup.index') }}">
                             <i class="icon ri-database-2-fill"></i>
                             <span class="item-name">Base de Datos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mb-3">
+                        <a class="nav-link @yield('auditoriaActive') {{ request()->routeIs('auditoria.*') ? 'active' : '' }}" href="{{ route('auditoria.index') }}">
+                            <i class="icon ri-shield-check-fill"></i>
+                            <span class="item-name">Auditoría</span>
                         </a>
                     </li>
                 @endif
