@@ -145,8 +145,10 @@
 
         function agregar_id_expediente_conciliar(id){
             $('#cita_expediente_id_conciliar').val(id);
+            window.conciliacionDenuncianteCedula = null;
             // Consultar si el expediente ya tiene un involucrado con rol 'denunciado'
             $.get('/expedientes/' + id + '/tiene-denunciado', function(response) {
+                window.conciliacionDenuncianteCedula = response.denuncianteCedula ? String(response.denuncianteCedula) : null;
                 if (response.hasDenunciado) {
                     // Ocultar y deshabilitar campos de datos personales si ya existe denunciado
                     $('#datos_denunciado_container').hide();

@@ -171,11 +171,11 @@ class DenunciasController extends Controller
 
         $persona = Persona::where('cedula', $request->cedula)
             ->where('cedula_tipo', 'V')
-            ->whereHas('visitas')
+            ->whereHas('familia')
             ->first();
 
         if (!$persona) {
-            return response()->json(['message' => 'Persona no encontrada en visitas'], 404);
+            return response()->json(['message' => 'Persona no encontrada en el censo'], 404);
         }
 
         return response()->json([

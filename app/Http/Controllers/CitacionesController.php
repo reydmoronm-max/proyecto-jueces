@@ -159,10 +159,20 @@ class CitacionesController extends Controller
     public function tieneDenunciado($id)
     {
         $involucrado = Involucrados::with('persona')->where('expediente_id', $id)->where('rol', 'denunciado')->first();
+        $denunciante = Involucrados::with('persona')->where('expediente_id', $id)->where('rol', 'denunciante')->first();
+
         if ($involucrado) {
-            return response()->json(['hasDenunciado' => true, 'persona' => $involucrado->persona]);
+            return response()->json([
+                'hasDenunciado' => true,
+                'persona' => $involucrado->persona,
+                'denuncianteCedula' => $denunciante?->persona?->cedula,
+            ]);
         }
-        return response()->json(['hasDenunciado' => false]);
+
+        return response()->json([
+            'hasDenunciado' => false,
+            'denuncianteCedula' => $denunciante?->persona?->cedula,
+        ]);
     }
 
     // Guarda el acta de conciliación y cierra el expediente
@@ -171,6 +181,27 @@ class CitacionesController extends Controller
         $request->validate([
             'expediente_id' => 'required|integer',
         ]);
+
+        $denuncianteCedulas = Involucrados::where('expediente_id', $request->expediente_id)
+            ->where('rol', 'denunciante')
+            ->with('persona:id,cedula')
+            ->get()
+            ->pluck('persona.cedula')
+            ->filter()
+            ->map(fn ($cedula) => (string) $cedula);
+
+        $cedulasDenunciados = collect($request->input('denunciados', []))
+            ->pluck('cedula')
+            ->filter()
+            ->map(fn ($cedula) => (string) $cedula);
+
+        if ($request->filled('cedula')) {
+            $cedulasDenunciados->push((string) $request->cedula);
+        }
+
+        if ($cedulasDenunciados->intersect($denuncianteCedulas)->isNotEmpty()) {
+            return redirect()->back()->with('error', '¡No puedes denunciarte a ti mismo!');
+        }
 
         DB::beginTransaction();
         try {
