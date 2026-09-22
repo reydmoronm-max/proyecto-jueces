@@ -54,6 +54,11 @@
                                                     {{ session('success') }}
                                                 </div>
                                             @endif
+                                            @if (session('error'))
+                                                <div class="alert alert-warning mt-4">
+                                                    {{ session('error') }}
+                                                </div>
+                                            @endif
                                             @if ($errors->any())
                                                 <div class="mt-4" style="color: rgb(158, 0, 0);">
                                                     <ul>

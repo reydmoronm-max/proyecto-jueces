@@ -7,6 +7,7 @@ use App\Models\Expediente;
 use App\Models\Involucrados;
 use App\Models\Persona;
 use App\Models\Actas;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -56,6 +57,10 @@ class CitacionesController extends Controller
         $data = $request->all();
         $data['fecha_citacion'] = \Carbon\Carbon::parse(str_replace('/', '-', $data['fecha_citacion']))->format('Y-m-d');
         $data['hora_citacion']  = \Carbon\Carbon::parse($data['hora_citacion'])->format('H:i');
+
+        if (Carbon::createFromFormat('Y-m-d H:i', $data['fecha_citacion'] . ' ' . $data['hora_citacion'])->isPast()) {
+            return redirect()->back()->with('validar', 'No se puede agendar una citación en una fecha u hora pasada.');
+        }
 
 
         $validarHora = Citaciones::where('fecha_citacion', $data['fecha_citacion'])
@@ -114,6 +119,14 @@ class CitacionesController extends Controller
 
     public function marcarInasistente(Request $request)
     {
+        $data = $request->all();
+        $data['fecha_citacion'] = \Carbon\Carbon::parse(str_replace('/', '-', $data['fecha_citacion']))->format('Y-m-d');
+        $data['hora_citacion']  = \Carbon\Carbon::parse($data['hora_citacion'])->format('H:i');
+
+        if (Carbon::createFromFormat('Y-m-d H:i', $data['fecha_citacion'] . ' ' . $data['hora_citacion'])->isPast()) {
+            return redirect()->back()->with('validar', 'No se puede agendar una citación en una fecha u hora pasada.');
+        }
+
         $citacion = Citaciones::where('expediente_id', $request->expediente_id)->where('estatus', true)->first();
         
         if($citacion) {
@@ -122,10 +135,6 @@ class CitacionesController extends Controller
             $citacion->estatus = false;
             $citacion->save();
         }
-
-        $data = $request->all();
-        $data['fecha_citacion'] = \Carbon\Carbon::parse(str_replace('/', '-', $data['fecha_citacion']))->format('Y-m-d');
-        $data['hora_citacion']  = \Carbon\Carbon::parse($data['hora_citacion'])->format('H:i');
 
         $validarHora = Citaciones::where('fecha_citacion', $data['fecha_citacion'])
             ->where('hora_citacion', $data['hora_citacion'])
@@ -150,10 +159,20 @@ class CitacionesController extends Controller
     public function tieneDenunciado($id)
     {
         $involucrado = Involucrados::with('persona')->where('expediente_id', $id)->where('rol', 'denunciado')->first();
+        $denunciante = Involucrados::with('persona')->where('expediente_id', $id)->where('rol', 'denunciante')->first();
+
         if ($involucrado) {
-            return response()->json(['hasDenunciado' => true, 'persona' => $involucrado->persona]);
+            return response()->json([
+                'hasDenunciado' => true,
+                'persona' => $involucrado->persona,
+                'denuncianteCedula' => $denunciante?->persona?->cedula,
+            ]);
         }
-        return response()->json(['hasDenunciado' => false]);
+
+        return response()->json([
+            'hasDenunciado' => false,
+            'denuncianteCedula' => $denunciante?->persona?->cedula,
+        ]);
     }
 
     // Guarda el acta de conciliación y cierra el expediente
@@ -162,6 +181,27 @@ class CitacionesController extends Controller
         $request->validate([
             'expediente_id' => 'required|integer',
         ]);
+
+        $denuncianteCedulas = Involucrados::where('expediente_id', $request->expediente_id)
+            ->where('rol', 'denunciante')
+            ->with('persona:id,cedula')
+            ->get()
+            ->pluck('persona.cedula')
+            ->filter()
+            ->map(fn ($cedula) => (string) $cedula);
+
+        $cedulasDenunciados = collect($request->input('denunciados', []))
+            ->pluck('cedula')
+            ->filter()
+            ->map(fn ($cedula) => (string) $cedula);
+
+        if ($request->filled('cedula')) {
+            $cedulasDenunciados->push((string) $request->cedula);
+        }
+
+        if ($cedulasDenunciados->intersect($denuncianteCedulas)->isNotEmpty()) {
+            return redirect()->back()->with('error', '¡No puedes denunciarte a ti mismo!');
+        }
 
         DB::beginTransaction();
         try {

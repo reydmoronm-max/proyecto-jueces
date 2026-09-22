@@ -36,7 +36,7 @@
                                             <label class="text-primary fw-bold mb-1">TELÉFONO</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
-                                                <input type="number" name="denunciados[0][telefono]" class="form-control bg-white" placeholder="0412XXXXXXX" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
+                                                <input type="number" name="denunciados[0][telefono]" class="form-control bg-light" placeholder="0412XXXXXXX" required readonly oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">
                                             </div>
                                         </div>
 
@@ -44,7 +44,7 @@
                                             <label class="text-primary fw-bold mb-1">NOMBRE</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                                <input type="text" class="form-control bg-white" name="denunciados[0][nombres]" placeholder="Juan" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
+                                                <input type="text" class="form-control bg-light" name="denunciados[0][nombres]" placeholder="Juan" required readonly pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                             </div>
                                         </div>
 
@@ -52,7 +52,7 @@
                                             <label class="text-primary fw-bold mb-1">APELLIDO</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                                <input type="text" class="form-control bg-white" name="denunciados[0][apellidos]" placeholder="García" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
+                                                <input type="text" class="form-control bg-light" name="denunciados[0][apellidos]" placeholder="García" required readonly pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
                                             </div>
                                         </div>
 
@@ -60,7 +60,7 @@
                                             <label class="text-primary fw-bold mb-1">DIRECCIÓN</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fa-solid fa-house-chimney"></i></span>
-                                                <input type="text" class="form-control bg-white" name="denunciados[0][direccion]" placeholder="Calle 1, Casa N° 23, Sector 4" required>
+                                                <input type="text" class="form-control bg-light" name="denunciados[0][direccion]" placeholder="Calle 1, Casa N° 23, Sector 4" required readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -144,28 +144,28 @@
                         '<label class="text-primary fw-bold mb-1">TELÉFONO</label>' +
                         '<div class="input-group">' +
                             '<span class="input-group-text"><i class="fa-solid fa-phone"></i></span>' +
-                            '<input type="number" name="denunciados[' + idx + '][telefono]" class="form-control bg-white" placeholder="0412XXXXXXX" required oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">' +
+                            '<input type="number" name="denunciados[' + idx + '][telefono]" class="form-control bg-light" placeholder="0412XXXXXXX" required readonly oninput="if(this.value.length>11)this.value=this.value.slice(0,11)">' +
                         '</div>' +
                     '</div>' +
                     '<div class="col-12 col-md-6">' +
                         '<label class="text-primary fw-bold mb-1">NOMBRE</label>' +
                         '<div class="input-group">' +
                             '<span class="input-group-text"><i class="fa-solid fa-user"></i></span>' +
-                            '<input type="text" class="form-control bg-white" name="denunciados[' + idx + '][nombres]" placeholder="Juan" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
+                            '<input type="text" class="form-control bg-light" name="denunciados[' + idx + '][nombres]" placeholder="Juan" required readonly pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
                         '</div>' +
                     '</div>' +
                     '<div class="col-12 col-md-6">' +
                         '<label class="text-primary fw-bold mb-1">APELLIDO</label>' +
                         '<div class="input-group">' +
                             '<span class="input-group-text"><i class="fa-solid fa-user"></i></span>' +
-                            '<input type="text" class="form-control bg-white" name="denunciados[' + idx + '][apellidos]" placeholder="García" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
+                            '<input type="text" class="form-control bg-light" name="denunciados[' + idx + '][apellidos]" placeholder="García" required readonly pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, \'\')">' +
                         '</div>' +
                     '</div>' +
                     '<div class="col-12">' +
                         '<label class="text-primary fw-bold mb-1">DIRECCIÓN</label>' +
                         '<div class="input-group">' +
                             '<span class="input-group-text"><i class="fa-solid fa-house-chimney"></i></span>' +
-                            '<input type="text" class="form-control bg-white" name="denunciados[' + idx + '][direccion]" placeholder="Calle 1, Casa N° 23, Sector 4" required>' +
+                            '<input type="text" class="form-control bg-light" name="denunciados[' + idx + '][direccion]" placeholder="Calle 1, Casa N° 23, Sector 4" required readonly>' +
                         '</div>' +
                     '</div>' +
                     '</div>';
@@ -174,6 +174,23 @@
 
             var cedulaInput = block.querySelector('.denunciado-cedula');
             if (cedulaInput) {
+                cedulaInput.addEventListener('input', function() {
+                    if (window.conciliacionDenuncianteCedula && this.value.trim() === window.conciliacionDenuncianteCedula) {
+                        this.setCustomValidity('¡No puedes denunciarte a ti mismo!');
+                        Swal.fire({
+                            title: 'Validación',
+                            text: '¡No puedes denunciarte a ti mismo!',
+                            icon: 'warning',
+                            confirmButtonText: 'Aceptar'
+                        });
+                        return;
+                    }
+
+                    this.setCustomValidity('');
+                    if (/^[0-9]{7,8}$/.test(this.value.trim())) {
+                        buscarDenunciadoPorCedulaEnBloque(block);
+                    }
+                });
                 cedulaInput.addEventListener('blur', function() {
                     buscarDenunciadoPorCedulaEnBloque(block);
                 });
@@ -190,6 +207,24 @@
 
         var primerCedula = container.querySelector('.denunciado-cedula');
         if (primerCedula) {
+            primerCedula.addEventListener('input', function() {
+                if (window.conciliacionDenuncianteCedula && this.value.trim() === window.conciliacionDenuncianteCedula) {
+                    this.setCustomValidity('¡No puedes denunciarte a ti mismo!');
+                    Swal.fire({
+                        title: 'Validación',
+                        text: '¡No puedes denunciarte a ti mismo!',
+                        icon: 'warning',
+                        confirmButtonText: 'Aceptar'
+                    });
+                    return;
+                }
+
+                this.setCustomValidity('');
+                if (/^[0-9]{7,8}$/.test(this.value.trim())) {
+                    var block = this.closest('.denunciado-block');
+                    if (block) buscarDenunciadoPorCedulaEnBloque(block);
+                }
+            });
             primerCedula.addEventListener('blur', function() {
                 var block = this.closest('.denunciado-block');
                 if (block) buscarDenunciadoPorCedulaEnBloque(block);
@@ -213,7 +248,7 @@
                     var nombresInput = block.querySelector('input[name$="[nombres]"]');
                     var apellidosInput = block.querySelector('input[name$="[apellidos]"]');
                     var telefonoInput = block.querySelector('input[name$="[telefono]"]');
-                    var direccionInput = block.querySelector('textarea[name$="[direccion]"]');
+                    var direccionInput = block.querySelector('input[name$="[direccion]"]');
                     if (nombresInput) nombresInput.value = data.nombres || '';
                     if (apellidosInput) apellidosInput.value = data.apellidos || '';
                     if (telefonoInput) telefonoInput.value = data.telefono || '';
@@ -222,6 +257,30 @@
             }
         };
         xhr.send();
+    }
+
+    var formularioConciliacion = document.getElementById('formConciliacion');
+    if (formularioConciliacion) {
+        formularioConciliacion.addEventListener('submit', function(event) {
+            if (!window.conciliacionDenuncianteCedula) {
+                return;
+            }
+
+            var coincideConDenunciante = Array.from(formularioConciliacion.querySelectorAll('.denunciado-cedula'))
+                .some(function(input) {
+                    return input.value.trim() === window.conciliacionDenuncianteCedula;
+                });
+
+            if (coincideConDenunciante) {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Validación',
+                    text: '¡No puedes denunciarte a ti mismo!',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
     }
 
     if (document.readyState === 'loading') {
