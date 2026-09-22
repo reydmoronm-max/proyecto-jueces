@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Familia;
 use App\Models\Persona;
 use App\Models\ConsejoComunal;
+use App\Models\Enfermedad;
+use App\Models\Profesion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -67,6 +69,8 @@ class CensoController extends Controller
 
         $items = $query->orderBy('created_at', 'desc')->get();
         $consejosComunales = ConsejoComunal::all();
+        $enfermedades = Enfermedad::orderBy('nombre', 'asc')->get();
+        $profesiones = Profesion::orderBy('nombre', 'asc')->get();
 
         return view('modules.censo.index', compact(
             'titulo',
@@ -75,6 +79,8 @@ class CensoController extends Controller
             'censoActive',
             'items',
             'consejosComunales',
+            'enfermedades',
+            'profesiones',
             'search',
             'consejoComunalId',
             'tipoVivienda',
@@ -211,6 +217,7 @@ class CensoController extends Controller
      */
     public function storeIntegrante(Request $request)
     {
+        $this->normalizarCatalogosCenso($request);
         $this->normalizarPensionadoJubilado($request);
         $this->normalizarCamposMenorEdad($request);
         $this->normalizarNivelAcademicoMenorEdad($request);
@@ -316,6 +323,7 @@ class CensoController extends Controller
     public function updateIntegrante(Request $request, string $id)
     {
         $persona = Persona::findOrFail($id);
+        $this->normalizarCatalogosCenso($request);
         $this->normalizarPensionadoJubilado($request);
         $this->normalizarCamposMenorEdad($request);
         $this->normalizarNivelAcademicoMenorEdad($request);
@@ -436,6 +444,40 @@ class CensoController extends Controller
             }
         } catch (\Throwable $exception) {
             // La validación y el procesamiento de la fecha informarán el formato inválido.
+        }
+    }
+
+    private function normalizarCatalogosCenso(Request $request): void
+    {
+        // Normalizar tipo_enfermedad si viene como array desde TomSelect múltiple
+        if (is_array($request->tipo_enfermedad)) {
+            $enfermedadesFiltradas = array_filter(array_map('trim', $request->tipo_enfermedad));
+            $request->merge([
+                'tipo_enfermedad' => !empty($enfermedadesFiltradas) ? implode(', ', $enfermedadesFiltradas) : null
+            ]);
+        } elseif (is_string($request->tipo_enfermedad)) {
+            $val = trim($request->tipo_enfermedad);
+            $request->merge([
+                'tipo_enfermedad' => $val !== '' ? $val : null
+            ]);
+        }
+
+        if ($request->filled('tipo_enfermedad')) {
+            $enfLista = explode(',', $request->tipo_enfermedad);
+            foreach ($enfLista as $enfItem) {
+                $enfItem = trim($enfItem);
+                if ($enfItem !== '' && !in_array($enfItem, ['Ninguna', 'No aplica'], true)) {
+                    Enfermedad::firstOrCreate(['nombre' => $enfItem]);
+                }
+            }
+        }
+
+        // Normalizar profesión y auto-registrar si es nueva
+        if ($request->filled('profesion')) {
+            $profesionVal = trim($request->profesion);
+            if ($profesionVal !== '' && $profesionVal !== 'No aplica') {
+                Profesion::firstOrCreate(['nombre' => $profesionVal]);
+            }
         }
     }
 }

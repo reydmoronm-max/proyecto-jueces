@@ -142,7 +142,14 @@
                             <label class="text-primary fw-bold mb-1" for="edit-profesion">PROFESIÓN</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-briefcase"></i></span>
-                                <input type="text" class="form-control bg-white" name="profesion" id="edit-profesion" placeholder="Ej. Abogado">
+                                <select class="form-select bg-white" name="profesion" id="edit-profesion" placeholder="Seleccione o escriba profesión...">
+                                    <option value="">Seleccione o escriba...</option>
+                                    @if(isset($profesiones))
+                                        @foreach($profesiones as $prof)
+                                            <option value="{{ $prof->nombre }}">{{ $prof->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
 
@@ -178,7 +185,13 @@
                             <label class="text-primary fw-bold mb-1" for="edit-tipo_enfermedad">ENFERMEDAD O CONDICIÓN (si posee)</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-heartbeat"></i></span>
-                                <input type="text" class="form-control bg-white" name="tipo_enfermedad" id="edit-tipo_enfermedad" placeholder="Ingrese tipo de enfermedad">
+                                <select class="form-select bg-white" name="tipo_enfermedad[]" id="edit-tipo_enfermedad" multiple placeholder="Seleccione o escriba enfermedad(es)...">
+                                    @if(isset($enfermedades))
+                                        @foreach($enfermedades as $enf)
+                                            <option value="{{ $enf->nombre }}">{{ $enf->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
 

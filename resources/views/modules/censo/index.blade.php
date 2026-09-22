@@ -10,9 +10,12 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <div class="header-title">
+                        <div class="header-title d-flex gap-2 flex-wrap">
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarFamilia">
                                 <i class="ri-add-fill"></i> Registrar Familia
+                            </button>
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalGestionCatalogos">
+                                <i class="ri-list-settings-line me-1"></i> Catálogo de Enfermedades y Profesiones
                             </button>
                         </div>
                         <div class="d-flex align-items-center">
@@ -151,11 +154,59 @@
     @include('modules.censo.modalEditarIntegrante')
     @include('modules.censo.modalConsultarIntegrante')
     @include('modules.censo.modalConsultarFamilia')
+    @include('modules.censo.modalGestionCatalogos')
 
 @endsection
 
 @push('scripts')
+    <style>
+        /* Adaptación de Tom Select para input-group de Bootstrap 5 */
+        .input-group > .ts-wrapper {
+            flex: 1 1 auto;
+            width: 1%;
+        }
+        .input-group > .ts-wrapper .ts-control {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            min-height: 38px;
+            padding-top: 0.375rem;
+            padding-bottom: 0.375rem;
+            border-color: #dee2e6;
+            background-color: #ffffff;
+        }
+        .ts-wrapper.focus .ts-control {
+            border-color: #3a57e8;
+            box-shadow: 0 0 0 0.25rem rgba(58, 87, 232, 0.25);
+        }
+        .ts-dropdown {
+            z-index: 1065 !important;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .ts-wrapper .item {
+            background: #e8edff !important;
+            color: #3a57e8 !important;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-weight: 500;
+        }
+        .ts-wrapper.plugin-remove_button .item .remove {
+            border-left-color: rgba(58, 87, 232, 0.2) !important;
+            color: #3a57e8 !important;
+        }
+        .ts-wrapper.plugin-remove_button .item .remove:hover {
+            background: rgba(220, 53, 69, 0.15) !important;
+            color: #dc3545 !important;
+        }
+        .ts-wrapper.disabled .ts-control {
+            background-color: #e9ecef !important;
+            cursor: not-allowed;
+        }
+    </style>
     <script>
+        var tsProfesion, tsEditProfesion, tsEnfermedad, tsEditEnfermedad;
+        var catalogosCache = { enfermedades: [], profesiones: [] };
+
         // SweetAlert message displays
         @if (session('success'))
             Swal.fire({
@@ -216,8 +267,8 @@
         function actualizarCamposMenorEdad(prefix) {
             var edad = obtenerEdadIntegrante(prefix);
             var campos = prefix
-                ? '#edit-profesion, #edit-situacion_laboral, #edit-centro_votacion'
-                : '#profesion, #situacion_laboral, #centro_votacion';
+                ? '#edit-situacion_laboral, #edit-centro_votacion'
+                : '#situacion_laboral, #centro_votacion';
             var nivel = $('#' + (prefix ? 'edit-nivel_academico' : 'nivel_academico'));
             var esMenor = edad >= 0 && edad < 18;
 
@@ -228,10 +279,25 @@
             }
             if (esMenor) {
                 $(campos).val('No aplica');
+                var tsProf = prefix ? tsEditProfesion : tsProfesion;
+                if (tsProf) {
+                    if (!tsProf.options['No aplica']) {
+                        tsProf.addOption({value: 'No aplica', text: 'No aplica'});
+                    }
+                    tsProf.setValue('No aplica');
+                    tsProf.disable();
+                }
             } else {
                 $(campos).filter(function() {
                     return $(this).val() === 'No aplica';
                 }).val('');
+                var tsProf = prefix ? tsEditProfesion : tsProfesion;
+                if (tsProf) {
+                    tsProf.enable();
+                    if (tsProf.getValue() === 'No aplica') {
+                        tsProf.clear();
+                    }
+                }
             }
         }
 
@@ -300,9 +366,38 @@
                     if (data.centro_votacion) $('#centro_votacion').val(data.centro_votacion);
                     if (data.carnet_patria) $('#carnet_patria').val(data.carnet_patria);
                     if (data.nivel_academico) $('#nivel_academico').val(data.nivel_academico);
-                    if (data.profesion) $('#profesion').val(data.profesion);
+                    
+                    if (data.profesion) {
+                        if (tsProfesion) {
+                            if (!tsProfesion.options[data.profesion]) {
+                                tsProfesion.addOption({value: data.profesion, text: data.profesion});
+                            }
+                            tsProfesion.setValue(data.profesion);
+                        } else {
+                            $('#profesion').val(data.profesion);
+                        }
+                    } else if (tsProfesion) {
+                        tsProfesion.clear();
+                    }
+
                     if (data.situacion_laboral) $('#situacion_laboral').val(data.situacion_laboral);
-                    if (data.tipo_enfermedad) $('#tipo_enfermedad').val(data.tipo_enfermedad);
+
+                    if (data.tipo_enfermedad) {
+                        if (tsEnfermedad) {
+                            var enfArr = data.tipo_enfermedad.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+                            enfArr.forEach(function(enf) {
+                                if (!tsEnfermedad.options[enf]) {
+                                    tsEnfermedad.addOption({value: enf, text: enf});
+                                }
+                            });
+                            tsEnfermedad.setValue(enfArr);
+                        } else {
+                            $('#tipo_enfermedad').val(data.tipo_enfermedad);
+                        }
+                    } else if (tsEnfermedad) {
+                        tsEnfermedad.clear();
+                    }
+
                     if (data.pensionado_jubilado) $('#pensionado_jubilado').val(data.pensionado_jubilado);
                     if (data.direccion) $('#direccion').val(data.direccion);
                     if (data.estudia) $('#estudia').val(data.estudia);
@@ -315,6 +410,8 @@
                         $('#nombres').val('').prop('readonly', false);
                         $('#apellidos').val('').prop('readonly', false);
                         $('#telefono').val('');
+                        if (tsProfesion) tsProfesion.clear();
+                        if (tsEnfermedad) tsEnfermedad.clear();
                     }
                 }
             });
@@ -368,6 +465,8 @@
             $('#estudia').val('');
             $('#parentesco').val('');
             $('#pensionado_jubilado').val('');
+            if (tsProfesion) tsProfesion.clear();
+            if (tsEnfermedad) tsEnfermedad.clear();
             actualizarReglasPorEdad('');
             $('#nivel_academico').val('');
             $('#direccion').val('');
@@ -495,9 +594,38 @@
                     $('#edit-centro_votacion').val(data.centro_votacion ?? '');
                     $('#edit-carnet_patria').val(data.carnet_patria ?? '');
                     $('#edit-nivel_academico').val(data.nivel_academico ?? '');
-                    $('#edit-profesion').val(data.profesion ?? '');
+                    
+                    if (data.profesion) {
+                        if (tsEditProfesion) {
+                            if (!tsEditProfesion.options[data.profesion]) {
+                                tsEditProfesion.addOption({value: data.profesion, text: data.profesion});
+                            }
+                            tsEditProfesion.setValue(data.profesion);
+                        } else {
+                            $('#edit-profesion').val(data.profesion);
+                        }
+                    } else if (tsEditProfesion) {
+                        tsEditProfesion.clear();
+                    }
+
                     $('#edit-situacion_laboral').val(data.situacion_laboral ?? '');
-                    $('#edit-tipo_enfermedad').val(data.tipo_enfermedad ?? '');
+
+                    if (data.tipo_enfermedad) {
+                        if (tsEditEnfermedad) {
+                            var editEnfArr = data.tipo_enfermedad.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+                            editEnfArr.forEach(function(enf) {
+                                if (!tsEditEnfermedad.options[enf]) {
+                                    tsEditEnfermedad.addOption({value: enf, text: enf});
+                                }
+                            });
+                            tsEditEnfermedad.setValue(editEnfArr);
+                        } else {
+                            $('#edit-tipo_enfermedad').val(data.tipo_enfermedad);
+                        }
+                    } else if (tsEditEnfermedad) {
+                        tsEditEnfermedad.clear();
+                    }
+
                     $('#edit-pensionado_jubilado').val(data.pensionado_jubilado ?? '');
                     $('#edit-genero').val(data.genero ?? '');
                     actualizarReglasPorEdad('edit');
@@ -743,6 +871,475 @@
                     return false;
                 }
             });
+
+            // Inicialización de Tom Select
+            if (typeof TomSelect !== 'undefined') {
+                tsProfesion = new TomSelect('#profesion', {
+                    create: true,
+                    createOnBlur: true,
+                    maxItems: 1,
+                    placeholder: 'Seleccione o escriba profesión...',
+                });
+
+                tsEditProfesion = new TomSelect('#edit-profesion', {
+                    create: true,
+                    createOnBlur: true,
+                    maxItems: 1,
+                    placeholder: 'Seleccione o escriba profesión...',
+                });
+
+                tsEnfermedad = new TomSelect('#tipo_enfermedad', {
+                    create: true,
+                    createOnBlur: true,
+                    plugins: ['remove_button'],
+                    placeholder: 'Seleccione o escriba enfermedad(es)...',
+                });
+
+                tsEditEnfermedad = new TomSelect('#edit-tipo_enfermedad', {
+                    create: true,
+                    createOnBlur: true,
+                    plugins: ['remove_button'],
+                    placeholder: 'Seleccione o escriba enfermedad(es)...',
+                });
+            }
+
+            // Catálogo de Enfermedades y Profesiones en Modal
+            function renderizarTablaEnfermedades(filtro = '') {
+                var filtroLower = (filtro || '').toLowerCase().trim();
+                var filtradas = catalogosCache.enfermedades.filter(function(item) {
+                    return item.nombre.toLowerCase().includes(filtroLower);
+                });
+
+                $('#contador-enfermedades').text(catalogosCache.enfermedades.length);
+
+                var html = '';
+                if (filtradas.length === 0) {
+                    html = '<tr><td colspan="3" class="text-center text-muted py-3"><i class="ri-information-line me-1"></i> ' +
+                           (filtro ? 'No se encontraron enfermedades con ese criterio.' : 'No hay enfermedades registradas en el catálogo.') +
+                           '</td></tr>';
+                } else {
+                    filtradas.forEach(function(item, index) {
+                        html += `<tr>
+                            <td class="text-center text-muted small">${index + 1}</td>
+                            <td class="fw-semibold text-dark">${escapeHtml(item.nombre)}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-sm btn-icon btn-outline-warning me-1 btn-editar-enfermedad" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Editar">
+                                    <i class="ri-edit-line"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-icon btn-outline-danger btn-eliminar-enfermedad" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Eliminar">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </td>
+                        </tr>`;
+                    });
+                }
+                $('#tbodyEnfermedades').html(html);
+            }
+
+            function renderizarTablaProfesiones(filtro = '') {
+                var filtroLower = (filtro || '').toLowerCase().trim();
+                var filtradas = catalogosCache.profesiones.filter(function(item) {
+                    return item.nombre.toLowerCase().includes(filtroLower);
+                });
+
+                $('#contador-profesiones').text(catalogosCache.profesiones.length);
+
+                var html = '';
+                if (filtradas.length === 0) {
+                    html = '<tr><td colspan="3" class="text-center text-muted py-3"><i class="ri-information-line me-1"></i> ' +
+                           (filtro ? 'No se encontraron profesiones con ese criterio.' : 'No hay profesiones registradas en el catálogo.') +
+                           '</td></tr>';
+                } else {
+                    filtradas.forEach(function(item, index) {
+                        html += `<tr>
+                            <td class="text-center text-muted small">${index + 1}</td>
+                            <td class="fw-semibold text-dark">${escapeHtml(item.nombre)}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-sm btn-icon btn-outline-warning me-1 btn-editar-profesion" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Editar">
+                                    <i class="ri-edit-line"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-icon btn-outline-danger btn-eliminar-profesion" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Eliminar">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </td>
+                        </tr>`;
+                    });
+                }
+                $('#tbodyProfesiones').html(html);
+            }
+
+            function cargarCatalogos() {
+                $.ajax({
+                    url: '{{ route('censo.catalogos.index') }}',
+                    type: 'GET',
+                    success: function(response) {
+                        catalogosCache.enfermedades = response.enfermedades || [];
+                        catalogosCache.profesiones = response.profesiones || [];
+                        renderizarTablaEnfermedades($('#buscarEnfermedadTabla').val());
+                        renderizarTablaProfesiones($('#buscarProfesionTabla').val());
+
+                        // Sincronizar dinámicamente con TomSelect
+                        actualizarOpcionesTomSelect();
+                    }
+                });
+            }
+
+            function actualizarOpcionesTomSelect() {
+                if (typeof tsEnfermedad !== 'undefined' && tsEnfermedad) {
+                    catalogosCache.enfermedades.forEach(function(item) {
+                        if (!tsEnfermedad.options[item.nombre]) {
+                            tsEnfermedad.addOption({ value: item.nombre, text: item.nombre });
+                        }
+                    });
+                }
+                if (typeof tsEditEnfermedad !== 'undefined' && tsEditEnfermedad) {
+                    catalogosCache.enfermedades.forEach(function(item) {
+                        if (!tsEditEnfermedad.options[item.nombre]) {
+                            tsEditEnfermedad.addOption({ value: item.nombre, text: item.nombre });
+                        }
+                    });
+                }
+                if (typeof tsProfesion !== 'undefined' && tsProfesion) {
+                    catalogosCache.profesiones.forEach(function(item) {
+                        if (!tsProfesion.options[item.nombre]) {
+                            tsProfesion.addOption({ value: item.nombre, text: item.nombre });
+                        }
+                    });
+                }
+                if (typeof tsEditProfesion !== 'undefined' && tsEditProfesion) {
+                    catalogosCache.profesiones.forEach(function(item) {
+                        if (!tsEditProfesion.options[item.nombre]) {
+                            tsEditProfesion.addOption({ value: item.nombre, text: item.nombre });
+                        }
+                    });
+                }
+            }
+
+            function escapeHtml(str) {
+                return String(str).replace(/[&<>"']/g, function (s) {
+                    return {
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        '"': '&quot;',
+                        "'": '&#39;'
+                    }[s];
+                });
+            }
+
+            // Agregar Enfermedad
+            $('#btnAgregarEnfermedad').on('click', function() {
+                var nombre = $('#nueva_enfermedad_nombre').val().trim();
+                $('#error-enfermedad').addClass('d-none').text('');
+                if (!nombre) {
+                    $('#error-enfermedad').removeClass('d-none').text('Por favor ingrese el nombre de la enfermedad.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route('censo.enfermedades.store') }}',
+                    type: 'POST',
+                    data: {
+                        nombre: nombre,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(resp) {
+                        $('#nueva_enfermedad_nombre').val('');
+                        cargarCatalogos();
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: resp.message,
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    },
+                    error: function(xhr) {
+                        var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Error al guardar.';
+                        if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.nombre) {
+                            msg = xhr.responseJSON.errors.nombre[0];
+                        }
+                        $('#error-enfermedad').removeClass('d-none').text(msg);
+                    }
+                });
+            });
+
+            $('#nueva_enfermedad_nombre').on('keypress', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    $('#btnAgregarEnfermedad').click();
+                }
+            });
+
+            // Editar Enfermedad
+            $(document).on('click', '.btn-editar-enfermedad', function() {
+                var id = $(this).data('id');
+                var nombreActual = $(this).data('nombre');
+
+                Swal.fire({
+                    target: '#modalGestionCatalogos',
+                    title: 'Modificar Enfermedad',
+                    input: 'text',
+                    inputValue: nombreActual,
+                    inputLabel: 'Nombre de la enfermedad o condición',
+                    showCancelButton: true,
+                    confirmButtonText: 'Guardar Cambios',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#3a57e8',
+                    inputValidator: (value) => {
+                        if (!value || !value.trim()) {
+                            return 'Debe ingresar un nombre válido';
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/censo/catalogos/enfermedades/' + id,
+                            type: 'POST',
+                            data: {
+                                _method: 'PUT',
+                                nombre: result.value.trim(),
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(resp) {
+                                cargarCatalogos();
+                                Swal.fire({
+                                    target: '#modalGestionCatalogos',
+                                    title: '¡Actualizado!',
+                                    text: resp.message,
+                                    icon: 'success'
+                                });
+                            },
+                            error: function(xhr) {
+                                var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'No se pudo actualizar.';
+                                if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.nombre) {
+                                    msg = xhr.responseJSON.errors.nombre[0];
+                                }
+                                Swal.fire({
+                                    target: '#modalGestionCatalogos',
+                                    title: 'Error',
+                                    text: msg,
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Eliminar Enfermedad
+            $(document).on('click', '.btn-eliminar-enfermedad', function() {
+                var id = $(this).data('id');
+                var nombre = $(this).data('nombre');
+
+                Swal.fire({
+                    target: '#modalGestionCatalogos',
+                    title: '¿Eliminar del catálogo?',
+                    text: `¿Desea eliminar la enfermedad "${nombre}" del catálogo?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/censo/catalogos/enfermedades/' + id,
+                            type: 'POST',
+                            data: {
+                                _method: 'DELETE',
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(resp) {
+                                cargarCatalogos();
+                                Swal.fire({
+                                    target: '#modalGestionCatalogos',
+                                    title: '¡Eliminado!',
+                                    text: resp.message,
+                                    icon: 'success'
+                                });
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    target: '#modalGestionCatalogos',
+                                    title: 'Error',
+                                    text: 'No se pudo eliminar el elemento.',
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Agregar Profesión
+            $('#btnAgregarProfesion').on('click', function() {
+                var nombre = $('#nueva_profesion_nombre').val().trim();
+                $('#error-profesion').addClass('d-none').text('');
+                if (!nombre) {
+                    $('#error-profesion').removeClass('d-none').text('Por favor ingrese el nombre de la profesión.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route('censo.profesiones.store') }}',
+                    type: 'POST',
+                    data: {
+                        nombre: nombre,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(resp) {
+                        $('#nueva_profesion_nombre').val('');
+                        cargarCatalogos();
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: resp.message,
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    },
+                    error: function(xhr) {
+                        var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Error al guardar.';
+                        if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.nombre) {
+                            msg = xhr.responseJSON.errors.nombre[0];
+                        }
+                        $('#error-profesion').removeClass('d-none').text(msg);
+                    }
+                });
+            });
+
+            $('#nueva_profesion_nombre').on('keypress', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    $('#btnAgregarProfesion').click();
+                }
+            });
+
+            // Editar Profesión
+            $(document).on('click', '.btn-editar-profesion', function() {
+                var id = $(this).data('id');
+                var nombreActual = $(this).data('nombre');
+
+                Swal.fire({
+                    target: '#modalGestionCatalogos',
+                    title: 'Modificar Profesión',
+                    input: 'text',
+                    inputValue: nombreActual,
+                    inputLabel: 'Nombre de la profesión u oficio',
+                    showCancelButton: true,
+                    confirmButtonText: 'Guardar Cambios',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#3a57e8',
+                    inputValidator: (value) => {
+                        if (!value || !value.trim()) {
+                            return 'Debe ingresar un nombre válido';
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/censo/catalogos/profesiones/' + id,
+                            type: 'POST',
+                            data: {
+                                _method: 'PUT',
+                                nombre: result.value.trim(),
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(resp) {
+                                cargarCatalogos();
+                                Swal.fire({
+                                    target: '#modalGestionCatalogos',
+                                    title: '¡Actualizado!',
+                                    text: resp.message,
+                                    icon: 'success'
+                                });
+                            },
+                            error: function(xhr) {
+                                var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'No se pudo actualizar.';
+                                if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.nombre) {
+                                    msg = xhr.responseJSON.errors.nombre[0];
+                                }
+                                Swal.fire({
+                                    target: '#modalGestionCatalogos',
+                                    title: 'Error',
+                                    text: msg,
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Eliminar Profesión
+            $(document).on('click', '.btn-eliminar-profesion', function() {
+                var id = $(this).data('id');
+                var nombre = $(this).data('nombre');
+
+                Swal.fire({
+                    target: '#modalGestionCatalogos',
+                    title: '¿Eliminar del catálogo?',
+                    text: `¿Desea eliminar la profesión "${nombre}" del catálogo?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/censo/catalogos/profesiones/' + id,
+                            type: 'POST',
+                            data: {
+                                _method: 'DELETE',
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(resp) {
+                                cargarCatalogos();
+                                Swal.fire({
+                                    target: '#modalGestionCatalogos',
+                                    title: '¡Eliminado!',
+                                    text: resp.message,
+                                    icon: 'success'
+                                });
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    target: '#modalGestionCatalogos',
+                                    title: 'Error',
+                                    text: 'No se pudo eliminar el elemento.',
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Filtrado en vivo de tablas
+            $('#buscarEnfermedadTabla').on('input', function() {
+                renderizarTablaEnfermedades($(this).val());
+            });
+
+            $('#buscarProfesionTabla').on('input', function() {
+                renderizarTablaProfesiones($(this).val());
+            });
+
+            // Al abrir la modal de catálogos
+            var modalCat = document.getElementById('modalGestionCatalogos');
+            if (modalCat) {
+                modalCat.addEventListener('show.bs.modal', function() {
+                    cargarCatalogos();
+                });
+            }
+
+            // Cargar catálogos al inicio
+            cargarCatalogos();
         });
     </script>
 @endpush
