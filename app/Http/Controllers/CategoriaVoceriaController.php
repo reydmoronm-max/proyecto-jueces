@@ -19,32 +19,26 @@ class CategoriaVoceriaController extends Controller
         $categoriaVoceriasActive = 'active';
 
         $search = trim((string) $request->input('search', ''));
-        $estadoCategoria = (string) $request->input('estado_categoria', '');
         $query = CategoriaVoceria::query();
 
         if ($search !== '') {
             $query->where(function ($q) use ($search) {
-                $q->where('nombre', 'LIKE', '%' . $search . '%')
-                  ->orWhere('descripcion', 'LIKE', '%' . $search . '%');
+                $q->where('nombre', 'LIKE', '%'.$search.'%')
+                    ->orWhere('descripcion', 'LIKE', '%'.$search.'%');
             });
         }
 
-        if (in_array($estadoCategoria, ['0', '1'], true)) {
-            $query->where('activo', $estadoCategoria === '1');
-        } else {
-            $estadoCategoria = '';
-        }
-
-        $items = $query->orderBy('created_at', 'desc')->get();
+        $categoriasActivas = (clone $query)->where('activo', true)->orderBy('created_at', 'desc')->get();
+        $categoriasInactivas = (clone $query)->where('activo', false)->orderBy('created_at', 'desc')->get();
 
         return view('modules.categoria_vocerias.index', compact(
             'titulo',
             'paginaTitulo',
             'paginaSubtitulo',
             'categoriaVoceriasActive',
-            'items',
-            'search',
-            'estadoCategoria'
+            'categoriasActivas',
+            'categoriasInactivas',
+            'search'
         ));
     }
 
@@ -54,16 +48,16 @@ class CategoriaVoceriaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre'      => ['required', 'string', 'min:3', 'max:100', 'unique:categoria_vocerias,nombre'],
+            'nombre' => ['required', 'string', 'min:3', 'max:100', 'unique:categoria_vocerias,nombre'],
             'descripcion' => ['nullable', 'string', 'max:255'],
         ], [
             'nombre.unique' => 'Ya existe una categoría con este nombre.',
         ]);
 
         CategoriaVoceria::create([
-            'nombre'      => trim($request->nombre),
+            'nombre' => trim($request->nombre),
             'descripcion' => $request->descripcion ? trim($request->descripcion) : null,
-            'activo'      => true,
+            'activo' => true,
         ]);
 
         return to_route('categoria-vocerias.index')->with('success', 'Categoría registrada correctamente.');
@@ -75,6 +69,7 @@ class CategoriaVoceriaController extends Controller
     public function show(string $id)
     {
         $categoria = CategoriaVoceria::findOrFail($id);
+
         return response()->json($categoria);
     }
 
@@ -84,6 +79,7 @@ class CategoriaVoceriaController extends Controller
     public function edit(string $id)
     {
         $categoria = CategoriaVoceria::findOrFail($id);
+
         return response()->json($categoria);
     }
 
@@ -95,7 +91,7 @@ class CategoriaVoceriaController extends Controller
         $categoria = CategoriaVoceria::findOrFail($id);
 
         $request->validate([
-            'nombre'      => ['required', 'string', 'min:3', 'max:100', 'unique:categoria_vocerias,nombre,' . $id],
+            'nombre' => ['required', 'string', 'min:3', 'max:100', 'unique:categoria_vocerias,nombre,'.$id],
             'descripcion' => ['nullable', 'string', 'max:255'],
         ], [
             'nombre.unique' => 'Ya existe otra categoría con este nombre.',
@@ -105,7 +101,7 @@ class CategoriaVoceriaController extends Controller
         $nuevoNombre = trim($request->nombre);
 
         $categoria->update([
-            'nombre'      => $nuevoNombre,
+            'nombre' => $nuevoNombre,
             'descripcion' => $request->descripcion ? trim($request->descripcion) : null,
         ]);
 
@@ -120,10 +116,15 @@ class CategoriaVoceriaController extends Controller
     /**
      * Activate or deactivate the specified resource.
      */
-    public function cambiarEstado(string $id, int $estado)
+    public function cambiarEstado(Request $request, string $id, string $estado)
     {
+        $request->merge(['estado' => $estado]);
+        $datos = $request->validate([
+            'estado' => ['required', 'boolean'],
+        ]);
+
         $categoria = CategoriaVoceria::findOrFail($id);
-        $categoria->activo = (bool) $estado;
+        $categoria->activo = (bool) $datos['estado'];
         $categoria->save();
 
         return response()->json(['activo' => $categoria->activo]);
@@ -143,6 +144,7 @@ class CategoriaVoceriaController extends Controller
         }
 
         $categoria->delete();
+
         return to_route('categoria-vocerias.index')->with('success', 'Categoría eliminada correctamente.');
     }
 }

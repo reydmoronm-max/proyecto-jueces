@@ -28,9 +28,9 @@
                                 <span class="input-group-text"><i class="fa-solid fa-users-gear"></i></span>
                                 <select class="form-select bg-white" name="rol" id="edit-rol" required>
                                     <option value="">Elija una opción</option>
-                                    <option value="Jefe de comuna">Jefe de comuna</option>
-                                    <option value="Jefe de Comando">Jefe de Comando</option>
-                                    <option value="Juez">Juez</option>
+                                    <option value="Jefe de comuna" @selected(old('rol') === 'Jefe de comuna')>Jefe de comuna</option>
+                                    <option value="Jefe de Comando" @selected(old('rol') === 'Jefe de Comando')>Jefe de Comando</option>
+                                    <option value="Juez" @selected(old('rol') === 'Juez')>Juez</option>
                                 </select>
                             </div>
                         </div>
