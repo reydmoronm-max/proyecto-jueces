@@ -3,14 +3,6 @@
 
 @section('contenido')
     <main>
-        <!-- loader Start -->
-        <div id="loading">
-            <div class="loader simple-loader">
-                <div class="loader-body"></div>
-            </div>
-        </div>
-        <!-- loader END -->
-
         <div class="wrapper">
             <section class="login-content">
                 <div class="row m-0 align-items-center bg-white vh-100">

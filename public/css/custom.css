@@ -562,25 +562,58 @@ body.uikit .btn-download {
   top: 1rem;
 }
 
-/*--------------------------------------------------------------
-# Animación fadeIn
---------------------------------------------------------------*/
+.page-loader {
+    align-items: center;
+    animation: page-loader-dismiss 0.18s ease-out 0.65s forwards;
+    background: rgba(21, 24, 36, 0.94);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    inset: 0;
+    justify-content: center;
+    position: fixed;
+    z-index: 2000;
+}
 
-/* Definición de la animación */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        /* transform: translateY(20px); //*Empieza 20px abajo */
-    }
+.page-loader__spinner {
+    animation: page-loader-spin 0.7s linear infinite;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.page-loader__text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.page-loader.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+@keyframes page-loader-spin {
     to {
-        opacity: 1;
-        /* transform: translateY(0); /* Termina en su posición original */
+        transform: rotate(360deg);
     }
 }
 
-/* Clase que aplica a las secciones */
-.fase-animada {
-    animation: fadeIn 1s ease-out forwards;
+@keyframes page-loader-dismiss {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-loader__spinner {
+        animation-duration: 1.4s;
+    }
 }
 
 #grad{

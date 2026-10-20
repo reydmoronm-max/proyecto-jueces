@@ -34,6 +34,10 @@
         
     </head>
     <body class=" " data-bs-spy="scroll" data-bs-target="#elements-section" data-bs-offset="0" tabindex="0">
+        <div class="page-loader" id="page-loader" role="status" aria-live="polite" aria-label="Cargando">
+            <span class="page-loader__spinner" aria-hidden="true"></span>
+            <span class="page-loader__text">Cargando...</span>
+        </div>
         @yield('contenido')
     
         <!-- Library Bundle Script -->
