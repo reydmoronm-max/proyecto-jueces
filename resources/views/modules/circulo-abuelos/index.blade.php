@@ -65,6 +65,18 @@
             <div class="col-sm-12">
                 <div class="card shadow-sm" style="border-radius: 15px;">
                     <div class="card-body p-4">
+                        <div class="d-flex justify-content-end mb-4">
+                            <div class="input-group w-100 shadow-sm rounded-3" style="max-width: 360px;">
+                                <label for="buscar-circulo-abuelos" class="visually-hidden">Buscar en Círculo de Abuelos</label>
+                                <span class="input-group-text bg-primary text-white border border-dark border-end-0 rounded-start-3">
+                                    <i class="ri-search-line"></i>
+                                </span>
+                                <input type="search" id="buscar-circulo-abuelos"
+                                    class="form-control border-start-0 ps-0 rounded-end-3"
+                                    placeholder="Buscar en todos los registros..."
+                                    autocomplete="off" aria-label="Buscar abuelos y jornadas">
+                            </div>
+                        </div>
                         <!-- Pestañas (Tabs) -->
                         <ul class="nav nav-tabs nav-fill mb-4 border-bottom-0" id="abuelosTabs" role="tablist"
                             style="background: #f8f9fa; padding: 6px; border-radius: 10px;">
@@ -94,41 +106,6 @@
                             <!-- TAB DE ABUELOS -->
                             <div class="tab-pane fade show active" id="abuelitos-content" role="tabpanel"
                                 aria-labelledby="abuelitos-tab">
-                                <!-- Filtros y Búsqueda -->
-                                <div class="row g-3 align-items-end mb-4">
-                                    <div class="col-md-12">
-                                        <form action="{{ route('circulo-abuelos.index') }}" method="GET" class="row g-2">
-                                            <div class="col-md-6">
-                                                <div class="input-group">
-                                                    <span class="input-group-text"><i class="ri-search-line"></i></span>
-                                                    <input type="text" name="search" class="form-control" placeholder="Buscar por cédula o nombre..." value="{{ request('search') }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <select name="consejo_comunal_id" class="form-select">
-                                                    <option value="">Todas las comunidades</option>
-                                                    @foreach ($consejosComunales as $cc)
-                                                        <option value="{{ $cc->id }}"
-                                                            {{ request('consejo_comunal_id') == $cc->id ? 'selected' : '' }}>
-                                                            {{ $cc->nombre }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2 d-flex gap-1">
-                                                <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-filter"></i> Filtrar</button>
-                                                @if (request('search') || request('consejo_comunal_id'))
-                                                    <a href="{{ route('circulo-abuelos.index') }}" class="btn btn-secondary"
-                                                        title="Limpiar Filtros">Limpiar</a>
-                                                @endif
-                                            </div>
-                                        </form>
-                                    </div>
-                                    {{-- <div class="col-md-4 text-end">
-                                        <span hidden class="text-muted fw-bold">Total Encontrados: <span
-                                                class="badge bg-secondary">{{ $abuelos->count() }}</span></span>
-                                    </div> --}}
-                                </div>
-
                                 <!-- Tabla de Abuelitos -->
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered table-striped-columns align-middle mb-0">
@@ -145,7 +122,18 @@
                                         </thead>
                                         <tbody>
                                             @forelse($abuelos as $ab)
-                                                <tr>
+                                                @php
+                                                    $datosBusquedaAbuelo = array_merge(
+                                                        $ab->getAttributes(),
+                                                        ['edad' => $ab->edad],
+                                                        $ab->familia?->getAttributes() ?? [],
+                                                        $ab->consejoComunal?->getAttributes() ?? []
+                                                    );
+                                                    $textoBusquedaAbuelo = collect($datosBusquedaAbuelo)
+                                                        ->filter(fn ($valor) => is_scalar($valor) && filled($valor))
+                                                        ->implode(' ');
+                                                @endphp
+                                                <tr data-search="{{ $textoBusquedaAbuelo }}">
                                                     <td>
                                                         <span
                                                             class="badge bg-primary me-1">{{ $ab->cedula_tipo ?? 'V' }}</span>
@@ -176,7 +164,7 @@
                                                         {{ $ab->direccion ?? 'No registrada' }}</td>
                                                 </tr>
                                             @empty
-                                                <tr>
+                                                <tr class="empty-abuelos-row">
                                                     <td colspan="7" class="text-center py-4 text-muted">No se
                                                         encontraron adultos mayores censados (mayores o iguales a 60 años).
                                                     </td>
@@ -213,7 +201,16 @@
                                         </thead>
                                         <tbody>
                                             @forelse($jornadas as $jo)
-                                                <tr>
+                                                @php
+                                                    $datosBusquedaJornada = array_merge(
+                                                        $jo->getAttributes(),
+                                                        $jo->consejoComunal?->getAttributes() ?? []
+                                                    );
+                                                    $textoBusquedaJornada = collect($datosBusquedaJornada)
+                                                        ->filter(fn ($valor) => is_scalar($valor) && filled($valor))
+                                                        ->implode(' ');
+                                                @endphp
+                                                <tr data-search="{{ $textoBusquedaJornada }}">
                                                     <td class="fw-semibold">{{ $jo->nombre_jornada }}</td>
                                                     <td><i class="fa-solid fa-calendar"></i> {{ \Carbon\Carbon::parse($jo->fecha_programada)->format('d-m-Y') }}
                                                     </td>
@@ -257,7 +254,7 @@
                                                     </td>
                                                 </tr>
                                             @empty
-                                                <tr>
+                                                <tr class="empty-jornadas-row">
                                                     <td colspan="5" class="text-center py-4 text-muted">No hay jornadas
                                                         de atención planificadas.</td>
                                                 </tr>
@@ -478,6 +475,52 @@
 @endsection
 
 @push('scripts')
+    <script>
+        function normalizarTextoCirculoAbuelos(texto) {
+            return texto
+                .toLocaleLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function filtrarCirculoAbuelos() {
+            var busqueda = normalizarTextoCirculoAbuelos($('#buscar-circulo-abuelos').val().trim());
+
+            [
+                { selector: '#abuelitos-content tbody', emptyClass: '.empty-abuelos-row', colspan: 7 },
+                { selector: '#jornadas-content tbody', emptyClass: '.empty-jornadas-row', colspan: 5 }
+            ].forEach(function(configuracion) {
+                var tbody = $(configuracion.selector);
+                var filas = tbody.find('tr[data-search]');
+                var resultados = 0;
+
+                filas.each(function() {
+                    var coincide = normalizarTextoCirculoAbuelos($(this).attr('data-search')).includes(busqueda);
+                    $(this).toggle(coincide);
+
+                    if (coincide) {
+                        resultados++;
+                    }
+                });
+
+                tbody.find(configuracion.emptyClass).toggle(!busqueda && filas.length === 0);
+                tbody.find('.no-search-results-row').remove();
+
+                if (busqueda && resultados === 0) {
+                    tbody.append(
+                        '<tr class="no-search-results-row"><td colspan="' + configuracion.colspan +
+                        '" class="text-center py-4 text-muted">No se encontraron registros que coincidan con la búsqueda.</td></tr>'
+                    );
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $('#buscar-circulo-abuelos').on('input', filtrarCirculoAbuelos);
+            filtrarCirculoAbuelos();
+        });
+    </script>
+
     <script>
         // Sincronizar Tab activa desde parámetro URL
         $(document).ready(function() {

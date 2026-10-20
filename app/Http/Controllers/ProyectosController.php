@@ -3,40 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proyecto;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class ProyectosController extends Controller
 {
     /**
      * Display a listing of community projects.
      */
-    public function index(Request $request)
+    public function index()
     {
         $titulo = 'Proyectos Comunitarios';
         $paginaTitulo = 'Proyectos Comunitarios';
         $paginaSubtitulo = 'Módulo para el registro y control de proyectos comunitarios.';
         $proyectosActive = 'active';
 
-        $search = trim((string) $request->input('search', ''));
-        $estatusProyecto = (string) $request->input('estatus_proyecto', '');
-        $query = Proyecto::query();
-
-        if ($search !== '') {
-            $query->where(function($q) use ($search) {
-                $q->where('nombre', 'LIKE', '%' . $search . '%')
-                  ->orWhere('sector_productivo', 'LIKE', '%' . $search . '%')
-                  ->orWhere('responsable', 'LIKE', '%' . $search . '%');
-            });
-        }
-
-        if (in_array($estatusProyecto, ['En planificación', 'Completado', 'Paralizado'], true)) {
-            $query->where('estatus', $estatusProyecto);
-        } else {
-            $estatusProyecto = '';
-        }
-
-        $items = $query->orderBy('created_at', 'desc')->get();
+        $items = Proyecto::orderBy('created_at', 'desc')->get();
 
         // Calculate card statistics
         $totalProyectos = Proyecto::count();
@@ -46,8 +28,7 @@ class ProyectosController extends Controller
 
         return view('modules.proyectos.index', compact(
             'titulo', 'paginaTitulo', 'paginaSubtitulo', 'proyectosActive', 'items',
-            'totalProyectos', 'planificadosCount', 'completadosCount', 'paralizadosCount',
-            'search', 'estatusProyecto'
+            'totalProyectos', 'planificadosCount', 'completadosCount', 'paralizadosCount'
         ));
     }
 
@@ -57,30 +38,30 @@ class ProyectosController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre'            => ['required', 'string', 'min:3', 'max:150'],
+            'nombre' => ['required', 'string', 'min:3', 'max:150'],
             'sector_productivo' => ['required', 'string', 'max:100'],
-            'presupuesto'       => ['required', 'numeric', 'min:0'],
-            'responsable'       => ['required', 'string', 'min:3', 'max:100'],
-            'fecha_inicio'      => ['required', 'string'],
-            'descripcion'       => ['required', 'string', 'max:2000'],
+            'presupuesto' => ['required', 'numeric', 'min:0'],
+            'responsable' => ['required', 'string', 'min:3', 'max:100'],
+            'fecha_inicio' => ['required', 'string'],
+            'descripcion' => ['required', 'string', 'max:2000'],
         ]);
 
         try {
             $fecha = Carbon::createFromFormat('d-m-Y', $request->fecha_inicio)->format('Y-m-d');
 
             Proyecto::create([
-                'nombre'            => $request->nombre,
+                'nombre' => $request->nombre,
                 'sector_productivo' => $request->sector_productivo,
-                'presupuesto'       => $request->presupuesto,
-                'responsable'       => $request->responsable,
-                'fecha_inicio'      => $fecha,
-                'estatus'           => 'En planificación', // Default status from user request
-                'descripcion'       => $request->descripcion,
+                'presupuesto' => $request->presupuesto,
+                'responsable' => $request->responsable,
+                'fecha_inicio' => $fecha,
+                'estatus' => 'En planificación', // Default status from user request
+                'descripcion' => $request->descripcion,
             ]);
 
             return redirect()->route('proyectos.index')->with('success', 'Proyecto registrado correctamente.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Ocurrió un error al registrar el proyecto: ' . $e->getMessage()])->withInput();
+            return back()->withErrors(['error' => 'Ocurrió un error al registrar el proyecto: '.$e->getMessage()])->withInput();
         }
     }
 
@@ -92,6 +73,7 @@ class ProyectosController extends Controller
         $proyecto = Proyecto::findOrFail($id);
         $proyecto->fecha_inicio_formateada = Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y');
         $proyecto->presupuesto_formateado = number_format($proyecto->presupuesto, 2, ',', '.');
+
         return response()->json($proyecto);
     }
 
@@ -102,6 +84,7 @@ class ProyectosController extends Controller
     {
         $proyecto = Proyecto::findOrFail($id);
         $proyecto->fecha_inicio_formateada = Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y');
+
         return response()->json($proyecto);
     }
 
@@ -113,31 +96,31 @@ class ProyectosController extends Controller
         $proyecto = Proyecto::findOrFail($id);
 
         $request->validate([
-            'nombre'            => ['required', 'string', 'min:3', 'max:150'],
+            'nombre' => ['required', 'string', 'min:3', 'max:150'],
             'sector_productivo' => ['required', 'string', 'max:100'],
-            'presupuesto'       => ['required', 'numeric', 'min:0'],
-            'responsable'       => ['required', 'string', 'min:3', 'max:100'],
-            'fecha_inicio'      => ['required', 'string'],
-            'estatus'           => ['required', 'string', 'in:En planificación,Completado,Paralizado'],
-            'descripcion'       => ['required', 'string', 'max:2000'],
+            'presupuesto' => ['required', 'numeric', 'min:0'],
+            'responsable' => ['required', 'string', 'min:3', 'max:100'],
+            'fecha_inicio' => ['required', 'string'],
+            'estatus' => ['required', 'string', 'in:En planificación,Completado,Paralizado'],
+            'descripcion' => ['required', 'string', 'max:2000'],
         ]);
 
         try {
             $fecha = Carbon::createFromFormat('d-m-Y', $request->fecha_inicio)->format('Y-m-d');
 
             $proyecto->update([
-                'nombre'            => $request->nombre,
+                'nombre' => $request->nombre,
                 'sector_productivo' => $request->sector_productivo,
-                'presupuesto'       => $request->presupuesto,
-                'responsable'       => $request->responsable,
-                'fecha_inicio'      => $fecha,
-                'estatus'           => $request->estatus,
-                'descripcion'       => $request->descripcion,
+                'presupuesto' => $request->presupuesto,
+                'responsable' => $request->responsable,
+                'fecha_inicio' => $fecha,
+                'estatus' => $request->estatus,
+                'descripcion' => $request->descripcion,
             ]);
 
             return redirect()->route('proyectos.index')->with('success', 'Proyecto actualizado correctamente.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Ocurrió un error al actualizar el proyecto: ' . $e->getMessage()])->withInput();
+            return back()->withErrors(['error' => 'Ocurrió un error al actualizar el proyecto: '.$e->getMessage()])->withInput();
         }
     }
 

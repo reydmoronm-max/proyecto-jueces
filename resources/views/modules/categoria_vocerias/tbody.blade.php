@@ -1,5 +1,6 @@
 @foreach ($items as $item)
-    <tr>
+    <tr data-search="{{ $item->id }} {{ $item->nombre }} {{ $item->descripcion }}"
+        data-status="{{ $item->activo ? 'activa' : 'inactiva' }}">
         <td class="fw-bold">{{ $item->nombre }}</td>
         <td>{{ $item->descripcion ?? 'Sin descripción' }}</td>
         <td>

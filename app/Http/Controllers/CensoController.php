@@ -22,25 +22,10 @@ class CensoController extends Controller
         $paginaSubtitulo = 'Módulo para la gestión y censo de núcleos familiares.';
         $censoActive = 'active';
 
-        $search = trim((string) $request->input('search', ''));
         $consejoComunalId = (string) $request->input('consejo_comunal_id', '');
         $tipoVivienda = (string) $request->input('tipo_vivienda', '');
         $beneficio = (string) $request->input('beneficio', '');
         $query = Familia::with(['personas', 'consejoComunal']);
-
-        if ($search !== '') {
-            $query->where(function ($q) use ($search) {
-                $q->where('numero_familia', 'LIKE', '%' . $search . '%')
-                    ->orWhereHas('personas', function ($qp) use ($search) {
-                        $qp->where('cedula', 'LIKE', '%' . $search . '%')
-                            ->orWhere('nombres', 'LIKE', '%' . $search . '%')
-                            ->orWhere('apellidos', 'LIKE', '%' . $search . '%');
-                    })
-                    ->orWhereHas('consejoComunal', function ($qc) use ($search) {
-                        $qc->where('nombre', 'LIKE', '%' . $search . '%');
-                    });
-            });
-        }
 
         if (ctype_digit($consejoComunalId) && $consejoComunalId !== '') {
             $query->where('consejo_comunal_id', $consejoComunalId);
@@ -81,7 +66,6 @@ class CensoController extends Controller
             'consejosComunales',
             'enfermedades',
             'profesiones',
-            'search',
             'consejoComunalId',
             'tipoVivienda',
             'beneficio'

@@ -75,28 +75,15 @@
                                 <i class="ri-add-fill"></i> Registrar Proyecto
                             </button>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <form action="{{ route('proyectos.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2">
-                                <div>
-                                    <label for="estatus_proyecto" class="form-label small text-muted fw-bold mb-1">Estatus del Proyecto</label>
-                                    <select name="estatus_proyecto" id="estatus_proyecto" class="form-select">
-                                        <option value="">Todos los estatus</option>
-                                        <option value="Completado" {{ $estatusProyecto === 'Completado' ? 'selected' : '' }}>Completados</option>
-                                        <option value="En planificación" {{ $estatusProyecto === 'En planificación' ? 'selected' : '' }}>En planificación</option>
-                                        <option value="Paralizado" {{ $estatusProyecto === 'Paralizado' ? 'selected' : '' }}>Paralizados</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="search" class="form-label small text-muted fw-bold mb-1">Buscar proyecto</label>
-                                <input type="text" name="search" id="search" class="form-control"
-                                    placeholder="Buscar por nombre, sector, responsable..." value="{{ request('search') }}"
-                                    style="min-width: 280px;">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if ($search !== '' || $estatusProyecto !== '')
-                                    <a href="{{ route('proyectos.index') }}" class="btn btn-secondary">Limpiar</a>
-                                @endif
-                            </form>
+                        <div class="input-group shadow-sm rounded-3" style="max-width: 360px;">
+                            <label for="buscar-proyecto" class="visually-hidden">Buscar proyectos</label>
+                            <span class="input-group-text bg-primary text-white border border-dark border-end-0 rounded-start-3">
+                                <i class="ri-search-line"></i>
+                            </span>
+                            <input type="search" id="buscar-proyecto"
+                                class="form-control border-start-0 ps-0 rounded-end-3"
+                                placeholder="Buscar en todos los registros..."
+                                autocomplete="off" aria-label="Buscar proyectos en todos sus datos">
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -115,7 +102,19 @@
                                 </thead>
                                 <tbody>
                                     @forelse($items as $item)
-                                        <tr>
+                                        @php
+                                            $datosBusquedaProyecto = array_merge(
+                                                $item->getAttributes(),
+                                                [
+                                                    'presupuesto_formateado' => number_format($item->presupuesto, 2, ',', '.'),
+                                                    'fecha_inicio_formateada' => \Carbon\Carbon::parse($item->fecha_inicio)->format('d-m-Y'),
+                                                ]
+                                            );
+                                            $textoBusquedaProyecto = collect($datosBusquedaProyecto)
+                                                ->filter(fn ($valor) => is_scalar($valor) && filled($valor))
+                                                ->implode(' ');
+                                        @endphp
+                                        <tr data-search="{{ $textoBusquedaProyecto }}">
                                             <td class="fw-semibold">{{ $item->nombre }}</td>
                                             <td>{{ $item->sector_productivo }}</td>
                                             <td>
@@ -161,7 +160,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr>
+                                        <tr class="empty-projects-row">
                                             <td colspan="7" class="text-center py-4 text-muted">No se encontraron
                                                 proyectos comunitarios registrados.</td>
                                         </tr>
@@ -408,6 +407,46 @@
 @endsection
 
 @push('scripts')
+    <script>
+        function normalizarTextoProyecto(texto) {
+            return texto
+                .toLocaleLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function filtrarProyectos() {
+            var busqueda = normalizarTextoProyecto($('#buscar-proyecto').val().trim());
+            var tbody = $('#buscar-proyecto').closest('.card').find('tbody');
+            var filas = tbody.find('tr[data-search]');
+            var resultados = 0;
+
+            filas.each(function() {
+                var coincide = normalizarTextoProyecto($(this).attr('data-search')).includes(busqueda);
+                $(this).toggle(coincide);
+
+                if (coincide) {
+                    resultados++;
+                }
+            });
+
+            tbody.find('.empty-projects-row').toggle(!busqueda && filas.length === 0);
+            tbody.find('.no-search-results-row').remove();
+
+            if (busqueda && resultados === 0) {
+                tbody.append(
+                    '<tr class="no-search-results-row"><td colspan="7" class="text-center py-4 text-muted">' +
+                    'No se encontraron proyectos que coincidan con la búsqueda.</td></tr>'
+                );
+            }
+        }
+
+        $(document).ready(function() {
+            $('#buscar-proyecto').on('input', filtrarProyectos);
+            filtrarProyectos();
+        });
+    </script>
+
     <script>
         // Inicializar Flatpickrs
         $(document).ready(function() {

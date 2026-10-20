@@ -13,32 +13,15 @@ class VocerosController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
         $titulo = 'Voceros';
         $paginaTitulo = 'Voceros';
         $paginaSubtitulo = 'Listado de voceros registrados en el sistema.';
         $vocerosActive = 'active';
 
-        $categoriaVoceria = trim((string) $request->input('categoria_voceria', ''));
-        $cedula = preg_replace('/\D+/', '', (string) $request->input('cedula', ''));
-        if ($categoriaVoceria === 'Todas las categorías') {
-            $categoriaVoceria = '';
-        }
-        $query = Vocero::with('persona');
-
-        if ($categoriaVoceria !== '') {
-            $query->where('categoria_vocero', $categoriaVoceria);
-        }
-
-        if ($cedula !== '') {
-            $query->whereHas('persona', function ($personaQuery) use ($cedula) {
-                $personaQuery->where('cedula', 'LIKE', '%' . $cedula . '%');
-            });
-        }
-
-        $vocerosActivos = (clone $query)->where('activo', true)->orderBy('created_at', 'desc')->get();
-        $vocerosInactivos = (clone $query)->where('activo', false)->orderBy('created_at', 'desc')->get();
+        $vocerosActivos = Vocero::with('persona')->where('activo', true)->orderBy('created_at', 'desc')->get();
+        $vocerosInactivos = Vocero::with('persona')->where('activo', false)->orderBy('created_at', 'desc')->get();
         $categorias = CategoriaVoceria::where('activo', true)->orderBy('nombre')->get();
 
         return view('modules.voceros.index', compact(
@@ -48,9 +31,7 @@ class VocerosController extends Controller
             'vocerosActive',
             'vocerosActivos',
             'vocerosInactivos',
-            'categorias',
-            'categoriaVoceria',
-            'cedula'
+            'categorias'
         ));
     }
 

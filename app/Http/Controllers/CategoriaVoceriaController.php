@@ -11,25 +11,15 @@ class CategoriaVoceriaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
         $titulo = 'Categorías de Vocerías';
         $paginaTitulo = 'Categorías de Vocerías';
         $paginaSubtitulo = 'Gestión de categorías para las vocerías comunitarias.';
         $categoriaVoceriasActive = 'active';
 
-        $search = trim((string) $request->input('search', ''));
-        $query = CategoriaVoceria::query();
-
-        if ($search !== '') {
-            $query->where(function ($q) use ($search) {
-                $q->where('nombre', 'LIKE', '%'.$search.'%')
-                    ->orWhere('descripcion', 'LIKE', '%'.$search.'%');
-            });
-        }
-
-        $categoriasActivas = (clone $query)->where('activo', true)->orderBy('created_at', 'desc')->get();
-        $categoriasInactivas = (clone $query)->where('activo', false)->orderBy('created_at', 'desc')->get();
+        $categoriasActivas = CategoriaVoceria::where('activo', true)->orderBy('created_at', 'desc')->get();
+        $categoriasInactivas = CategoriaVoceria::where('activo', false)->orderBy('created_at', 'desc')->get();
 
         return view('modules.categoria_vocerias.index', compact(
             'titulo',
@@ -37,8 +27,7 @@ class CategoriaVoceriaController extends Controller
             'paginaSubtitulo',
             'categoriaVoceriasActive',
             'categoriasActivas',
-            'categoriasInactivas',
-            'search'
+            'categoriasInactivas'
         ));
     }
 

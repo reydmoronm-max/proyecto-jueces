@@ -28,7 +28,7 @@ class CategoriaVoceriasModuleTest extends TestCase
         $this->actingAs($administrador);
     }
 
-    public function test_index_separates_active_and_inactive_categories_and_keeps_search_filter(): void
+    public function test_index_separates_categories_and_provides_live_search_for_all_fields(): void
     {
         CategoriaVoceria::create([
             'nombre' => 'Salud',
@@ -46,22 +46,26 @@ class CategoriaVoceriasModuleTest extends TestCase
         $response->assertOk();
         $response->assertSee('Categorias Activas');
         $response->assertSee('Categorias Inactivas');
-        $response->assertDontSee('estado_categoria');
+        $response->assertSee('id="buscar-categoria-voceria"', false);
+        $response->assertSee('placeholder="Buscar en todos los registros..."', false);
+        $response->assertDontSee('name="search"', false);
         $response->assertSeeInOrder([
             'id="categorias-activas-content"',
             'id="tbody-categorias-activas">',
+            'data-search="1 Salud Categoría activa"',
             'Salud',
             '</tbody>',
             'id="categorias-inactivas-content"',
             'id="tbody-categorias-inactivas">',
+            'data-search="2 Educación Categoría inactiva"',
             'Educación',
             '</tbody>',
         ], false);
 
-        $this->get(route('categoria-vocerias.index', ['search' => 'Salud']))
+        $this->get(route('categoria-vocerias.index', ['search' => 'no-match']))
             ->assertOk()
             ->assertSee('Salud')
-            ->assertDontSee('Educación');
+            ->assertSee('Educación');
     }
 
     public function test_changing_category_status_updates_the_category(): void

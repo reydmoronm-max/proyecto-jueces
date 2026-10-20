@@ -1,5 +1,5 @@
 @foreach ($items as $item)
-    <tr>
+    <tr data-search="{{ $item->nombre }} {{ $item->apellido }} {{ $item->cedula_usuario }} {{ $item->rol }}">
         <td>
             <div class="d-flex align-items-center">
                 <img class="rounded img-fluid avatar-40 me-3"

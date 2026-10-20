@@ -1,5 +1,15 @@
 @foreach ($items as $item)
-    <tr>
+    <tr data-search="{{ implode(' ', array_filter([
+        $item->id,
+        $item->persona?->id,
+        $item->persona?->cedula_tipo,
+        $item->persona?->cedula,
+        $item->persona?->nombres,
+        $item->persona?->apellidos,
+        $item->categoria_vocero,
+        \Carbon\Carbon::parse($item->fecha_eleccion)->format('d-m-Y'),
+        \Carbon\Carbon::parse($item->fecha_eleccion)->format('Y-m-d'),
+    ])) }}" data-status="{{ $item->activo ? 'activo' : 'inactivo' }}">
         <td>
             <span class="badge bg-primary me-1">{{ $item->persona->cedula_tipo ?? 'V' }}</span>
             {{ $item->persona->cedula }}

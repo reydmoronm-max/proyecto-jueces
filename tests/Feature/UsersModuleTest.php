@@ -54,15 +54,19 @@ class UsersModuleTest extends TestCase
         $response->assertOk();
         $response->assertSee('Usuarios Activos');
         $response->assertSee('Usuarios Inactivos');
+        $response->assertSee('id="buscar-usuario"', false);
+        $response->assertSee('placeholder="Nombre, apellido, cédula o rol..."', false);
         $response->assertSeeInOrder([
             'id="usuarios-activos-content"',
             'id="tbody-usuarios">',
+            'data-search="Usuario Prueba 10000001 Jefe de comuna"',
             'Usuario Prueba',
             'Activo Prueba',
             '</tbody>',
             '</div>',
             'id="usuarios-inactivos-content"',
             'id="tbody-usuarios-inactivos">',
+            'data-search="Inactivo Prueba 87654321 Juez"',
             'Inactivo Prueba',
             '</tbody>',
         ], false);

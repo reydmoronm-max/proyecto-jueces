@@ -15,19 +15,17 @@
                                 <i class="ri-add-fill"></i> Registrar Categoría
                             </button>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <form action="{{ route('categoria-vocerias.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2">
-                                <div>
-                                    <label for="search" class="form-label small text-muted fw-bold mb-1">Buscar categoría</label>
-                                <input type="text" name="search" class="form-control"
-                                    placeholder="Buscar por nombre o descripción..." value="{{ request('search') }}"
-                                    style="min-width: 280px;">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if ($search !== '')
-                                    <a href="{{ route('categoria-vocerias.index') }}" class="btn btn-secondary">Limpiar</a>
-                                @endif
-                            </form>
+                        <div class="d-flex flex-grow-1 justify-content-end">
+                            <div class="input-group w-100 shadow-sm rounded-3" style="max-width: 360px;">
+                                <label for="buscar-categoria-voceria" class="visually-hidden">Buscar categorías de vocerías</label>
+                                <span class="input-group-text bg-primary text-white border border-dark border-end-0 rounded-start-3">
+                                    <i class="ri-search-line"></i>
+                                </span>
+                                <input type="search" id="buscar-categoria-voceria"
+                                    class="form-control border-start-0 ps-0 rounded-end-3"
+                                    placeholder="Buscar en todos los registros..."
+                                    autocomplete="off" aria-label="Buscar categorías en todos sus datos">
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -152,7 +150,7 @@
         }
 
         function actualizarFilaCategoriaVacia(tbody, mensaje) {
-            var tieneCategorias = $(tbody).find('tr').not('.empty-categorias-row').length > 0;
+            var tieneCategorias = $(tbody).find('tr[data-search]').length > 0;
             $(tbody).find('.empty-categorias-row').remove();
 
             if (!tieneCategorias) {
@@ -160,6 +158,44 @@
                     '<tr class="empty-categorias-row"><td colspan="4" class="text-center py-4">' + mensaje + '</td></tr>'
                 );
             }
+
+            filtrarCategorias();
+        }
+
+        function normalizarTextoCategoria(texto) {
+            return texto
+                .toLocaleLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function filtrarCategorias() {
+            var busqueda = normalizarTextoCategoria($('#buscar-categoria-voceria').val().trim());
+
+            ['#tbody-categorias-activas', '#tbody-categorias-inactivas'].forEach(function(selector) {
+                var tbody = $(selector);
+                var filas = tbody.find('tr[data-search]');
+                var resultados = 0;
+
+                filas.each(function() {
+                    var textoBusqueda = $(this).attr('data-search') + ' ' + $(this).attr('data-status');
+                    var coincide = normalizarTextoCategoria(textoBusqueda).includes(busqueda);
+                    $(this).toggle(coincide);
+
+                    if (coincide) {
+                        resultados++;
+                    }
+                });
+
+                tbody.find('.empty-categorias-row').toggle(!busqueda && filas.length === 0);
+                tbody.find('.no-search-results-row').remove();
+
+                if (busqueda && resultados === 0) {
+                    tbody.append(
+                        '<tr class="no-search-results-row"><td colspan="4" class="text-center py-4">No se encontraron categorías que coincidan con la búsqueda.</td></tr>'
+                    );
+                }
+            });
         }
 
         function moverCategoriaDeSeccion(id, estado) {
@@ -174,8 +210,10 @@
                 'No se encontraron categorías inactivas.';
 
             $(listaDestino).find('.empty-categorias-row').remove();
+            fila.attr('data-status', estado ? 'activa' : 'inactiva');
             $(listaDestino).append(fila);
             actualizarFilaCategoriaVacia(listaOrigen, mensajeOrigen);
+            filtrarCategorias();
 
             return {
                 fila: fila,
@@ -207,6 +245,8 @@
                     $(movimiento.listaOrigen).append(movimiento.fila);
                     actualizarFilaCategoriaVacia(movimiento.listaDestino, movimiento.mensajeDestino);
                     $('#cat-' + id).prop('checked', !estado);
+                    movimiento.fila.attr('data-status', estado ? 'inactiva' : 'activa');
+                    filtrarCategorias();
                     Swal.fire({
                         title: 'Error',
                         text: 'No se pudo actualizar el estado de la categoría.',
@@ -240,6 +280,9 @@
 
         // Form validations
         $(document).ready(function() {
+            $('#buscar-categoria-voceria').on('input', filtrarCategorias);
+            filtrarCategorias();
+
             $('#formCategoria').on('submit', function(e) {
                 var nombre = $('#nombre').val().trim();
                 if (nombre.length < 3) {

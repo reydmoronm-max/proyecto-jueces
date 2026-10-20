@@ -39,6 +39,11 @@ class VocerosModuleTest extends TestCase
         $response->assertOk();
         $response->assertSee('Voceros Activos');
         $response->assertSee('Voceros Inactivos');
+        $response->assertSee('id="buscar-vocero"', false);
+        $response->assertSee('placeholder="Buscar en todos los registros..."', false);
+        $response->assertDontSee('name="categoria_voceria"', false);
+        $response->assertDontSee('id="buscar_cedula"', false);
+        $response->assertSee('data-search="1 1 V 12345678 Activo Persona Salud 01-01-2026 2026-01-01"', false);
         $response->assertSeeInOrder([
             'id="voceros-activos-content"',
             'id="tbody-voceros-activos">',
@@ -51,6 +56,16 @@ class VocerosModuleTest extends TestCase
         ], false);
         $this->assertTrue($activo->activo);
         $this->assertFalse($inactivo->activo);
+
+        $responseConFiltrosAntiguos = $this->get(route('voceros.index', [
+            'categoria_voceria' => 'Categoría inexistente',
+            'cedula' => '00000000',
+            'estado_vocero' => '1',
+        ]));
+
+        $responseConFiltrosAntiguos->assertOk();
+        $responseConFiltrosAntiguos->assertSee('Activo Persona');
+        $responseConFiltrosAntiguos->assertSee('Inactivo Persona');
     }
 
     public function test_changing_vocero_status_updates_the_record_for_moving_it_between_tabs(): void

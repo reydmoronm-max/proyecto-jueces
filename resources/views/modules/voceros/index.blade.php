@@ -15,30 +15,17 @@
                                 <i class="ri-add-fill"></i> Registrar Vocero
                             </button>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <form action="{{ route('voceros.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2">
-                                <div>
-                                    <label for="categoria_voceria" class="form-label small text-muted fw-bold mb-1">Categoría de Vocería</label>
-                                    <select name="categoria_voceria" id="categoria_voceria" class="form-select">
-                                        <option value="">Todas las categorías</option>
-                                        @foreach ($categorias as $categoria)
-                                            <option value="{{ $categoria->nombre }}" {{ $categoriaVoceria === $categoria->nombre ? 'selected' : '' }}>
-                                                {{ $categoria->nombre }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="buscar_cedula" class="form-label small text-muted fw-bold mb-1">Buscar por Cédula</label>
-                                    <input type="text" name="cedula" id="buscar_cedula" class="form-control"
-                                        placeholder="Ingrese la cédula" value="{{ $cedula }}" maxlength="8" inputmode="numeric"
-                                        style="min-width: 180px;">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if ($categoriaVoceria !== '' || $cedula !== '')
-                                    <a href="{{ route('voceros.index') }}" class="btn btn-secondary">Limpiar</a>
-                                @endif
-                            </form>
+                        <div class="d-flex flex-grow-1 justify-content-end">
+                            <div class="input-group w-100 shadow-sm rounded-3" style="max-width: 360px;">
+                                <label for="buscar-vocero" class="visually-hidden">Buscar voceros</label>
+                                <span class="input-group-text bg-primary text-white border border-dark border-end-0 rounded-start-3">
+                                    <i class="ri-search-line"></i>
+                                </span>
+                                <input type="search" id="buscar-vocero"
+                                    class="form-control border-start-0 ps-0 rounded-end-3"
+                                    placeholder="Buscar en todos los registros..."
+                                    autocomplete="off" aria-label="Buscar voceros en todos sus datos">
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -272,7 +259,7 @@
         }
 
         function actualizarFilaVacia(tbody, mensaje) {
-            var tieneVoceros = $(tbody).find('tr').not('.empty-voceros-row').length > 0;
+            var tieneVoceros = $(tbody).find('tr[data-search]').length > 0;
             $(tbody).find('.empty-voceros-row').remove();
 
             if (!tieneVoceros) {
@@ -280,6 +267,44 @@
                     '<tr class="empty-voceros-row"><td colspan="6" class="text-center py-4">' + mensaje + '</td></tr>'
                 );
             }
+
+            filtrarVoceros();
+        }
+
+        function normalizarTextoVocero(texto) {
+            return texto
+                .toLocaleLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function filtrarVoceros() {
+            var busqueda = normalizarTextoVocero($('#buscar-vocero').val().trim());
+
+            ['#tbody-voceros-activos', '#tbody-voceros-inactivos'].forEach(function(selector) {
+                var tbody = $(selector);
+                var filas = tbody.find('tr[data-search]');
+                var resultados = 0;
+
+                filas.each(function() {
+                    var textoBusqueda = $(this).attr('data-search') + ' ' + $(this).attr('data-status');
+                    var coincide = normalizarTextoVocero(textoBusqueda).includes(busqueda);
+                    $(this).toggle(coincide);
+
+                    if (coincide) {
+                        resultados++;
+                    }
+                });
+
+                tbody.find('.empty-voceros-row').toggle(!busqueda && filas.length === 0);
+                tbody.find('.no-search-results-row').remove();
+
+                if (busqueda && resultados === 0) {
+                    tbody.append(
+                        '<tr class="no-search-results-row"><td colspan="6" class="text-center py-4">No se encontraron voceros que coincidan con la búsqueda.</td></tr>'
+                    );
+                }
+            });
         }
 
         function moverVoceroDeSeccion(id, estado) {
@@ -294,8 +319,10 @@
                 'No se encontraron voceros inactivos.';
 
             $(listaDestino).find('.empty-voceros-row').remove();
+            fila.attr('data-status', estado ? 'activo' : 'inactivo');
             $(listaDestino).append(fila);
             actualizarFilaVacia(listaOrigen, mensajeOrigen);
+            filtrarVoceros();
 
             return {
                 fila: fila,
@@ -326,6 +353,8 @@
                     $(movimiento.listaOrigen).append(movimiento.fila);
                     actualizarFilaVacia(movimiento.listaDestino, movimiento.mensajeDestino);
                     $('#vocero-' + id).prop('checked', !estado);
+                    movimiento.fila.attr('data-status', estado ? 'inactivo' : 'activo');
+                    filtrarVoceros();
                     Swal.fire({
                         title: 'Error',
                         text: 'No se pudo actualizar el estado del vocero.',
@@ -337,6 +366,9 @@
 
         // Client-side forms validation
         $(document).ready(function() {
+            $('#buscar-vocero').on('input', filtrarVoceros);
+            filtrarVoceros();
+
             // Create Vocero validation
             $('#formVocero').on('submit', function(e) {
                 var cedula = $('#cedula').val().trim();
