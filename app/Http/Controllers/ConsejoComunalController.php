@@ -13,25 +13,19 @@ class ConsejoComunalController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
         $titulo = 'Consejos Comunales';
         $paginaTitulo = 'Consejos Comunales';
         $paginaSubtitulo = 'Listado de consejos comunales registrados.';
 
-        $items = $this->consultaConsejos($request)->get();
-        $consejos = ConsejoComunal::orderBy('nombre')->get(['nombre']);
-        $nombreConsejo = $request->input('nombre_consejo', '');
-        $cedulaJefe = $request->input('cedula_jefe', '');
+        $items = ConsejoComunal::with('jefe')->orderBy('created_at', 'desc')->get();
 
         return view('modules.consejos_comunales.index', compact(
             'titulo',
             'paginaTitulo',
             'paginaSubtitulo',
-            'items',
-            'consejos',
-            'nombreConsejo',
-            'cedulaJefe'
+            'items'
         ));
     }
 
@@ -138,24 +132,11 @@ class ConsejoComunalController extends Controller
     /**
      * Return tbody partial with items.
      */
-    public function tbody(Request $request)
+    public function tbody()
     {
-        $items = $this->consultaConsejos($request)->get();
-        return view('modules.consejos_comunales.tbody', compact('items'));
-    }
+        $items = ConsejoComunal::with('jefe')->orderBy('created_at', 'desc')->get();
 
-    private function consultaConsejos(Request $request)
-    {
-        return ConsejoComunal::with('jefe')
-            ->when($request->filled('nombre_consejo'), function ($query) use ($request) {
-                $query->where('nombre', 'like', '%' . $request->input('nombre_consejo') . '%');
-            })
-            ->when($request->filled('cedula_jefe'), function ($query) use ($request) {
-                $query->whereHas('jefe', function ($jefeQuery) use ($request) {
-                    $jefeQuery->where('cedula', $request->input('cedula_jefe'));
-                });
-            })
-            ->orderBy('created_at', 'desc');
+        return view('modules.consejos_comunales.tbody', compact('items'));
     }
 
     /**

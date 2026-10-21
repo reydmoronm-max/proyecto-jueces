@@ -14,15 +14,12 @@ class CirculoAbuelosController extends Controller
     /**
      * Display the index view containing Abuelos and Jornadas tabs.
      */
-    public function index(Request $request)
+    public function index()
     {
         $titulo = 'Círculo de Abuelos';
         $paginaTitulo = 'Círculo de Abuelos';
         $paginaSubtitulo = 'Módulo para la atención social y registro de adultos mayores.';
         $circuloActive = 'active';
-
-        $search = $request->input('search');
-        $consejoComunalId = $request->input('consejo_comunal_id');
 
         // Age threshold for 60 years or older
         $thresholdDate = Carbon::now()->subYears(60)->toDateString();
@@ -30,20 +27,6 @@ class CirculoAbuelosController extends Controller
         $queryAbuelos = Persona::with(['consejoComunal', 'familia'])
             ->whereNotNull('fecha_nacimiento')
             ->where('fecha_nacimiento', '<=', $thresholdDate);
-
-        if ($search) {
-            $queryAbuelos->where(function($q) use ($search) {
-                $q->where('cedula', 'LIKE', '%' . $search . '%')
-                  ->orWhere('nombres', 'LIKE', '%' . $search . '%')
-                  ->orWhere('apellidos', 'LIKE', '%' . $search . '%');
-            });
-        }
-
-        if ($consejoComunalId) {
-            $queryAbuelos->whereHas('familia', function ($q) use ($consejoComunalId) {
-                $q->where('consejo_comunal_id', $consejoComunalId);
-            });
-        }
 
         $abuelos = $queryAbuelos->orderBy('nombres', 'asc')->get();
 

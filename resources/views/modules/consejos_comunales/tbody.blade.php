@@ -1,5 +1,14 @@
 @forelse ($items as $item)
-    <tr>
+    <tr data-search="{{ implode(' ', array_filter([
+        $item->id,
+        $item->nombre,
+        $item->rif,
+        $item->jefe?->cedula_tipo,
+        $item->jefe?->cedula,
+        $item->jefe?->nombres,
+        $item->jefe?->apellidos,
+        $item->direccion,
+    ])) }}">
         <td>
             <div class="d-flex align-items-center">
                 <h6>{{ $item->nombre }}</h6>
@@ -46,7 +55,7 @@
         </td>
     </tr>
 @empty
-    <tr>
+    <tr class="empty-councils-row">
         <td colspan="5" class="text-center py-4 text-muted">
             <i class="ri-search-line fs-3 d-block mb-2"></i>
             No se encontraron consejos comunales con los filtros indicados.

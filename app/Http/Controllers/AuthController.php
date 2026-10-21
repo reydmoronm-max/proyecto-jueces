@@ -46,7 +46,7 @@ class AuthController extends Controller
         if (Auth::user()->rol == 'Jefe de comuna' || Auth::user()->rol == 'Jefe de Comando') {
             return to_route('reportes.index');
         } else if (Auth::user()->rol == 'Juez') {
-            return to_route('visitas.index');
+            return to_route('visitas.index')->with('mostrar_notificacion_citas', true);
         }
     }
 

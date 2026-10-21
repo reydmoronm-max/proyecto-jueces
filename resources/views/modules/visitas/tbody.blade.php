@@ -1,5 +1,17 @@
 @foreach ($items as $item)
-    <tr>
+    <tr data-search="{{ implode(' ', array_filter([
+        $item->id,
+        $item->persona_id,
+        optional($item->persona)->nombres,
+        optional($item->persona)->apellidos,
+        optional($item->persona)->cedula_tipo,
+        optional($item->persona)->cedula,
+        optional($item->persona)->telefono,
+        optional($item->persona)->direccion,
+        $item->de_parte,
+        $item->created_at?->format('d/m/Y h:i A'),
+        $item->proposito,
+    ])) }}">
         <td>
             <div class="d-flex align-items-center">
                 <h6>{{ optional($item->persona)->nombres }} {{ optional($item->persona)->apellidos }}</h6>
@@ -41,3 +53,8 @@
         </td>
     </tr>
 @endforeach
+@if ($items->isEmpty())
+    <tr class="empty-visits-row">
+        <td colspan="7" class="text-center py-4">No hay visitas registradas.</td>
+    </tr>
+@endif

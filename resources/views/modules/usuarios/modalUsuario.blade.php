@@ -33,7 +33,7 @@
                             <label class="text-primary fw-bold mb-1" for="nombre">NOMBRE</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" class="form-control bg-white" name="nombre" id="nombre" placeholder="Juan" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]+/g, '')">
+                                <input type="text" class="form-control bg-white" name="nombre" id="nombre" placeholder="Juan" value="{{ old('nombre') }}" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]+/g, '')">
                             </div>
                         </div>
 
@@ -41,7 +41,7 @@
                             <label class="text-primary fw-bold mb-1" for="apellido">APELLIDO</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" class="form-control bg-white" name="apellido" id="apellido" placeholder="García" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]+/g, '')">
+                                <input type="text" class="form-control bg-white" name="apellido" id="apellido" placeholder="García" value="{{ old('apellido') }}" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]+/g, '')">
                             </div>
                         </div>
 
@@ -51,9 +51,9 @@
                                 <span class="input-group-text"><i class="fa-solid fa-users-gear"></i></span>
                                 <select class="form-select bg-white" name="rol" id="rol" required>
                                     <option value="">Elija una opción</option>
-                                    <option value="Jefe de comuna">Jefe de Comuna</option>
-                                    <option value="Jefe de Comando">Jefe de Comando</option>
-                                    <option value="Juez">Juez</option>
+                                    <option value="Jefe de comuna" @selected(old('rol') === 'Jefe de comuna')>Jefe de Comuna</option>
+                                    <option value="Jefe de Comando" @selected(old('rol') === 'Jefe de Comando')>Jefe de Comando</option>
+                                    <option value="Juez" @selected(old('rol') === 'Juez')>Juez</option>
                                 </select>
                             </div>
                         </div>
@@ -64,10 +64,10 @@
                                 <span class="input-group-text"><i class="fa-solid fa-question"></i></span>
                                 <select class="form-select bg-white" name="pregunta_seguridad" id="pregunta_seguridad">
                                     <option value="">Elija una pregunta (opcional)</option>
-                                    <option value="¿Qué color le gusta más?">¿Qué color le gusta más?</option>
-                                    <option value="¿Cómo se llamaba su mascota favorita de la infancia?">¿Cómo se llamaba su mascota favorita de la infancia?</option>
-                                    <option value="¿Cuál es su deporte favorito?">¿Cuál es su deporte favorito?</option>
-                                    <option value="¿Qué raza de gato le gusta más?">¿Qué raza de gato le gusta más?</option>
+                                    <option value="¿Qué color le gusta más?" @selected(old('pregunta_seguridad') === '¿Qué color le gusta más?')>¿Qué color le gusta más?</option>
+                                    <option value="¿Cómo se llamaba su mascota favorita de la infancia?" @selected(old('pregunta_seguridad') === '¿Cómo se llamaba su mascota favorita de la infancia?')>¿Cómo se llamaba su mascota favorita de la infancia?</option>
+                                    <option value="¿Cuál es su deporte favorito?" @selected(old('pregunta_seguridad') === '¿Cuál es su deporte favorito?')>¿Cuál es su deporte favorito?</option>
+                                    <option value="¿Qué raza de gato le gusta más?" @selected(old('pregunta_seguridad') === '¿Qué raza de gato le gusta más?')>¿Qué raza de gato le gusta más?</option>
                                 </select>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                             <label class="fw-bold text-primary mb-1" for="respuesta_seguridad">RESPUSTA DE SEGURIDAD</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                                <input type="text" class="form-control bg-white" name="respuesta_seguridad" id="respuesta_seguridad" placeholder="Escriba su respuesta a la pregunta de seguridad">
+                                <input type="text" class="form-control bg-white" name="respuesta_seguridad" id="respuesta_seguridad" placeholder="Escriba su respuesta a la pregunta de seguridad" value="{{ old('respuesta_seguridad') }}">
                             </div>
                         </div>
                     </section>

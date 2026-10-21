@@ -15,92 +15,88 @@
                                 <i class="ri-add-fill"></i> Registrar Vocero
                             </button>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <form action="{{ route('voceros.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2">
-                                <div>
-                                    <label for="categoria_voceria" class="form-label small text-muted fw-bold mb-1">Categoría de Vocería</label>
-                                    <select name="categoria_voceria" id="categoria_voceria" class="form-select">
-                                        <option value="">Todas las categorías</option>
-                                        @foreach ($categorias as $categoria)
-                                            <option value="{{ $categoria->nombre }}" {{ $categoriaVoceria === $categoria->nombre ? 'selected' : '' }}>
-                                                {{ $categoria->nombre }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="buscar_cedula" class="form-label small text-muted fw-bold mb-1">Buscar por Cédula</label>
-                                    <input type="text" name="cedula" id="buscar_cedula" class="form-control"
-                                        placeholder="Ingrese la cédula" value="{{ $cedula }}" maxlength="8" inputmode="numeric"
-                                        style="min-width: 180px;">
-                                </div>
-                                <div>
-                                    <label for="estado_vocero" class="form-label small text-muted fw-bold mb-1">Vocero Activo/Inactivo</label>
-                                    <select name="estado_vocero" id="estado_vocero" class="form-select">
-                                        <option value="">Todos los voceros</option>
-                                        <option value="1" {{ $estadoVocero === '1' ? 'selected' : '' }}>Activos</option>
-                                        <option value="0" {{ $estadoVocero === '0' ? 'selected' : '' }}>Inactivos</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if ($categoriaVoceria !== '' || $cedula !== '' || $estadoVocero !== '')
-                                    <a href="{{ route('voceros.index') }}" class="btn btn-secondary">Limpiar</a>
-                                @endif
-                            </form>
+                        <div class="d-flex flex-grow-1 justify-content-end">
+                            <div class="input-group w-100 shadow-sm rounded-3" style="max-width: 360px;">
+                                <label for="buscar-vocero" class="visually-hidden">Buscar voceros</label>
+                                <span class="input-group-text bg-primary text-white border border-dark border-end-0 rounded-start-3">
+                                    <i class="ri-search-line"></i>
+                                </span>
+                                <input type="search" id="buscar-vocero"
+                                    class="form-control border-start-0 ps-0 rounded-end-3"
+                                    placeholder="Buscar en todos los registros..."
+                                    autocomplete="off" aria-label="Buscar voceros en todos sus datos">
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive mt-4">
-                            <table id="basic-table" class="table table-striped mb-0" role="grid">
-                                <thead>
-                                    <tr>
-                                        <th>Cédula</th>
-                                        <th>Nombre y Apellido</th>
-                                        <th>Categoría</th>
-                                        <th>Fecha de elección</th>
-                                        <th>Activo</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($items as $item)
-                                        <tr>
-                                            <td>
-                                                <span
-                                                    class="badge bg-primary me-1">{{ $item->persona->cedula_tipo ?? 'V' }}</span>
-                                                {{ $item->persona->cedula }}
-                                            </td>
-                                            <td>{{ $item->persona->nombres }} {{ $item->persona->apellidos }}</td>
-                                            <td>{{ $item->categoria_vocero }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->fecha_eleccion)->format('d-m-Y') }}</td>
-                                            <td>
-                                                <div class="form-check form-switch form-check-inline">
-                                                    <input class="form-check-input estado-vocero" type="checkbox"
-                                                        id="vocero-{{ $item->id }}" data-id="{{ $item->id }}"
-                                                        {{ $item->activo ? 'checked' : '' }}>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    {{-- <button type="button" class="btn btn-sm btn-light" title="Consultar"
-                                                        onclick="consultarVocero({{ $item->id }})">
-                                                        <i class="ri-eye-fill"></i>
-                                                    </button> --}}
-                                                    <button type="button" class="btn btn-sm btn-warning" title="Editar"
-                                                        onclick="editarVocero({{ $item->id }})">
-                                                        <i class="ri-pencil-fill"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center py-4">No se encontraron voceros
-                                                registrados.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs nav-fill mb-4 border-bottom-0" id="vocerosTabs" role="tablist"
+                            style="background: #f8f9fa; padding: 6px; border-radius: 10px;">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active py-2 fw-semibold" id="voceros-activos-tab"
+                                    data-bs-toggle="tab" data-bs-target="#voceros-activos-content" type="button"
+                                    role="tab" aria-controls="voceros-activos-content" aria-selected="true"
+                                    style="border-radius: 8px;">Voceros Activos</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link py-2 fw-semibold" id="voceros-inactivos-tab"
+                                    data-bs-toggle="tab" data-bs-target="#voceros-inactivos-content" type="button"
+                                    role="tab" aria-controls="voceros-inactivos-content" aria-selected="false"
+                                    style="border-radius: 8px;">Voceros Inactivos</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="vocerosTabsContent">
+                            <div class="tab-pane fade show active" id="voceros-activos-content" role="tabpanel"
+                                aria-labelledby="voceros-activos-tab">
+                                <div class="table-responsive">
+                                    <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                        <thead>
+                                            <tr>
+                                                <th>Cédula</th>
+                                                <th>Nombre y Apellido</th>
+                                                <th>Categoría</th>
+                                                <th>Fecha de elección</th>
+                                                <th>Activo</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-voceros-activos">
+                                            @if ($vocerosActivos->isNotEmpty())
+                                                @include('modules.voceros.tbody', ['items' => $vocerosActivos])
+                                            @else
+                                                <tr class="empty-voceros-row">
+                                                    <td colspan="6" class="text-center py-4">No se encontraron voceros activos.</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="voceros-inactivos-content" role="tabpanel"
+                                aria-labelledby="voceros-inactivos-tab">
+                                <div class="table-responsive">
+                                    <table id="tabla-voceros-inactivos" class="table table-striped mb-0" role="grid">
+                                        <thead>
+                                            <tr>
+                                                <th>Cédula</th>
+                                                <th>Nombre y Apellido</th>
+                                                <th>Categoría</th>
+                                                <th>Fecha de elección</th>
+                                                <th>Activo</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-voceros-inactivos">
+                                            @if ($vocerosInactivos->isNotEmpty())
+                                                @include('modules.voceros.tbody', ['items' => $vocerosInactivos])
+                                            @else
+                                                <tr class="empty-voceros-row">
+                                                    <td colspan="6" class="text-center py-4">No se encontraron voceros inactivos.</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -262,16 +258,103 @@
             });
         }
 
+        function actualizarFilaVacia(tbody, mensaje) {
+            var tieneVoceros = $(tbody).find('tr[data-search]').length > 0;
+            $(tbody).find('.empty-voceros-row').remove();
+
+            if (!tieneVoceros) {
+                $(tbody).append(
+                    '<tr class="empty-voceros-row"><td colspan="6" class="text-center py-4">' + mensaje + '</td></tr>'
+                );
+            }
+
+            filtrarVoceros();
+        }
+
+        function normalizarTextoVocero(texto) {
+            return texto
+                .toLocaleLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function filtrarVoceros() {
+            var busqueda = normalizarTextoVocero($('#buscar-vocero').val().trim());
+
+            ['#tbody-voceros-activos', '#tbody-voceros-inactivos'].forEach(function(selector) {
+                var tbody = $(selector);
+                var filas = tbody.find('tr[data-search]');
+                var resultados = 0;
+
+                filas.each(function() {
+                    var textoBusqueda = $(this).attr('data-search') + ' ' + $(this).attr('data-status');
+                    var coincide = normalizarTextoVocero(textoBusqueda).includes(busqueda);
+                    $(this).toggle(coincide);
+
+                    if (coincide) {
+                        resultados++;
+                    }
+                });
+
+                tbody.find('.empty-voceros-row').toggle(!busqueda && filas.length === 0);
+                tbody.find('.no-search-results-row').remove();
+
+                if (busqueda && resultados === 0) {
+                    tbody.append(
+                        '<tr class="no-search-results-row"><td colspan="6" class="text-center py-4">No se encontraron voceros que coincidan con la búsqueda.</td></tr>'
+                    );
+                }
+            });
+        }
+
+        function moverVoceroDeSeccion(id, estado) {
+            var fila = $('#vocero-' + id).closest('tr');
+            var listaOrigen = estado ? '#tbody-voceros-inactivos' : '#tbody-voceros-activos';
+            var listaDestino = estado ? '#tbody-voceros-activos' : '#tbody-voceros-inactivos';
+            var mensajeOrigen = estado ?
+                'No se encontraron voceros inactivos.' :
+                'No se encontraron voceros activos.';
+            var mensajeDestino = estado ?
+                'No se encontraron voceros activos.' :
+                'No se encontraron voceros inactivos.';
+
+            $(listaDestino).find('.empty-voceros-row').remove();
+            fila.attr('data-status', estado ? 'activo' : 'inactivo');
+            $(listaDestino).append(fila);
+            actualizarFilaVacia(listaOrigen, mensajeOrigen);
+            filtrarVoceros();
+
+            return {
+                fila: fila,
+                listaOrigen: listaOrigen,
+                listaDestino: listaDestino,
+                mensajeDestino: mensajeDestino
+            };
+        }
+
         $(document).on('change', '.estado-vocero', function() {
             var checkbox = $(this);
             var estado = checkbox.is(':checked') ? 1 : 0;
             var id = checkbox.data('id');
+            var movimiento = moverVoceroDeSeccion(id, estado);
 
             $.ajax({
-                type: 'GET',
+                type: 'PATCH',
                 url: '{{ url('/voceros/cambiar-estado') }}/' + id + '/' + estado,
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function() {
+                    var tab = estado ? '#voceros-activos-tab' : '#voceros-inactivos-tab';
+                    bootstrap.Tab.getOrCreateInstance(document.querySelector(tab)).show();
+                },
                 error: function() {
-                    checkbox.prop('checked', !estado);
+                    $(movimiento.listaOrigen).find('.empty-voceros-row').remove();
+                    $(movimiento.listaOrigen).append(movimiento.fila);
+                    actualizarFilaVacia(movimiento.listaDestino, movimiento.mensajeDestino);
+                    $('#vocero-' + id).prop('checked', !estado);
+                    movimiento.fila.attr('data-status', estado ? 'inactivo' : 'activo');
+                    filtrarVoceros();
                     Swal.fire({
                         title: 'Error',
                         text: 'No se pudo actualizar el estado del vocero.',
@@ -283,6 +366,9 @@
 
         // Client-side forms validation
         $(document).ready(function() {
+            $('#buscar-vocero').on('input', filtrarVoceros);
+            filtrarVoceros();
+
             // Create Vocero validation
             $('#formVocero').on('submit', function(e) {
                 var cedula = $('#cedula').val().trim();

@@ -46,7 +46,11 @@
         <link href="{{ asset('vendor/fontawesome/css/all.css') }}" rel="stylesheet">
         
     </head>
-    <body class="fase-animada">
+    <body>
+        <div class="page-loader" id="page-loader" role="status" aria-live="polite" aria-label="Cargando">
+            <span class="page-loader__spinner" aria-hidden="true"></span>
+            <span class="page-loader__text">Cargando...</span>
+        </div>
         @include('shared.aside')        
         <main class="main-content">
             @include('shared.header')

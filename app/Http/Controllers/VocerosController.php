@@ -13,38 +13,15 @@ class VocerosController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
         $titulo = 'Voceros';
         $paginaTitulo = 'Voceros';
         $paginaSubtitulo = 'Listado de voceros registrados en el sistema.';
         $vocerosActive = 'active';
 
-        $categoriaVoceria = trim((string) $request->input('categoria_voceria', ''));
-        $cedula = preg_replace('/\D+/', '', (string) $request->input('cedula', ''));
-        $estadoVocero = (string) $request->input('estado_vocero', '');
-        if ($categoriaVoceria === 'Todas las categorías') {
-            $categoriaVoceria = '';
-        }
-        $query = Vocero::with('persona');
-
-        if ($categoriaVoceria !== '') {
-            $query->where('categoria_vocero', $categoriaVoceria);
-        }
-
-        if ($cedula !== '') {
-            $query->whereHas('persona', function ($personaQuery) use ($cedula) {
-                $personaQuery->where('cedula', 'LIKE', '%' . $cedula . '%');
-            });
-        }
-
-        if (in_array($estadoVocero, ['0', '1'], true)) {
-            $query->where('activo', $estadoVocero === '1');
-        } else {
-            $estadoVocero = '';
-        }
-
-        $items = $query->orderBy('created_at', 'desc')->get();
+        $vocerosActivos = Vocero::with('persona')->where('activo', true)->orderBy('created_at', 'desc')->get();
+        $vocerosInactivos = Vocero::with('persona')->where('activo', false)->orderBy('created_at', 'desc')->get();
         $categorias = CategoriaVoceria::where('activo', true)->orderBy('nombre')->get();
 
         return view('modules.voceros.index', compact(
@@ -52,11 +29,9 @@ class VocerosController extends Controller
             'paginaTitulo',
             'paginaSubtitulo',
             'vocerosActive',
-            'items',
-            'categorias',
-            'categoriaVoceria',
-            'cedula',
-            'estadoVocero'
+            'vocerosActivos',
+            'vocerosInactivos',
+            'categorias'
         ));
     }
 
@@ -210,10 +185,15 @@ class VocerosController extends Controller
     /**
      * Activate or deactivate the specified resource.
      */
-    public function cambiarEstado(string $id, int $estado)
+    public function cambiarEstado(Request $request, string $id, string $estado)
     {
+        $request->merge(['estado' => $estado]);
+        $datos = $request->validate([
+            'estado' => ['required', 'boolean'],
+        ]);
+
         $vocero = Vocero::findOrFail($id);
-        $vocero->activo = (bool) $estado;
+        $vocero->activo = (bool) $datos['estado'];
         $vocero->save();
 
         return response()->json(['activo' => $vocero->activo]);

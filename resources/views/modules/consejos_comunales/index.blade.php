@@ -14,32 +14,18 @@
                             <i class="ri-add-fill"></i> Registrar Consejo Comunal
                         </button>
                     </div>
-                    <form action="{{ route('consejos-comunales.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2 ms-auto">
-                        <div>
-                            <label for="nombre_consejo" class="form-label small text-muted fw-bold">Nombre del Consejo</label>
-                            <select name="nombre_consejo" id="nombre_consejo" class="form-select bg-white">
-                                <option value="">Todos los consejos</option>
-                                @foreach ($consejos as $consejo)
-                                    <option value="{{ $consejo->nombre }}" {{ $nombreConsejo === $consejo->nombre ? 'selected' : '' }}>
-                                        {{ $consejo->nombre }}
-                                    </option>
-                                @endforeach
-                            </select>
+                    <div class="d-flex flex-grow-1 justify-content-end">
+                        <div class="input-group w-100 shadow-sm rounded-3" style="max-width: 360px;">
+                            <label for="buscar-consejo" class="visually-hidden">Buscar consejos comunales</label>
+                            <span class="input-group-text bg-primary text-white border border-dark border-end-0 rounded-start-3">
+                                <i class="ri-search-line"></i>
+                            </span>
+                            <input type="search" id="buscar-consejo"
+                                class="form-control border-start-0 ps-0 rounded-end-3"
+                                placeholder="Buscar en todos los registros..."
+                                autocomplete="off" aria-label="Buscar consejos comunales en todos sus datos">
                         </div>
-                        <div>
-                            <label for="cedula_jefe" class="form-label small text-muted fw-bold">Cédula del Jefe de Comando</label>
-                            <input type="text" name="cedula_jefe" id="cedula_jefe" class="form-control bg-white"
-                                placeholder="Buscar por cédula" value="{{ $cedulaJefe }}" maxlength="8" inputmode="numeric" style="min-width: 190px;">
-                        </div>
-                        <div class="d-flex gap-2 pb-1">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="ri-search-line"></i> Buscar
-                            </button>
-                            @if ($nombreConsejo !== '' || $cedulaJefe !== '')
-                                <a href="{{ route('consejos-comunales.index') }}" class="btn btn-secondary">Limpiar</a>
-                            @endif
-                        </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive mt-4">
@@ -98,6 +84,43 @@
 
     <!-- Operaciones CRUD y AJAX Búsqueda -->
     <script>
+        function normalizarTextoConsejo(texto) {
+            return texto
+                .toLocaleLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function filtrarConsejos() {
+            var busqueda = normalizarTextoConsejo($('#buscar-consejo').val().trim());
+            var tbody = $('#tbody-consejos');
+            var filas = tbody.find('tr[data-search]');
+            var resultados = 0;
+
+            filas.each(function() {
+                var coincide = normalizarTextoConsejo($(this).attr('data-search')).includes(busqueda);
+                $(this).toggle(coincide);
+
+                if (coincide) {
+                    resultados++;
+                }
+            });
+
+            tbody.find('.empty-councils-row').toggle(!busqueda && filas.length === 0);
+            tbody.find('.no-search-results-row').remove();
+
+            if (busqueda && resultados === 0) {
+                tbody.append(
+                    '<tr class="no-search-results-row"><td colspan="5" class="text-center py-4 text-muted"><i class="ri-search-line fs-3 d-block mb-2"></i>No se encontraron consejos comunales que coincidan con la búsqueda.</td></tr>'
+                );
+            }
+        }
+
+        $(document).ready(function() {
+            $('#buscar-consejo').on('input', filtrarConsejos);
+            filtrarConsejos();
+        });
+
         // Función de búsqueda de Jefe de Comando por Cédula (Común)
         function buscarJefeComando(cedulaInputId, hiddenIdId, containerId, labelId) {
             var cedula = $('#' + cedulaInputId).val().trim();

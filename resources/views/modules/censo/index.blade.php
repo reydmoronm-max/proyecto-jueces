@@ -18,8 +18,9 @@
                                 <i class="ri-list-settings-line me-1"></i> Catálogo de Enfermedades y Profesiones
                             </button>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <form action="{{ route('censo.index') }}" method="GET" class="d-flex align-items-end flex-wrap gap-2">
+                        <div class="d-flex flex-grow-1 justify-content-end">
+                            <form id="censo-filtros" action="{{ route('censo.index') }}" method="GET"
+                                class="d-flex align-items-end justify-content-end flex-wrap gap-2 w-100">
                                 <div>
                                     <label for="consejo_comunal_id" class="form-label small text-muted fw-bold mb-1">Consejo Comunidad</label>
                                     <select name="consejo_comunal_id" id="consejo_comunal_id" class="form-select">
@@ -49,14 +50,17 @@
                                         <option value="ninguno" {{ $beneficio === 'ninguno' ? 'selected' : '' }}>Ningún beneficio</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <label for="search" class="form-label small text-muted fw-bold mb-1">Buscar</label>
-                                <input type="text" name="search" id="search" class="form-control"
-                                    placeholder="Buscar por familia, cédula, nombre, comunidad..." value="{{ request('search') }}"
-                                    style="min-width: 280px;">
+                                <div class="input-group w-100 shadow-sm rounded-3" style="max-width: 360px;">
+                                    <label for="buscar-censo" class="visually-hidden">Buscar en el censo</label>
+                                    <span class="input-group-text bg-primary text-white border border-dark border-end-0 rounded-start-3">
+                                        <i class="ri-search-line"></i>
+                                    </span>
+                                    <input type="search" id="buscar-censo"
+                                        class="form-control border-start-0 ps-0 rounded-end-3"
+                                        placeholder="Buscar en todos los registros..."
+                                        autocomplete="off" aria-label="Buscar registros del censo">
                                 </div>
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                                @if ($search !== '' || $consejoComunalId !== '' || $tipoVivienda !== '' || $beneficio !== '')
+                                @if ($consejoComunalId !== '' || $tipoVivienda !== '' || $beneficio !== '')
                                     <a href="{{ route('censo.index') }}" class="btn btn-secondary">Limpiar</a>
                                 @endif
                             </form>
@@ -77,7 +81,51 @@
                                 </thead>
                                 <tbody>
                                     @forelse($items as $item)
-                                        <tr>
+                                        @php
+                                            $datosBusqueda = [
+                                                $item->id,
+                                                $item->numero_familia,
+                                                $item->consejo_comunal_id,
+                                                $item->consejoComunal?->nombre,
+                                                $item->vivienda,
+                                                $item->mision_vivienda,
+                                                $item->bono_unico_familiar,
+                                                $item->clap,
+                                                $item->personas->count(),
+                                            ];
+
+                                            foreach ($item->personas as $persona) {
+                                                $datosBusqueda = array_merge($datosBusqueda, [
+                                                    $persona->id,
+                                                    $persona->cedula_tipo,
+                                                    $persona->cedula,
+                                                    $persona->nombres,
+                                                    $persona->apellidos,
+                                                    $persona->telefono,
+                                                    $persona->direccion,
+                                                    $persona->fecha_nacimiento,
+                                                    $persona->centro_votacion,
+                                                    $persona->carnet_patria,
+                                                    $persona->nivel_academico,
+                                                    $persona->profesion,
+                                                    $persona->situacion_laboral,
+                                                    $persona->tipo_enfermedad,
+                                                    $persona->pensionado_jubilado,
+                                                    $persona->estudia,
+                                                    $persona->genero,
+                                                    $persona->parentesco,
+                                                ]);
+                                            }
+
+                                            $textoBusqueda = collect($datosBusqueda)
+                                                ->filter(fn ($valor) => filled($valor))
+                                                ->implode(' ');
+                                        @endphp
+                                        <tr data-search="{{ $textoBusqueda }}"
+                                            data-council="{{ $item->consejo_comunal_id ?? '' }}"
+                                            data-housing="{{ $item->vivienda ?? '' }}"
+                                            data-clap="{{ $item->clap === 'Sí' ? '1' : '0' }}"
+                                            data-bono="{{ $item->bono_unico_familiar === 'Sí' ? '1' : '0' }}">
                                             <td>
                                                 <span class="fw-bold text-dark">{{ $item->numero_familia }}</span>
                                             </td>
@@ -136,7 +184,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr>
+                                        <tr class="empty-censo-row">
                                             <td colspan="6" class="text-center py-4">No se encontraron familias registradas.</td>
                                         </tr>
                                     @endforelse
@@ -159,6 +207,63 @@
 @endsection
 
 @push('scripts')
+    <script>
+        function normalizarTextoCenso(texto) {
+            return texto
+                .toLocaleLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function filtrarCenso() {
+            var busqueda = normalizarTextoCenso($('#buscar-censo').val().trim());
+            var consejoSeleccionado = $('#consejo_comunal_id').val();
+            var viviendaSeleccionada = $('#tipo_vivienda').val();
+            var beneficioSeleccionado = $('#beneficio').val();
+            var tbody = $('#basic-table tbody');
+            var filas = tbody.find('tr[data-search]');
+            var resultados = 0;
+
+            filas.each(function() {
+                var fila = $(this);
+                var coincideBusqueda = normalizarTextoCenso(fila.attr('data-search')).includes(busqueda);
+                var coincideConsejo = !consejoSeleccionado || fila.attr('data-council') === consejoSeleccionado;
+                var coincideVivienda = !viviendaSeleccionada || fila.attr('data-housing') === viviendaSeleccionada;
+                var recibeClap = fila.attr('data-clap') === '1';
+                var recibeBono = fila.attr('data-bono') === '1';
+                var coincideBeneficio = beneficioSeleccionado === '' ||
+                    (beneficioSeleccionado === 'clap' && recibeClap) ||
+                    (beneficioSeleccionado === 'bono_familiar' && recibeBono) ||
+                    (beneficioSeleccionado === 'ninguno' && !recibeClap && !recibeBono);
+                var coincide = coincideBusqueda && coincideConsejo && coincideVivienda && coincideBeneficio;
+                fila.toggle(coincide);
+
+                if (coincide) {
+                    resultados++;
+                }
+            });
+
+            var hayFiltros = busqueda || consejoSeleccionado || viviendaSeleccionada || beneficioSeleccionado;
+            tbody.find('.empty-censo-row').toggle(!hayFiltros && filas.length === 0);
+            tbody.find('.no-censo-results-row').remove();
+
+            if (hayFiltros && resultados === 0) {
+                tbody.append(
+                    '<tr class="no-censo-results-row"><td colspan="6" class="text-center py-4">No se encontraron registros que coincidan con la búsqueda.</td></tr>'
+                );
+            }
+        }
+
+        $(document).ready(function() {
+            $('#buscar-censo').on('input', filtrarCenso);
+            $('#consejo_comunal_id, #tipo_vivienda, #beneficio').on('change', filtrarCenso);
+            $('#censo-filtros').on('submit', function(event) {
+                event.preventDefault();
+            });
+            filtrarCenso();
+        });
+    </script>
+
     <style>
         /* Adaptación de Tom Select para input-group de Bootstrap 5 */
         .input-group > .ts-wrapper {

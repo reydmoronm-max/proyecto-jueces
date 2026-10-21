@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:Jefe de comuna')->group(function () {
         Route::resource('/usuarios', UsersController::class);
         Route::get('/tbody', [UsersController::class, 'tbody'])->name('tbody');
-        Route::get('usuarios/cambiar-estado/{id}/{estado}', [UsersController::class, 'cambiarEstado'])->name('cambiar-estado');
+        Route::patch('usuarios/cambiar-estado/{id}/{estado}', [UsersController::class, 'cambiarEstado'])->name('cambiar-estado');
         Route::get('usuarios/cambiar-password/{id}/{password}', [UsersController::class, 'cambiarPassword'])->name('cambiar-password');
         Route::get('/usuarios/{id}/edit', [UsersController::class, 'edit'])->name('usuarios.edit');
         Route::put('/usuarios/update/{id}', [UsersController::class, 'update'])->name('usuarios.update');
@@ -99,10 +99,10 @@ Route::middleware('auth')->group(function () {
 
         // Voceros y Categorías de Vocerías
         Route::get('/voceros/buscar-persona', [VocerosController::class, 'buscarPersona'])->name('voceros.buscar-persona');
-        Route::get('/voceros/cambiar-estado/{id}/{estado}', [VocerosController::class, 'cambiarEstado'])->name('voceros.cambiar-estado');
+        Route::patch('/voceros/cambiar-estado/{id}/{estado}', [VocerosController::class, 'cambiarEstado'])->name('voceros.cambiar-estado');
         Route::resource('voceros', VocerosController::class)->except(['destroy']);
 
-        Route::get('/categoria-vocerias/cambiar-estado/{id}/{estado}', [CategoriaVoceriaController::class, 'cambiarEstado'])->name('categoria-vocerias.cambiar-estado');
+        Route::patch('/categoria-vocerias/cambiar-estado/{id}/{estado}', [CategoriaVoceriaController::class, 'cambiarEstado'])->name('categoria-vocerias.cambiar-estado');
         Route::resource('categoria-vocerias', CategoriaVoceriaController::class);
 
         // Censo

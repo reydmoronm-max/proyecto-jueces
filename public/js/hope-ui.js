@@ -306,13 +306,17 @@ const resizePlugins = () => {
               LoaderInit
 -----------------------------------------------------------------------*/
 const loaderInit = () => {
-  const loader = document.querySelector('.loader')
+  const loader = document.querySelector('.page-loader')
+  if (loader === null) {
+    return
+  }
+
   setTimeout(() => {
-    loader.classList.add('animate__animated', 'animate__fadeOut')
+    loader.classList.add('is-hidden')
     setTimeout(() => {
-      loader.classList.add('d-none')
-    }, 500)
-  }, 500)
+      loader.remove()
+    }, 200)
+  }, 700)
 }
 /*---------------------------------------------------------------------
               Sidebar Toggle

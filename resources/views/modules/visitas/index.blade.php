@@ -8,11 +8,23 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between">
+                    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
                         <div class="header-title">
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarVisita">
                                 <i class=" ri-add-fill"></i> Registrar Visita
                             </button>
+                        </div>
+                        <div class="d-flex flex-grow-1 justify-content-end">
+                            <div class="input-group w-100 shadow-sm rounded-3" style="max-width: 360px;">
+                                <label for="buscar-visita" class="visually-hidden">Buscar visitas</label>
+                                <span class="input-group-text bg-primary text-white border border-dark border-end-0 rounded-start-3">
+                                    <i class="ri-search-line"></i>
+                                </span>
+                                <input type="search" id="buscar-visita"
+                                    class="form-control border-start-0 ps-0 rounded-end-3"
+                                    placeholder="Buscar en todos los registros..."
+                                    autocomplete="off" aria-label="Buscar visitas en todos sus datos">
+                            </div>
                         </div>
                         {{-- <button id="btn-guide-visitas" class="btn btn-outline-secondary btn-icon" type="button" aria-label="Ver guía de visitas">
                     <i class="ri-question-line"></i>
@@ -131,6 +143,38 @@
             modal.show();
         }
 
+        function normalizarTextoVisita(texto) {
+            return texto
+                .toLocaleLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function filtrarVisitas() {
+            var busqueda = normalizarTextoVisita($('#buscar-visita').val().trim());
+            var tbody = $('#tbody-visitas');
+            var filas = tbody.find('tr[data-search]');
+            var resultados = 0;
+
+            filas.each(function() {
+                var coincide = normalizarTextoVisita($(this).attr('data-search')).includes(busqueda);
+                $(this).toggle(coincide);
+
+                if (coincide) {
+                    resultados++;
+                }
+            });
+
+            tbody.find('.empty-visits-row').toggle(!busqueda && filas.length === 0);
+            tbody.find('.no-search-results-row').remove();
+
+            if (busqueda && resultados === 0) {
+                tbody.append(
+                    '<tr class="no-search-results-row"><td colspan="7" class="text-center py-4">No se encontraron visitas que coincidan con la búsqueda.</td></tr>'
+                );
+            }
+        }
+
         // Eliminar funcionalidad de borrado: no permitido por diseño
 
         function editarVisita(id) {
@@ -163,6 +207,9 @@
 
         // Client-side validation before submitting the registrar visita form
         $(document).ready(function() {
+            $('#buscar-visita').on('input', filtrarVisitas);
+            filtrarVisitas();
+
             $('#formRegistrarVisita').on('submit', function(e) {
                 e.preventDefault();
 

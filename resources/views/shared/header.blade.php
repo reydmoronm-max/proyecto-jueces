@@ -19,7 +19,8 @@
 
                     <h4 class="logo-title">SGIC</h4>
                 </a>
-                <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
+                <div class="sidebar-toggle d-xl-none" data-toggle="sidebar" data-active="true"
+                    role="button" aria-label="Abrir o cerrar el menú">
                     <i class="icon">
                         <svg width="20px" class="icon-20" viewBox="0 0 24 24">
                             <path fill="currentColor"
