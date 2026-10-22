@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Persona;
 use App\Models\ConsejoComunal;
+use App\Models\Profesion;
+use App\Models\Enfermedad;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -97,20 +99,54 @@ class CensoDemograficoController extends Controller
             $q->where('estudia', 'No')->orWhereNull('estudia');
         })->count();
 
-        // 5. Disease stats
+        // 5. Disease stats (Directamente desde la tabla 'enfermedades')
+        // Asegurar que las patologías reportadas existan en la tabla del catálogo 'enfermedades'
+        $enfermedadesPersonas = (clone $query)->whereNotNull('tipo_enfermedad')
+            ->where('tipo_enfermedad', '!=', '')
+            ->pluck('tipo_enfermedad');
+        foreach ($enfermedadesPersonas as $enfTexto) {
+            foreach (explode(',', $enfTexto) as $eItem) {
+                $eItem = trim($eItem);
+                if ($eItem !== '' && !in_array(strtolower($eItem), ['ninguna', 'no aplica', 'sano', 'ninguno'])) {
+                    Enfermedad::firstOrCreate(['nombre' => $eItem]);
+                }
+            }
+        }
+
+        // Consultar directamente la tabla 'enfermedades'
+        $catalogoEnfermedades = Enfermedad::orderBy('nombre', 'asc')->get();
+        $enfermedadesData = [];
+        foreach ($catalogoEnfermedades as $enf) {
+            $nombreEnf = trim($enf->nombre);
+            if ($nombreEnf === '' || in_array(strtolower($nombreEnf), ['ninguna', 'no aplica', 'sano', 'ninguno'])) {
+                continue;
+            }
+            // Contar personas de la consulta filtrada que posean esta enfermedad registrada
+            $count = (clone $query)->whereNotNull('tipo_enfermedad')
+                ->where(function ($subQ) use ($nombreEnf) {
+                    $subQ->where('tipo_enfermedad', $nombreEnf)
+                         ->orWhere('tipo_enfermedad', 'LIKE', $nombreEnf . ',%')
+                         ->orWhere('tipo_enfermedad', 'LIKE', '%, ' . $nombreEnf . '%')
+                         ->orWhere('tipo_enfermedad', 'LIKE', '%,' . $nombreEnf . '%');
+                })
+                ->count();
+
+            if ($count > 0) {
+                $enfermedadesData[] = (object) [
+                    'id' => $enf->id,
+                    'tipo_enfermedad' => $nombreEnf,
+                    'total' => $count,
+                ];
+            }
+        }
+        usort($enfermedadesData, fn($a, $b) => $b->total <=> $a->total ?: strcmp($a->tipo_enfermedad, $b->tipo_enfermedad));
+        $enfermedades = collect($enfermedadesData)->take(15);
+
         $conEnfermedadCount = (clone $query)->whereNotNull('tipo_enfermedad')
             ->where('tipo_enfermedad', '!=', '')
             ->where('tipo_enfermedad', '!=', 'Ninguna')
+            ->where('tipo_enfermedad', '!=', 'No aplica')
             ->count();
-
-        $enfermedades = (clone $query)->whereNotNull('tipo_enfermedad')
-            ->where('tipo_enfermedad', '!=', '')
-            ->where('tipo_enfermedad', '!=', 'Ninguna')
-            ->select('tipo_enfermedad', DB::raw('count(*) as total'))
-            ->groupBy('tipo_enfermedad')
-            ->orderBy('total', 'desc')
-            ->take(10)
-            ->get();
 
         // 6. Academic level stats
         $nivelesDb = (clone $query)->select('nivel_academico', DB::raw('count(*) as total'))
@@ -147,6 +183,101 @@ class CensoDemograficoController extends Controller
             $q->where('mision_vivienda', 'Sí');
         })->count();
 
+        // 8. Professions / Trades stats (Directamente desde la tabla 'profesiones')
+        // Asegurar que las profesiones reportadas existan en la tabla del catálogo 'profesiones'
+        $profesionesPersonas = (clone $query)->whereNotNull('profesion')
+            ->where('profesion', '!=', '')
+            ->pluck('profesion')
+            ->unique();
+        foreach ($profesionesPersonas as $profTexto) {
+            $profTexto = trim($profTexto);
+            if ($profTexto !== '' && !in_array(strtolower($profTexto), ['ninguna', 'no aplica', 'ninguno'])) {
+                Profesion::firstOrCreate(['nombre' => $profTexto]);
+            }
+        }
+
+        // Consultar directamente la tabla 'profesiones'
+        $catalogoProfesiones = Profesion::orderBy('nombre', 'asc')->get();
+        $profesionesData = [];
+        $totalConProfesion = 0;
+
+        foreach ($catalogoProfesiones as $prof) {
+            $nombreProf = trim($prof->nombre);
+            if ($nombreProf === '' || in_array(strtolower($nombreProf), ['ninguna', 'no aplica', 'ninguno'])) {
+                continue;
+            }
+            // Contar personas de la consulta filtrada que posean esta profesión
+            $count = (clone $query)->whereNotNull('profesion')
+                ->where('profesion', $nombreProf)
+                ->count();
+
+            if ($count > 0) {
+                $profesionesData[] = (object) [
+                    'id' => $prof->id,
+                    'profesion' => $nombreProf,
+                    'total' => $count,
+                ];
+                $totalConProfesion += $count;
+            }
+        }
+        usort($profesionesData, fn($a, $b) => $b->total <=> $a->total ?: strcmp($a->profesion, $b->profesion));
+        $profesiones = collect($profesionesData)->take(15);
+
+        $sinProfesionCount = max(0, $totalCiudadanos - $totalConProfesion);
+
+        // 9. Age Histogram Distribution (Intervals of 10 years)
+        $personasFechas = (clone $query)->whereNotNull('fecha_nacimiento')->pluck('fecha_nacimiento');
+        $histogramaEdades = [
+            '0-9' => 0,
+            '10-19' => 0,
+            '20-29' => 0,
+            '30-39' => 0,
+            '40-49' => 0,
+            '50-59' => 0,
+            '60-69' => 0,
+            '70+' => 0,
+        ];
+        foreach ($personasFechas as $fn) {
+            try {
+                $edad = Carbon::parse($fn)->age;
+                if ($edad < 10) {
+                    $histogramaEdades['0-9']++;
+                } elseif ($edad < 20) {
+                    $histogramaEdades['10-19']++;
+                } elseif ($edad < 30) {
+                    $histogramaEdades['20-29']++;
+                } elseif ($edad < 40) {
+                    $histogramaEdades['30-39']++;
+                } elseif ($edad < 50) {
+                    $histogramaEdades['40-49']++;
+                } elseif ($edad < 60) {
+                    $histogramaEdades['50-59']++;
+                } elseif ($edad < 70) {
+                    $histogramaEdades['60-69']++;
+                } else {
+                    $histogramaEdades['70+']++;
+                }
+            } catch (\Throwable $e) {
+                // Ignore parse errors
+            }
+        }
+
+        // 10. Gender per life-cycle for comparative histogram
+        $generoPorCiclo = [
+            'menores' => [
+                'masculino' => (clone $query)->whereNotNull('fecha_nacimiento')->where('fecha_nacimiento', '>', $fecha18)->where('genero', 'Masculino')->count(),
+                'femenino' => (clone $query)->whereNotNull('fecha_nacimiento')->where('fecha_nacimiento', '>', $fecha18)->where('genero', 'Femenino')->count(),
+            ],
+            'adultos' => [
+                'masculino' => (clone $query)->whereNotNull('fecha_nacimiento')->where('fecha_nacimiento', '<=', $fecha18)->where('fecha_nacimiento', '>', $fecha60)->where('genero', 'Masculino')->count(),
+                'femenino' => (clone $query)->whereNotNull('fecha_nacimiento')->where('fecha_nacimiento', '<=', $fecha18)->where('fecha_nacimiento', '>', $fecha60)->where('genero', 'Femenino')->count(),
+            ],
+            'abuelos' => [
+                'masculino' => (clone $query)->whereNotNull('fecha_nacimiento')->where('fecha_nacimiento', '<=', $fecha60)->where('genero', 'Masculino')->count(),
+                'femenino' => (clone $query)->whereNotNull('fecha_nacimiento')->where('fecha_nacimiento', '<=', $fecha60)->where('genero', 'Femenino')->count(),
+            ],
+        ];
+
         // Extra info
         $consejosComunales = ConsejoComunal::all();
         $comunidadSeleccionada = $consejoComunalId ? ConsejoComunal::find($consejoComunalId) : null;
@@ -157,7 +288,8 @@ class CensoDemograficoController extends Controller
             'menoresCount', 'adultosCount', 'abuelosCount', 'sinFechaCount',
             'estudianCount', 'noEstudianCount', 'conEnfermedadCount', 'enfermedades',
             'niveles', 'viviendas', 'pensionadosCount', 'bonoFamiliarCount',
-            'recibeClapCount', 'misionViviendaCount', 'consejosComunales', 'comunidadSeleccionada'
+            'recibeClapCount', 'misionViviendaCount', 'consejosComunales', 'comunidadSeleccionada',
+            'profesiones', 'totalConProfesion', 'sinProfesionCount', 'histogramaEdades', 'generoPorCiclo'
         );
     }
 }

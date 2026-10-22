@@ -6,306 +6,303 @@
 
 @section('contenido')
     <div class="container-fluid content-inner mt-n5 py-0">
-        <!-- Panel de Filtros -->
-        <div class="card shadow-sm mb-4" style="border-radius: 15px;">
+        <!-- Panel de Filtro Dinámico -->
+        <div class="card shadow-sm mb-4 border-0" style="border-radius: 14px;">
             <div class="card-body p-4">
-                <form action="{{ route('reportes.index') }}" method="GET" class="row g-3 align-items-end">
-                    <div class="col-md-4">
-                        <label for="consejo_comunal_id" class="form-label small text-muted fw-bold">Filtrar por Comunidad
-                            (Consejo Comunal)</label>
-                        <select name="consejo_comunal_id" id="consejo_comunal_id" class="form-select bg-white">
-                            <option value="">Censo Completo (Todas las comunidades)</option>
-                            @foreach ($consejosComunales as $cc)
-                                <option value="{{ $cc->id }}" {{ $consejoComunalId == $cc->id ? 'selected' : '' }}>
-                                    {{ $cc->nombre }}</option>
-                            @endforeach
-                        </select>
+                <form id="form-filtro-reportes" action="{{ route('reportes.index') }}" method="GET" class="row g-3 align-items-center">
+                    <div class="col-lg-6 col-md-8">
+                        <label for="consejo_comunal_id" class="form-label small text-muted fw-bold mb-1">
+                            <i class="ri-community-line text-primary me-1"></i> Filtrar por Comunidad (Consejo Comunal)
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-primary border-end-0">
+                                <i class="ri-map-pin-2-fill"></i>
+                            </span>
+                            <select name="consejo_comunal_id" id="consejo_comunal_id" class="form-select border-start-0 ps-0 bg-white">
+                                <option value="">-- Censo Completo (Todas las comunidades) --</option>
+                                @foreach ($consejosComunales as $cc)
+                                    <option value="{{ $cc->id }}" {{ $consejoComunalId == $cc->id ? 'selected' : '' }}>
+                                        {{ $cc->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-text small text-muted mt-1 d-flex align-items-center gap-1">
+                            <!-- <i class="ri-flashlight-line text-warning"></i>
+                            <span>Actualización dinámica: el reporte se actualiza automáticamente al cambiar la selección.</span> -->
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="custom_age" class="form-label small text-muted fw-bold">Parámetro de Edad</label>
-                        <input type="number" name="custom_age" id="custom_age" class="form-control bg-white" min="0"
-                            max="120" value="{{ $customAge }}">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="custom_age_operator" class="form-label small text-muted fw-bold">Comparación</label>
-                        <select name="custom_age_operator" id="custom_age_operator" class="form-select bg-white">
-                            <option value="above" {{ $customAgeOperator === 'above' ? 'selected' : '' }}>Mayor o igual (>=)
-                            </option>
-                            <option value="below" {{ $customAgeOperator === 'below' ? 'selected' : '' }}>Menor (<)<
-                                    /option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 d-grid gap-2">
-                        <button type="submit" class="btn btn-primary"><i class="ri-search-line"></i> Consultar</button>
+
+                    <div class="col-lg-6 col-md-4 d-flex justify-content-md-end align-items-center gap-2 mt-3 mt-md-0">
+                        @if ($consejoComunalId)
+                            <a href="{{ route('reportes.index') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1">
+                                <i class="ri-refresh-line"></i> Ver Censo Completo
+                            </a>
+                        @endif
+                        <a href="{{ route('reportes.pdf', request()->query()) }}"
+                            class="btn btn-danger d-flex align-items-center gap-2 shadow-sm">
+                            <i class="ri-file-pdf-fill fs-5"></i> Exportar Reporte PDF
+                        </a>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Botón Exportar PDF -->
-        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-            <h5 class="mb-0 text-dark fw-bold">
-                @if ($comunidadSeleccionada)
-                    Resultados para: <span class="text-primary">{{ $comunidadSeleccionada->nombre }}</span>
-                @else
-                    Resultados para: <span class="text-primary">Todo el Censo</span>
-                @endif
+        <!-- Indicador de Contexto Actual -->
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2 px-1">
+            <h5 class="mb-0 text-dark fw-bold d-flex align-items-center gap-2">
+                <span class="badge bg-soft-primary text-primary px-3 py-2 rounded-pill fs-6 fw-bold">
+                    <i class="ri-building-line me-1"></i>
+                    {{ $comunidadSeleccionada ? $comunidadSeleccionada->nombre : 'Todas las Comunidades (Censo General)' }}
+                </span>
+                <span class="text-muted small fw-normal">| {{ $totalCiudadanos }} ciudadanos analizados</span>
             </h5>
-            <a href="{{ route('reportes.pdf', request()->query()) }}"
-                class="btn btn-danger d-flex align-items-center gap-2">
-                <i class="fa-solid fa-file-pdf" style="font-size: 1.2rem;"></i> Exportar Reporte en PDF
-            </a>
+            <span class="text-muted small">
+                <i class="ri-time-line me-1"></i> Datos consolidados en tiempo real
+            </span>
         </div>
 
-        <!-- Tarjetas de Métricas Rápidas -->
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="card shadow-sm text-center" style="border-radius: 12px; border-left: 5px solid #0056b3;">
-                    <div class="card-body py-3">
-                        <p class="text-muted small text-uppercase fw-bold mb-1">Población Total</p>
-                        <h2 class="fw-bold mb-0 text-primary">{{ $totalCiudadanos }}</h2>
+        <!-- Tarjetas de Métricas Rápidas (KPIs) -->
+        <div class="row g-3 mb-4">
+            <!-- 1. Total Ciudadanos -->
+            <div class="col-xl col-md-4 col-sm-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 12px; border-left: 5px solid #3a57e8 !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small text-uppercase fw-bold">Población Total</span>
+                            <div class="bg-soft-primary rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                <i class="ri-group-line text-primary"></i>
+                            </div>
+                        </div>
+                        <h3 class="fw-bold mb-0 text-primary">{{ $totalCiudadanos }}</h3>
                         <span class="text-muted small">Ciudadanos censados</span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm text-center" style="border-radius: 12px; border-left: 5px solid #28a745;">
-                    <div class="card-body py-3">
-                        <p class="text-muted small text-uppercase fw-bold mb-1">Estudiantes</p>
-                        <h2 class="fw-bold mb-0 text-success">{{ $estudianCount }}</h2>
-                        <span
-                            class="text-muted small">({{ $totalCiudadanos > 0 ? round(($estudianCount / $totalCiudadanos) * 100, 1) : 0 }}%
-                            del total)</span>
+
+            <!-- 2. Con Profesión / Oficio -->
+            <div class="col-xl col-md-4 col-sm-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 12px; border-left: 5px solid #08b1ba !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small text-uppercase fw-bold">Con Profesión</span>
+                            <div class="bg-soft-info rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                <i class="ri-briefcase-line text-info"></i>
+                            </div>
+                        </div>
+                        <h3 class="fw-bold mb-0 text-info">{{ $totalConProfesion }}</h3>
+                        <span class="text-muted small">
+                            ({{ $totalCiudadanos > 0 ? round(($totalConProfesion / $totalCiudadanos) * 100, 1) : 0 }}% con oficio reportado)
+                        </span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm text-center" style="border-radius: 12px; border-left: 5px solid #dc3545;">
-                    <div class="card-body py-3">
-                        <p class="text-muted small text-uppercase fw-bold mb-1">Con Enfermedades</p>
-                        <h2 class="fw-bold mb-0 text-danger">{{ $conEnfermedadCount }}</h2>
-                        <span
-                            class="text-muted small">({{ $totalCiudadanos > 0 ? round(($conEnfermedadCount / $totalCiudadanos) * 100, 1) : 0 }}%
-                            del total)</span>
+
+            <!-- 3. Estudiantes -->
+            <div class="col-xl col-md-4 col-sm-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 12px; border-left: 5px solid #1aa053 !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small text-uppercase fw-bold">Estudiantes</span>
+                            <div class="bg-soft-success rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                <i class="ri-book-read-line text-success"></i>
+                            </div>
+                        </div>
+                        <h3 class="fw-bold mb-0 text-success">{{ $estudianCount }}</h3>
+                        <span class="text-muted small">
+                            ({{ $totalCiudadanos > 0 ? round(($estudianCount / $totalCiudadanos) * 100, 1) : 0 }}% en formación)
+                        </span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm text-center" style="border-radius: 12px; border-left: 5px solid #ffc107;">
-                    <div class="card-body py-3">
-                        <p class="text-muted small text-uppercase fw-bold mb-1">Pensionados / Jub.</p>
-                        <h2 class="fw-bold mb-0 text-warning" style="color: #ffc107 !important;">{{ $pensionadosCount }}
-                        </h2>
-                        <span
-                            class="text-muted small">({{ $totalCiudadanos > 0 ? round(($pensionadosCount / $totalCiudadanos) * 100, 1) : 0 }}%
-                            del total)</span>
+
+            <!-- 4. Con Enfermedades -->
+            <div class="col-xl col-md-6 col-sm-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 12px; border-left: 5px solid #c03221 !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small text-uppercase fw-bold">Con Patología</span>
+                            <div class="bg-soft-danger rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                <i class="ri-heart-pulse-line text-danger"></i>
+                            </div>
+                        </div>
+                        <h3 class="fw-bold mb-0 text-danger">{{ $conEnfermedadCount }}</h3>
+                        <span class="text-muted small">
+                            ({{ $totalCiudadanos > 0 ? round(($conEnfermedadCount / $totalCiudadanos) * 100, 1) : 0 }}% con condición médica)
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Pensionados / Jubilados -->
+            <div class="col-xl col-md-6 col-sm-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 12px; border-left: 5px solid #f16a1b !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small text-uppercase fw-bold">Pensionados</span>
+                            <div class="bg-soft-warning rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                <i class="ri-empathize-line text-warning"></i>
+                            </div>
+                        </div>
+                        <h3 class="fw-bold mb-0 text-warning">{{ $pensionadosCount }}</h3>
+                        <span class="text-muted small">
+                            ({{ $totalCiudadanos > 0 ? round(($pensionadosCount / $totalCiudadanos) * 100, 1) : 0 }}% del total)
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Secciones de Distribución -->
-        <div class="row mb-4">
-
-            <!-- Columna Izquierda: Edad y Género -->
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm h-100" style="border-radius: 15px;">
-                    <div class="card-header bg-transparent border-0 pt-4 px-4">
-                        <h5 class="card-title fw-bold text-dark mb-0">Demografía de Edad y Género</h5>
+        <!-- Fila 1 de Histogramas: Edades y Profesiones -->
+        <div class="row g-4 mb-4">
+            <!-- Histograma de Distribución por Edades -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 14px;">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                            <h5 class="card-title fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                                <i class="ri-bar-chart-fill text-primary"></i> Histograma de Distribución de Edades
+                            </h5>
+                            <p class="text-muted small mb-0">Frecuencia por intervalos etarios (décadas de edad)</p>
+                        </div>
+                        <div class="d-flex gap-1 flex-wrap">
+                            <span class="badge bg-soft-info text-info small" title="0 a 17 años">
+                                Menores: <strong>{{ $menoresCount }}</strong>
+                            </span>
+                            <span class="badge bg-soft-primary text-primary small" title="18 a 59 años">
+                                Adultos: <strong>{{ $adultosCount }}</strong>
+                            </span>
+                            <span class="badge bg-soft-warning text-warning small" title="60+ años">
+                                Mayores: <strong>{{ $abuelosCount }}</strong>
+                            </span>
+                        </div>
                     </div>
-                    <div class="card-body px-4 pb-4">
+                    <div class="card-body px-3 pb-3">
+                        <div id="chart-histograma-edades" style="min-height: 340px; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
 
-                        <!-- Consulta de Edad Custom -->
-                        <div class="p-3 mb-4 rounded bg-light border-start border-4 border-info">
-                            <span class="small text-muted fw-bold d-block text-uppercase">Consulta de Edad
-                                Personalizada</span>
-                            <p class="mb-0 fw-semibold">
-                                Ciudadanos con edad
-                                {{ $customAgeOperator === 'above' ? 'mayor o igual (>=)' : 'menor (<)' }} a
-                                {{ $customAge }} años:
-                                <span class="badge bg-info float-end fs-6">{{ $customAgeCount }}</span>
-                            </p>
+            <!-- Histograma / Estadísticas de Profesiones y Oficios -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 14px;">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                            <h5 class="card-title fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                                <i class="ri-briefcase-4-fill text-info"></i> Estadísticas de Profesiones y Oficios
+                            </h5>
+                            <p class="text-muted small mb-0">Distribución de las ocupaciones más frecuentes registradas</p>
                         </div>
-
-                        <!-- Distribución de Género -->
-                        <h6 class="fw-bold mb-3">Distribución por Género</h6>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="small">Masculino</span>
-                                <span class="small fw-bold">{{ $generoMasculino }}
-                                    ({{ $totalCiudadanos > 0 ? round(($generoMasculino / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                            </div>
-                            <div class="progress" style="height: 10px;">
-                                <div class="progress-bar bg-primary" role="progressbar"
-                                    style="width: {{ $totalCiudadanos > 0 ? ($generoMasculino / $totalCiudadanos) * 100 : 0 }}%">
+                        <span class="badge bg-soft-info text-info rounded-pill px-3 py-1">
+                            {{ $profesiones->count() }} actividades registradas
+                        </span>
+                    </div>
+                    <div class="card-body px-3 pb-3">
+                        @if ($profesiones->count() > 0)
+                            <div id="chart-histograma-profesiones" style="min-height: 340px; width: 100%;"></div>
+                        @else
+                            <div class="text-center py-5">
+                                <div class="bg-soft-info rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <i class="ri-user-unfollow-line text-info fs-3"></i>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="small">Femenino</span>
-                                <span class="small fw-bold">{{ $generoFemenino }}
-                                    ({{ $totalCiudadanos > 0 ? round(($generoFemenino / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                            </div>
-                            <div class="progress" style="height: 10px;">
-                                <div class="progress-bar bg-success" role="progressbar"
-                                    style="width: {{ $totalCiudadanos > 0 ? ($generoFemenino / $totalCiudadanos) * 100 : 0 }}%">
-                                </div>
-                            </div>
-                        </div>
-                        @if ($generoOtros > 0)
-                            <div class="mb-4">
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="small">No especificado</span>
-                                    <span class="small fw-bold">{{ $generoOtros }}
-                                        ({{ $totalCiudadanos > 0 ? round(($generoOtros / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                                </div>
-                                <div class="progress" style="height: 10px;">
-                                    <div class="progress-bar bg-secondary" role="progressbar"
-                                        style="width: {{ ($generoOtros / $totalCiudadanos) * 100 }}%"></div>
-                                </div>
+                                <h6 class="text-muted fw-bold">Sin profesiones registradas</h6>
+                                <p class="text-muted small mb-0">No se encontraron ciudadanos con profesión u oficio registrado en este filtro.</p>
                             </div>
                         @endif
-
-                        <hr class="hr-horizontal my-4">
-
-                        <!-- Grupos de Edad -->
-                        <h6 class="fw-bold mb-3">Distribución por Ciclo de Vida</h6>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="small">Menores de edad (0 - 17 años)</span>
-                                <span class="small fw-bold">{{ $menoresCount }}
-                                    ({{ $totalCiudadanos > 0 ? round(($menoresCount / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                            </div>
-                            <div class="progress" style="height: 10px;">
-                                <div class="progress-bar bg-info" role="progressbar"
-                                    style="width: {{ $totalCiudadanos > 0 ? ($menoresCount / $totalCiudadanos) * 100 : 0 }}%">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="small">Adultos (18 - 59 años)</span>
-                                <span class="small fw-bold">{{ $adultosCount }}
-                                    ({{ $totalCiudadanos > 0 ? round(($adultosCount / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                            </div>
-                            <div class="progress" style="height: 10px;">
-                                <div class="progress-bar bg-primary" role="progressbar"
-                                    style="width: {{ $totalCiudadanos > 0 ? ($adultosCount / $totalCiudadanos) * 100 : 0 }}%">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="small">Adultos Mayores / Abuelos (60+ años)</span>
-                                <span class="small fw-bold">{{ $abuelosCount }}
-                                    ({{ $totalCiudadanos > 0 ? round(($abuelosCount / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                            </div>
-                            <div class="progress" style="height: 10px;">
-                                <div class="progress-bar bg-warning" role="progressbar"
-                                    style="width: {{ $totalCiudadanos > 0 ? ($abuelosCount / $totalCiudadanos) * 100 : 0 }}%">
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Columna Derecha: Académico e Socioeconómico -->
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm h-100" style="border-radius: 15px;">
-                    <div class="card-header bg-transparent border-0 pt-4 px-4">
-                        <h5 class="card-title fw-bold text-dark mb-0">Nivel Académico e Indicadores Socioeconómicos</h5>
-                    </div>
-                    <div class="card-body px-4 pb-4">
-
-                        <!-- Nivel Académico -->
-                        <h6 class="fw-bold mb-3">Nivel Académico Alcanzado</h6>
-                        @foreach ($niveles as $nivel => $count)
-                            <div class="mb-2">
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="small">{{ $nivel }}</span>
-                                    <span class="small fw-bold">{{ $count }}</span>
-                                </div>
-                                <div class="progress" style="height: 6px;">
-                                    <div class="progress-bar bg-secondary" role="progressbar"
-                                        style="width: {{ $totalCiudadanos > 0 ? ($count / $totalCiudadanos) * 100 : 0 }}%">
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-
-                        <hr class="hr-horizontal my-4">
-
-                        <!-- Indicadores Socioeconómicos -->
-                        <h6 class="fw-bold mb-3">Cobertura de Beneficios y Apoyo Social</h6>
-                        <div class="row g-3">
-                            <div class="col-6">
-                                <div class="p-3 border rounded text-center bg-success">
-                                    <span class="small text-white d-block mb-1">Reciben CLAP</span>
-                                    <span class="fw-bold fs-5 text-white">{{ $recibeClapCount }}</span>
-                                    <span
-                                        class="text-white d-block small">({{ $totalCiudadanos > 0 ? round(($recibeClapCount / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-3 border rounded text-center" style="background-color: #FE2F60">
-                                    <span class="small text-white d-block mb-1">Bono Familiar</span>
-                                    <span class="fw-bold fs-5 text-white">{{ $bonoFamiliarCount }}</span>
-                                    <span
-                                        class="text-white d-block small">({{ $totalCiudadanos > 0 ? round(($bonoFamiliarCount / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-3 border rounded text-center" style="background-color: #279eff">
-                                    <span class="small text-white d-block mb-1">Misión Vivienda</span>
-                                    <span class="fw-bold fs-5 text-white">{{ $misionViviendaCount }}</span>
-                                    <span
-                                        class="text-white d-block small">({{ $totalCiudadanos > 0 ? round(($misionViviendaCount / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-3 border rounded text-center bg-warning">
-                                    <span class="small text-white d-block mb-1">Vivienda Propia</span>
-                                    <span class="fw-bold fs-5 text-white">{{ $viviendas['Propia'] }}</span>
-                                    <span
-                                        class="text-white d-block small">({{ $totalCiudadanos > 0 ? round(($viviendas['Propia'] / $totalCiudadanos) * 100, 1) : 0 }}%)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <!-- Enfermedades Frecuentes -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow-sm" style="border-radius: 15px;">
-                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
-                        <h5 class="card-title fw-bold text-dark mb-0">Enfermedades Frecuentes en la Comunidad</h5>
-                        <p class="text-muted small mb-0">Las enfermedades con mayor frecuencia reportadas en el censo.</p>
+        <!-- Fila 2 de Histogramas: Nivel Académico y Género por Ciclo de Vida -->
+        <div class="row g-4 mb-4">
+            <!-- Histograma de Nivel Académico -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 14px;">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                            <h5 class="card-title fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                                <i class="ri-graduation-cap-fill text-primary"></i> Histograma de Nivel Académico
+                            </h5>
+                            <p class="text-muted small mb-0">Nivel de instrucción escolar y universitaria alcanzado</p>
+                        </div>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body px-3 pb-3">
+                        <div id="chart-histograma-academico" style="min-height: 320px; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Histograma Comparativo: Género por Ciclo de Vida -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 14px;">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                            <h5 class="card-title fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                                <i class="ri-women-line text-danger"></i><i class="ri-men-line text-primary"></i> Género por Ciclo de Vida
+                            </h5>
+                            <p class="text-muted small mb-0">Distribución comparativa de hombres y mujeres por grupo etario</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <span class="badge bg-soft-primary text-primary small">
+                                <i class="ri-men-line"></i> Masc: {{ $generoMasculino }}
+                            </span>
+                            <span class="badge bg-soft-danger text-danger small">
+                                <i class="ri-women-line"></i> Fem: {{ $generoFemenino }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body px-3 pb-3">
+                        <div id="chart-histograma-genero-ciclo" style="min-height: 320px; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fila 3 de Histogramas: Beneficios/Vivienda y Enfermedades Frecuentes -->
+        <div class="row g-4 mb-4">
+            <!-- Histograma de Beneficios Sociales y Vivienda -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 14px;">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                            <h5 class="card-title fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                                <i class="ri-home-heart-fill text-success"></i> Beneficios y Tenencia de Vivienda
+                            </h5>
+                            <p class="text-muted small mb-0">Cobertura de programas sociales e indicadores habitacionales</p>
+                        </div>
+                    </div>
+                    <div class="card-body px-3 pb-3">
+                        <div id="chart-histograma-socioeconomico" style="min-height: 320px; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Histograma de Enfermedades Frecuentes -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100 border-0" style="border-radius: 14px;">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                            <h5 class="card-title fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                                <i class="ri-heart-pulse-fill text-danger"></i> Patologías y Enfermedades Reportadas
+                            </h5>
+                            <p class="text-muted small mb-0">Frecuencia de las principales afecciones de salud en la comunidad</p>
+                        </div>
+                        <span class="badge bg-soft-danger text-danger rounded-pill px-3 py-1">
+                            {{ $conEnfermedadCount }} casos totales
+                        </span>
+                    </div>
+                    <div class="card-body px-3 pb-3">
                         @if ($enfermedades->count() > 0)
-                            <div class="row g-3">
-                                @foreach ($enfermedades as $enf)
-                                    <div class="col-md-4 col-sm-6">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center p-3 border rounded-pill bg-light">
-                                            <span class="fw-semibold small text-truncate"
-                                                style="max-width: 80%;">{{ $enf->tipo_enfermedad }}</span>
-                                            <span class="badge rounded-pill"
-                                                style="background-color: #fd1b1b">{{ $enf->total }} casos</span>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
+                            <div id="chart-histograma-enfermedades" style="min-height: 320px; width: 100%;"></div>
                         @else
-                            <p class="text-center text-muted py-3 mb-0">No se registran ciudadanos con enfermedades en el
-                                grupo consultado.</p>
+                            <div class="text-center py-5">
+                                <div class="bg-soft-success rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <i class="ri-shield-check-line text-success fs-3"></i>
+                                </div>
+                                <h6 class="text-success fw-bold">Sin patologías registradas</h6>
+                                <p class="text-muted small mb-0">No se registran ciudadanos con afecciones médicas en el grupo consultado.</p>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -313,3 +310,513 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('vendor/echart/echarts.min.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // -------------------------------------------------------------
+        // 1. FILTRADO DINÁMICO POR CONSEJO COMUNAL
+        // -------------------------------------------------------------
+        const consejoSelect = document.getElementById('consejo_comunal_id');
+        if (consejoSelect) {
+            consejoSelect.addEventListener('change', function () {
+                const form = document.getElementById('form-filtro-reportes');
+                // Indicador visual sutil de carga
+                document.body.style.cursor = 'wait';
+                consejoSelect.style.opacity = '0.7';
+                form.submit();
+            });
+        }
+
+        // Variable de población total para cálculos de porcentaje
+        const totalPoblacion = {{ $totalCiudadanos > 0 ? $totalCiudadanos : 1 }};
+
+        // -------------------------------------------------------------
+        // 2. HISTOGRAMA DE EDADES (Intervalos Etarios)
+        // -------------------------------------------------------------
+        const elChartEdades = document.getElementById('chart-histograma-edades');
+        let chartEdades = null;
+        if (elChartEdades) {
+            chartEdades = echarts.init(elChartEdades);
+            const dataEdades = [
+                {{ $histogramaEdades['0-9'] }},
+                {{ $histogramaEdades['10-19'] }},
+                {{ $histogramaEdades['20-29'] }},
+                {{ $histogramaEdades['30-39'] }},
+                {{ $histogramaEdades['40-49'] }},
+                {{ $histogramaEdades['50-59'] }},
+                {{ $histogramaEdades['60-69'] }},
+                {{ $histogramaEdades['70+'] }}
+            ];
+            const categoriasEdades = ['0-9 años', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70+ años'];
+
+            chartEdades.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    formatter: function (params) {
+                        const item = params[0];
+                        const pct = ((item.value / totalPoblacion) * 100).toFixed(1);
+                        return `<strong>${item.name}</strong><br/>
+                                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#3a57e8;"></span>
+                                Cantidad: <b>${item.value} ciudadanos</b> (${pct}%)`;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '8%',
+                    top: '12%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: categoriasEdades,
+                    axisLabel: {
+                        color: '#6c757d',
+                        interval: 0,
+                        fontSize: 11
+                    },
+                    axisLine: { lineStyle: { color: '#e0e0e0' } },
+                    axisTick: { alignWithLabel: true }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Ciudadanos',
+                    nameTextStyle: { color: '#6c757d', fontSize: 11 },
+                    minInterval: 1,
+                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
+                },
+                series: [{
+                    name: 'Frecuencia',
+                    type: 'bar',
+                    barWidth: '55%',
+                    data: dataEdades,
+                    itemStyle: {
+                        borderRadius: [6, 6, 0, 0],
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: '#3a57e8' },
+                            { offset: 1, color: '#7b95ff' }
+                        ])
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        color: '#3a57e8',
+                        fontWeight: 'bold',
+                        fontSize: 11,
+                        formatter: function(params) {
+                            return params.value > 0 ? params.value : '';
+                        }
+                    }
+                }]
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 3. HISTOGRAMA / ESTADÍSTICAS DE PROFESIONES Y OFICIOS
+        // -------------------------------------------------------------
+        const elChartProfesiones = document.getElementById('chart-histograma-profesiones');
+        let chartProfesiones = null;
+        if (elChartProfesiones) {
+            chartProfesiones = echarts.init(elChartProfesiones);
+            const categoriasProfesiones = [
+                @foreach ($profesiones as $prof)
+                    '{{ addslashes($prof->profesion) }}',
+                @endforeach
+            ];
+            const dataProfesiones = [
+                @foreach ($profesiones as $prof)
+                    {{ $prof->total }},
+                @endforeach
+            ];
+
+            chartProfesiones.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    formatter: function (params) {
+                        const item = params[0];
+                        const pct = ((item.value / totalPoblacion) * 100).toFixed(1);
+                        return `<strong>${item.name}</strong><br/>
+                                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#08b1ba;"></span>
+                                Personas: <b>${item.value}</b> (${pct}% del censo)`;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '6%',
+                    bottom: '5%',
+                    top: '8%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    minInterval: 1,
+                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: categoriasProfesiones,
+                    inverse: true,
+                    axisLabel: {
+                        color: '#495057',
+                        fontSize: 11,
+                        formatter: function(val) {
+                            return val.length > 20 ? val.substring(0, 18) + '...' : val;
+                        }
+                    },
+                    axisLine: { lineStyle: { color: '#e0e0e0' } }
+                },
+                series: [{
+                    name: 'Ocupación',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: dataProfesiones,
+                    itemStyle: {
+                        borderRadius: [0, 6, 6, 0],
+                        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                            { offset: 0, color: '#08b1ba' },
+                            { offset: 1, color: '#279eff' }
+                        ])
+                    },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        color: '#08b1ba',
+                        fontWeight: 'bold',
+                        fontSize: 11
+                    }
+                }]
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 4. HISTOGRAMA DE NIVEL ACADÉMICO
+        // -------------------------------------------------------------
+        const elChartAcademico = document.getElementById('chart-histograma-academico');
+        let chartAcademico = null;
+        if (elChartAcademico) {
+            chartAcademico = echarts.init(elChartAcademico);
+            const categoriasNivel = [
+                @foreach ($niveles as $nivel => $count)
+                    '{{ $nivel }}',
+                @endforeach
+            ];
+            const dataNivel = [
+                @foreach ($niveles as $nivel => $count)
+                    {{ $count }},
+                @endforeach
+            ];
+
+            chartAcademico.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    formatter: function (params) {
+                        const item = params[0];
+                        const pct = ((item.value / totalPoblacion) * 100).toFixed(1);
+                        return `<strong>${item.name}</strong><br/>
+                                Registrados: <b>${item.value} ciudadanos</b> (${pct}%)`;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '8%',
+                    top: '12%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: categoriasNivel,
+                    axisLabel: { color: '#6c757d', fontSize: 11, interval: 0 },
+                    axisLine: { lineStyle: { color: '#e0e0e0' } },
+                    axisTick: { alignWithLabel: true }
+                },
+                yAxis: {
+                    type: 'value',
+                    minInterval: 1,
+                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
+                },
+                series: [{
+                    name: 'Nivel Educativo',
+                    type: 'bar',
+                    barWidth: '50%',
+                    data: dataNivel,
+                    itemStyle: {
+                        borderRadius: [6, 6, 0, 0],
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: '#4f46e5' },
+                            { offset: 1, color: '#818cf8' }
+                        ])
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        color: '#4f46e5',
+                        fontWeight: 'bold',
+                        fontSize: 11,
+                        formatter: function(params) {
+                            return params.value > 0 ? params.value : '';
+                        }
+                    }
+                }]
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 5. HISTOGRAMA COMPARATIVO: GÉNERO POR CICLO DE VIDA
+        // -------------------------------------------------------------
+        const elChartGeneroCiclo = document.getElementById('chart-histograma-genero-ciclo');
+        let chartGeneroCiclo = null;
+        if (elChartGeneroCiclo) {
+            chartGeneroCiclo = echarts.init(elChartGeneroCiclo);
+            chartGeneroCiclo.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' }
+                },
+                legend: {
+                    data: ['Masculino', 'Femenino'],
+                    top: '2%',
+                    textStyle: { color: '#6c757d', fontSize: 11 }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '8%',
+                    top: '18%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Menores (0-17)', 'Adultos (18-59)', 'Adultos Mayores (60+)'],
+                    axisLabel: { color: '#6c757d', fontSize: 11 },
+                    axisLine: { lineStyle: { color: '#e0e0e0' } },
+                    axisTick: { alignWithLabel: true }
+                },
+                yAxis: {
+                    type: 'value',
+                    minInterval: 1,
+                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
+                },
+                series: [
+                    {
+                        name: 'Masculino',
+                        type: 'bar',
+                        barWidth: '35%',
+                        data: [
+                            {{ $generoPorCiclo['menores']['masculino'] }},
+                            {{ $generoPorCiclo['adultos']['masculino'] }},
+                            {{ $generoPorCiclo['abuelos']['masculino'] }}
+                        ],
+                        itemStyle: {
+                            borderRadius: [6, 6, 0, 0],
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#3a57e8' },
+                                { offset: 1, color: '#6b8aff' }
+                            ])
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            color: '#3a57e8',
+                            fontWeight: 'bold',
+                            fontSize: 10
+                        }
+                    },
+                    {
+                        name: 'Femenino',
+                        type: 'bar',
+                        barWidth: '35%',
+                        data: [
+                            {{ $generoPorCiclo['menores']['femenino'] }},
+                            {{ $generoPorCiclo['adultos']['femenino'] }},
+                            {{ $generoPorCiclo['abuelos']['femenino'] }}
+                        ],
+                        itemStyle: {
+                            borderRadius: [6, 6, 0, 0],
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#fe2f60' },
+                                { offset: 1, color: '#ff7597' }
+                            ])
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            color: '#fe2f60',
+                            fontWeight: 'bold',
+                            fontSize: 10
+                        }
+                    }
+                ]
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 6. HISTOGRAMA DE BENEFICIOS Y TENENCIA DE VIVIENDA
+        // -------------------------------------------------------------
+        const elChartSocio = document.getElementById('chart-histograma-socioeconomico');
+        let chartSocio = null;
+        if (elChartSocio) {
+            chartSocio = echarts.init(elChartSocio);
+            const categoriasSocio = ['Reciben CLAP', 'Bono Familiar', 'Misión Viv.', 'Viv. Propia', 'Viv. Prestada', 'Viv. Alquilada'];
+            const dataSocio = [
+                {{ $recibeClapCount }},
+                {{ $bonoFamiliarCount }},
+                {{ $misionViviendaCount }},
+                {{ $viviendas['Propia'] }},
+                {{ $viviendas['Prestada'] }},
+                {{ $viviendas['Alquilada'] }}
+            ];
+
+            chartSocio.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    formatter: function (params) {
+                        const item = params[0];
+                        const pct = ((item.value / totalPoblacion) * 100).toFixed(1);
+                        return `<strong>${item.name}</strong><br/>
+                                Beneficiarios / Casos: <b>${item.value}</b> (${pct}% de la población)`;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '10%',
+                    top: '12%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: categoriasSocio,
+                    axisLabel: {
+                        color: '#6c757d',
+                        fontSize: 10,
+                        interval: 0,
+                        rotate: 15
+                    },
+                    axisLine: { lineStyle: { color: '#e0e0e0' } },
+                    axisTick: { alignWithLabel: true }
+                },
+                yAxis: {
+                    type: 'value',
+                    minInterval: 1,
+                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
+                },
+                series: [{
+                    name: 'Cobertura',
+                    type: 'bar',
+                    barWidth: '45%',
+                    data: dataSocio,
+                    itemStyle: {
+                        borderRadius: [6, 6, 0, 0],
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: '#1aa053' },
+                            { offset: 1, color: '#48d884' }
+                        ])
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        color: '#1aa053',
+                        fontWeight: 'bold',
+                        fontSize: 11
+                    }
+                }]
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 7. HISTOGRAMA DE PATOLOGÍAS Y ENFERMEDADES FRECUENTES
+        // -------------------------------------------------------------
+        const elChartEnfermedades = document.getElementById('chart-histograma-enfermedades');
+        let chartEnfermedades = null;
+        if (elChartEnfermedades) {
+            chartEnfermedades = echarts.init(elChartEnfermedades);
+            const categoriasEnf = [
+                @foreach ($enfermedades as $enf)
+                    '{{ addslashes($enf->tipo_enfermedad) }}',
+                @endforeach
+            ];
+            const dataEnf = [
+                @foreach ($enfermedades as $enf)
+                    {{ $enf->total }},
+                @endforeach
+            ];
+
+            chartEnfermedades.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    formatter: function (params) {
+                        const item = params[0];
+                        return `<strong>${item.name}</strong><br/>
+                                Casos Registrados: <b>${item.value} ciudadanos</b>`;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '6%',
+                    bottom: '5%',
+                    top: '8%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    minInterval: 1,
+                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: categoriasEnf,
+                    inverse: true,
+                    axisLabel: {
+                        color: '#495057',
+                        fontSize: 11,
+                        formatter: function(val) {
+                            return val.length > 20 ? val.substring(0, 18) + '...' : val;
+                        }
+                    },
+                    axisLine: { lineStyle: { color: '#e0e0e0' } }
+                },
+                series: [{
+                    name: 'Casos',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: dataEnf,
+                    itemStyle: {
+                        borderRadius: [0, 6, 6, 0],
+                        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                            { offset: 0, color: '#c03221' },
+                            { offset: 1, color: '#f16a1b' }
+                        ])
+                    },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        color: '#c03221',
+                        fontWeight: 'bold',
+                        fontSize: 11
+                    }
+                }]
+            });
+        }
+
+        // -------------------------------------------------------------
+        // REDIMENSIONAMIENTO AUTOMÁTICO RESPONSIVO
+        // -------------------------------------------------------------
+        window.addEventListener('resize', () => {
+            if (chartEdades) chartEdades.resize();
+            if (chartProfesiones) chartProfesiones.resize();
+            if (chartAcademico) chartAcademico.resize();
+            if (chartGeneroCiclo) chartGeneroCiclo.resize();
+            if (chartSocio) chartSocio.resize();
+            if (chartEnfermedades) chartEnfermedades.resize();
+        });
+    });
+</script>
+@endpush
