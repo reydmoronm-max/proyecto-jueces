@@ -174,7 +174,7 @@ class CensoController extends Controller
             'cedula' => ['required', 'digits_between:7,8'],
         ]);
 
-        $persona = Persona::where('cedula', $request->cedula)->first();
+        $persona = Persona::with('familia')->where('cedula', $request->cedula)->first();
 
         if (!$persona) {
             return response()->json(['message' => 'Persona no encontrada'], 404);
@@ -232,6 +232,15 @@ class CensoController extends Controller
                 ->exists();
             if ($jefeExiste) {
                 return back()->withErrors(['parentesco' => 'Ya existe un Jefe de familia registrado en esta familia.'])->withInput();
+            }
+        }
+
+        $personaExistente = Persona::where('cedula', $request->cedula)->first();
+        if ($personaExistente && $personaExistente->familia_id) {
+            if ((int) $personaExistente->familia_id === (int) $request->familia_id) {
+                return back()->withErrors(['cedula' => 'Este ciudadano ya se encuentra registrado como integrante de esta familia.'])->withInput();
+            } else {
+                return back()->withErrors(['cedula' => 'Este ciudadano ya se encuentra registrado en otra familia (Familia #' . ($personaExistente->familia?->numero_familia ?? $personaExistente->familia_id) . ').'])->withInput();
             }
         }
 
@@ -341,6 +350,17 @@ class CensoController extends Controller
             }
         }
 
+        $otraPersonaConCedula = Persona::where('cedula', $request->cedula)
+            ->where('id', '!=', $id)
+            ->first();
+        if ($otraPersonaConCedula && $otraPersonaConCedula->familia_id) {
+            if ((int) $otraPersonaConCedula->familia_id === (int) $persona->familia_id) {
+                return back()->withErrors(['cedula' => 'Ya existe otro integrante en esta familia registrado con esa cédula.'])->withInput();
+            } else {
+                return back()->withErrors(['cedula' => 'Esa cédula ya pertenece a una persona registrada en otra familia (Familia #' . ($otraPersonaConCedula->familia?->numero_familia ?? $otraPersonaConCedula->familia_id) . ').'])->withInput();
+            }
+        }
+
         DB::beginTransaction();
         try {
             $fecha = \Carbon\Carbon::createFromFormat('d-m-Y', $request->fecha_nacimiento)->format('Y-m-d');
@@ -423,8 +443,18 @@ class CensoController extends Controller
         try {
             $fechaNacimiento = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento'));
 
-            if ($fechaNacimiento->age < 18 && in_array($request->input('nivel_academico'), ['Universitario', 'Postgrado'], true)) {
-                $request->merge(['nivel_academico' => 'Técnico']);
+            $nivelesSuperiores = [
+                'Superior con certificacion de tecnico superior',
+                'Pregrado universitario (licenciatura, ingenieria)',
+                'Posgrado universitario (maestria, doctorado, especializacion)',
+                // Compatibilidad con valores antiguos si existieran
+                'Universitario',
+                'Postgrado',
+                'Técnico'
+            ];
+
+            if ($fechaNacimiento->age < 18 && in_array($request->input('nivel_academico'), $nivelesSuperiores, true)) {
+                $request->merge(['nivel_academico' => 'Secundaria con titulo de bachiller']);
             }
         } catch (\Throwable $exception) {
             // La validación y el procesamiento de la fecha informarán el formato inválido.

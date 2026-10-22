@@ -128,11 +128,13 @@
                                     required>
                                     <option value="" selected disabled>Seleccione...</option>
                                     <option value="Ninguno">Ninguno</option>
+                                    <option value="Preescolar">Preescolar</option>
                                     <option value="Primaria">Primaria</option>
-                                    <option value="Secundaria">Secundaria</option>
-                                    <option value="Técnico">Técnico</option>
-                                    <option value="Universitario">Universitario</option>
-                                    <option value="Postgrado">Postgrado</option>
+                                    <option value="Secundaria con titulo de bachiller">Secundaria con titulo de bachíller</option>
+                                    <option value="Superior con certificacion de tecnico superior">Superior con certificación de técnico superior</option>
+                                    <option value="Pregrado universitario (licenciatura, ingenieria)">Pregrado universitario (licenciatura, ingeniería)</option>
+                                    <option value="Posgrado universitario (maestria, doctorado, especializacion)">Posgrado universitario (maestría, doctorado, especialización)</option>
+                                    <option value="No sabe/no responde">No sabe/no responde</option>
                                 </select>
                             </div>
                         </div>
