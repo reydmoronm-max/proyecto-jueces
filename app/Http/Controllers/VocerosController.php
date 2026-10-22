@@ -53,7 +53,7 @@ class VocerosController extends Controller
             'nombres'          => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellidos'        => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'categoria_vocero' => ['required', 'string'],
-            'fecha_eleccion'   => ['required', 'string'],
+            'fecha_eleccion'   => ['required', 'date', 'before_or_equal:today'],
         ]);
 
         DB::beginTransaction();
@@ -133,7 +133,7 @@ class VocerosController extends Controller
             'nombres'          => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellidos'        => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'categoria_vocero' => ['required', 'string'],
-            'fecha_eleccion'   => ['required', 'string'],
+            'fecha_eleccion'   => ['required', 'date', 'before_or_equal:today'],
         ]);
 
         DB::beginTransaction();

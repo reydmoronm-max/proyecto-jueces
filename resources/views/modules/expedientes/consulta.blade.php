@@ -845,11 +845,13 @@
                                         <select class="form-select " id="filtro_nivel" name="nivel_academico">
                                             <option value="Todos">Todos</option>
                                             <option value="Ninguno" {{ request('nivel_academico') == 'Ninguno' ? 'selected' : '' }}>Ninguno</option>
+                                            <option value="Preescolar" {{ request('nivel_academico') == 'Preescolar' ? 'selected' : '' }}>Preescolar</option>
                                             <option value="Primaria" {{ request('nivel_academico') == 'Primaria' ? 'selected' : '' }}>Primaria</option>
-                                            <option value="Secundaria" {{ request('nivel_academico') == 'Secundaria' ? 'selected' : '' }}>Secundaria</option>
-                                            <option value="Técnico" {{ request('nivel_academico') == 'Técnico' ? 'selected' : '' }}>Técnico</option>
-                                            <option value="Universitario" {{ request('nivel_academico') == 'Universitario' ? 'selected' : '' }}>Universitario</option>
-                                            <option value="Postgrado" {{ request('nivel_academico') == 'Postgrado' ? 'selected' : '' }}>Postgrado</option>
+                                            <option value="Secundaria con titulo de bachiller" {{ request('nivel_academico') == 'Secundaria con titulo de bachiller' ? 'selected' : '' }}>Secundaria con titulo de bachiller</option>
+                                            <option value="Superior con certificacion de tecnico superior" {{ request('nivel_academico') == 'Superior con certificacion de tecnico superior' ? 'selected' : '' }}>Superior con certificación de técnico superior</option>
+                                            <option value="Pregrado universitario (licenciatura, ingenieria)" {{ request('nivel_academico') == 'Pregrado universitario (licenciatura, ingenieria)' ? 'selected' : '' }}>Pregrado universitario (licenciatura, ingeniería)</option>
+                                            <option value="Posgrado universitario (maestria, doctorado, especializacion)" {{ request('nivel_academico') == 'Posgrado universitario (maestria, doctorado, especializacion)' ? 'selected' : '' }}>Posgrado universitario (maestría, doctorado, especialización)</option>
+                                            <option value="No sabe/no responde" {{ request('nivel_academico') == 'No sabe/no responde' ? 'selected' : '' }}>No sabe/no responde</option>
                                         </select>
                                     </div>
 

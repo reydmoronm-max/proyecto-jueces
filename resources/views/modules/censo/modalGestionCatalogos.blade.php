@@ -16,12 +16,12 @@
                 <!-- Pestañas de navegación -->
                 <ul class="nav nav-tabs nav-fill mb-3" id="catalogosTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active fw-bold text-primary" id="tab-enfermedades-btn" data-bs-toggle="tab" data-bs-target="#tab-enfermedades" type="button" role="tab" aria-controls="tab-enfermedades" aria-selected="true">
+                        <button class="nav-link active fw-bold" id="tab-enfermedades-btn" data-bs-toggle="tab" data-bs-target="#tab-enfermedades" type="button" role="tab" aria-controls="tab-enfermedades" aria-selected="true">
                             <i class="fa-solid fa-notes-medical me-2"></i> Enfermedades (<span id="contador-enfermedades">0</span>)
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link fw-bold text-primary" id="tab-profesiones-btn" data-bs-toggle="tab" data-bs-target="#tab-profesiones" type="button" role="tab" aria-controls="tab-profesiones" aria-selected="false">
+                        <button class="nav-link fw-bold" id="tab-profesiones-btn" data-bs-toggle="tab" data-bs-target="#tab-profesiones" type="button" role="tab" aria-controls="tab-profesiones" aria-selected="false">
                             <i class="fa-solid fa-briefcase me-2"></i> Profesiones (<span id="contador-profesiones">0</span>)
                         </button>
                     </li>
