@@ -164,7 +164,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia">
+                                                            <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia" target="_blank" rel="noopener">
                                                                 <i class="ri-file-pdf-2-line"></i>
                                                             </a>
                                                             <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCita" onclick="agregar_id_expediente({{ $expediente->id }})" title="Agendar cita">
@@ -244,7 +244,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia">
+                                                            <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia" target="_blank" rel="noopener">
                                                                 <i class="ri-file-pdf-2-line"></i>
                                                             </a>
                                                             <button type="button" class="btn btn-sm btn-warning"
@@ -331,12 +331,12 @@
                                                             </button>
                                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                                 <li>
-                                                                    <a type="button" class="dropdown-item" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}">
+                                                                    <a type="button" class="dropdown-item" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" target="_blank" rel="noopener">
                                                                         Ver acta de recepción
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a type="button" class="dropdown-item" href="{{ route('denuncias.exportar-acta-conciliacion', $expediente->id) }}">
+                                                                    <a type="button" class="dropdown-item" href="{{ route('denuncias.exportar-acta-conciliacion', $expediente->id) }}" target="_blank" rel="noopener">
                                                                         Ver acta de conciliación
                                                                     </a>
                                                                 </li>

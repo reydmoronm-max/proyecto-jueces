@@ -212,7 +212,7 @@ class ConsultaController extends Controller
 
         $pdf->setPaper('letter', 'portrait');
 
-        return $pdf->download('reporte-busqueda-censo-' . date('Ymd_His') . '.pdf');
+        return $pdf->stream('reporte-busqueda-censo-' . date('Ymd_His') . '.pdf');
     }
 
     /**

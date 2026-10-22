@@ -22,7 +22,7 @@
                                     <i class="ri-search-line"></i>
                                 </span>
                                 <input type="search" id="buscar-usuario"
-                                    class="form-control border-start-0 ps-0 rounded-end-3"
+                                    class="form-control border-start-0 ps-2 rounded-end-3"
                                     placeholder="Nombre, apellido, cédula o rol..."
                                     autocomplete="off" aria-label="Buscar usuarios por nombre, apellido, cédula o rol">
                             </div>

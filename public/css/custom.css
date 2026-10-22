@@ -654,6 +654,78 @@ input[type=number] {
   background: rgba(25, 135, 84, 0.25) !important;
 }
 
+.login-form .login-field {
+  position: relative;
+}
+
+.login-form .login-field__spinner {
+  animation: page-loader-spin 0.7s linear infinite;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  border-top-color: var(--bs-primary, #3b8aff);
+  display: none;
+  height: 1rem;
+  position: absolute;
+  right: 0.9rem;
+  top: calc(50% - 0.5rem);
+  width: 1rem;
+}
+
+.login-form.is-submitting .login-field__spinner {
+  display: block;
+}
+
+.login-form.was-validated .form-control:valid,
+.login-form .form-control.is-valid {
+  background-image: none;
+  border-color: var(--bs-border-color, #ced4da);
+  padding-right: 0.75rem;
+}
+
+.login-form.is-submitting .form-control {
+  padding-right: 2.5rem;
+}
+
+.consulta-field {
+  position: relative;
+}
+
+.consulta-field__spinner,
+.consulta-submit__spinner {
+  animation: page-loader-spin 0.7s linear infinite;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  display: none;
+  height: 1rem;
+  width: 1rem;
+}
+
+.consulta-field__spinner {
+  border-color: rgba(0, 0, 0, 0.15);
+  border-top-color: var(--bs-primary, #3b8aff);
+  pointer-events: none;
+  position: absolute;
+  right: 0.75rem;
+  top: calc(50% - 0.5rem);
+  z-index: 2;
+}
+
+.consulta-loading-form.is-submitting .consulta-submit__spinner,
+.consulta-individual-form.is-submitting .consulta-field__spinner {
+  display: inline-block;
+}
+
+.consulta-individual-form.is-submitting .consulta-field .form-control {
+  padding-right: 2.5rem;
+}
+
+.consulta-individual-form.was-validated .form-control:valid,
+.consulta-individual-form .form-control.is-valid {
+  background-image: none;
+  border-color: var(--bs-primary, #3b8aff);
+}
+
 /* Color del icono y texto al hacer hover (base) */
 .sidebar-base .nav-item .nav-link:hover {
   color: #ffffff !important;

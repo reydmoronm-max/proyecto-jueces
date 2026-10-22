@@ -71,7 +71,7 @@
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                             <li>
-                                                <a type="button" class="dropdown-item" href="{{ route('denuncias.exportar-acta-recepcion', $citacion->expediente_id) }}" title="Ver acta de recepción de denuncia">
+                                                <a type="button" class="dropdown-item" href="{{ route('denuncias.exportar-acta-recepcion', $citacion->expediente_id) }}" title="Ver acta de recepción de denuncia" target="_blank" rel="noopener">
                                                     Ver acta de recepción
                                                 </a>
                                             </li>
