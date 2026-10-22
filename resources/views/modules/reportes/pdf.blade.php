@@ -132,7 +132,7 @@
             width: 100%;
             border-collapse: separate;
             border-spacing: 8px 0;
-            margin-bottom: 11px;
+            margin-bottom: 14px;
             page-break-inside: avoid;
         }
 
@@ -142,7 +142,7 @@
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
-            padding: 8px 10px;
+            padding: 10px 10px;
         }
 
         .card-header-pdf {
@@ -152,7 +152,7 @@
         }
 
         .card-title-pdf {
-            font-size: 10.5px;
+            font-size: 11px;
             font-weight: bold;
             color: #0f172a;
             margin: 0 0 1px 0;
@@ -174,13 +174,13 @@
         .histogram-bar-cell {
             vertical-align: bottom;
             text-align: center;
-            height: 95px;
+            height: 125px;
             padding: 0 1px;
             border-bottom: 2px solid #94a3b8;
         }
 
         .histogram-bar-val {
-            font-size: 7.5px;
+            font-size: 8px;
             font-weight: bold;
             margin-bottom: 1px;
             line-height: 1;
@@ -408,9 +408,9 @@
                                 <div class="card-subtitle-pdf">Frecuencia por intervalos etarios decenales</div>
                             </td>
                             <td style="text-align: right;">
-                                <span class="pill-tag pill-info">0-17: {{ $menoresCount }}</span>
+                                <span class="pill-tag pill-primary">0-17: {{ $menoresCount }}</span>
                                 <span class="pill-tag pill-primary">18-59: {{ $adultosCount }}</span>
-                                <span class="pill-tag pill-warning">60+: {{ $abuelosCount }}</span>
+                                <span class="pill-tag pill-primary">60+: {{ $abuelosCount }}</span>
                             </td>
                         </tr>
                     </table>
@@ -431,17 +431,17 @@
                     $maxValEdades = max(1, max(array_values($rangosEdades)));
                 @endphp
 
-                <!-- Gráfico de Columnas (Histograma) -->
+                <!-- Gráfico de Columnas (Histograma de Edades - Azul) -->
                 <table class="histogram-vertical-table">
                     <tr>
                         @foreach ($rangosEdades as $rango => $val)
                             @php
-                                $altPx = $val > 0 ? max(10, round(($val / $maxValEdades) * 80)) : 2;
+                                $altPx = $val > 0 ? max(12, round(($val / $maxValEdades) * 110)) : 2;
                             @endphp
                             <td class="histogram-bar-cell">
                                 @if ($val > 0)
-                                    <div class="histogram-bar-val histogram-bar-val-primary">{{ $val }}</div>
-                                    <div class="histogram-bar-v bar-v-primary" style="height: {{ $altPx }}px; width: 18px;"></div>
+                                    <div class="histogram-bar-val" style="color: #3a57e8;">{{ $val }}</div>
+                                    <div class="histogram-bar-v" style="height: {{ $altPx }}px; width: 18px; background-color: #3a57e8;"></div>
                                 @else
                                     <div class="histogram-bar-v bar-v-empty" style="width: 18px;"></div>
                                 @endif
@@ -460,44 +460,52 @@
                 </table>
             </td>
 
-            <!-- Columna Derecha: Histograma de Profesiones y Oficios (Tabla profesiones) -->
+            <!-- Columna Derecha: Histograma Vertical de Profesiones y Oficios (Amarillo) -->
             <td class="section-col">
                 <div class="card-header-pdf">
                     <table style="width: 100%;">
                         <tr>
                             <td>
-                                <div class="card-title-pdf">Estadísticas de Profesiones y Oficios</div>
-                                <div class="card-subtitle-pdf">Ocupaciones más frecuentes (Tabla 'profesiones')</div>
+                                <div class="card-title-pdf">Histograma de Profesiones y Oficios</div>
+                                <div class="card-subtitle-pdf">Ocupaciones más frecuentes en la comunidad</div>
                             </td>
                             <td style="text-align: right;">
-                                <span class="pill-tag pill-info">{{ $profesiones->count() }} actividades</span>
+                                <span class="pill-tag pill-warning">{{ $profesiones->count() }} actividades</span>
                             </td>
                         </tr>
                     </table>
                 </div>
 
                 @if ($profesiones->count() > 0)
-                    @php $maxProf = max(1, $profesiones->max('total')); @endphp
-                    <table class="bar-table-h" style="margin-top: 4px;">
-                        @foreach ($profesiones->take(7) as $prof)
-                            @php
-                                $pctProf = round(($prof->total / $totalRef) * 100, 1);
-                                $anchoBarra = max(6, round(($prof->total / $maxProf) * 100));
-                            @endphp
-                            <tr>
-                                <td style="width: 38%;" class="bar-label-h" title="{{ $prof->profesion }}">
-                                    {{ Str::limit($prof->profesion, 17) }}
+                    @php
+                        $topProf = $profesiones->take(6);
+                        $maxProf = max(1, $topProf->max('total'));
+                    @endphp
+                    <table class="histogram-vertical-table">
+                        <tr>
+                            @foreach ($topProf as $prof)
+                                @php
+                                    $altPxProf = $prof->total > 0 ? max(12, round(($prof->total / $maxProf) * 110)) : 2;
+                                @endphp
+                                <td class="histogram-bar-cell">
+                                    @if ($prof->total > 0)
+                                        <div class="histogram-bar-val" style="color: #ffbe0c;">{{ $prof->total }}</div>
+                                        <div class="histogram-bar-v" style="height: {{ $altPxProf }}px; width: 18px; background-color: #ffbe0c;"></div>
+                                    @else
+                                        <div class="histogram-bar-v bar-v-empty" style="width: 18px;"></div>
+                                    @endif
                                 </td>
-                                <td style="width: 44%;">
-                                    <div class="bar-track-h">
-                                        <div class="bar-fill-h bar-fill-info" style="width: {{ $anchoBarra }}%;"></div>
-                                    </div>
+                            @endforeach
+                        </tr>
+                        <tr>
+                            @foreach ($topProf as $prof)
+                                @php $pctProf = round(($prof->total / $totalRef) * 100, 1); @endphp
+                                <td class="histogram-label-cell">
+                                    <div class="histogram-label-txt" style="font-size: 6.5px;" title="{{ $prof->profesion }}">{{ Str::limit($prof->profesion, 9) }}</div>
+                                    <div class="histogram-label-pct">{{ $pctProf }}%</div>
                                 </td>
-                                <td style="width: 18%;" class="bar-value-h">
-                                    {{ $prof->total }} <span class="bar-subvalue-h">({{ $pctProf }}%)</span>
-                                </td>
-                            </tr>
-                        @endforeach
+                            @endforeach
+                        </tr>
                     </table>
                 @else
                     <div class="empty-notice">No se registran ciudadanos con profesión u oficio registrado.</div>
@@ -518,19 +526,29 @@
 
                 @php
                     $maxValNivel = max(1, max(array_values($niveles)));
+                    $etiquetasCortas = [
+                        'Ninguno' => 'Ninguno',
+                        'Preescolar' => 'Preescolar',
+                        'Primaria' => 'Primaria',
+                        'Secundaria con título de bachiller' => 'Bachiller',
+                        'Superior con certificación de técnico superior' => 'TSU',
+                        'Pregrado universitario (licenciatura, ingeniería)' => 'Pregrado',
+                        'Posgrado universitario (maestría, doctorado, especialización)' => 'Posgrado',
+                        'No sabe/no responde' => 'NS/NR',
+                    ];
                 @endphp
                 <table class="histogram-vertical-table">
                     <tr>
                         @foreach ($niveles as $nivel => $count)
                             @php
-                                $altPxNiv = $count > 0 ? max(10, round(($count / $maxValNivel) * 80)) : 2;
+                                $altPxNiv = $count > 0 ? max(12, round(($count / $maxValNivel) * 110)) : 2;
                             @endphp
                             <td class="histogram-bar-cell">
                                 @if ($count > 0)
-                                    <div class="histogram-bar-val histogram-bar-val-purple">{{ $count }}</div>
-                                    <div class="histogram-bar-v bar-v-purple" style="height: {{ $altPxNiv }}px; width: 22px;"></div>
+                                    <div class="histogram-bar-val" style="color: #4f46e5;">{{ $count }}</div>
+                                    <div class="histogram-bar-v" style="height: {{ $altPxNiv }}px; width: 14px; background-color: #4f46e5;"></div>
                                 @else
-                                    <div class="histogram-bar-v bar-v-empty" style="width: 22px;"></div>
+                                    <div class="histogram-bar-v bar-v-empty" style="width: 14px;"></div>
                                 @endif
                             </td>
                         @endforeach
@@ -539,7 +557,7 @@
                         @foreach ($niveles as $nivel => $count)
                             @php $pctNiv = round(($count / $totalRef) * 100, 1); @endphp
                             <td class="histogram-label-cell">
-                                <div class="histogram-label-txt">{{ Str::limit($nivel, 7) }}</div>
+                                <div class="histogram-label-txt" style="font-size: 6.5px;">{{ $etiquetasCortas[$nivel] ?? Str::limit($nivel, 8) }}</div>
                                 <div class="histogram-label-pct">{{ $pctNiv }}%</div>
                             </td>
                         @endforeach
@@ -581,8 +599,8 @@
                     <tr>
                         @foreach ($cicloGrupos as $grupoNombre => $gVals)
                             @php
-                                $altM = $gVals['m'] > 0 ? max(10, round(($gVals['m'] / $maxValGenero) * 80)) : 2;
-                                $altF = $gVals['f'] > 0 ? max(10, round(($gVals['f'] / $maxValGenero) * 80)) : 2;
+                                $altM = $gVals['m'] > 0 ? max(12, round(($gVals['m'] / $maxValGenero) * 110)) : 2;
+                                $altF = $gVals['f'] > 0 ? max(12, round(($gVals['f'] / $maxValGenero) * 110)) : 2;
                             @endphp
                             <td class="histogram-bar-cell" style="width: 33.3%;">
                                 <table style="width: 100%; border-collapse: collapse;">
@@ -649,12 +667,12 @@
                     <tr>
                         @foreach ($socioItems as $itemNom => $valSocio)
                             @php
-                                $altPxSocio = $valSocio > 0 ? max(10, round(($valSocio / $maxValSocio) * 80)) : 2;
+                                $altPxSocio = $valSocio > 0 ? max(12, round(($valSocio / $maxValSocio) * 110)) : 2;
                             @endphp
                             <td class="histogram-bar-cell">
                                 @if ($valSocio > 0)
-                                    <div class="histogram-bar-val histogram-bar-val-success">{{ $valSocio }}</div>
-                                    <div class="histogram-bar-v bar-v-success" style="height: {{ $altPxSocio }}px; width: 20px;"></div>
+                                    <div class="histogram-bar-val" style="color: #1aa053;">{{ $valSocio }}</div>
+                                    <div class="histogram-bar-v" style="height: {{ $altPxSocio }}px; width: 20px; background-color: #1aa053;"></div>
                                 @else
                                     <div class="histogram-bar-v bar-v-empty" style="width: 20px;"></div>
                                 @endif
@@ -673,14 +691,14 @@
                 </table>
             </td>
 
-            <!-- Columna Derecha: Histograma de Patologías y Enfermedades Reportadas (Tabla enfermedades) -->
+            <!-- Columna Derecha: Histograma Vertical de Patologías y Enfermedades Reportadas (Rojo) -->
             <td class="section-col">
                 <div class="card-header-pdf">
                     <table style="width: 100%;">
                         <tr>
                             <td>
-                                <div class="card-title-pdf">Patologías y Enfermedades</div>
-                                <div class="card-subtitle-pdf">Principales afecciones (Tabla 'enfermedades')</div>
+                                <div class="card-title-pdf">Histograma de Patologías y Enfermedades</div>
+                                <div class="card-subtitle-pdf">Principales afecciones de salud reportadas</div>
                             </td>
                             <td style="text-align: right;">
                                 <span class="pill-tag pill-danger">{{ $conEnfermedadCount }} casos totales</span>
@@ -690,26 +708,34 @@
                 </div>
 
                 @if ($enfermedades->count() > 0)
-                    @php $maxEnf = max(1, $enfermedades->max('total')); @endphp
-                    <table class="bar-table-h" style="margin-top: 4px;">
-                        @foreach ($enfermedades->take(7) as $enf)
-                            @php
-                                $anchoBarraEnf = max(6, round(($enf->total / $maxEnf) * 100));
-                            @endphp
-                            <tr>
-                                <td style="width: 40%;" class="bar-label-h" title="{{ $enf->tipo_enfermedad }}">
-                                    {{ Str::limit($enf->tipo_enfermedad, 18) }}
+                    @php
+                        $topEnf = $enfermedades->take(6);
+                        $maxEnf = max(1, $topEnf->max('total'));
+                    @endphp
+                    <table class="histogram-vertical-table">
+                        <tr>
+                            @foreach ($topEnf as $enf)
+                                @php
+                                    $altPxEnf = $enf->total > 0 ? max(12, round(($enf->total / $maxEnf) * 110)) : 2;
+                                @endphp
+                                <td class="histogram-bar-cell">
+                                    @if ($enf->total > 0)
+                                        <div class="histogram-bar-val" style="color: #ff2525;">{{ $enf->total }}</div>
+                                        <div class="histogram-bar-v" style="height: {{ $altPxEnf }}px; width: 18px; background-color: #ff2525;"></div>
+                                    @else
+                                        <div class="histogram-bar-v bar-v-empty" style="width: 18px;"></div>
+                                    @endif
                                 </td>
-                                <td style="width: 42%;">
-                                    <div class="bar-track-h">
-                                        <div class="bar-fill-h bar-fill-danger" style="width: {{ $anchoBarraEnf }}%;"></div>
-                                    </div>
+                            @endforeach
+                        </tr>
+                        <tr>
+                            @foreach ($topEnf as $enf)
+                                <td class="histogram-label-cell">
+                                    <div class="histogram-label-txt" style="font-size: 6.5px;" title="{{ $enf->tipo_enfermedad }}">{{ Str::limit($enf->tipo_enfermedad, 9) }}</div>
+                                    <div class="histogram-label-pct" style="color: #ff2525; font-weight: bold;">{{ $enf->total }} cas.</div>
                                 </td>
-                                <td style="width: 18%;" class="bar-value-h">
-                                    {{ $enf->total }} <span class="bar-subvalue-h">casos</span>
-                                </td>
-                            </tr>
-                        @endforeach
+                            @endforeach
+                        </tr>
                     </table>
                 @else
                     <div class="empty-notice">No se reportan ciudadanos con patologías registradas en este grupo.</div>

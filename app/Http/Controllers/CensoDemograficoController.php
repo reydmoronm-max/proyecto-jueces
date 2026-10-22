@@ -148,22 +148,47 @@ class CensoDemograficoController extends Controller
             ->where('tipo_enfermedad', '!=', 'No aplica')
             ->count();
 
-        // 6. Academic level stats
-        $nivelesDb = (clone $query)->select('nivel_academico', DB::raw('count(*) as total'))
-            ->whereNotNull('nivel_academico')
-            ->groupBy('nivel_academico')
-            ->get()
-            ->pluck('total', 'nivel_academico')
-            ->toArray();
-
-        $niveles = [
-            'Ninguno' => $nivelesDb['Ninguno'] ?? 0,
-            'Primaria' => $nivelesDb['Primaria'] ?? 0,
-            'Secundaria' => $nivelesDb['Secundaria'] ?? 0,
-            'Técnico' => $nivelesDb['Técnico'] ?? 0,
-            'Universitario' => $nivelesDb['Universitario'] ?? 0,
-            'Postgrado' => $nivelesDb['Postgrado'] ?? 0,
+        // 6. Academic level stats (Categorías oficiales del censo)
+        $nivelesOficiales = [
+            'Ninguno' => ['Ninguno'],
+            'Preescolar' => ['Preescolar'],
+            'Primaria' => ['Primaria'],
+            'Secundaria con título de bachiller' => [
+                'Secundaria con titulo de bachiller',
+                'Secundaria con título de bachiller',
+                'Secundaria con titulo de bachíller',
+                'Secundaria',
+                'Bachiller'
+            ],
+            'Superior con certificación de técnico superior' => [
+                'Superior con certificacion de tecnico superior',
+                'Superior con certificación de técnico superior',
+                'Técnico',
+                'Técnico Superior',
+                'Tecnico'
+            ],
+            'Pregrado universitario (licenciatura, ingeniería)' => [
+                'Pregrado universitario (licenciatura, ingenieria)',
+                'Pregrado universitario (licenciatura, ingeniería)',
+                'Universitario'
+            ],
+            'Posgrado universitario (maestría, doctorado, especialización)' => [
+                'Posgrado universitario (maestria, doctorado, especializacion)',
+                'Posgrado universitario (maestría, doctorado, especialización)',
+                'Postgrado',
+                'Posgrado'
+            ],
+            'No sabe/no responde' => [
+                'No sabe/no responde',
+                'No sabe',
+                'No responde'
+            ],
         ];
+
+        $niveles = [];
+        foreach ($nivelesOficiales as $nombreNivel => $aliases) {
+            $niveles[$nombreNivel] = (clone $query)->whereIn('nivel_academico', $aliases)->count();
+        }
 
         // 7. Socioeconomic stats
         $viviendas = [

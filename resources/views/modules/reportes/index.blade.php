@@ -166,19 +166,19 @@
                             <p class="text-muted small mb-0">Frecuencia por intervalos etarios (décadas de edad)</p>
                         </div>
                         <div class="d-flex gap-1 flex-wrap">
-                            <span class="badge bg-soft-info text-info small" title="0 a 17 años">
+                            <span class="badge bg-soft-primary text-primary small" title="0 a 17 años">
                                 Menores: <strong>{{ $menoresCount }}</strong>
                             </span>
                             <span class="badge bg-soft-primary text-primary small" title="18 a 59 años">
                                 Adultos: <strong>{{ $adultosCount }}</strong>
                             </span>
-                            <span class="badge bg-soft-warning text-warning small" title="60+ años">
+                            <span class="badge bg-soft-primary text-primary small" title="60+ años">
                                 Mayores: <strong>{{ $abuelosCount }}</strong>
                             </span>
                         </div>
                     </div>
                     <div class="card-body px-3 pb-3">
-                        <div id="chart-histograma-edades" style="min-height: 340px; width: 100%;"></div>
+                        <div id="chart-histograma-edades" style="height: 270px; width: 100%;"></div>
                     </div>
                 </div>
             </div>
@@ -189,21 +189,21 @@
                     <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-start flex-wrap gap-2">
                         <div>
                             <h5 class="card-title fw-bold text-dark mb-1 d-flex align-items-center gap-2">
-                                <i class="ri-briefcase-4-fill text-info"></i> Estadísticas de Profesiones y Oficios
+                                <i class="ri-briefcase-4-fill" style="color: #ffbe0c;"></i> Estadísticas de Profesiones y Oficios
                             </h5>
                             <p class="text-muted small mb-0">Distribución de las ocupaciones más frecuentes registradas</p>
                         </div>
-                        <span class="badge bg-soft-info text-info rounded-pill px-3 py-1">
+                        <span class="badge rounded-pill px-3 py-1" style="background-color: #fff9e6; color: #b8860b; border: 1px solid #ffeeba;">
                             {{ $profesiones->count() }} actividades registradas
                         </span>
                     </div>
                     <div class="card-body px-3 pb-3">
                         @if ($profesiones->count() > 0)
-                            <div id="chart-histograma-profesiones" style="min-height: 340px; width: 100%;"></div>
+                            <div id="chart-histograma-profesiones" style="height: 270px; width: 100%;"></div>
                         @else
                             <div class="text-center py-5">
-                                <div class="bg-soft-info rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                                    <i class="ri-user-unfollow-line text-info fs-3"></i>
+                                <div class="bg-soft-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: #fff9e6;">
+                                    <i class="ri-user-unfollow-line text-warning fs-3"></i>
                                 </div>
                                 <h6 class="text-muted fw-bold">Sin profesiones registradas</h6>
                                 <p class="text-muted small mb-0">No se encontraron ciudadanos con profesión u oficio registrado en este filtro.</p>
@@ -222,13 +222,17 @@
                     <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-start flex-wrap gap-2">
                         <div>
                             <h5 class="card-title fw-bold text-dark mb-1 d-flex align-items-center gap-2">
-                                <i class="ri-graduation-cap-fill text-primary"></i> Histograma de Nivel Académico
+                                <i class="ri-graduation-cap-fill" style="color: #4f46e5;"></i> Histograma de Nivel Académico
                             </h5>
                             <p class="text-muted small mb-0">Nivel de instrucción escolar y universitaria alcanzado</p>
                         </div>
+                        <div class="d-flex align-items-center gap-1 flex-wrap">
+                            <span class="badge small" style="background-color: #eef2ff; color: #4f46e5; border: 1px solid #e0e7ff;" title="Técnico Superior Universitario">TSU: Téc. Superior</span>
+                            <span class="badge small" style="background-color: #f5f3ff; color: #6366f1; border: 1px solid #ede9fe;" title="No sabe / no responde">NS/NR: Sin respuesta</span>
+                        </div>
                     </div>
                     <div class="card-body px-3 pb-3">
-                        <div id="chart-histograma-academico" style="min-height: 320px; width: 100%;"></div>
+                        <div id="chart-histograma-academico" style="height: 270px; width: 100%;"></div>
                     </div>
                 </div>
             </div>
@@ -253,7 +257,7 @@
                         </div>
                     </div>
                     <div class="card-body px-3 pb-3">
-                        <div id="chart-histograma-genero-ciclo" style="min-height: 320px; width: 100%;"></div>
+                        <div id="chart-histograma-genero-ciclo" style="height: 270px; width: 100%;"></div>
                     </div>
                 </div>
             </div>
@@ -273,7 +277,7 @@
                         </div>
                     </div>
                     <div class="card-body px-3 pb-3">
-                        <div id="chart-histograma-socioeconomico" style="min-height: 320px; width: 100%;"></div>
+                        <div id="chart-histograma-socioeconomico" style="height: 270px; width: 100%;"></div>
                     </div>
                 </div>
             </div>
@@ -294,7 +298,7 @@
                     </div>
                     <div class="card-body px-3 pb-3">
                         @if ($enfermedades->count() > 0)
-                            <div id="chart-histograma-enfermedades" style="min-height: 320px; width: 100%;"></div>
+                            <div id="chart-histograma-enfermedades" style="height: 270px; width: 100%;"></div>
                         @else
                             <div class="text-center py-5">
                                 <div class="bg-soft-success rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
@@ -332,8 +336,11 @@
         // Variable de población total para cálculos de porcentaje
         const totalPoblacion = {{ $totalCiudadanos > 0 ? $totalCiudadanos : 1 }};
 
+        // Paleta de 4 colores del sistema (Azul, Amarillo, Verde, Rojo) distribuida equitativamente
+        const paleta4 = ['#3a57e8', '#ffbe0c', '#1aa053', '#ff2525'];
+
         // -------------------------------------------------------------
-        // 2. HISTOGRAMA DE EDADES (Intervalos Etarios)
+        // 2. HISTOGRAMA DE EDADES (Intervalos Etarios) -> COLOR AZUL (#3a57e8)
         // -------------------------------------------------------------
         const elChartEdades = document.getElementById('chart-histograma-edades');
         let chartEdades = null;
@@ -366,7 +373,7 @@
                 grid: {
                     left: '3%',
                     right: '4%',
-                    bottom: '8%',
+                    bottom: '4%',
                     top: '12%',
                     containLabel: true
                 },
@@ -395,10 +402,7 @@
                     data: dataEdades,
                     itemStyle: {
                         borderRadius: [6, 6, 0, 0],
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            { offset: 0, color: '#3a57e8' },
-                            { offset: 1, color: '#7b95ff' }
-                        ])
+                        color: '#3a57e8'
                     },
                     label: {
                         show: true,
@@ -415,19 +419,19 @@
         }
 
         // -------------------------------------------------------------
-        // 3. HISTOGRAMA / ESTADÍSTICAS DE PROFESIONES Y OFICIOS
+        // 3. HISTOGRAMA DE PROFESIONES Y OFICIOS (VERTICAL) -> COLOR AMARILLO (#ffbe0c)
         // -------------------------------------------------------------
         const elChartProfesiones = document.getElementById('chart-histograma-profesiones');
         let chartProfesiones = null;
         if (elChartProfesiones) {
             chartProfesiones = echarts.init(elChartProfesiones);
             const categoriasProfesiones = [
-                @foreach ($profesiones as $prof)
+                @foreach ($profesiones->take(8) as $prof)
                     '{{ addslashes($prof->profesion) }}',
                 @endforeach
             ];
             const dataProfesiones = [
-                @foreach ($profesiones as $prof)
+                @foreach ($profesiones->take(8) as $prof)
                     {{ $prof->total }},
                 @endforeach
             ];
@@ -440,75 +444,82 @@
                         const item = params[0];
                         const pct = ((item.value / totalPoblacion) * 100).toFixed(1);
                         return `<strong>${item.name}</strong><br/>
-                                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#08b1ba;"></span>
+                                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ffbe0c;"></span>
                                 Personas: <b>${item.value}</b> (${pct}% del censo)`;
                     }
                 },
                 grid: {
                     left: '3%',
-                    right: '6%',
-                    bottom: '5%',
-                    top: '8%',
+                    right: '4%',
+                    bottom: '4%',
+                    top: '12%',
                     containLabel: true
                 },
                 xAxis: {
-                    type: 'value',
-                    minInterval: 1,
-                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
-                },
-                yAxis: {
                     type: 'category',
                     data: categoriasProfesiones,
-                    inverse: true,
                     axisLabel: {
                         color: '#495057',
-                        fontSize: 11,
+                        fontSize: 10,
+                        interval: 0,
+                        rotate: 20,
                         formatter: function(val) {
-                            return val.length > 20 ? val.substring(0, 18) + '...' : val;
+                            return val.length > 14 ? val.substring(0, 12) + '..' : val;
                         }
                     },
-                    axisLine: { lineStyle: { color: '#e0e0e0' } }
+                    axisLine: { lineStyle: { color: '#e0e0e0' } },
+                    axisTick: { alignWithLabel: true }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Personas',
+                    nameTextStyle: { color: '#6c757d', fontSize: 10 },
+                    minInterval: 1,
+                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
                 },
                 series: [{
                     name: 'Ocupación',
                     type: 'bar',
-                    barWidth: '60%',
+                    barWidth: '50%',
                     data: dataProfesiones,
                     itemStyle: {
-                        borderRadius: [0, 6, 6, 0],
-                        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                            { offset: 0, color: '#08b1ba' },
-                            { offset: 1, color: '#279eff' }
-                        ])
+                        borderRadius: [6, 6, 0, 0],
+                        color: '#ffbe0c'
                     },
                     label: {
                         show: true,
-                        position: 'right',
-                        color: '#08b1ba',
+                        position: 'top',
+                        color: '#d99b00',
                         fontWeight: 'bold',
-                        fontSize: 11
+                        fontSize: 11,
+                        formatter: function(params) {
+                            return params.value > 0 ? params.value : '';
+                        }
                     }
                 }]
             });
         }
 
         // -------------------------------------------------------------
-        // 4. HISTOGRAMA DE NIVEL ACADÉMICO
+        // 4. HISTOGRAMA DE NIVEL ACADÉMICO -> COLOR PÚRPURA / ÍNDIGO (#4f46e5)
         // -------------------------------------------------------------
         const elChartAcademico = document.getElementById('chart-histograma-academico');
         let chartAcademico = null;
         if (elChartAcademico) {
             chartAcademico = echarts.init(elChartAcademico);
-            const categoriasNivel = [
-                @foreach ($niveles as $nivel => $count)
-                    '{{ $nivel }}',
-                @endforeach
+            const nivelesConfig = [
+                { corto: 'Ninguno', full: 'Ninguno', val: {{ $niveles['Ninguno'] ?? 0 }} },
+                { corto: 'Preescolar', full: 'Preescolar', val: {{ $niveles['Preescolar'] ?? 0 }} },
+                { corto: 'Primaria', full: 'Primaria', val: {{ $niveles['Primaria'] ?? 0 }} },
+                { corto: 'Bachiller', full: 'Secundaria con título de bachiller', val: {{ $niveles['Secundaria con título de bachiller'] ?? 0 }} },
+                { corto: 'TSU', full: 'Superior con certificación de técnico superior (TSU)', val: {{ $niveles['Superior con certificación de técnico superior'] ?? 0 }} },
+                { corto: 'Pregrado', full: 'Pregrado universitario (licenciatura, ingeniería)', val: {{ $niveles['Pregrado universitario (licenciatura, ingeniería)'] ?? 0 }} },
+                { corto: 'Posgrado', full: 'Posgrado universitario (maestría, doctorado, especialización)', val: {{ $niveles['Posgrado universitario (maestría, doctorado, especialización)'] ?? 0 }} },
+                { corto: 'NS / NR', full: 'No sabe / no responde', val: {{ $niveles['No sabe/no responde'] ?? 0 }} }
             ];
-            const dataNivel = [
-                @foreach ($niveles as $nivel => $count)
-                    {{ $count }},
-                @endforeach
-            ];
+
+            const categoriasNivel = nivelesConfig.map(i => i.corto);
+            const dataNivel = nivelesConfig.map(i => i.val);
 
             chartAcademico.setOption({
                 tooltip: {
@@ -516,22 +527,30 @@
                     axisPointer: { type: 'shadow' },
                     formatter: function (params) {
                         const item = params[0];
+                        const conf = nivelesConfig[item.dataIndex] || { full: item.name };
                         const pct = ((item.value / totalPoblacion) * 100).toFixed(1);
-                        return `<strong>${item.name}</strong><br/>
+                        return `<strong>${conf.full}</strong><br/>
+                                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#4f46e5;"></span>
                                 Registrados: <b>${item.value} ciudadanos</b> (${pct}%)`;
                     }
                 },
                 grid: {
                     left: '3%',
                     right: '4%',
-                    bottom: '8%',
+                    bottom: '4%',
                     top: '12%',
                     containLabel: true
                 },
                 xAxis: {
                     type: 'category',
                     data: categoriasNivel,
-                    axisLabel: { color: '#6c757d', fontSize: 11, interval: 0 },
+                    axisLabel: {
+                        color: '#495057',
+                        fontSize: 11,
+                        fontWeight: '500',
+                        interval: 0,
+                        rotate: 0
+                    },
                     axisLine: { lineStyle: { color: '#e0e0e0' } },
                     axisTick: { alignWithLabel: true }
                 },
@@ -543,14 +562,11 @@
                 series: [{
                     name: 'Nivel Educativo',
                     type: 'bar',
-                    barWidth: '50%',
+                    barWidth: '45%',
                     data: dataNivel,
                     itemStyle: {
                         borderRadius: [6, 6, 0, 0],
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            { offset: 0, color: '#4f46e5' },
-                            { offset: 1, color: '#818cf8' }
-                        ])
+                        color: '#4f46e5'
                     },
                     label: {
                         show: true,
@@ -567,7 +583,7 @@
         }
 
         // -------------------------------------------------------------
-        // 5. HISTOGRAMA COMPARATIVO: GÉNERO POR CICLO DE VIDA
+        // 5. HISTOGRAMA COMPARATIVO: GÉNERO POR CICLO DE VIDA (VERTICAL AGRUPADO)
         // -------------------------------------------------------------
         const elChartGeneroCiclo = document.getElementById('chart-histograma-genero-ciclo');
         let chartGeneroCiclo = null;
@@ -586,7 +602,7 @@
                 grid: {
                     left: '3%',
                     right: '4%',
-                    bottom: '8%',
+                    bottom: '4%',
                     top: '18%',
                     containLabel: true
                 },
@@ -656,7 +672,7 @@
         }
 
         // -------------------------------------------------------------
-        // 6. HISTOGRAMA DE BENEFICIOS Y TENENCIA DE VIVIENDA
+        // 6. HISTOGRAMA DE BENEFICIOS Y TENENCIA DE VIVIENDA -> COLOR VERDE (#1aa053)
         // -------------------------------------------------------------
         const elChartSocio = document.getElementById('chart-histograma-socioeconomico');
         let chartSocio = null;
@@ -680,13 +696,14 @@
                         const item = params[0];
                         const pct = ((item.value / totalPoblacion) * 100).toFixed(1);
                         return `<strong>${item.name}</strong><br/>
+                                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1aa053;"></span>
                                 Beneficiarios / Casos: <b>${item.value}</b> (${pct}% de la población)`;
                     }
                 },
                 grid: {
                     left: '3%',
                     right: '4%',
-                    bottom: '10%',
+                    bottom: '4%',
                     top: '12%',
                     containLabel: true
                 },
@@ -714,10 +731,7 @@
                     data: dataSocio,
                     itemStyle: {
                         borderRadius: [6, 6, 0, 0],
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            { offset: 0, color: '#1aa053' },
-                            { offset: 1, color: '#48d884' }
-                        ])
+                        color: '#1aa053'
                     },
                     label: {
                         show: true,
@@ -731,19 +745,19 @@
         }
 
         // -------------------------------------------------------------
-        // 7. HISTOGRAMA DE PATOLOGÍAS Y ENFERMEDADES FRECUENTES
+        // 7. HISTOGRAMA DE PATOLOGÍAS Y ENFERMEDADES (VERTICAL) -> COLOR ROJO (#ff2525)
         // -------------------------------------------------------------
         const elChartEnfermedades = document.getElementById('chart-histograma-enfermedades');
         let chartEnfermedades = null;
         if (elChartEnfermedades) {
             chartEnfermedades = echarts.init(elChartEnfermedades);
             const categoriasEnf = [
-                @foreach ($enfermedades as $enf)
+                @foreach ($enfermedades->take(8) as $enf)
                     '{{ addslashes($enf->tipo_enfermedad) }}',
                 @endforeach
             ];
             const dataEnf = [
-                @foreach ($enfermedades as $enf)
+                @foreach ($enfermedades->take(8) as $enf)
                     {{ $enf->total }},
                 @endforeach
             ];
@@ -755,52 +769,57 @@
                     formatter: function (params) {
                         const item = params[0];
                         return `<strong>${item.name}</strong><br/>
+                                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ff2525;"></span>
                                 Casos Registrados: <b>${item.value} ciudadanos</b>`;
                     }
                 },
                 grid: {
                     left: '3%',
-                    right: '6%',
-                    bottom: '5%',
-                    top: '8%',
+                    right: '4%',
+                    bottom: '4%',
+                    top: '12%',
                     containLabel: true
                 },
                 xAxis: {
-                    type: 'value',
-                    minInterval: 1,
-                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
-                },
-                yAxis: {
                     type: 'category',
                     data: categoriasEnf,
-                    inverse: true,
                     axisLabel: {
                         color: '#495057',
-                        fontSize: 11,
+                        fontSize: 10,
+                        interval: 0,
+                        rotate: 20,
                         formatter: function(val) {
-                            return val.length > 20 ? val.substring(0, 18) + '...' : val;
+                            return val.length > 14 ? val.substring(0, 12) + '..' : val;
                         }
                     },
-                    axisLine: { lineStyle: { color: '#e0e0e0' } }
+                    axisLine: { lineStyle: { color: '#e0e0e0' } },
+                    axisTick: { alignWithLabel: true }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Casos',
+                    nameTextStyle: { color: '#6c757d', fontSize: 10 },
+                    minInterval: 1,
+                    splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
                 },
                 series: [{
                     name: 'Casos',
                     type: 'bar',
-                    barWidth: '60%',
+                    barWidth: '50%',
                     data: dataEnf,
                     itemStyle: {
-                        borderRadius: [0, 6, 6, 0],
-                        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                            { offset: 0, color: '#c03221' },
-                            { offset: 1, color: '#f16a1b' }
-                        ])
+                        borderRadius: [6, 6, 0, 0],
+                        color: '#ff2525'
                     },
                     label: {
                         show: true,
-                        position: 'right',
-                        color: '#c03221',
+                        position: 'top',
+                        color: '#ff2525',
                         fontWeight: 'bold',
-                        fontSize: 11
+                        fontSize: 11,
+                        formatter: function(params) {
+                            return params.value > 0 ? params.value : '';
+                        }
                     }
                 }]
             });
