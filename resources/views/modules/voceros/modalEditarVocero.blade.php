@@ -20,7 +20,7 @@
                                     <label class="text-primary fw-bold mb-1" for="edit-cedula">CÉDULA</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
-                                        <input id="edit-cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ingrese una cédula para buscar" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                        <input id="edit-cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ingrese una cédula para buscar" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)" readonly>
                                     </div>
                                 </div>
 
@@ -56,7 +56,7 @@
                                 <div class="col-12 col-md-12">
                                     <label class="text-primary fw-bold mb-1" for="edit-fecha_eleccion">FECHA DE ELECCIÓN</label>
                                     <div class="form-group">
-                                        <div class="input-group wrap_flatpicker" data-min-date="none" id="edit-fecha_eleccion_container">
+                                        <div class="input-group wrap_flatpicker" data-min-date="none" data-max-date="today" id="edit-fecha_eleccion_container">
                                             <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                             <input required type="text" name="fecha_eleccion" id="edit-fecha_eleccion" class="form-control bg-white" placeholder="Indique la fecha de elección" data-input>
                                             <a class="input-group-text input-button bg-white" title="limpiar" data-clear

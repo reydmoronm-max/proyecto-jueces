@@ -137,11 +137,11 @@
                                         <div class="input-group">
                                             <input type="number" class="form-control" name="anios_residencia"
                                                 id="anios_residencia" placeholder="Ingrese los años domiciliado"
-                                                min="0" max="120" required>
+                                                min="0" max="120" maxlength="3"
+                                                oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);" required>
                                             <span class="input-group-text bg-light">años</span>
                                         </div>
-                                        <div class="form-text">Indique manualmente el número de años que el ciudadano tiene
-                                            residiendo en la comunidad.</div>
+                                        <div class="form-text">Indique el número de años que el ciudadano tiene residiendo en la comunidad (máximo 3 dígitos).</div>
                                     </div>
 
                                     <div class="d-grid">
@@ -291,14 +291,26 @@
                 });
             }
 
+            // Limitar en tiempo real a máximo 3 dígitos numéricos
+            $('#anios_residencia').on('input paste', function() {
+                var self = this;
+                setTimeout(function() {
+                    var val = $(self).val().toString().replace(/[^0-9]/g, '');
+                    if (val.length > 3) {
+                        val = val.substring(0, 3);
+                    }
+                    $(self).val(val);
+                }, 10);
+            });
+
             // Client side validation for residency form submit
             $('#form_residencia').on('submit', function(e) {
                 var anios = $('#anios_residencia').val();
-                if (anios === '' || anios < 0 || anios > 120) {
+                if (anios === '' || parseInt(anios, 10) < 0 || parseInt(anios, 10) > 120 || anios.toString().length > 3) {
                     e.preventDefault();
                     Swal.fire({
                         title: 'Años no válidos',
-                        text: 'Por favor, ingrese un número válido de años de domicilio (0 a 120).',
+                        text: 'Por favor, ingrese un número válido de años de domicilio (máximo 3 dígitos, entre 0 y 120).',
                         icon: 'warning',
                         confirmButtonText: 'Aceptar'
                     });

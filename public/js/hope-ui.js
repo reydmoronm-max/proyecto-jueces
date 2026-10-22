@@ -488,12 +488,17 @@ window.addEventListener('load', function () {
   Array.from(wrap_flatpicker, (elem) => {
     if (typeof flatpickr !== typeof undefined) {
       const minDateAttr = elem.getAttribute('data-min-date');
-      flatpickr(elem, {
+      const maxDateAttr = elem.getAttribute('data-max-date');
+      const config = {
         locale: "Spanish",
         wrap: true,
         minDate: minDateAttr === "none" ? null : (minDateAttr || "today"),
         dateFormat: "d-m-Y",
-      })
+      };
+      if (maxDateAttr) {
+        config.maxDate = maxDateAttr === "none" ? null : maxDateAttr;
+      }
+      flatpickr(elem, config)
     }
   })
   /*-------------Time Flatpickr---------------*/

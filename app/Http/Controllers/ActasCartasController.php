@@ -67,7 +67,9 @@ class ActasCartasController extends Controller
     {
         $request->validate([
             'cedula' => ['required', 'digits_between:7,8'],
-            'anios_residencia' => ['required', 'integer', 'min:0'],
+            'anios_residencia' => ['required', 'integer', 'min:0', 'max:120'],
+        ], [
+            'anios_residencia.max' => 'Los años de domicilio no pueden superar 3 dígitos ni exceder los 120 años.',
         ]);
 
         $persona = Persona::with(['familia.consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
