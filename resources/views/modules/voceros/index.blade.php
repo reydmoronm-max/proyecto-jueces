@@ -394,6 +394,16 @@
                 }
                 if (!fecha) {
                     errors.push('Fecha de elección: campo obligatorio.');
+                } else {
+                    var parts = fecha.split('-');
+                    if (parts.length === 3) {
+                        var fechaDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                        var hoy = new Date();
+                        hoy.setHours(23, 59, 59, 999);
+                        if (fechaDate > hoy) {
+                            errors.push('Fecha de elección: no puede ser una fecha futura.');
+                        }
+                    }
                 }
 
                 if (errors.length > 0) {
@@ -432,6 +442,16 @@
                 }
                 if (!fecha) {
                     errors.push('Fecha de elección: campo obligatorio.');
+                } else {
+                    var parts = fecha.split('-');
+                    if (parts.length === 3) {
+                        var fechaDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                        var hoy = new Date();
+                        hoy.setHours(23, 59, 59, 999);
+                        if (fechaDate > hoy) {
+                            errors.push('Fecha de elección: no puede ser una fecha futura.');
+                        }
+                    }
                 }
 
                 if (errors.length > 0) {

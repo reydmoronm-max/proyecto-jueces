@@ -27,7 +27,7 @@
                                     <label class="text-primary fw-bold mb-1" for="nombres">NOMBRE</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                        <input type="text" class="form-control bg-white" name="nombres" id="nombres" placeholder="Juan" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
+                                        <input type="text" class="form-control bg-white" name="nombres" id="nombres" placeholder="Juan" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')" readonly>
                                     </div>
                                 </div>
 
@@ -35,7 +35,7 @@
                                     <label class="text-primary fw-bold mb-1" for="apellidos">APELLIDO</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                        <input type="text" class="form-control bg-white" name="apellidos" id="apellidos" placeholder="García" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')">
+                                        <input type="text" class="form-control bg-white" name="apellidos" id="apellidos" placeholder="García" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')" readonly>
                                     </div>
                                 </div>
 
@@ -55,7 +55,7 @@
                                 <div class="col-12 col-md-12">
                                     <label class="text-primary fw-bold mb-1" for="fecha_eleccion">FECHA DE ELECCIÓN</label>
                                     <div class="form-group">
-                                        <div class="input-group wrap_flatpicker" data-min-date="none">
+                                        <div class="input-group wrap_flatpicker" data-min-date="none" data-max-date="today">
                                             <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                             <input required type="text" name="fecha_eleccion" class="form-control bg-white" placeholder="Indique la fecha de elección" data-input>
                                             <a class="input-group-text input-button bg-white" title="limpiar" data-clear href="javascript:void(0)">
