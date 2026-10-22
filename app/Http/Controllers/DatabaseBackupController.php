@@ -41,6 +41,13 @@ class DatabaseBackupController extends Controller
         try {
             $result = $this->backupService->exportDatabase();
 
+            app(\App\Services\AuditService::class)->logCustom(
+                'backup_export',
+                'Base de Datos',
+                "Se generó y descargó un respaldo completo de la base de datos: {$result['filename']}",
+                ['archivo' => $result['filename']]
+            );
+
             return response()->download($result['path'], $result['filename'], [
                 'Content-Type' => 'application/sql',
             ]);
@@ -76,6 +83,13 @@ class DatabaseBackupController extends Controller
             $tempPath = $file->getRealPath();
             $this->backupService->importDatabase($tempPath);
 
+            app(\App\Services\AuditService::class)->logCustom(
+                'backup_import',
+                'Base de Datos',
+                "Se importó y restauró la base de datos desde el archivo subido: {$file->getClientOriginalName()}",
+                ['archivo' => $file->getClientOriginalName()]
+            );
+
             // Limpiar caché del sistema
             try {
                 Artisan::call('cache:clear');
@@ -105,6 +119,13 @@ class DatabaseBackupController extends Controller
             }
 
             $this->backupService->importDatabase($filePath);
+
+            app(\App\Services\AuditService::class)->logCustom(
+                'backup_restore',
+                'Base de Datos',
+                "Se restauró la base de datos desde el respaldo del servidor: {$safeFilename}",
+                ['archivo' => $safeFilename]
+            );
 
             try {
                 Artisan::call('cache:clear');
@@ -145,6 +166,13 @@ class DatabaseBackupController extends Controller
         $deleted = $this->backupService->deleteBackup($filename);
 
         if ($deleted) {
+            app(\App\Services\AuditService::class)->logCustom(
+                'deleted',
+                'Base de Datos',
+                "Se eliminó el archivo de respaldo del servidor: {$filename}",
+                ['archivo' => $filename]
+            );
+
             return redirect()->route('database-backup.index')
                 ->with('success', 'Copia de seguridad eliminada del servidor.');
         }

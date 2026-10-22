@@ -43,6 +43,15 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
+        // Registrar auditoría de inicio de sesión
+        app(\App\Services\AuditService::class)->logCustom(
+            'login',
+            'Autenticación y Seguridad',
+            "Inicio de sesión exitoso del usuario {$user->nombre} {$user->apellido} (Cédula: {$user->cedula_usuario})",
+            ['rol' => $user->rol],
+            $user
+        );
+
         if (Auth::user()->rol == 'Jefe de comuna' || Auth::user()->rol == 'Jefe de Comando') {
             return to_route('reportes.index');
         } else if (Auth::user()->rol == 'Juez') {
@@ -69,6 +78,17 @@ class AuthController extends Controller
 
     public function logout()
     {
+        $user = Auth::user();
+        if ($user) {
+            app(\App\Services\AuditService::class)->logCustom(
+                'logout',
+                'Autenticación y Seguridad',
+                "Cierre de sesión del usuario {$user->nombre} {$user->apellido}",
+                ['rol' => $user->rol],
+                $user
+            );
+        }
+
         Auth::logout();
         return to_route('login');
     }
