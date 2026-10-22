@@ -230,7 +230,7 @@ class Audit extends BaseAudit
             'created' => 'success',
             'updated' => 'primary',
             'deleted' => 'danger',
-            'login' => 'info',
+            'login' => 'secondary',
             'logout' => 'secondary',
             'backup_export', 'backup_import', 'backup_restore' => 'warning',
             'purge' => 'dark',
@@ -276,9 +276,9 @@ class Audit extends BaseAudit
         $modulo = $this->modulo_nombre;
 
         return match ($this->event) {
-            'created' => "El usuario {$usuario} creó un nuevo registro en {$modulo} (ID: #{$this->auditable_id}).",
-            'updated' => "El usuario {$usuario} modificó el registro #{$this->auditable_id} en {$modulo} (" . count($this->getModified()) . " campo(s) cambiados).",
-            'deleted' => "El usuario {$usuario} eliminó el registro #{$this->auditable_id} en {$modulo}.",
+            'created' => "El usuario {$usuario} creó un nuevo registro en {$modulo}.",
+            'updated' => "El usuario {$usuario} modificó el registro  en {$modulo} (" . count($this->getModified()) . " campo(s) cambiados).",
+            'deleted' => "El usuario {$usuario} eliminó el registro en {$modulo}.",
             'login' => "El usuario {$usuario} inició sesión satisfactoriamente.",
             'logout' => "El usuario {$usuario} cerró su sesión en el sistema.",
             'backup_export' => "El usuario {$usuario} exportó una copia de respaldo de la base de datos.",

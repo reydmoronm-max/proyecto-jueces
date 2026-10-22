@@ -90,7 +90,7 @@ class AuditoriaController extends Controller
                     'evento' => $audit->event,
                     'registro_id' => $audit->auditable_id,
                     'fecha' => $audit->created_at ? $audit->created_at->format('d/m/Y h:i:s A') : 'N/A',
-                    'tiempo_relativo' => $audit->created_at ? $audit->created_at->diffForHumans() : '',
+                    'tiempo_relativo' => $audit->created_at ? \Carbon\Carbon::parse($audit->created_at)->locale('es')->diffForHumans() : '',
                     'ip_address' => $audit->ip_address ?? 'No registrada',
                     'user_agent' => $audit->user_agent ?? 'No especificado',
                     'url' => $audit->url ?? 'N/A',
@@ -150,7 +150,7 @@ class AuditoriaController extends Controller
             $pdf = Pdf::loadView('modules.auditoria.pdf', compact('audits', 'fechaImpresion', 'generadoPor', 'request'))
                 ->setPaper('a4', 'landscape');
 
-            $nombreArchivo = 'Auditoria_SGIC_' . Carbon::now()->format('Ymd_His') . '.pdf';
+            $nombreArchivo = 'Auditoria_SIGIC_' . Carbon::now()->format('Ymd_His') . '.pdf';
 
             return $pdf->download($nombreArchivo);
         } catch (Exception $e) {

@@ -29,7 +29,7 @@
         @endif
 
         {{-- Tarjetas de Estadísticas Rápidas --}}
-        <div class="row mb-4">
+        <div hidden class="row mb-4">
             <div class="col-12 col-md-6 col-lg-3 mb-3">
                 <div class="card h-100 mb-0 shadow-sm border-0">
                     <div class="card-body d-flex align-items-center">
@@ -92,7 +92,7 @@
             </div>
         </div>
 
-        {{-- Banner informativo si hay registros para depuración --}}
+        {{-- Banner informativo si hay registros para depuración
         @if ($stats['auditorias_antiguas'] > 0)
             <div class="alert alert-warning d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm mb-4 border-0">
                 <div class="d-flex align-items-center">
@@ -108,10 +108,10 @@
                     <i class="ri-delete-bin-line me-1"></i> Depurar Ahora
                 </button>
             </div>
-        @endif
+        @endif --}}
 
         {{-- Barra de Acciones y Filtros --}}
-        <div class="card shadow-sm border-0 mb-4">
+        <div hidden class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div class="d-flex align-items-center">
                     <i class="ri-filter-3-fill fs-4 text-primary me-2"></i>
@@ -211,17 +211,17 @@
         <div class="card shadow-sm border-0">
             <div class="card-header bg-white py-3 border-bottom d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                    <i class="ri-table-line fs-4 text-primary me-2"></i>
+                    {{-- <i class="ri-table-line fs-4 text-primary me-2"></i> --}}
                     <h5 class="card-title mb-0 fw-bold">Registro Cronológico de Auditoría</h5>
                 </div>
-                <span class="badge bg-soft-primary text-primary px-3 py-2">
+                <span class="text-muted small px-3 py-2">
                     Mostrando {{ $audits->firstItem() ?? 0 }} - {{ $audits->lastItem() ?? 0 }} de {{ $audits->total() }} registros
                 </span>
             </div>
 
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover table-striped table-striped-columns table-bordered align-middle mb-0">
                         <thead class="bg-light text-muted small text-uppercase">
                             <tr>
                                 <th class="ps-4">Fecha y Hora</th>
@@ -229,7 +229,7 @@
                                 <th>Módulo</th>
                                 <th class="text-center">Acción</th>
                                 <th>Descripción de la Acción</th>
-                                <th>Dirección IP</th>
+                                {{-- <th>Dirección IP</th> --}}
                                 <th class="text-center pe-4">Detalle</th>
                             </tr>
                         </thead>
@@ -242,7 +242,7 @@
                                             {{ $audit->created_at ? $audit->created_at->format('d/m/Y h:i A') : 'N/A' }}
                                         </div>
                                         <small class="text-muted">
-                                            <i class="ri-time-line me-1"></i>{{ $audit->created_at ? $audit->created_at->diffForHumans() : '' }}
+                                            <i class="ri-time-line me-1"></i>{{ \Carbon\Carbon::parse($audit->created_at)->locale('es')->diffForHumans() }}
                                         </small>
                                     </td>
 
@@ -255,7 +255,7 @@
                                                 </div>
                                                 <div>
                                                     <span class="fw-bold text-dark d-block">{{ $audit->user->nombre }} {{ $audit->user->apellido }}</span>
-                                                    <span class="badge bg-soft-dark text-muted" style="font-size: 0.75rem;">
+                                                    <span class="badge bg-light text-muted" style="font-size: 0.75rem;">
                                                         {{ $audit->user->rol ?? 'Usuario' }}
                                                     </span>
                                                 </div>
@@ -267,11 +267,11 @@
 
                                     {{-- Módulo --}}
                                     <td>
-                                        <span class="badge bg-soft-info text-info border border-info border-opacity-25 px-2 py-1">
+                                        <span class="badge bg-light text-muted border border-light border-opacity-25 px-2 py-1">
                                             <i class="ri-folder-line me-1"></i>{{ $audit->modulo_nombre }}
                                         </span>
                                         @if ($audit->auditable_id)
-                                            <small class="text-muted d-block mt-1">ID #{{ $audit->auditable_id }}</small>
+                                            <small class="text-muted d-block mt-1"></small> {{-- ID #{{ $audit->auditable_id }} --}}
                                         @endif
                                     </td>
 
@@ -290,16 +290,16 @@
                                     </td>
 
                                     {{-- Dirección IP --}}
-                                    <td class="text-nowrap">
+                                    {{-- <td class="text-nowrap">
                                         <span class="badge bg-light text-secondary border">
                                             <i class="ri-global-line me-1"></i>{{ $audit->ip_address ?? '127.0.0.1' }}
                                         </span>
-                                    </td>
+                                    </td> --}}
 
                                     {{-- Botón Ver Detalle --}}
                                     <td class="text-center pe-4 text-nowrap">
-                                        <button type="button" class="btn btn-soft-primary btn-sm btn-icon rounded-circle btn-ver-detalle" data-id="{{ $audit->id }}" title="Ver detalles y cambios del registro">
-                                            <i class="ri-eye-line fs-5"></i>
+                                        <button type="button" class="btn btn-light btn-sm btn-ver-detalle" data-id="{{ $audit->id }}" title="Ver detalles y cambios del registro">
+                                            <i class="ri-eye-fill fs-5"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -334,14 +334,14 @@
     <div class="modal fade" id="modalDetalleAuditoria" tabindex="-1" aria-labelledby="modalDetalleLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-light border-bottom py-3">
+                <div class="modal-header border-bottom py-3">
                     <div class="d-flex align-items-center">
                         <div id="modalIconoContenedor" class="avatar avatar-40 rounded-circle bg-soft-primary text-primary d-flex align-items-center justify-content-center me-3">
                             <i id="modalIcono" class="ri-history-line fs-4"></i>
                         </div>
                         <div>
                             <h5 class="modal-title fw-bold mb-0" id="modalDetalleLabel">Detalle de Auditoría</h5>
-                            <small class="text-muted" id="modalSubtitulo">Información detallada del movimiento</small>
+                            {{-- <small class="text-muted" id="modalSubtitulo">Información detallada del movimiento</small> --}}
                         </div>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
@@ -359,11 +359,11 @@
                     {{-- Contenido Dinámico --}}
                     <div id="modalContenido" style="display: none;">
                         {{-- Resumen de Metadatos --}}
-                        <div class="row g-3 p-3 bg-light rounded-3 mb-4">
+                        <div class="row g-3 p-3 pt-1 rounded-2 mb-4" style="background-color: #ecedf1;">
                             <div class="col-12 col-md-6">
                                 <span class="text-muted small d-block">Usuario Responsable:</span>
                                 <strong class="text-dark" id="modalDetalleUsuario">—</strong>
-                                <span class="badge bg-secondary ms-1" id="modalDetalleRol">—</span>
+                                <span class="badge bg-light text-muted ms-1" id="modalDetalleRol">—</span>
                             </div>
                             <div class="col-12 col-md-6">
                                 <span class="text-muted small d-block">Fecha y Hora:</span>
@@ -372,18 +372,18 @@
                             </div>
                             <div class="col-12 col-md-6">
                                 <span class="text-muted small d-block">Módulo Afectado:</span>
-                                <span class="badge bg-soft-info text-info border border-info border-opacity-25" id="modalDetalleModulo">—</span>
-                                <span class="text-muted small ms-1" id="modalDetalleRegistroId"></span>
+                                <span class="badge bg-light text-muted border border-light border-opacity-25" id="modalDetalleModulo">—</span>
+                                <span hidden class="text-muted small ms-1" id="modalDetalleRegistroId"></span>
                             </div>
                             <div class="col-12 col-md-6">
                                 <span class="text-muted small d-block">Tipo de Acción:</span>
                                 <span class="badge text-white text-uppercase" id="modalDetalleAccion">—</span>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div hidden class="col-12 col-md-6">
                                 <span class="text-muted small d-block">Dirección IP:</span>
                                 <code class="text-dark" id="modalDetalleIp">—</code>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div hidden class="col-12 col-md-6">
                                 <span class="text-muted small d-block">Dispositivo / Navegador:</span>
                                 <span class="text-secondary small text-truncate d-block" id="modalDetalleUserAgent" title="">—</span>
                             </div>
@@ -394,7 +394,7 @@
                             <h6 class="fw-bold text-dark mb-2">
                                 <i class="ri-chat-1-line text-primary me-1"></i> Resumen de la Acción
                             </h6>
-                            <p class="p-3 bg-soft-primary text-primary rounded-3 mb-0 small" id="modalDetalleDescripcion">
+                            <p class="p-3 bg-soft-primary text-primary rounded-2 mb-0 small" id="modalDetalleDescripcion">
                                 —
                             </p>
                         </div>
@@ -402,9 +402,9 @@
                         {{-- SECCIÓN A: TABLA DE COMPARACIÓN DIFF (Para Modificaciones) --}}
                         <div id="seccionModificaciones" style="display: none;" class="mb-3">
                             <h6 class="fw-bold text-dark mb-3">
-                                <i class="ri-git-commit-line text-primary me-1"></i> Campos Afectados (Antes vs. Después)
+                                <i class="ri-git-commit-line text-primary me-1"></i> Campos Afectados
                             </h6>
-                            <div class="table-responsive border rounded-3">
+                            <div class="table-responsive border rounded-2">
                                 <table class="table table-bordered mb-0 align-middle">
                                     <thead class="bg-light text-muted small">
                                         <tr>
@@ -429,8 +429,8 @@
                             <h6 class="fw-bold text-dark mb-3">
                                 <i class="ri-add-box-line text-success me-1"></i> Datos Iniciales Registrados
                             </h6>
-                            <div class="table-responsive border rounded-3">
-                                <table class="table table-sm table-striped mb-0 align-middle">
+                            <div class="table-responsive border rounded-2">
+                                <table class="table table-striped mb-0 align-middle">
                                     <thead class="bg-light text-muted small">
                                         <tr>
                                             <th style="width: 40%;">Campo</th>
@@ -449,8 +449,8 @@
                             <div class="alert alert-danger p-2 small mb-3">
                                 <i class="ri-alert-line me-1"></i> Este registro fue eliminado del sistema. A continuación se muestran los datos que contenía antes de su eliminación:
                             </div>
-                            <div class="table-responsive border rounded-3">
-                                <table class="table table-sm table-striped mb-0 align-middle">
+                            <div class="table-responsive border rounded-2">
+                                <table class="table table-striped mb-0 align-middle">
                                     <thead class="bg-light text-muted small">
                                         <tr>
                                             <th style="width: 40%;">Campo</th>
@@ -466,15 +466,15 @@
 
                         {{-- SECCIÓN D: EVENTOS DE SISTEMA / SIN DATOS --}}
                         <div id="seccionEventoSimple" style="display: none;" class="mb-3">
-                            <div class="p-3 bg-light rounded-3 text-center text-muted small">
+                            <div class="p-3 bg-light rounded-2 text-center text-muted small">
                                 <i class="ri-information-line fs-4 d-block mb-1 text-secondary"></i>
-                                Este es un evento de sistema o seguridad sin atributos Eloquent modificados directamente.
+                                Este es un evento de sistema o seguridad sin atributos modificados directamente.
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal-footer bg-light border-top py-2">
+                <div class="modal-footer border-top py-2">
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
@@ -533,7 +533,7 @@
                         </div>
                     </div>
 
-                    <div class="modal-footer bg-light border-top py-2">
+                    <div class="modal-footer border-top py-2">
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-danger btn-sm fw-bold px-3" id="btnEjecutarDepuracion" disabled>
                             <i class="ri-delete-bin-line me-1"></i> Confirmar y Depurar
