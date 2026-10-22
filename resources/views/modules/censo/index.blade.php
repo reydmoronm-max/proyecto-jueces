@@ -14,7 +14,7 @@
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRegistrarFamilia">
                                 <i class="ri-add-fill"></i> Registrar Familia
                             </button>
-                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalGestionCatalogos">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalGestionCatalogos">
                                 <i class="ri-list-settings-line me-1"></i> Catálogo de Enfermedades y Profesiones
                             </button>
                         </div>
@@ -32,7 +32,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div>
+                                <div hidden>
                                     <label for="tipo_vivienda" class="form-label small text-muted fw-bold mb-1">Tipo de vivienda</label>
                                     <select name="tipo_vivienda" id="tipo_vivienda" class="form-select">
                                         <option value="">Todos los tipos</option>
@@ -41,7 +41,7 @@
                                         <option value="Alquilada" {{ $tipoVivienda === 'Alquilada' ? 'selected' : '' }}>Alquiladas</option>
                                     </select>
                                 </div>
-                                <div>
+                                <div hidden>
                                     <label for="beneficio" class="form-label small text-muted fw-bold mb-1">Beneficios</label>
                                     <select name="beneficio" id="beneficio" class="form-select">
                                         <option value="">Todos los beneficios</option>
@@ -327,7 +327,7 @@
                 title: 'Errores en el formulario',
                 html: '{!! implode('<br>', $errors->all()) !!}',
                 icon: 'error',
-                confirmButtonText: 'Corregir'
+                confirmButtonText: 'Aceptar'
             });
         @endif
 
@@ -377,10 +377,25 @@
             var nivel = $('#' + (prefix ? 'edit-nivel_academico' : 'nivel_academico'));
             var esMenor = edad >= 0 && edad < 18;
 
+            var nivelesSuperiores = [
+                'Superior con certificacion de tecnico superior',
+                'Pregrado universitario (licenciatura, ingenieria)',
+                'Posgrado universitario (maestria, doctorado, especializacion)',
+                'Universitario',
+                'Postgrado',
+                'Técnico'
+            ];
+
             $(campos).prop('disabled', esMenor);
-            nivel.find('option[value="Universitario"], option[value="Postgrado"]').prop('disabled', esMenor);
-            if (esMenor && ['Universitario', 'Postgrado'].includes(nivel.val())) {
-                nivel.val('Técnico');
+            nivel.find('option').each(function() {
+                var val = $(this).val();
+                if (nivelesSuperiores.includes(val)) {
+                    $(this).prop('disabled', esMenor);
+                }
+            });
+
+            if (esMenor && nivelesSuperiores.includes(nivel.val())) {
+                nivel.val('Secundaria con titulo de bachiller');
             }
             if (esMenor) {
                 $(campos).val('No aplica');
@@ -458,6 +473,32 @@
                     cedula: cedula
                 },
                 success: function(data) {
+                    if (data.familia_id) {
+                        var familiaActualId = $('#integrante_familia_id').val();
+                        var mensajeFamilia = '';
+                        if (parseInt(data.familia_id) === parseInt(familiaActualId)) {
+                            mensajeFamilia = 'Este ciudadano ya se encuentra registrado como integrante de esta familia.';
+                        } else {
+                            var numFam = data.familia ? data.familia.numero_familia : data.familia_id;
+                            mensajeFamilia = 'Este ciudadano ya se encuentra registrado en otra familia (Familia #' + numFam + ').';
+                        }
+
+                        Swal.fire({
+                            title: 'Ciudadano ya registrado',
+                            text: mensajeFamilia,
+                            icon: 'warning',
+                            confirmButtonText: 'Entendido'
+                        });
+
+                        $('#cedula').val('');
+                        $('#nombres').val('').prop('readonly', false);
+                        $('#apellidos').val('').prop('readonly', false);
+                        $('#telefono').val('');
+                        if (tsProfesion) tsProfesion.clear();
+                        if (tsEnfermedad) tsEnfermedad.clear();
+                        return;
+                    }
+
                     $('#nombres').val(data.nombres).prop('readonly', true);
                     $('#apellidos').val(data.apellidos).prop('readonly', true);
                     $('#telefono').val(data.telefono || '');
@@ -470,7 +511,6 @@
                     
                     if (data.centro_votacion) $('#centro_votacion').val(data.centro_votacion);
                     if (data.carnet_patria) $('#carnet_patria').val(data.carnet_patria);
-                    if (data.nivel_academico) $('#nivel_academico').val(data.nivel_academico);
                     
                     if (data.profesion) {
                         if (tsProfesion) {
@@ -509,6 +549,19 @@
                     if (data.genero) $('#genero').val(data.genero);
                     if (data.parentesco) $('#parentesco').val(data.parentesco);
                     actualizarReglasPorEdad('');
+
+                    if (data.nivel_academico) {
+                        var nivelMap = {
+                            'Bachiller': 'Secundaria con titulo de bachiller',
+                            'Secundaria': 'Secundaria con titulo de bachiller',
+                            'Técnico': 'Superior con certificacion de tecnico superior',
+                            'Técnico Superior': 'Superior con certificacion de tecnico superior',
+                            'Universitario': 'Pregrado universitario (licenciatura, ingenieria)',
+                            'Postgrado': 'Posgrado universitario (maestria, doctorado, especializacion)'
+                        };
+                        var nivelVal = nivelMap[data.nivel_academico] || data.nivel_academico;
+                        $('#nivel_academico').val(nivelVal);
+                    }
                 },
                 error: function(xhr) {
                     if (xhr.status === 404) {
@@ -698,7 +751,6 @@
                     
                     $('#edit-centro_votacion').val(data.centro_votacion ?? '');
                     $('#edit-carnet_patria').val(data.carnet_patria ?? '');
-                    $('#edit-nivel_academico').val(data.nivel_academico ?? '');
                     
                     if (data.profesion) {
                         if (tsEditProfesion) {
@@ -734,6 +786,19 @@
                     $('#edit-pensionado_jubilado').val(data.pensionado_jubilado ?? '');
                     $('#edit-genero').val(data.genero ?? '');
                     actualizarReglasPorEdad('edit');
+
+                    // Mapeo de compatibilidad con datos previos
+                    var nivelMap = {
+                        'Bachiller': 'Secundaria con titulo de bachiller',
+                        'Secundaria': 'Secundaria con titulo de bachiller',
+                        'Técnico': 'Superior con certificacion de tecnico superior',
+                        'Técnico Superior': 'Superior con certificacion de tecnico superior',
+                        'Universitario': 'Pregrado universitario (licenciatura, ingenieria)',
+                        'Postgrado': 'Posgrado universitario (maestria, doctorado, especializacion)'
+                    };
+                    var nivelVal = data.nivel_academico ? (nivelMap[data.nivel_academico] || data.nivel_academico) : '';
+                    $('#edit-nivel_academico').val(nivelVal);
+
                     $('#edit-estudia').val(data.estudia ?? '');
                     $('#edit-parentesco').val(data.parentesco ?? '');
                     $('#edit-direccion').val(data.direccion ?? '');
@@ -1028,10 +1093,10 @@
                             <td class="text-center text-muted small">${index + 1}</td>
                             <td class="fw-semibold text-dark">${escapeHtml(item.nombre)}</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-sm btn-icon btn-outline-warning me-1 btn-editar-enfermedad" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Editar">
+                                <button type="button" class="btn btn-sm btn-icon btn-warning me-1 btn-editar-enfermedad" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Editar">
                                     <i class="ri-edit-line"></i>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-icon btn-outline-danger btn-eliminar-enfermedad" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Eliminar">
+                                <button type="button" class="btn btn-sm btn-icon btn-danger btn-eliminar-enfermedad" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Eliminar">
                                     <i class="ri-delete-bin-line"></i>
                                 </button>
                             </td>
@@ -1060,10 +1125,10 @@
                             <td class="text-center text-muted small">${index + 1}</td>
                             <td class="fw-semibold text-dark">${escapeHtml(item.nombre)}</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-sm btn-icon btn-outline-warning me-1 btn-editar-profesion" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Editar">
+                                <button type="button" class="btn btn-sm btn-icon btn-warning me-1 btn-editar-profesion" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Editar">
                                     <i class="ri-edit-line"></i>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-icon btn-outline-danger btn-eliminar-profesion" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Eliminar">
+                                <button type="button" class="btn btn-sm btn-icon btn-danger btn-eliminar-profesion" data-id="${item.id}" data-nombre="${escapeHtml(item.nombre)}" title="Eliminar">
                                     <i class="ri-delete-bin-line"></i>
                                 </button>
                             </td>
