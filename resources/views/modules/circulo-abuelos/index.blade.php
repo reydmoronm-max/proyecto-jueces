@@ -72,7 +72,7 @@
                                     <i class="ri-search-line"></i>
                                 </span>
                                 <input type="search" id="buscar-circulo-abuelos"
-                                    class="form-control border-start-0 ps-0 rounded-end-3"
+                                    class="form-control border-start-0 ps-2 rounded-end-3"
                                     placeholder="Buscar en todos los registros..."
                                     autocomplete="off" aria-label="Buscar abuelos y jornadas">
                             </div>

@@ -12,6 +12,8 @@ use App\Models\Actas;
 use App\Models\Citaciones;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -64,19 +66,44 @@ class DenunciasController extends Controller
      */
     public function store(Request $request)
     {
-        // Validación básica
-        $request->validate([
+        $validated = $request->validate([
             'denunciantes' => 'required|array|min:1',
-            'denunciantes.*.cedula' => 'required',
-            'denunciantes.*.nombres' => 'required',
-            'denunciantes.*.apellidos' => 'required',
-            'denunciantes.*.telefono' => 'required',
-            'denunciantes.*.direccion' => 'required',
+            'denunciantes.*.cedula' => [
+                'required',
+                'digits_between:7,8',
+                Rule::exists('personas', 'cedula')->where(
+                    fn ($query) => $query->where('cedula_tipo', 'V')->whereNotNull('familia_id')
+                ),
+            ],
             'caso' => 'required',
             'tipo_caso' => 'required',
             'categoria' => 'required',
             'denunciado_a' => 'nullable|string|max:255',
         ]);
+
+        $personasPorCedula = Persona::where('cedula_tipo', 'V')
+            ->whereHas('familia')
+            ->whereIn('cedula', array_column($validated['denunciantes'], 'cedula'))
+            ->get()
+            ->keyBy('cedula');
+
+        foreach ($validated['denunciantes'] as $indice => $denuncianteData) {
+            $persona = $personasPorCedula->get($denuncianteData['cedula']);
+
+            if (!$persona) {
+                throw ValidationException::withMessages([
+                    "denunciantes.{$indice}.cedula" => 'La cédula debe pertenecer a una persona registrada en el censo.',
+                ]);
+            }
+
+            foreach (['nombres', 'apellidos', 'telefono', 'direccion'] as $campo) {
+                if (!filled($persona->{$campo})) {
+                    throw ValidationException::withMessages([
+                        "denunciantes.{$indice}.cedula" => 'La persona está censada, pero sus datos personales están incompletos. Complete los datos en el censo antes de registrar la denuncia.',
+                    ]);
+                }
+            }
+        }
 
         DB::beginTransaction();
         try {
@@ -90,19 +117,8 @@ class DenunciasController extends Controller
             ]);
 
             // 2. Guardar cada denunciante (persona + involucrado)
-            foreach ($request->denunciantes as $denuncianteData) {
-                $persona = Persona::firstOrCreate(
-                    [
-                        'cedula_tipo' => 'V',
-                        'cedula' => $denuncianteData['cedula'],
-                    ],
-                    [
-                        'nombres' => $denuncianteData['nombres'],
-                        'apellidos' => $denuncianteData['apellidos'],
-                        'telefono' => $denuncianteData['telefono'],
-                        'direccion' => $denuncianteData['direccion'],
-                    ]
-                );
+            foreach ($validated['denunciantes'] as $denuncianteData) {
+                $persona = $personasPorCedula->get($denuncianteData['cedula']);
 
                 Involucrados::create([
                     'persona_id' => $persona->id,

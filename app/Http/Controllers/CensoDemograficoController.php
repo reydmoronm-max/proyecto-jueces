@@ -40,7 +40,7 @@ class CensoDemograficoController extends Controller
         $data['fechaReporte'] = Carbon::now()->format('d-m-Y H:i A');
 
         $pdf = Pdf::loadView('modules.reportes.pdf', $data);
-        return $pdf->download('reporte-censo-demografico.pdf');
+        return $pdf->stream('reporte-censo-demografico.pdf');
     }
 
     /**

@@ -20,7 +20,7 @@
                             <h4 class="card-title fw-bold mb-0"><i class="ri-search-eye-line text-primary me-2"></i>BUSCADOR DE HISTORIAL</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation" novalidate>
+                            <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation consulta-loading-form consulta-individual-form" novalidate>
                                 <div class="row">
                                     <div hidden class="col-3 mb-3">
                                         <label for="cedula_tipo" class="form-label fw-bold">Tipo</label>
@@ -31,9 +31,10 @@
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="cedula" class="form-label fw-bold">Cédula de Identidad</label>
-                                        <div class="input-group">
+                                        <div class="input-group consulta-field">
                                             <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
                                             <input type="number" class="form-control border-primary" id="cedula" name="cedula" value="{{ request('cedula', $cedula) }}" placeholder="Ej: 12345678" required min="100000" max="999999999" oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                            <span class="consulta-field__spinner" aria-hidden="true"></span>
                                         </div>
                                         <div class="invalid-feedback">
                                             Ingrese un número de cédula válido.
@@ -314,11 +315,11 @@
                                                                         <span class="text-muted small ms-2">Registrada: {{ $acta->created_at->format('d/m/Y h:i A') }}</span>
                                                                     </strong>
                                                                     @if ($acta->tipo_acta == 'recepcion')
-                                                                        <a class="btn btn-sm text-white" style="background-color: rgb(212, 25, 25);" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}">
+                                                                        <a class="btn btn-sm text-white" style="background-color: rgb(212, 25, 25);" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" target="_blank" rel="noopener">
                                                                             <i class="ri-file-pdf-2-line me-1"></i> Exportar a PDF
                                                                         </a>
                                                                     @else
-                                                                        <a class="btn btn-sm text-white" style="background-color: rgb(212, 25, 25);" href="{{ route('denuncias.exportar-acta-conciliacion', $expediente->id) }}">
+                                                                        <a class="btn btn-sm text-white" style="background-color: rgb(212, 25, 25);" href="{{ route('denuncias.exportar-acta-conciliacion', $expediente->id) }}" target="_blank" rel="noopener">
                                                                             <i class="ri-file-pdf-2-line me-1"></i> Exportar a PDF
                                                                         </a>
                                                                     @endif
@@ -383,7 +384,7 @@
                                     </h5>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation" novalidate id="formConsultaIndividual">
+                                    <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation consulta-loading-form consulta-individual-form" novalidate id="formConsultaIndividual">
                                         <input type="hidden" name="tab" value="individual">
                                         <div class="row">
                                             <div hidden class="col-3 mb-3">
@@ -395,9 +396,10 @@
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <label for="comunal_cedula" class="form-label fw-bold">Cédula de Identidad</label>
-                                                <div class="input-group">
+                                                <div class="input-group consulta-field">
                                                     <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
                                                     <input type="number" class="form-control border-primary" id="comunal_cedula" name="cedula" value="{{ request('cedula', $cedula) }}" placeholder="Ej: 12345678" required min="100000" max="999999999" oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                                    <span class="consulta-field__spinner" aria-hidden="true"></span>
                                                 </div>
                                                 <div class="invalid-feedback">
                                                     Ingrese un número de cédula válido.
@@ -405,7 +407,7 @@
                                             </div>
                                         </div>
                                         <div class="d-grid gap-2 mt-1">
-                                            <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center">
+                                            <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center consulta-submit">
                                                 <i class="ri-search-2-line me-2"></i> Consultar
                                             </button>
                                             @if ($busquedaRealizada)
@@ -768,7 +770,7 @@
                             @endif --}}
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('consulta.index') }}" method="GET" id="formBusquedaAvanzada">
+                            <form action="{{ route('consulta.index') }}" method="GET" class="consulta-loading-form" id="formBusquedaAvanzada">
                                 <input type="hidden" name="tab" value="avanzada">
                                 <input type="hidden" name="buscar_avanzado" value="1">
 
@@ -952,8 +954,9 @@
                                     <a href="{{ route('consulta.index') }}?tab=avanzada" class="btn btn-secondary">
                                         <i class="ri-refresh-line me-1"></i> Limpiar filtros
                                     </a>
-                                    <button type="submit" class="btn btn-primary px-4">
+                                    <button type="submit" class="btn btn-primary px-4 consulta-submit">
                                         <i class="ri-search-2-line me-1"></i> Filtrar
+                                        <span class="consulta-submit__spinner ms-2" aria-hidden="true"></span>
                                     </button>
                                 </div>
                             </form>
@@ -1017,8 +1020,8 @@
                                 </div>
                                 @if ($resultadosAvanzados->isNotEmpty())
                                     <a href="{{ route('consulta.busqueda-avanzada.pdf') }}?{{ http_build_query(request()->all()) }}" 
-                                        class="btn btn-danger btn-sm d-flex align-items-center" target="_blank">
-                                        <i class="ri-file-pdf-2-line me-1"></i> Descargar PDF
+                                        class="btn btn-danger btn-sm d-flex align-items-center" target="_blank" rel="noopener">
+                                        <i class="ri-file-pdf-2-line me-1"></i> Ver PDF
                                     </a>
                                 @endif
                             </div>
@@ -1239,5 +1242,17 @@
                 }, false)
             })
         })()
+
+        document.querySelectorAll('.consulta-loading-form').forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (event.defaultPrevented || !form.checkValidity()) {
+                    return
+                }
+
+                form.classList.add('is-submitting')
+                form.setAttribute('aria-busy', 'true')
+                form.querySelector('[type="submit"]').disabled = true
+            })
+        })
     </script>
 @endsection

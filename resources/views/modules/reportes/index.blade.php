@@ -57,6 +57,10 @@
                 </span>
                 <span class="text-muted small fw-normal">| {{ $totalCiudadanos }} ciudadanos analizados</span>
             </h5>
+            <a href="{{ route('reportes.pdf', request()->query()) }}"
+                class="btn btn-danger d-flex align-items-center gap-2" target="_blank" rel="noopener">
+                <i class="fa-solid fa-file-pdf" style="font-size: 1.2rem;"></i> Exportar Reporte en PDF
+            </a>
             <span class="text-muted small">
                 <i class="ri-time-line me-1"></i> Datos consolidados en tiempo real
             </span>

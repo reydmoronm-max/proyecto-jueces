@@ -20,17 +20,23 @@
                                             </h4>
                                         </a>
                                         {{-- <p class="">Ingrese sus credenciales para acceder al sistema.</p> --}}
-                                        <form class="needs-validation" novalidate action="{{ route('logear') }}"
-                                            method="POST" autocomplete="off">
+                                        <form id="login-form" class="needs-validation login-form" novalidate
+                                            action="{{ route('logear') }}" method="POST" autocomplete="off">
                                             @csrf
                                             <div class="row">
                                                 <div class="col-lg-12 mt-4 mb-4">
                                                         <label for="cedula_usuario" class="form-label text-primary fw-bold">CÉDULA DE USUARIO</label>
-                                                        <input type="number" class="form-control" name="cedula_usuario" id="cedula_usuario" placeholder='"12345678"' required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                                        <div class="login-field">
+                                                            <input type="number" class="form-control" name="cedula_usuario" id="cedula_usuario" placeholder='"12345678"' required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                                            <span class="login-field__spinner" aria-hidden="true"></span>
+                                                        </div>
                                                 </div>
                                                 <div class="col-lg-12 mb-4">
                                                         <label for="password" class="form-label text-primary fw-bold">CONTRASEÑA</label>
-                                                        <input type="password" class="form-control" name="password" id="password" placeholder="Ingrese su contraseña" required>
+                                                        <div class="login-field">
+                                                            <input type="password" class="form-control" name="password" id="password" placeholder="Ingrese su contraseña" required>
+                                                            <span class="login-field__spinner" aria-hidden="true"></span>
+                                                        </div>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mt-2">
@@ -89,4 +95,15 @@
             </section>
         </div>
     </main>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function () {
+            if (!this.checkValidity()) {
+                return;
+            }
+
+            this.classList.add('is-submitting');
+            this.setAttribute('aria-busy', 'true');
+            this.querySelector('[type="submit"]').disabled = true;
+        });
+    </script>
 @endsection

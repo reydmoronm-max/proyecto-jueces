@@ -26,6 +26,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
                                                 <input type="number" name="denunciantes[0][cedula]" class="form-control denunciante-cedula" placeholder="15000100" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                                <span class="input-group-text denunciante-cedula-status d-none" aria-live="polite"></span>
                                             </div>
                                         </div>
 
@@ -179,6 +180,7 @@
                     '<div class="input-group">' +
                     '<span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>' +
                     '<input type="number" name="denunciantes[' + idx + '][cedula]" class="form-control denunciante-cedula" placeholder="15000100" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">' +
+                    '<span class="input-group-text denunciante-cedula-status d-none" aria-live="polite"></span>' +
                     '</div>' +
                     '</div>' +
                     '<div class="col-12 col-md-6">' +
@@ -213,18 +215,6 @@
 
                 container.appendChild(block);
 
-                // Vincular evento de autocompletado en el campo cédula del nuevo bloque
-                var cedulaInput = block.querySelector('.denunciante-cedula');
-                if (cedulaInput) {
-                    cedulaInput.addEventListener('input', function () {
-                        if (/^[0-9]{7,8}$/.test(this.value.trim())) {
-                            buscarPersonaPorCedulaEnBloque(block);
-                        }
-                    });
-                    cedulaInput.addEventListener('blur', function () {
-                        buscarPersonaPorCedulaEnBloque(block);
-                    });
-                }
             });
 
             // Delegación de evento para eliminar bloques
@@ -236,26 +226,131 @@
                 }
             });
 
-            // Autocompletado para el primer bloque (índice 0)
-            var primerCedula = container.querySelector('.denunciante-cedula');
-            if (primerCedula) {
-                primerCedula.addEventListener('input', function () {
-                    if (/^[0-9]{7,8}$/.test(this.value.trim())) {
-                        var block = this.closest('.denunciante-block');
-                        if (block) buscarPersonaPorCedulaEnBloque(block);
-                    }
+            container.addEventListener('input', function (event) {
+                var cedulaInput = event.target.closest('.denunciante-cedula');
+                if (!cedulaInput) return;
+
+                var block = cedulaInput.closest('.denunciante-block');
+                limpiarDatosDenunciante(block);
+                cedulaInput.dataset.censoValido = 'false';
+
+                var cedula = cedulaInput.value.trim();
+                if (!cedula) {
+                    establecerEstadoCedula(block, 'empty', '');
+                    return;
+                }
+                if (!/^[0-9]{7,8}$/.test(cedula)) {
+                    establecerEstadoCedula(block, 'invalid', 'Ingrese una cédula válida para consultar el censo.');
+                    return;
+                }
+
+                establecerEstadoCedula(block, 'loading', 'Verificando cédula en el censo...');
+                if (cedulaInput.dataset.lookupTimeout) {
+                    clearTimeout(Number(cedulaInput.dataset.lookupTimeout));
+                }
+
+                var version = Number(cedulaInput.dataset.lookupVersion || 0) + 1;
+                cedulaInput.dataset.lookupVersion = String(version);
+                cedulaInput.dataset.lookupTimeout = String(setTimeout(function () {
+                    buscarPersonaPorCedulaEnBloque(block, version);
+                }, 250));
+            });
+
+            container.addEventListener('focusout', function (event) {
+                var cedulaInput = event.target.closest('.denunciante-cedula');
+                if (!cedulaInput || !/^[0-9]{7,8}$/.test(cedulaInput.value.trim())) return;
+
+                if (cedulaInput.dataset.lookupTimeout) {
+                    clearTimeout(Number(cedulaInput.dataset.lookupTimeout));
+                }
+                var version = Number(cedulaInput.dataset.lookupVersion || 0);
+                buscarPersonaPorCedulaEnBloque(cedulaInput.closest('.denunciante-block'), version);
+            });
+
+            var form = document.getElementById('formDenuncia');
+            form.addEventListener('submit', function (event) {
+                var bloques = Array.from(container.querySelectorAll('.denunciante-block'));
+                var bloqueInvalido = bloques.find(function (block) {
+                    var cedulaInput = block.querySelector('.denunciante-cedula');
+                    return cedulaInput.dataset.censoValido !== 'true';
                 });
-                primerCedula.addEventListener('blur', function () {
-                    var block = this.closest('.denunciante-block');
-                    if (block) buscarPersonaPorCedulaEnBloque(block);
+
+                if (bloqueInvalido) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    var cedulaInput = bloqueInvalido.querySelector('.denunciante-cedula');
+                    establecerEstadoCedula(bloqueInvalido, 'invalid', 'La cédula debe existir en el censo para registrar la denuncia.');
+                    cedulaInput.focus();
+                    mostrarAlertaDenuncia('Verifique la cédula', 'Cada denunciante debe tener una cédula registrada en el censo.', 'warning');
+                    return;
+                }
+
+                var bloqueIncompleto = bloques.find(function (block) {
+                    return Array.from(block.querySelectorAll('input[readonly][required]'))
+                        .some(function (input) { return !input.value.trim(); });
                 });
+
+                if (bloqueIncompleto) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    bloqueIncompleto.querySelector('.denunciante-cedula').focus();
+                    mostrarAlertaDenuncia(
+                        'Datos censales incompletos',
+                        'La persona existe en el censo, pero falta algún dato obligatorio. Complete nombre, apellido, teléfono y dirección en el censo antes de registrar la denuncia.',
+                        'warning'
+                    );
+                }
+            });
+        }
+
+        function limpiarDatosDenunciante(block) {
+            ['nombres', 'apellidos', 'telefono', 'direccion'].forEach(function (campo) {
+                var input = block.querySelector('input[name$="[' + campo + ']"]');
+                if (input) input.value = '';
+            });
+        }
+
+        function establecerEstadoCedula(block, estado, mensaje) {
+            var status = block.querySelector('.denunciante-cedula-status');
+            if (!status) return;
+
+            status.className = 'input-group-text denunciante-cedula-status';
+            if (estado === 'empty') {
+                status.classList.add('d-none');
+                status.innerHTML = '';
+                status.removeAttribute('title');
+                return;
+            }
+
+            status.classList.remove('text-success', 'text-danger', 'text-muted');
+            status.title = mensaje;
+
+            if (estado === 'valid') {
+                status.classList.add('text-success');
+                status.innerHTML = '<i class="ri-checkbox-circle-fill" aria-label="Cédula encontrada en el censo"></i>';
+                block.querySelector('.denunciante-cedula').dataset.censoValido = 'true';
+            } else if (estado === 'loading') {
+                status.classList.add('text-muted');
+                status.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-label="Verificando cédula"></i>';
+                block.querySelector('.denunciante-cedula').dataset.censoValido = 'false';
+            } else {
+                status.classList.add('text-danger');
+                status.innerHTML = '<i class="ri-error-warning-fill" aria-label="Cédula no válida o no encontrada"></i>';
+                block.querySelector('.denunciante-cedula').dataset.censoValido = 'false';
             }
         }
 
-        // Buscar persona en visitas y autocompletar campos del bloque
-        function buscarPersonaPorCedulaEnBloque(block) {
+        function mostrarAlertaDenuncia(titulo, mensaje, icono) {
+            if (window.Swal) {
+                window.Swal.fire({ title: titulo, text: mensaje, icon: icono, confirmButtonText: 'Entendido' });
+            } else {
+                window.alert(mensaje);
+            }
+        }
+
+        function buscarPersonaPorCedulaEnBloque(block, version) {
             var cedulaInput = block.querySelector('input[name$="[cedula]"]');
-            if (!cedulaInput) return;
+            if (!cedulaInput || Number(cedulaInput.dataset.lookupVersion || 0) !== version) return;
             var cedula = cedulaInput.value.trim();
             if (!/^[0-9]{7,8}$/.test(cedula)) return;
 
@@ -263,6 +358,8 @@
             xhr.open('GET', '{{ route("denuncias.buscar-persona") }}?cedula=' + encodeURIComponent(cedula), true);
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.onload = function () {
+                if (Number(cedulaInput.dataset.lookupVersion || 0) !== version || cedulaInput.value.trim() !== cedula) return;
+
                 if (xhr.status === 200) {
                     try {
                         var data = JSON.parse(xhr.responseText);
@@ -274,8 +371,22 @@
                         if (apellidosInput) apellidosInput.value = data.apellidos || '';
                         if (telefonoInput) telefonoInput.value = data.telefono || '';
                         if (direccionInput) direccionInput.value = data.direccion || '';
-                    } catch (e) { }
+                        establecerEstadoCedula(block, 'valid', 'Cédula encontrada en el censo.');
+                    } catch (error) {
+                        establecerEstadoCedula(block, 'invalid', 'No se pudo procesar la respuesta del censo.');
+                    }
+                } else if (xhr.status === 404) {
+                    limpiarDatosDenunciante(block);
+                    establecerEstadoCedula(block, 'invalid', 'Cédula no encontrada en el censo.');
+                } else {
+                    limpiarDatosDenunciante(block);
+                    establecerEstadoCedula(block, 'invalid', 'No se pudo verificar la cédula. Intente nuevamente.');
                 }
+            };
+            xhr.onerror = function () {
+                if (Number(cedulaInput.dataset.lookupVersion || 0) !== version || cedulaInput.value.trim() !== cedula) return;
+                limpiarDatosDenunciante(block);
+                establecerEstadoCedula(block, 'invalid', 'No se pudo conectar con el censo. Intente nuevamente.');
             };
             xhr.send();
         }
