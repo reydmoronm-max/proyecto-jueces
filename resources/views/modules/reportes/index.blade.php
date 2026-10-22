@@ -15,11 +15,11 @@
                             <i class="ri-community-line text-primary me-1"></i> Filtrar por Comunidad (Consejo Comunal)
                         </label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light text-primary border-end-0">
+                            <span class="input-group-text text-primary border-end-0">
                                 <i class="ri-map-pin-2-fill"></i>
                             </span>
                             <select name="consejo_comunal_id" id="consejo_comunal_id" class="form-select border-start-0 ps-0 bg-white">
-                                <option value="">-- Censo Completo (Todas las comunidades) --</option>
+                                <option value="">Censo Completo (Todas las comunidades)</option>
                                 @foreach ($consejosComunales as $cc)
                                     <option value="{{ $cc->id }}" {{ $consejoComunalId == $cc->id ? 'selected' : '' }}>
                                         {{ $cc->nombre }}
@@ -34,15 +34,20 @@
                     </div>
 
                     <div class="col-lg-6 col-md-4 d-flex justify-content-md-end align-items-center gap-2 mt-3 mt-md-0">
-                        @if ($consejoComunalId)
+                        {{-- @if ($consejoComunalId)
                             <a href="{{ route('reportes.index') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1">
                                 <i class="ri-refresh-line"></i> Ver Censo Completo
                             </a>
-                        @endif
+                        @endif --}}
+                        <a href="{{ route('reportes.pdf', request()->query()) }}"
+                            class="btn btn-danger d-flex align-items-center gap-2" target="_blank" rel="noopener">
+                            <i class="fa-solid fa-file-pdf" style="font-size: 1.2rem;"></i> Exportar Reporte en PDF
+                        </a>
+                        {{-- BOTON VIEJO 
                         <a href="{{ route('reportes.pdf', request()->query()) }}"
                             class="btn btn-danger d-flex align-items-center gap-2 shadow-sm">
                             <i class="ri-file-pdf-fill fs-5"></i> Exportar Reporte PDF
-                        </a>
+                        </a> --}}
                     </div>
                 </form>
             </div>
@@ -57,13 +62,9 @@
                 </span>
                 <span class="text-muted small fw-normal">| {{ $totalCiudadanos }} ciudadanos analizados</span>
             </h5>
-            <a href="{{ route('reportes.pdf', request()->query()) }}"
-                class="btn btn-danger d-flex align-items-center gap-2" target="_blank" rel="noopener">
-                <i class="fa-solid fa-file-pdf" style="font-size: 1.2rem;"></i> Exportar Reporte en PDF
-            </a>
-            <span class="text-muted small">
+            {{-- <span class="text-muted small">
                 <i class="ri-time-line me-1"></i> Datos consolidados en tiempo real
-            </span>
+            </span> --}}
         </div>
 
         <!-- Tarjetas de Métricas Rápidas (KPIs) -->
