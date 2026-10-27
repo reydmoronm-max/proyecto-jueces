@@ -114,6 +114,69 @@ class CensoModuleTest extends TestCase
         $this->assertSame('12345678', $persona->cedula);
     }
 
+    public function test_family_store_and_update_handles_direccion_and_syncs_to_members(): void
+    {
+        $consejo = $this->crearConsejo('Consejo Familiar', '33333333');
+
+        // 1. Registrar familia con dirección
+        $response = $this->post(route('censo.store'), [
+            'numero_familia'      => 'FAMILIA-DIR-001',
+            'consejo_comunal_id'  => $consejo->id,
+            'vivienda'            => 'Propia',
+            'mision_vivienda'     => 'No',
+            'bono_unico_familiar' => 'No',
+            'clap'                => 'Sí',
+            'direccion'           => 'Calle 5, Casa #10, Sector Primavera',
+        ]);
+
+        $response->assertRedirect(route('censo.index'));
+        $this->assertDatabaseHas('familias', [
+            'numero_familia' => 'FAMILIA-DIR-001',
+            'direccion'      => 'Calle 5, Casa #10, Sector Primavera',
+        ]);
+
+        $familia = Familia::where('numero_familia', 'FAMILIA-DIR-001')->firstOrFail();
+
+        // 2. Registrar integrante sin enviar 'direccion' (debe heredarse de la familia)
+        $memberResponse = $this->post(route('censo.integrante.store'), [
+            'familia_id'          => $familia->id,
+            'cedula'              => '31234567',
+            'nombres'             => 'Carlos',
+            'apellidos'           => 'Ramirez',
+            'telefono'            => '04141234567',
+            'fecha_nacimiento'    => '15-05-1990',
+            'centro_votacion'     => 'Escuela Básica',
+            'carnet_patria'       => '0011223344',
+            'nivel_academico'     => 'Secundaria con titulo de bachiller',
+            'profesion'           => 'Comerciante',
+            'situacion_laboral'   => 'Independiente',
+            'tipo_enfermedad'     => 'Ninguna',
+            'pensionado_jubilado' => 'No',
+            'estudia'             => 'No',
+            'genero'              => 'Masculino',
+            'parentesco'          => 'Jefe de familia',
+        ]);
+
+        $memberResponse->assertRedirect(route('censo.index'));
+        $persona = Persona::where('cedula', '31234567')->firstOrFail();
+        $this->assertSame('Calle 5, Casa #10, Sector Primavera', $persona->direccion);
+
+        // 3. Actualizar la familia con nueva dirección y comprobar que se sincroniza
+        $updateResponse = $this->put(route('censo.update', $familia->id), [
+            'numero_familia'      => 'FAMILIA-DIR-001',
+            'consejo_comunal_id'  => $consejo->id,
+            'vivienda'            => 'Propia',
+            'mision_vivienda'     => 'No',
+            'bono_unico_familiar' => 'No',
+            'clap'                => 'Sí',
+            'direccion'           => 'Avenida Bolívar, Edificio Los Andes, Apto 4B',
+        ]);
+
+        $updateResponse->assertRedirect(route('censo.index'));
+        $this->assertSame('Avenida Bolívar, Edificio Los Andes, Apto 4B', $familia->fresh()->direccion);
+        $this->assertSame('Avenida Bolívar, Edificio Los Andes, Apto 4B', $persona->fresh()->direccion);
+    }
+
     private function crearConsejo(string $nombre, string $cedulaJefe): ConsejoComunal
     {
         $jefe = Persona::create([

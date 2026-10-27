@@ -91,6 +91,7 @@ class CensoController extends Controller
                 : ['required', 'string', 'in:NA'],
             'bono_unico_familiar' => ['required', 'string', 'in:Sí,No'],
             'clap'                => ['required', 'string', 'in:Sí,No'],
+            'direccion'           => ['required', 'string', 'min:5', 'max:500'],
         ], [
             'numero_familia.required'      => 'El número de familia es obligatorio.',
             'numero_familia.unique'        => 'Esta familia ya está registrada.',
@@ -98,6 +99,9 @@ class CensoController extends Controller
             'mision_vivienda.required'     => 'Indique si recibió vivienda por Misión Vivienda.',
             'bono_unico_familiar.required' => 'Indique si la familia recibe Bono Único Familiar.',
             'clap.required'                => 'Indique si la familia recibe CLAP.',
+            'direccion.required'           => 'La dirección de residencia es obligatoria.',
+            'direccion.min'                => 'La dirección debe tener al menos 5 caracteres.',
+            'direccion.max'                => 'La dirección no puede exceder 500 caracteres.',
         ]);
 
         Familia::create([
@@ -107,6 +111,7 @@ class CensoController extends Controller
             'mision_vivienda'     => $request->mision_vivienda,
             'bono_unico_familiar' => $request->bono_unico_familiar,
             'clap'                => $request->clap,
+            'direccion'           => $request->direccion,
         ]);
 
         return to_route('censo.index')->with('success', 'Familia registrada correctamente.');
@@ -132,6 +137,7 @@ class CensoController extends Controller
                 : ['required', 'string', 'in:NA'],
             'bono_unico_familiar' => ['required', 'string', 'in:Sí,No'],
             'clap'                => ['required', 'string', 'in:Sí,No'],
+            'direccion'           => ['required', 'string', 'min:5', 'max:500'],
         ], [
             'numero_familia.required'      => 'El número de familia es obligatorio.',
             'numero_familia.unique'        => 'Esta familia ya está registrada.',
@@ -139,6 +145,9 @@ class CensoController extends Controller
             'mision_vivienda.required'     => 'Indique si recibió vivienda por Misión Vivienda.',
             'bono_unico_familiar.required' => 'Indique si la familia recibe Bono Único Familiar.',
             'clap.required'                => 'Indique si la familia recibe CLAP.',
+            'direccion.required'           => 'La dirección de residencia es obligatoria.',
+            'direccion.min'                => 'La dirección debe tener al menos 5 caracteres.',
+            'direccion.max'                => 'La dirección no puede exceder 500 caracteres.',
         ]);
 
         $familia->update([
@@ -148,7 +157,11 @@ class CensoController extends Controller
             'mision_vivienda'     => $request->mision_vivienda,
             'bono_unico_familiar' => $request->bono_unico_familiar,
             'clap'                => $request->clap,
+            'direccion'           => $request->direccion,
         ]);
+
+        // Sincronizar la dirección en los integrantes de la familia
+        $familia->personas()->update(['direccion' => $request->direccion]);
 
         return to_route('censo.index')->with('success', 'Familia actualizada correctamente.');
     }
@@ -220,7 +233,6 @@ class CensoController extends Controller
             'situacion_laboral'   => ['nullable', 'string', 'max:100'],
             'tipo_enfermedad'     => ['nullable', 'string', 'max:150'],
             'pensionado_jubilado' => ['required', 'string', 'in:Sí,No'],
-            'direccion'           => ['nullable', 'string', 'max:500'],
             'estudia'             => ['required', 'string', 'in:Sí,No'],
             'genero'              => ['required', 'string', 'in:Masculino,Femenino'],
             'parentesco'          => ['required', 'string', 'in:Jefe de familia,Hijo/a,Padre,Madre,Abuelo/a,Tío/a,Primo/a'],
@@ -247,6 +259,7 @@ class CensoController extends Controller
         DB::beginTransaction();
         try {
             $fecha = \Carbon\Carbon::createFromFormat('d-m-Y', $request->fecha_nacimiento)->format('Y-m-d');
+            $familia = Familia::findOrFail($request->familia_id);
 
             $persona = Persona::firstOrCreate(
                 ['cedula' => $request->cedula],
@@ -255,10 +268,11 @@ class CensoController extends Controller
                     'nombres'     => $request->nombres,
                     'apellidos'   => $request->apellidos,
                     'telefono'    => $request->telefono,
+                    'direccion'   => $familia->direccion,
                 ]
             );
 
-            // Update all member census and basic fields
+            // Update all member census and basic fields (direccion comes from familia)
             $persona->update([
                 'nombres'             => $request->nombres,
                 'apellidos'           => $request->apellidos,
@@ -272,7 +286,7 @@ class CensoController extends Controller
                 'situacion_laboral'   => $request->situacion_laboral,
                 'tipo_enfermedad'     => $request->tipo_enfermedad,
                 'pensionado_jubilado' => $request->pensionado_jubilado,
-                'direccion'           => $request->direccion,
+                'direccion'           => $familia->direccion,
                 'estudia'             => $request->estudia,
                 'genero'              => $request->genero,
                 'parentesco'          => $request->parentesco,
@@ -315,7 +329,7 @@ class CensoController extends Controller
      */
     public function updateIntegrante(Request $request, string $id)
     {
-        $persona = Persona::findOrFail($id);
+        $persona = Persona::with('familia')->findOrFail($id);
         $this->normalizarCatalogosCenso($request);
         $this->normalizarPensionadoJubilado($request);
         $this->normalizarCamposMenorEdad($request);
@@ -334,7 +348,6 @@ class CensoController extends Controller
             'situacion_laboral'   => ['nullable', 'string', 'max:100'],
             'tipo_enfermedad'     => ['nullable', 'string', 'max:150'],
             'pensionado_jubilado' => ['required', 'string', 'in:Sí,No'],
-            'direccion'           => ['nullable', 'string', 'max:500'],
             'estudia'             => ['required', 'string', 'in:Sí,No'],
             'genero'              => ['required', 'string', 'in:Masculino,Femenino'],
             'parentesco'          => ['required', 'string', 'in:Jefe de familia,Hijo/a,Padre,Madre,Abuelo/a,Tío/a,Primo/a'],
@@ -378,7 +391,7 @@ class CensoController extends Controller
                 'situacion_laboral'   => $request->situacion_laboral,
                 'tipo_enfermedad'     => $request->tipo_enfermedad,
                 'pensionado_jubilado' => $request->pensionado_jubilado,
-                'direccion'           => $request->direccion,
+                'direccion'           => $persona->familia?->direccion ?? $persona->direccion,
                 'estudia'             => $request->estudia,
                 'genero'              => $request->genero,
                 'parentesco'          => $request->parentesco,

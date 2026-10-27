@@ -108,4 +108,17 @@ class Persona extends Model implements Auditable
     {
         return $this->familia?->clap;
     }
+
+    public function getDireccionAttribute()
+    {
+        if ($this->relationLoaded('familia') && $this->familia) {
+            return $this->familia->direccion ?? ($this->attributes['direccion'] ?? null);
+        }
+
+        if ($this->familia_id && $this->familia) {
+            return $this->familia->direccion ?? ($this->attributes['direccion'] ?? null);
+        }
+
+        return $this->attributes['direccion'] ?? null;
+    }
 }

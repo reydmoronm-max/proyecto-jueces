@@ -91,6 +91,7 @@
                                                 $item->mision_vivienda,
                                                 $item->bono_unico_familiar,
                                                 $item->clap,
+                                                $item->direccion,
                                                 $item->personas->count(),
                                             ];
 
@@ -544,7 +545,6 @@
                     }
 
                     if (data.pensionado_jubilado) $('#pensionado_jubilado').val(data.pensionado_jubilado);
-                    if (data.direccion) $('#direccion').val(data.direccion);
                     if (data.estudia) $('#estudia').val(data.estudia);
                     if (data.genero) $('#genero').val(data.genero);
                     if (data.parentesco) $('#parentesco').val(data.parentesco);
@@ -627,7 +627,6 @@
             if (tsEnfermedad) tsEnfermedad.clear();
             actualizarReglasPorEdad('');
             $('#nivel_academico').val('');
-            $('#direccion').val('');
 
             var modal = new bootstrap.Modal(document.getElementById('modalRegistrarIntegrante'));
             modal.show();
@@ -641,6 +640,7 @@
             $('#view_fam_mision_vivienda').text('...');
             $('#view_fam_bono').text('...');
             $('#view_fam_clap').text('...');
+            $('#view_fam_direccion').text('...');
             $('#lista-integrantes-body').html('<tr><td colspan="5" class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Cargando...</td></tr>');
             
             var modal = new bootstrap.Modal(document.getElementById('modalConsultarFamilia'));
@@ -655,6 +655,7 @@
                     $('#view_fam_mision_vivienda').text(data.mision_vivienda ?? 'No');
                     $('#view_fam_bono').text(data.bono_unico_familiar ?? 'No');
                     $('#view_fam_clap').text(data.clap ?? 'No');
+                    $('#view_fam_direccion').text(data.direccion ?? 'No registrada');
 
                     var html = '';
                     if (data.personas && data.personas.length > 0) {
@@ -801,7 +802,6 @@
 
                     $('#edit-estudia').val(data.estudia ?? '');
                     $('#edit-parentesco').val(data.parentesco ?? '');
-                    $('#edit-direccion').val(data.direccion ?? '');
 
                     $('#edit-nombres').prop('readonly', true);
                     $('#edit-apellidos').prop('readonly', true);
@@ -839,6 +839,7 @@
                     actualizarMisionVivienda('edit');
                     $('#edit_bono_unico_familiar').val(data.bono_unico_familiar ?? '');
                     $('#edit_clap').val(data.clap ?? '');
+                    $('#edit_direccion_fam').val(data.direccion ?? '');
                     var modal = new bootstrap.Modal(document.getElementById('modalEditarFamilia'));
                     modal.show();
                 },
@@ -979,6 +980,14 @@
                 if (!clap) {
                     errors.push('CLAP: campo obligatorio.');
                 }
+
+                var dir = $('#' + (prefix ? 'edit_direccion_fam' : 'direccion_fam')).val().trim();
+                if (!dir) {
+                    errors.push('Dirección de residencia: campo obligatorio.');
+                } else if (dir.length < 5 || dir.length > 500) {
+                    errors.push('Dirección de residencia: debe tener entre 5 y 500 caracteres.');
+                }
+
                 return errors;
             }
 

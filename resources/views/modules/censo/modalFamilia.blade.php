@@ -80,6 +80,14 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="col-12">
+                            <label class="text-primary fw-bold mb-1" for="direccion_fam">DIRECCIÓN ESPECÍFICA DE RESIDENCIA <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
+                                <input id="direccion_fam" type="text" name="direccion" class="form-control bg-white" placeholder="Ej. Calle 1, Casa N° 23, Sector 4" required value="{{ old('direccion') }}">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="modal-footer mt-4 pb-0 pe-0">
@@ -173,6 +181,14 @@
                                     <option value="Sí">Sí</option>
                                     <option value="No">No</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="text-primary fw-bold mb-1" for="edit_direccion_fam">DIRECCIÓN ESPECÍFICA DE RESIDENCIA <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
+                                <input id="edit_direccion_fam" type="text" name="direccion" class="form-control bg-white" placeholder="Ej. Calle 1, Casa N° 23, Sector 4" required>
                             </div>
                         </div>
                     </div>
