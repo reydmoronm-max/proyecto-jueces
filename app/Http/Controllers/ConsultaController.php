@@ -175,6 +175,7 @@ class ConsultaController extends Controller
             'mision_vivienda' => $familia->mision_vivienda ?? 'No',
             'bono_unico_familiar' => $familia->bono_unico_familiar ?? 'No',
             'clap' => $familia->clap ?? 'No',
+            'direccion' => $familia->direccion ?? 'No registrada',
             'consejo_comunal' => $familia->consejoComunal ? [
                 'id' => $familia->consejoComunal->id,
                 'nombre' => $familia->consejoComunal->nombre,

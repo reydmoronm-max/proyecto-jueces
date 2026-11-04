@@ -30,6 +30,10 @@
                                 <span class="text-muted fw-bold d-block">Recibe CLAP</span>
                                 <span id="view_fam_clap" class="badge bg-success">No</span>
                             </div>
+                            <div class="col-12 mt-2">
+                                <span class="text-muted fw-bold d-block">Dirección de Residencia</span>
+                                <span id="view_fam_direccion" class="text-dark fw-semibold">No registrada</span>
+                            </div>
                         </div>
                     </div>
                 </div>

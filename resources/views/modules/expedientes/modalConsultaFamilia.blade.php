@@ -33,6 +33,10 @@
                                 <span class="text-muted small fw-bold d-block text-uppercase">Bono Familiar:</span>
                                 <span id="modal_fam_bono" class="badge bg-danger fs-7">No</span>
                             </div>
+                            <div class="col-12 mt-2">
+                                <span class="text-muted small fw-bold d-block text-uppercase">Dirección de Residencia:</span>
+                                <span id="modal_fam_direccion" class="fw-semibold text-dark fs-7">No registrada</span>
+                            </div>
                         </div>
                     </div>
                 </div>
