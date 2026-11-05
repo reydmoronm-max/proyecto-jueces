@@ -742,8 +742,87 @@ input[type=number] {
 
 /* Cuando el aside tiene .sidebar-mini (colapsado): muestra mini, oculta normal */
 .sidebar.sidebar-mini .logo-main .logo-mini {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .sidebar.sidebar-mini .logo-main .logo-normal {
   display: none;
+}
+
+/* ── Logo y Texto SIGIC en el Aside ── */
+.sidebar .sidebar-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.sidebar .navbar-brand {
+  display: flex !important;
+  align-items: center !important;
+  padding: 1rem 0.9rem !important;
+  text-decoration: none;
+  overflow: hidden;
+  width: 100%;
+}
+
+.sidebar .logo-main {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar .logo-main .logo-mini img {
+  width: 2.75rem;
+  height: 2.75rem;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.sidebar.sidebar-hover:hover .logo-main .logo-mini img {
+  transform: scale(1.04);
+}
+
+.sidebar-logo-text {
+  display: inline-block;
+  font-family: var(--bs-body-font-family, system-ui, -apple-system, sans-serif);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ffffff 40%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  transition: opacity 350ms cubic-bezier(0.4, 0, 0.2, 1),
+              transform 350ms cubic-bezier(0.4, 0, 0.2, 1),
+              max-width 350ms cubic-bezier(0.4, 0, 0.2, 1),
+              margin 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estado colapsado: el texto se oculta suave y naturalmente */
+.sidebar.sidebar-mini:not(.sidebar-hover:hover) .sidebar-logo-text {
+  opacity: 0;
+  max-width: 0;
+  margin-left: 0 !important;
+  transform: translateX(-12px) scale(0.92);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Estado expandido (al pasar el cursor sobre el aside): se muestra al lado del logo */
+.sidebar.sidebar-hover:hover .sidebar-logo-text,
+.sidebar:not(.sidebar-mini) .sidebar-logo-text {
+  opacity: 1;
+  max-width: 150px;
+  margin-left: 0.85rem !important;
+  transform: translateX(0) scale(1);
+  overflow: visible;
 }

@@ -164,10 +164,10 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia" target="_blank" rel="noopener">
+                                                            <a type="button" class="btn btn-sm btn-danger" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia" target="_blank" rel="noopener">
                                                                 <i class="ri-file-pdf-2-line"></i>
                                                             </a>
-                                                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCita" onclick="agregar_id_expediente({{ $expediente->id }})" title="Agendar cita">
+                                                            <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#modalCita" onclick="agregar_id_expediente({{ $expediente->id }})" title="Agendar cita">
                                                                 <i class="ri-calendar-2-fill"></i>
                                                             </button>
                                                         </div>
@@ -244,10 +244,10 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <a type="button" class="btn btn-sm btn-light" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia" target="_blank" rel="noopener">
+                                                            <a type="button" class="btn btn-sm btn-danger" href="{{ route('denuncias.exportar-acta-recepcion', $expediente->id) }}" title="Ver acta de recepción de denuncia" target="_blank" rel="noopener">
                                                                 <i class="ri-file-pdf-2-line"></i>
                                                             </a>
-                                                            <button type="button" class="btn btn-sm btn-warning"
+                                                            <button type="button" class="btn btn-sm btn-light"
                                                                 data-bs-toggle="modal" data-bs-target="#modalPosponerCita"
                                                                 onclick="agregar_id_expediente_posponer({{ $expediente->id }})">
                                                                 <i class="ri-calendar-event-fill"></i>
@@ -326,7 +326,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown">
-                                                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <button class="btn btn-sm btn-danger dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <i class="ri-file-pdf-2-line"></i> Actas
                                                             </button>
                                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">

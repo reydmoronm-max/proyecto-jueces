@@ -145,7 +145,7 @@
                                     </div>
 
                                     <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary btn-lg">
+                                        <button type="submit" class="btn btn-danger btn-lg">
                                             <i class="ri-file-pdf-line me-2"></i>Generar Constancia de Residencia (PDF)
                                         </button>
                                     </div>
@@ -172,7 +172,7 @@
                                         generará usando los datos de filiación y el Consejo Comunal del censo actual.</p>
 
                                     <div class="d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg">
+                                        <button type="submit" class="btn btn-danger btn-lg">
                                             <i class="ri-file-pdf-line me-2"></i>Generar Carta de Buena Conducta (PDF)
                                         </button>
                                     </div>

@@ -1,24 +1,18 @@
 <aside class="sidebar sidebar-default sidebar-white sidebar-base sidebar-mini sidebar-hover navs-rounded-all" style="background-color: #151824; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
     <div class="sidebar-header d-flex align-items-center justify-content-start flex-shrink-0">
-        <a href="{{-- route('home') --}}" class="navbar-brand" style="pointer-events: none;">
-            <!--Logo start-->
-            <!--logo End-->
-
+        <a href="{{-- route('home') --}}" class="navbar-brand d-flex align-items-center" style="pointer-events: none;">
             <!--Logo start-->
             <div class="logo-main">
                 <div class="logo-normal">
-                    <img style="width: 10.5rem; margin-left: 15%;" src="{{ asset('images/logo2.png') }}" alt="">
+                    <img style="width: 10.5rem; margin-left: 15%;" src="{{ asset('images/logo2.png') }}" alt="SIGIC">
                 </div>
                 <div class="logo-mini">
-                    <img style="width: 3rem;" src="{{ asset('images/logoComuna.png') }}" alt="">
+                    <img src="{{ asset('images/logoComuna.png') }}" alt="Logo SIGIC">
                 </div>
             </div>
             <!--logo End-->
 
-
-
-
-            {{-- <h2 class="logo-title text-white" style="font-style: italic; font-weight: bolder;">SGIC</h2> --}}
+            <span class="sidebar-logo-text">SIGIC</span>
         </a>
     </div>
     <div class="sidebar-body pt-0 data-scrollbar" style="overflow-y: auto; flex-grow: 1; padding-bottom: 5rem;">

@@ -627,8 +627,8 @@
                 text: "Esta acción eliminará de forma permanente la planificación de esta jornada.",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#e20000',
+                cancelButtonColor: '#001f4d',
                 confirmButtonText: 'Sí, eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {

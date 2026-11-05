@@ -858,8 +858,8 @@
                 text: "Si eliminas la familia, los integrantes serán desvinculados, pero no borrados de la base de datos.",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#e20000',
+                cancelButtonColor: '#001f4d',
                 confirmButtonText: 'Sí, eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
@@ -876,8 +876,8 @@
                 text: `¿Estás seguro de que deseas desvincular a "${nombreCompleto}" de esta familia?`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#e20000',
+                cancelButtonColor: '#001f4d',
                 confirmButtonText: 'Sí, desvincular',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
@@ -1265,7 +1265,8 @@
                     showCancelButton: true,
                     confirmButtonText: 'Guardar Cambios',
                     cancelButtonText: 'Cancelar',
-                    confirmButtonColor: '#3a57e8',
+                    confirmButtonColor: '#0090E4',
+                    cancelButtonColor: '#001f4d',
                     inputValidator: (value) => {
                         if (!value || !value.trim()) {
                             return 'Debe ingresar un nombre válido';
@@ -1318,8 +1319,8 @@
                     text: `¿Desea eliminar la enfermedad "${nombre}" del catálogo?`,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#6c757d',
+                    confirmButtonColor: '#e20000',
+                    cancelButtonColor: '#001f4d',
                     confirmButtonText: 'Sí, eliminar',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
@@ -1412,7 +1413,8 @@
                     showCancelButton: true,
                     confirmButtonText: 'Guardar Cambios',
                     cancelButtonText: 'Cancelar',
-                    confirmButtonColor: '#3a57e8',
+                    confirmButtonColor: '#0090E4',
+                    cancelButtonColor: '#001f4d',
                     inputValidator: (value) => {
                         if (!value || !value.trim()) {
                             return 'Debe ingresar un nombre válido';
@@ -1465,8 +1467,8 @@
                     text: `¿Desea eliminar la profesión "${nombre}" del catálogo?`,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#6c757d',
+                    confirmButtonColor: '#e20000',
+                    cancelButtonColor: '#001f4d',
                     confirmButtonText: 'Sí, eliminar',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {

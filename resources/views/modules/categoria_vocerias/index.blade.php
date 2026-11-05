@@ -48,7 +48,7 @@
                             <div class="tab-pane fade show active" id="categorias-activas-content" role="tabpanel"
                                 aria-labelledby="categorias-activas-tab">
                                 <div class="table-responsive">
-                                    <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <table id="basic-table" class="table table-striped table-bordered table-striped-columns mb-0" role="grid">
                                         <thead>
                                             <tr>
                                                 <th>Categoría</th>
