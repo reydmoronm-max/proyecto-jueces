@@ -146,6 +146,7 @@ Route::middleware('auth')->group(function () {
         // Reportes Demográficos
         Route::get('/reportes', [CensoDemograficoController::class, 'index'])->name('reportes.index');
         Route::get('/reportes/pdf', [CensoDemograficoController::class, 'exportPdf'])->name('reportes.pdf');
+        Route::get('/reportes/listado-pdf', [CensoDemograficoController::class, 'exportListadoPdf'])->name('reportes.listado.pdf');
 
         // Actas y Cartas
         Route::get('/actas-cartas', [ActasCartasController::class, 'index'])->name('actas.index');
