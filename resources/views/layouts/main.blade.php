@@ -45,6 +45,7 @@
         {{-- Fonts Awesome --}}
         <link href="{{ asset('vendor/fontawesome/css/all.css') }}" rel="stylesheet">
         
+        @stack('styles')
     </head>
     <body>
         <div class="page-loader" id="page-loader" role="status" aria-live="polite" aria-label="Cargando">
