@@ -6,7 +6,7 @@
 
 @section('contenido')
     <div class="conatiner-fluid content-inner mt-n5 py-0">
-        {{-- Tarjetas de Estadísticas Rápidas --}}
+        {{-- Tarjetas de Estadísticas Rápidas 
         <div class="row mb-4">
             <div class="col-12 col-md-6 col-lg-3 mb-3">
                 <div class="card h-100 mb-0 shadow-sm border-0">
@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         {{-- Tarjetas de Acción: Exportar e Importar --}}
         <div class="row mb-4">
@@ -80,7 +80,7 @@
                                 <small class="text-muted">Generar archivo de respaldo descargable</small>
                             </div>
                         </div>
-                        <span class="badge bg-primary">Recomendado periódicamente</span>
+                        {{-- <span class="badge bg-primary">Recomendado periódicamente</span> --}}
                     </div>
 
                     <div class="card-body d-flex flex-column justify-content-between">
@@ -90,7 +90,7 @@
                                 en el sistema en un único archivo con formato <code>.sql</code>.
                             </p>
 
-                            <div class="p-3 bg-soft-primary rounded-3 mb-4">
+                            <div class="p-3 bg-soft-primary rounded-1 mb-4">
                                 <h6 class="fw-bold text-primary mb-2">
                                     <i class="ri-information-line me-1"></i> ¿Para qué sirve este respaldo?
                                 </h6>
@@ -131,7 +131,7 @@
                                 <small class="text-muted">Restablecer datos desde un archivo .sql</small>
                             </div>
                         </div>
-                        <span class="badge bg-warning text-dark">Acción Crítica</span>
+                        {{-- <span class="badge bg-warning text-dark">Acción Crítica</span> --}}
                     </div>
 
                     <div class="card-body d-flex flex-column justify-content-between">
@@ -150,13 +150,13 @@
 
                             <form action="{{ route('database-backup.import') }}" method="POST" enctype="multipart/form-data" id="form-importar-bd">
                                 @csrf
-                                <div class="mb-3">
+                                <div class="">
                                     <label for="backup_file" class="form-label fw-bold text-dark small">Archivo de Respaldo (.sql)</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="ri-file-code-line"></i></span>
                                         <input type="file" name="backup_file" id="backup_file" class="form-control" accept=".sql" required>
                                     </div>
-                                    <div class="form-text small">Solo archivos con extensión <code>.sql</code> (máx. 100 MB).</div>
+                                    <div class="form-text small mb-5">Solo archivos con extensión <code>.sql</code> (máx. 100 MB).</div>
                                 </div>
 
                                 <button type="button" id="btn-iniciar-importacion"
@@ -167,11 +167,11 @@
                             </form>
                         </div>
 
-                        <div class="text-center mt-3">
+                        {{-- <div class="text-center">
                             <small class="text-muted">
                                 <i class="ri-shield-check-line text-success me-1"></i> Integridad y claves foráneas protegidas durante la restauración
                             </small>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -182,7 +182,7 @@
             <div class="col-12">
                 <div class="card shadow-sm border-0">
                     <div class="card-header d-flex align-items-center justify-content-between border-bottom">
-                        <div>
+                        <div class="mb-3">
                             <h5 class="card-title mb-0 fw-bold">Copias de Seguridad Guardadas en el Servidor</h5>
                             <small class="text-muted">Archivos almacenados localmente en la carpeta de respaldos del sistema</small>
                         </div>
@@ -193,8 +193,8 @@
 
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-striped align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table table-striped table-bordered align-middle mb-0">
+                                <thead>
                                     <tr>
                                         <th scope="col" class="ps-4">Nombre del Archivo</th>
                                         <th scope="col">Fecha de Creación</th>
@@ -210,7 +210,7 @@
                                                     <i class="ri-file-code-fill text-primary fs-4 me-2"></i>
                                                     <div>
                                                         <strong class="text-dark d-block">{{ $item['filename'] }}</strong>
-                                                        <span class="badge bg-soft-info text-info small">MySQL Dump (.sql)</span>
+                                                        <span class="badge bg-soft-primary text-primary small">MySQL Dump (.sql)</span>
                                                     </div>
                                                 </div>
                                             </td>
@@ -221,18 +221,18 @@
                                             <td>
                                                 <span class="badge bg-soft-secondary text-dark">{{ $item['size'] }}</span>
                                             </td>
-                                            <td class="text-end pe-4">
+                                            <td class="text-end pe-4 text-center">
                                                 <div class="btn-group" role="group">
                                                     {{-- Botón Descargar --}}
                                                     <a href="{{ route('database-backup.download', $item['filename']) }}"
-                                                       class="btn btn-sm btn-outline-primary"
+                                                       class="btn btn-sm btn-primary"
                                                        title="Descargar respaldo a su computadora">
                                                         <i class="ri-download-2-line"></i> Descargar
                                                     </a>
 
                                                     {{-- Botón Restaurar --}}
                                                     <button type="button"
-                                                            class="btn btn-sm btn-outline-warning text-dark btn-restaurar-servidor"
+                                                            class="btn btn-sm btn-warning text-dark btn-restaurar-servidor"
                                                             data-filename="{{ $item['filename'] }}"
                                                             data-url="{{ route('database-backup.restore', $item['filename']) }}"
                                                             title="Restaurar base de datos a este punto">
@@ -241,11 +241,11 @@
 
                                                     {{-- Botón Eliminar --}}
                                                     <button type="button"
-                                                            class="btn btn-sm btn-outline-danger btn-eliminar-servidor"
+                                                            class="btn btn-sm btn-danger btn-eliminar-servidor"
                                                             data-filename="{{ $item['filename'] }}"
                                                             data-url="{{ route('database-backup.destroy', $item['filename']) }}"
                                                             title="Eliminar este archivo">
-                                                        <i class="ri-delete-bin-line"></i>
+                                                        <i class="ri-delete-bin-line"></i> Eliminar
                                                     </button>
                                                 </div>
                                             </td>
@@ -283,7 +283,7 @@
                     title: '¡Operación Exitosa!',
                     text: "{{ session('success') }}",
                     icon: 'success',
-                    confirmButtonColor: '#3a57e8',
+                    confirmButtonColor: '#0090E4',
                     confirmButtonText: 'Aceptar'
                 });
             @endif
@@ -311,7 +311,7 @@
                             title: 'Archivo requerido',
                             text: 'Por favor, seleccione un archivo de respaldo .sql para continuar.',
                             icon: 'warning',
-                            confirmButtonColor: '#3a57e8',
+                            confirmButtonColor: '#0090E4',
                             confirmButtonText: 'Entendido'
                         });
                         return;
@@ -323,7 +323,7 @@
                             title: 'Formato incorrecto',
                             text: 'El archivo debe tener extensión .sql',
                             icon: 'error',
-                            confirmButtonColor: '#3a57e8',
+                            confirmButtonColor: '#0090E4',
                             confirmButtonText: 'Entendido'
                         });
                         return;
@@ -334,8 +334,8 @@
                         html: `Se restaurará la base de datos con el archivo <strong>${fileName}</strong>.<br><br><span class="text-danger">¡ATENCIÓN! Toda la información actual será reemplazada por los datos del respaldo.</span>`,
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#e0a800',
-                        cancelButtonColor: '#6c757d',
+                        confirmButtonColor: '#0090E4',
+                        cancelButtonColor: '#001f4d',
                         confirmButtonText: 'Sí, Restaurar Base de Datos',
                         cancelButtonText: 'Cancelar',
                         reverseButtons: true
@@ -371,8 +371,8 @@
                         html: `Está a punto de restaurar la base de datos al estado del archivo: <br><strong>${filename}</strong>.<br><br><span class="text-danger">¡Los datos actuales serán reemplazados!</span>`,
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#e0a800',
-                        cancelButtonColor: '#6c757d',
+                        confirmButtonColor: '#0090E4',
+                        cancelButtonColor: '#001f4d',
                         confirmButtonText: 'Sí, Restaurar Ahora',
                         cancelButtonText: 'Cancelar',
                         reverseButtons: true
@@ -407,8 +407,8 @@
                         text: `¿Está seguro de que desea eliminar el archivo "${filename}"? Esta acción no se puede deshacer.`,
                         icon: 'question',
                         showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#6c757d',
+                        confirmButtonColor: '#e20000',
+                        cancelButtonColor: '#001f4d',
                         confirmButtonText: 'Sí, Eliminar',
                         cancelButtonText: 'Cancelar'
                     }).then((result) => {

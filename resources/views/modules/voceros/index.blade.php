@@ -48,7 +48,7 @@
                             <div class="tab-pane fade show active" id="voceros-activos-content" role="tabpanel"
                                 aria-labelledby="voceros-activos-tab">
                                 <div class="table-responsive">
-                                    <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <table id="basic-table" class="table table-striped table-bordered mb-0" role="grid">
                                         <thead>
                                             <tr>
                                                 <th>Cédula</th>

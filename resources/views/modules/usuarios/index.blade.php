@@ -52,7 +52,7 @@
                             <div class="tab-pane fade show active" id="usuarios-activos-content" role="tabpanel"
                                 aria-labelledby="usuarios-activos-tab">
                                 <div class="table-responsive">
-                                    <table id="basic-table" class="table table-striped mb-0" role="grid">
+                                    <table id="basic-table" class="table table-striped table-bordered table-striped-columns mb-0" role="grid">
                                         <thead>
                                             <tr>
                                                 <th>Nombre y Apellido</th>
