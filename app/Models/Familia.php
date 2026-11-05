@@ -20,7 +20,8 @@ class Familia extends Model implements Auditable
         'vivienda',
         'mision_vivienda',
         'bono_unico_familiar',
-        'clap'
+        'clap',
+        'direccion'
     ];
 
     public function personas()

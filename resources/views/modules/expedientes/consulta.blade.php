@@ -1145,6 +1145,7 @@
             $('#modal_fam_gmvv').text('...');
             $('#modal_fam_clap').text('...');
             $('#modal_fam_bono').text('...');
+            $('#modal_fam_direccion').text('...');
             $('#modal_fam_conteo').text('0');
             $('#modal_fam_integrantes_body').html('<tr><td colspan="7" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary" role="status"></div><span class="ms-2">Cargando integrantes...</span></td></tr>');
 
@@ -1162,6 +1163,7 @@
                     $('#modal_fam_gmvv').text(data.mision_vivienda === 'Sí' ? 'Sí (GMVV)' : (data.mision_vivienda ?? 'No'));
                     $('#modal_fam_clap').text(data.clap ?? 'No');
                     $('#modal_fam_bono').text(data.bono_unico_familiar ?? 'No');
+                    $('#modal_fam_direccion').text(data.direccion ?? 'No registrada');
                     $('#modal_fam_conteo').text(data.personas ? data.personas.length : 0);
 
                     var html = '';

@@ -196,15 +196,6 @@
                                 </select>
                             </div>
                         </div>
-
-                        <!-- Dirección -->
-                        <div class="col-12 col-md-12">
-                            <label class="text-primary fw-bold mb-1" for="edit-direccion">DIRECCIÓN ESPECÍFICA DE RESIDENCIA</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
-                                <input type="text" class="form-control bg-white" name="direccion" id="edit-direccion" placeholder="Escriba la dirección de domicilio">
-                            </div>
-                        </div>
                     </div>
 
                     <div class="modal-footer mt-4 pb-0 pe-0">

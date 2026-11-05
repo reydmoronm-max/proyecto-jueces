@@ -147,6 +147,7 @@ class DenunciasCensusValidationTest extends TestCase
     ): Persona {
         $familia = Familia::create([
             'numero_familia' => 'FAMILIA-'.$cedula,
+            'direccion' => $direccion ?: null,
         ]);
 
         return Persona::create([
