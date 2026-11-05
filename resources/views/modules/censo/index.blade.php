@@ -915,16 +915,16 @@
                 var nivel = $('#' + p + 'nivel_academico').val();
 
                 var errors = [];
-                var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s]/;
+                var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s\.]/;
 
-                if (!/^\d{7,8}$/.test(cedula)) {
-                    errors.push('Cédula: debe contener solo números (7 u 8 dígitos).');
+                if (!/^\d{7,10}$/.test(cedula)) {
+                    errors.push('Cédula: debe contener solo números (entre 7 y 10 dígitos).');
                 }
-                if (nombres.length < 3 || nombres.length > 50 || invalidNameRegex.test(nombres)) {
-                    errors.push('Nombres: debe tener entre 3 y 50 caracteres y contener solo letras.');
+                if (nombres.length < 2 || nombres.length > 50 || invalidNameRegex.test(nombres)) {
+                    errors.push('Nombres: debe tener entre 2 y 50 caracteres y contener solo letras.');
                 }
-                if (apellidos.length < 3 || apellidos.length > 50 || invalidNameRegex.test(apellidos)) {
-                    errors.push('Apellidos: debe tener entre 3 y 50 caracteres y contener solo letras.');
+                if (apellidos.length < 2 || apellidos.length > 50 || invalidNameRegex.test(apellidos)) {
+                    errors.push('Apellidos: debe tener entre 2 y 50 caracteres y contener solo letras.');
                 }
                 if (telefono && !/^\d{1,11}$/.test(telefono)) {
                     errors.push('Teléfono: debe contener solo números y tener máximo 11 dígitos.');

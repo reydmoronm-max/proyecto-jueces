@@ -171,7 +171,7 @@ class CensoController extends Controller
     public function buscarPersona(Request $request)
     {
         $request->validate([
-            'cedula' => ['required', 'digits_between:7,8'],
+            'cedula' => ['required', 'digits_between:7,10'],
         ]);
 
         $persona = Persona::with('familia')->where('cedula', $request->cedula)->first();
@@ -208,9 +208,9 @@ class CensoController extends Controller
 
         $request->validate([
             'familia_id'          => ['required', 'exists:familias,id'],
-            'cedula'              => ['required', 'digits_between:7,8'],
-            'nombres'             => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            'apellidos'           => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
+            'cedula'              => ['required', 'digits_between:7,10'],
+            'nombres'             => ['required', 'string', 'min:2', 'max:50', 'regex:/^[\p{L}\s\.]+$/u'],
+            'apellidos'           => ['required', 'string', 'min:2', 'max:50', 'regex:/^[\p{L}\s\.]+$/u'],
             'telefono'            => ['nullable', 'digits_between:1,11'],
             'fecha_nacimiento'    => ['required', 'string'],
             'centro_votacion'     => ['nullable', 'string', 'max:150'],
@@ -322,9 +322,9 @@ class CensoController extends Controller
         $this->normalizarNivelAcademicoMenorEdad($request);
 
         $request->validate([
-            'cedula'              => ['required', 'digits_between:7,8'],
-            'nombres'             => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            'apellidos'           => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
+            'cedula'              => ['required', 'digits_between:7,10'],
+            'nombres'             => ['required', 'string', 'min:2', 'max:50', 'regex:/^[\p{L}\s\.]+$/u'],
+            'apellidos'           => ['required', 'string', 'min:2', 'max:50', 'regex:/^[\p{L}\s\.]+$/u'],
             'telefono'            => ['nullable', 'digits_between:1,11'],
             'fecha_nacimiento'    => ['required', 'string'],
             'centro_votacion'     => ['nullable', 'string', 'max:150'],

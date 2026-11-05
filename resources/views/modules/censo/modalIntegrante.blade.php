@@ -18,7 +18,7 @@
                             <label class="text-primary fw-bold mb-1" for="cedula">CÉDULA <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
-                                <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ej. 15000100" title="Ingresar solo números sin puntos (Ej. 28472748)" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ej. 15000100" title="Ingresar solo números sin puntos (Ej. 28472748)" required oninput="if(this.value.length>10)this.value=this.value.slice(0,10)">
                             </div>
                         </div>
 
