@@ -37,6 +37,7 @@ class BDSeeder extends Seeder
                     'mision_vivienda'     => 'No',
                     'bono_unico_familiar' => 'No',
                     'clap'                => 'Sí',
+                    'direccion'           => 'calle 1, casa No 4, sector 1',
                 ]),
                 2 => Familia::updateOrCreate(['id' => 2], [
                     'numero_familia'      => 'Familia 2',
@@ -44,6 +45,7 @@ class BDSeeder extends Seeder
                     'mision_vivienda'     => 'No',
                     'bono_unico_familiar' => 'No',
                     'clap'                => 'Sí',
+                    'direccion'           => 'calle 1, casa No 12, sector 2',
                 ]),
                 3 => Familia::updateOrCreate(['id' => 3], [
                     'numero_familia'      => 'Familia 3',
@@ -51,6 +53,7 @@ class BDSeeder extends Seeder
                     'mision_vivienda'     => 'No',
                     'bono_unico_familiar' => 'Sí',
                     'clap'                => 'Sí',
+                    'direccion'           => 'calle 3, casa No 8, sector 3',
                 ]),
                 4 => Familia::updateOrCreate(['id' => 4], [
                     'numero_familia'      => 'Familia 4',
@@ -58,6 +61,7 @@ class BDSeeder extends Seeder
                     'mision_vivienda'     => 'No',
                     'bono_unico_familiar' => 'No',
                     'clap'                => 'Sí',
+                    'direccion'           => 'calle 3, casa No 15, sector 3',
                 ]),
                 5 => Familia::updateOrCreate(['id' => 5], [
                     'numero_familia'      => 'Familia 5',
@@ -65,6 +69,7 @@ class BDSeeder extends Seeder
                     'mision_vivienda'     => 'No',
                     'bono_unico_familiar' => 'No',
                     'clap'                => 'Sí',
+                    'direccion'           => 'calle 2, casa No 23, sector 1',
                 ]),
                 6 => Familia::updateOrCreate(['id' => 6], [
                     'numero_familia'      => 'Familia 6',
@@ -72,6 +77,7 @@ class BDSeeder extends Seeder
                     'mision_vivienda'     => 'No',
                     'bono_unico_familiar' => 'No',
                     'clap'                => 'Sí',
+                    'direccion'           => 'calle 4, casa No 18, sector 2',
                 ]),
             ];
 
@@ -94,7 +100,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Empleado',
                     'tipo_enfermedad'     => null,
                     'pensionado_jubilado' => 'No',
-                    'direccion'           => 'Avenida 2, entre Calles 1 y 2, Casa #4',
+                    'direccion'           => 'calle 1, casa No 4, sector 1',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
                     'parentesco'          => 'Jefe de familia',
@@ -114,7 +120,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Cuenta propia',
                     'tipo_enfermedad'     => 'Diabetes',
                     'pensionado_jubilado' => 'Sí',
-                    'direccion'           => 'Calle 1, entre Av. 1 y 2, Casa #12',
+                    'direccion'           => 'calle 1, casa No 12, sector 2',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
                     'parentesco'          => 'Jefe de familia',
@@ -134,7 +140,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Empleado',
                     'tipo_enfermedad'     => null,
                     'pensionado_jubilado' => 'No',
-                    'direccion'           => 'Calle 1, entre Av. 1 y 2, Casa #12',
+                    'direccion'           => 'calle 1, casa No 12, sector 2',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
                     'parentesco'          => 'Hijo/a',
@@ -154,7 +160,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Jubilado',
                     'tipo_enfermedad'     => 'Hipertensión',
                     'pensionado_jubilado' => 'Sí',
-                    'direccion'           => 'Sector Valles del Sol, Manzana B, Casa 8',
+                    'direccion'           => 'calle 3, casa No 8, sector 3',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
                     'parentesco'          => 'Jefe de familia',
@@ -174,7 +180,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Jubilado',
                     'tipo_enfermedad'     => 'Artritis',
                     'pensionado_jubilado' => 'Sí',
-                    'direccion'           => 'Sector Valles del Sol, Manzana B, Casa 8',
+                    'direccion'           => 'calle 3, casa No 8, sector 3',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
                     'parentesco'          => 'Hijo/a',
@@ -194,7 +200,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Jubilado',
                     'tipo_enfermedad'     => null,
                     'pensionado_jubilado' => 'Sí',
-                    'direccion'           => 'Urbanización Los Delirios, Calle Principal #23',
+                    'direccion'           => 'calle 2, casa No 23, sector 1',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
                     'parentesco'          => 'Jefe de familia',
@@ -214,7 +220,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Empleado',
                     'tipo_enfermedad'     => null,
                     'pensionado_jubilado' => 'No',
-                    'direccion'           => 'Sector Valles del Sol, Calle 3, Casa #15',
+                    'direccion'           => 'calle 3, casa No 15, sector 3',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
                     'parentesco'          => 'Jefe de familia',
@@ -234,7 +240,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Empleado',
                     'tipo_enfermedad'     => null,
                     'pensionado_jubilado' => 'No',
-                    'direccion'           => 'Sector Valles del Sol, Calle 3, Casa #15',
+                    'direccion'           => 'calle 3, casa No 15, sector 3',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
                     'parentesco'          => 'Hijo/a',
@@ -254,7 +260,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Cuenta propia',
                     'tipo_enfermedad'     => 'Hipertensión',
                     'pensionado_jubilado' => 'Sí',
-                    'direccion'           => 'Urbanización Los Delirios, Bloque 4, Apto 2-B',
+                    'direccion'           => 'calle 4, casa No 18, sector 2',
                     'estudia'             => 'No',
                     'genero'              => 'Masculino',
                     'parentesco'          => 'Jefe de familia',
@@ -274,7 +280,7 @@ class BDSeeder extends Seeder
                     'situacion_laboral'   => 'Empleado',
                     'tipo_enfermedad'     => null,
                     'pensionado_jubilado' => 'No',
-                    'direccion'           => 'Urbanización Los Delirios, Bloque 4, Apto 2-B',
+                    'direccion'           => 'calle 4, casa No 18, sector 2',
                     'estudia'             => 'No',
                     'genero'              => 'Femenino',
                     'parentesco'          => 'Hijo/a',
@@ -327,6 +333,11 @@ class BDSeeder extends Seeder
             $familias[4]->update(['consejo_comunal_id' => $cc2->id]);
             $familias[5]->update(['consejo_comunal_id' => $cc3->id]);
             $familias[6]->update(['consejo_comunal_id' => $cc3->id]);
+
+            // -------------------------------------------------------------
+            // 3.1 CENSO DE COMUNIDADES (Santa María El Pozón y Brisas del Sur)
+            // -------------------------------------------------------------
+            $this->call(CensoComunidadesSeeder::class);
 
             // -------------------------------------------------------------
             // 4. CATEGORÍAS DE VOCERÍAS
