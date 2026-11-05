@@ -18,7 +18,7 @@
                             <label class="text-primary fw-bold mb-1" for="edit-cedula">CÉDULA <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
-                                <input id="edit-cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ej. 15000100" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)"readonly>
+                                <input id="edit-cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ej. 15000100" required oninput="if(this.value.length>10)this.value=this.value.slice(0,10)" readonly>
                             </div>
                         </div>
 

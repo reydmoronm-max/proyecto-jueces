@@ -329,6 +329,11 @@ class BDSeeder extends Seeder
             $familias[6]->update(['consejo_comunal_id' => $cc3->id]);
 
             // -------------------------------------------------------------
+            // 3.1 CENSO DE COMUNIDADES (Santa María El Pozón y Brisas del Sur)
+            // -------------------------------------------------------------
+            $this->call(CensoComunidadesSeeder::class);
+
+            // -------------------------------------------------------------
             // 4. CATEGORÍAS DE VOCERÍAS
             // -------------------------------------------------------------
             $categoriasData = [
