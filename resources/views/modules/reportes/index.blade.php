@@ -584,9 +584,35 @@
                                                     <td>{{ $p->nombres }} {{ $p->apellidos }}</td>
                                                     <td>{{ $p->edad ?? 'S/F' }} años</td>
                                                     <td>
-                                                        <span class="badge bg-soft-danger text-danger fw-bold fs-7">
-                                                            <i class="ri-heart-pulse-fill me-1"></i>{{ $p->tipo_enfermedad }}
-                                                        </span>
+                                                        @php
+                                                            $enfermedadesSalud = collect(explode(',', (string)$p->tipo_enfermedad))
+                                                                ->map(fn($e) => trim($e))
+                                                                ->filter(fn($e) => $e !== '' && !in_array(strtolower($e), ['ninguna', 'no aplica', 'sano', 'ninguno']));
+                                                            $primeraEnfSalud = $enfermedadesSalud->first();
+                                                        @endphp
+                                                        @if ($enfermedadesSalud->isNotEmpty())
+                                                            <span class="badge bg-soft-danger text-danger fw-bold fs-7">
+                                                                <i class="ri-heart-pulse-fill me-1"></i>{{ $primeraEnfSalud }}
+                                                            </span>
+                                                            @if ($enfermedadesSalud->count() > 1)
+                                                                <div class="dropdown d-inline-block ms-1">
+                                                                    <button class="btn btn-xs btn-outline-primary dropdown-toggle py-0 px-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.75rem; background-color: rgba(58, 87, 232, 0.1); border-radius: 4px;">
+                                                                        +{{ $enfermedadesSalud->count() - 1 }} más
+                                                                    </button>
+                                                                    <ul class="dropdown-menu shadow-sm border-0 py-1" style="min-width: 220px; font-size: 0.85rem;">
+                                                                        <li class="dropdown-header text-muted py-1 px-3" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Otras Patologías</li>
+                                                                        @foreach ($enfermedadesSalud->skip(1) as $otraEnf)
+                                                                            <li class="px-3 py-1 d-flex align-items-center">
+                                                                                <i class="ri-heart-pulse-fill me-2 text-danger"></i>
+                                                                                <span class="text-dark fw-semibold">{{ $otraEnf }}</span>
+                                                                            </li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </div>
+                                                            @endif
+                                                        @else
+                                                            <span class="text-muted small fst-italic">Ninguna</span>
+                                                        @endif
                                                     </td>
                                                     <td>{{ $p->telefono ?? 'Sin teléfono' }}</td>
                                                     <td>
@@ -640,8 +666,30 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        @if ($p->tipo_enfermedad && !in_array(strtolower($p->tipo_enfermedad), ['ninguna', 'no aplica', 'sano']))
-                                                            <span class="text-danger small fw-bold">{{ $p->tipo_enfermedad }}</span>
+                                                        @php
+                                                            $enfermedadesAbueloRep = collect(explode(',', (string)$p->tipo_enfermedad))
+                                                                ->map(fn($e) => trim($e))
+                                                                ->filter(fn($e) => $e !== '' && !in_array(strtolower($e), ['ninguna', 'no aplica', 'sano', 'ninguno']));
+                                                            $primeraEnfAbueloRep = $enfermedadesAbueloRep->first();
+                                                        @endphp
+                                                        @if ($enfermedadesAbueloRep->isNotEmpty())
+                                                            <span class="text-danger small fw-bold">{{ $primeraEnfAbueloRep }}</span>
+                                                            @if ($enfermedadesAbueloRep->count() > 1)
+                                                                <div class="dropdown d-inline-block ms-1">
+                                                                    <button class="btn btn-xs btn-outline-primary dropdown-toggle py-0 px-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.75rem; background-color: rgba(58, 87, 232, 0.1); border-radius: 4px;">
+                                                                        +{{ $enfermedadesAbueloRep->count() - 1 }} más
+                                                                    </button>
+                                                                    <ul class="dropdown-menu shadow-sm border-0 py-1" style="min-width: 220px; font-size: 0.85rem;">
+                                                                        <li class="dropdown-header text-muted py-1 px-3" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Otras Patologías</li>
+                                                                        @foreach ($enfermedadesAbueloRep->skip(1) as $otraEnf)
+                                                                            <li class="px-3 py-1 d-flex align-items-center">
+                                                                                <i class="ri-heart-pulse-fill me-2 text-danger"></i>
+                                                                                <span class="text-dark fw-semibold">{{ $otraEnf }}</span>
+                                                                            </li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </div>
+                                                            @endif
                                                         @else
                                                             <span class="text-success small">Sin patologías</span>
                                                         @endif
