@@ -80,6 +80,18 @@ class VocerosController extends Controller
                 ]);
             }
 
+            // Validar que la persona sea mayor de 18 años
+            if (!$persona->fecha_nacimiento) {
+                DB::rollBack();
+                return back()->withErrors(['edad' => 'La persona no tiene fecha de nacimiento registrada en el censo. Debe registrarla primero.'])->withInput();
+            }
+
+            $edad = \Carbon\Carbon::parse($persona->fecha_nacimiento)->age;
+            if ($edad < 18) {
+                DB::rollBack();
+                return back()->withErrors(['edad' => 'El vocero debe ser mayor de 18 años. La persona tiene ' . $edad . ' años.'])->withInput();
+            }
+
             // Check if already registered as a vocero
             $alreadyVocero = Vocero::where('persona_id', $persona->id)->exists();
             if ($alreadyVocero) {
@@ -164,6 +176,18 @@ class VocerosController extends Controller
                 ]);
             }
 
+            // Validar que la persona sea mayor de 18 años
+            if (!$persona->fecha_nacimiento) {
+                DB::rollBack();
+                return back()->withErrors(['edad' => 'La persona no tiene fecha de nacimiento registrada en el censo. Debe registrarla primero.'])->withInput();
+            }
+
+            $edad = \Carbon\Carbon::parse($persona->fecha_nacimiento)->age;
+            if ($edad < 18) {
+                DB::rollBack();
+                return back()->withErrors(['edad' => 'El vocero debe ser mayor de 18 años. La persona tiene ' . $edad . ' años.'])->withInput();
+            }
+
             // Check if this new persona is already a vocero on another record
             $alreadyVocero = Vocero::where('persona_id', $persona->id)
                 ->where('id', '!=', $id)
@@ -227,10 +251,11 @@ class VocerosController extends Controller
         }
 
         return response()->json([
-            'cedula_tipo' => $persona->cedula_tipo,
-            'cedula'      => $persona->cedula,
-            'nombres'     => $persona->nombres,
-            'apellidos'   => $persona->apellidos,
+            'cedula_tipo'      => $persona->cedula_tipo,
+            'cedula'           => $persona->cedula,
+            'nombres'          => $persona->nombres,
+            'apellidos'        => $persona->apellidos,
+            'fecha_nacimiento' => $persona->fecha_nacimiento,
         ]);
     }
 }

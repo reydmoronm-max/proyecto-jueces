@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold"><i class="ri-user-add-line me-1 text-primary"></i> AÑADIR INTEGRANTE</h5>
+                <h5 class="modal-title fw-bold"><i class="ri-user-add-line me-1 text-primary"></i> AÑADIR INTEGRANTE <span id="lbl_integrante_familia_nombre" class="text-muted fw-normal fs-6 ms-1"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-3">

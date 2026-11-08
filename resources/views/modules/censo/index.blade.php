@@ -159,8 +159,8 @@
                                             </td>
                                             <td class="text-end">
                                                 <div>
-                                                    <button type="button" class="btn btn-sm btn-success me-1" title="Añadir Integrante"
-                                                        onclick="abrirAñadirIntegrante({{ $item->id }})">
+                                                    <button type="button" class="btn btn-sm btn-primary me-1" title="Añadir Integrante"
+                                                        onclick="abrirAñadirIntegrante({{ $item->id }}, '{{ addslashes($item->numero_familia) }}')">
                                                         <i class="ri-user-add-fill"></i>
                                                     </button>
                                                     <button type="button" class="btn btn-sm btn-light me-1" title="Ver Integrantes"
@@ -617,11 +617,12 @@
         });
 
         // Open Add Member Modal
-        function abrirAñadirIntegrante(familiaId) {
+        function abrirAñadirIntegrante(familiaId, numeroFamilia) {
             $('#formIntegrante')[0].reset();
             $('#nombres').prop('readonly', false);
             $('#apellidos').prop('readonly', false);
             $('#integrante_familia_id').val(familiaId);
+            $('#lbl_integrante_familia_nombre').text(numeroFamilia ? '- ' + numeroFamilia : '');
             
             var fp = document.getElementById('fecha_nacimiento')._flatpickr;
             if (fp) fp.clear();
@@ -746,6 +747,8 @@
                 type: 'GET',
                 success: function(data) {
                     $('#formEditarIntegrante').attr('action', '/censo/integrante/' + data.id);
+                    var nombreFamilia = data.familia ? data.familia.numero_familia : '';
+                    $('#lbl_edit_integrante_familia_nombre').text(nombreFamilia ? '- ' + nombreFamilia : '');
                     $('#edit-cedula_tipo').val(data.cedula_tipo ?? 'V');
                     $('#edit-cedula').val(data.cedula ?? '');
                     $('#edit-nombres').val(data.nombres ?? '');
