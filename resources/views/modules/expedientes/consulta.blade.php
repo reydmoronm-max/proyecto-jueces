@@ -22,14 +22,15 @@
                         <div class="card-body">
                             <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation consulta-loading-form consulta-individual-form" novalidate>
                                 <div class="row">
-                                    <div hidden class="col-3 mb-3">
+                                    <div class="col-3 mb-3">
                                         <label for="cedula_tipo" class="form-label fw-bold">Tipo</label>
                                         <select class="form-select border-primary" id="cedula_tipo" name="cedula_tipo" required>
                                             <option value="V" {{ request('cedula_tipo', $cedulaTipo) == 'V' ? 'selected' : '' }}>V</option>
                                             <option value="E" {{ request('cedula_tipo', $cedulaTipo) == 'E' ? 'selected' : '' }}>E</option>
+                                            <option value="J" {{ request('cedula_tipo', $cedulaTipo) == 'J' ? 'selected' : '' }}>J</option>
                                         </select>
                                     </div>
-                                    <div class="col-12 mb-3">
+                                    <div class="col-9 mb-3">
                                         <label for="cedula" class="form-label fw-bold">Cédula de Identidad</label>
                                         <div class="input-group consulta-field">
                                             <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
@@ -387,14 +388,15 @@
                                     <form action="{{ route('consulta.index') }}" method="GET" class="needs-validation consulta-loading-form consulta-individual-form" novalidate id="formConsultaIndividual">
                                         <input type="hidden" name="tab" value="individual">
                                         <div class="row">
-                                            <div hidden class="col-3 mb-3">
+                                            <div class="col-3 mb-3">
                                                 <label for="comunal_cedula_tipo" class="form-label fw-bold">Tipo</label>
                                                 <select class="form-select border-primary" id="comunal_cedula_tipo" name="cedula_tipo" required>
                                                     <option value="V" {{ request('cedula_tipo', $cedulaTipo) == 'V' ? 'selected' : '' }}>V</option>
                                                     <option value="E" {{ request('cedula_tipo', $cedulaTipo) == 'E' ? 'selected' : '' }}>E</option>
+                                                    <option value="J" {{ request('cedula_tipo', $cedulaTipo) == 'J' ? 'selected' : '' }}>J</option>
                                                 </select>
                                             </div>
-                                            <div class="col-12 mb-3">
+                                            <div class="col-9 mb-3">
                                                 <label for="comunal_cedula" class="form-label fw-bold">Cédula de Identidad</label>
                                                 <div class="input-group consulta-field">
                                                     <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>

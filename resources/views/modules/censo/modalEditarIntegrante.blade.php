@@ -17,7 +17,11 @@
                         <div class="col-12 col-md-4">
                             <label class="text-primary fw-bold mb-1" for="edit-cedula">CÉDULA <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
+                                <select id="edit-cedula_tipo" name="cedula_tipo" class="form-select flex-grow-0" style="width: 75px; pointer-events: none; background-color: #e9ecef;" tabindex="-1" required>
+                                    <option value="V">V</option>
+                                    <option value="E">E</option>
+                                    <option value="J">J</option>
+                                </select>
                                 <input id="edit-cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ej. 15000100" required oninput="if(this.value.length>10)this.value=this.value.slice(0,10)" readonly>
                             </div>
                         </div>

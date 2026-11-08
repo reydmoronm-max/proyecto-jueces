@@ -29,10 +29,15 @@ class ActasCartasController extends Controller
     public function buscarPersona(Request $request)
     {
         $request->validate([
-            'cedula' => ['required', 'digits_between:7,8'],
+            'cedula'      => ['required', 'digits_between:7,10'],
+            'cedula_tipo' => ['nullable', 'string', 'in:V,E,J'],
         ]);
 
-        $persona = Persona::with(['familia.consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
+        $cedulaTipo = $request->input('cedula_tipo', 'V');
+        $persona = Persona::with(['familia.consejoComunal.jefe'])
+            ->where('cedula', $request->cedula)
+            ->when($cedulaTipo, fn ($q) => $q->where('cedula_tipo', $cedulaTipo))
+            ->first();
 
         if (!$persona) {
             return response()->json(['message' => 'El ciudadano no está registrado en el Censo.'], 404);
@@ -66,13 +71,18 @@ class ActasCartasController extends Controller
     public function exportResidenciaPdf(Request $request)
     {
         $request->validate([
-            'cedula' => ['required', 'digits_between:7,8'],
+            'cedula'           => ['required', 'digits_between:7,10'],
+            'cedula_tipo'      => ['nullable', 'string', 'in:V,E,J'],
             'anios_residencia' => ['required', 'integer', 'min:0', 'max:120'],
         ], [
             'anios_residencia.max' => 'Los años de domicilio no pueden superar 3 dígitos ni exceder los 120 años.',
         ]);
 
-        $persona = Persona::with(['familia.consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
+        $cedulaTipo = $request->input('cedula_tipo', 'V');
+        $persona = Persona::with(['familia.consejoComunal.jefe'])
+            ->where('cedula', $request->cedula)
+            ->when($cedulaTipo, fn ($q) => $q->where('cedula_tipo', $cedulaTipo))
+            ->first();
 
         if (!$persona || !$persona->consejoComunal || !$persona->consejoComunal->jefe || empty($persona->direccion)) {
             return back()->withErrors(['error' => 'Los datos del ciudadano están incompletos en el censo.']);
@@ -111,10 +121,15 @@ class ActasCartasController extends Controller
     public function exportBuenaConductaPdf(Request $request)
     {
         $request->validate([
-            'cedula' => ['required', 'digits_between:7,8'],
+            'cedula'      => ['required', 'digits_between:7,10'],
+            'cedula_tipo' => ['nullable', 'string', 'in:V,E,J'],
         ]);
 
-        $persona = Persona::with(['familia.consejoComunal.jefe'])->where('cedula', $request->cedula)->first();
+        $cedulaTipo = $request->input('cedula_tipo', 'V');
+        $persona = Persona::with(['familia.consejoComunal.jefe'])
+            ->where('cedula', $request->cedula)
+            ->when($cedulaTipo, fn ($q) => $q->where('cedula_tipo', $cedulaTipo))
+            ->first();
 
         if (!$persona || !$persona->consejoComunal || !$persona->consejoComunal->jefe || empty($persona->direccion)) {
             return back()->withErrors(['error' => 'Los datos del ciudadano están incompletos en el censo.']);

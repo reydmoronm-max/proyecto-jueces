@@ -52,7 +52,7 @@
                                                 @foreach ($denunciantesList->skip(1) as $otro)
                                                     <li class="px-3 py-1 d-flex justify-content-between align-items-center">
                                                         <span><i class="ri-user-line me-1 text-primary"></i> {{ $otro->nombres }} {{ $otro->apellidos }}</span>
-                                                        <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">V-{{ $otro->cedula }}</span>
+                                                        <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">{{ $otro->cedula_tipo ?? 'V' }}-{{ $otro->cedula }}</span>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -60,7 +60,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <span class="badge bg-primary me-1">V</span> {{ $denunciante ? $denunciante->cedula : '-' }}
+                                    <span class="badge bg-primary me-1">{{ $denunciante->cedula_tipo ?? 'V' }}</span> {{ $denunciante ? $denunciante->cedula : '-' }}
                                 </td>
                                 <td>{{ $citacion->fecha_citacion->format('d/m/Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($citacion->hora_citacion)->format('h:i A') }}</td>

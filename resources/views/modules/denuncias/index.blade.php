@@ -137,7 +137,7 @@
                                                                     @foreach ($denunciantesList->skip(1) as $otro)
                                                                         <li class="px-3 py-1 d-flex justify-content-between align-items-center">
                                                                             <span><i class="ri-user-line me-1 text-primary"></i> {{ $otro->nombres }} {{ $otro->apellidos }}</span>
-                                                                            <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">V-{{ $otro->cedula }}</span>
+                                                                            <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">{{ $otro->cedula_tipo ?? 'V' }}-{{ $otro->cedula }}</span>
                                                                         </li>
                                                                     @endforeach
                                                                 </ul>
@@ -145,7 +145,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <span class="badge bg-primary me-1">V</span>
+                                                        <span class="badge bg-primary me-1">{{ $primerDenunciante->cedula_tipo ?? 'V' }}</span>
                                                         {{ $primerDenunciante ? $primerDenunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
@@ -217,7 +217,7 @@
                                                                     @foreach ($denunciantesList->skip(1) as $otro)
                                                                         <li class="px-3 py-1 d-flex justify-content-between align-items-center">
                                                                             <span><i class="ri-user-line me-1 text-primary"></i> {{ $otro->nombres }} {{ $otro->apellidos }}</span>
-                                                                            <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">V-{{ $otro->cedula }}</span>
+                                                                            <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">{{ $otro->cedula_tipo ?? 'V' }}-{{ $otro->cedula }}</span>
                                                                         </li>
                                                                     @endforeach
                                                                 </ul>
@@ -225,7 +225,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <span class="badge bg-primary me-1">V</span>
+                                                        <span class="badge bg-primary me-1">{{ $primerDenunciante->cedula_tipo ?? 'V' }}</span>
                                                         {{ $primerDenunciante ? $primerDenunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>
@@ -298,7 +298,7 @@
                                                                     @foreach ($denunciantesList->skip(1) as $otro)
                                                                         <li class="px-3 py-1 d-flex justify-content-between align-items-center">
                                                                             <span><i class="ri-user-line me-1 text-primary"></i> {{ $otro->nombres }} {{ $otro->apellidos }}</span>
-                                                                            <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">V-{{ $otro->cedula }}</span>
+                                                                            <span class="badge bg-soft-secondary text-secondary ms-2" style="font-size: 0.75rem;">{{ $otro->cedula_tipo ?? 'V' }}-{{ $otro->cedula }}</span>
                                                                         </li>
                                                                     @endforeach
                                                                 </ul>
@@ -306,7 +306,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <span class="badge bg-primary me-1">V</span>
+                                                        <span class="badge bg-primary me-1">{{ $primerDenunciante->cedula_tipo ?? 'V' }}</span>
                                                         {{ $primerDenunciante ? $primerDenunciante->cedula : '-' }}
                                                     </td>
                                                     <td>{{ $expediente->created_at->format('d/m/Y h:i A') }}</td>

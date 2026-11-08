@@ -23,7 +23,7 @@
         <td>
             @if ($item->jefe)
                 <h6>
-                    <span class="badge bg-primary me-1">{{ $item->jefe->cedula_tipo }}</span>
+                    <span class="badge bg-primary me-1">{{ $item->jefe->cedula_tipo ?? 'V' }}</span>
                     {{ $item->jefe->cedula }} -
                     {{ $item->jefe->nombres }} {{ $item->jefe->apellidos }}
                 </h6>

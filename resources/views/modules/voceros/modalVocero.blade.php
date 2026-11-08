@@ -18,7 +18,11 @@
                                 <div class="col-12">
                                     <label class="text-primary fw-bold mb-1" for="cedula">CÉDULA</label>
                                     <div class="input-group">
-                                        <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
+                                        <select id="cedula_tipo" name="cedula_tipo" class="form-select flex-grow-0" style="width: 75px;" required>
+                                            <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
+                                            <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
+                                            <option value="J" {{ old('cedula_tipo') == 'J' ? 'selected' : '' }}>J</option>
+                                        </select>
                                         <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ingrese una cédula para buscar" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                                     </div>
                                 </div>

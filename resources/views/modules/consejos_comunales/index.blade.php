@@ -124,6 +124,8 @@
         // Función de búsqueda de Jefe de Comando por Cédula (Común)
         function buscarJefeComando(cedulaInputId, hiddenIdId, containerId, labelId) {
             var cedula = $('#' + cedulaInputId).val().trim();
+            var tipoInputId = (cedulaInputId === 'edit-buscar_jefe_cedula') ? 'edit-buscar_jefe_cedula_tipo' : 'buscar_jefe_cedula_tipo';
+            var cedulaTipo = $('#' + tipoInputId).val() || 'V';
             if (cedula === '') {
                 Swal.fire({
                     title: 'Campo vacío',
@@ -133,21 +135,21 @@
                 return;
             }
 
-            if (!/^[0-9]{7,8}$/.test(cedula)) {
+            if (!/^[0-9]{7,10}$/.test(cedula)) {
                 Swal.fire({
                     title: 'Formato inválido',
-                    text: 'La cédula debe contener únicamente números y tener entre 7 y 8 dígitos.',
+                    text: 'La cédula debe contener únicamente números y tener entre 7 y 10 dígitos.',
                     icon: 'warning'
                 });
                 return;
             }
 
-            var url = '/consejos-comunales/buscar-persona/' + cedula;
+            var url = '/consejos-comunales/buscar-persona/' + cedula + '?cedula_tipo=' + encodeURIComponent(cedulaTipo);
             if (cedulaInputId === 'edit-buscar_jefe_cedula') {
                 var action = $('#formEditarConsejo').attr('action');
                 var match = action ? action.match(/\/consejos-comunales\/(\d+)$/) : null;
                 if (match) {
-                    url += '?current_consejo=' + match[1];
+                    url += '&current_consejo=' + match[1];
                 }
             }
 
@@ -228,6 +230,7 @@
                     $('#edit-direccion').val(response.direccion);
                     
                     if (response.persona) {
+                        $('#edit-buscar_jefe_cedula_tipo').val(response.persona.cedula_tipo || 'V');
                         $('#edit-buscar_jefe_cedula').val(response.persona.cedula);
                         $('#edit-jefe_comando_id').val(response.persona.id);
                         var $label = $('#edit-jefe_nombre_completo');

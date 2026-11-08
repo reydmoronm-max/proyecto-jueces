@@ -22,10 +22,14 @@
                         <div class="form-group mb-3">
                             <label class="form-label font-weight-bold" for="buscar_cedula">Cédula de Identidad</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-light"><i class="ri-id-card-line text-muted"></i></span>
+                                <select id="buscar_cedula_tipo" name="cedula_tipo" class="form-select flex-grow-0" style="width: 75px;">
+                                    <option value="V">V</option>
+                                    <option value="E">E</option>
+                                    <option value="J">J</option>
+                                </select>
                                 <input type="number" id="buscar_cedula" class="form-control" placeholder="Ej. 12345678"
-                                    min="1000000" max="99999999"
-                                    oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
+                                    min="1000000" max="999999999"
+                                    oninput="if(this.value.length>10)this.value=this.value.slice(0,10)">
                                 <button class="btn btn-primary" type="button" id="btn_buscar"><i
                                         class="ri-search-line"></i> Buscar</button>
                             </div>
@@ -122,6 +126,7 @@
                                     id="form_residencia">
                                     @csrf
                                     <input type="hidden" name="cedula" class="hidden_cedula">
+                                    <input type="hidden" name="cedula_tipo" class="hidden_cedula_tipo" value="V">
 
                                     <div class="alert alert-warning mb-4 d-flex align-items-center">
                                         <i class="ri-alert-line fs-4 me-2"></i>
@@ -159,6 +164,7 @@
                                     id="form_buena_conducta">
                                     @csrf
                                     <input type="hidden" name="cedula" class="hidden_cedula">
+                                    <input type="hidden" name="cedula_tipo" class="hidden_cedula_tipo" value="V">
 
                                     <div class="alert alert-warning mb-4 d-flex align-items-center">
                                         <i class="ri-alert-line fs-4 me-2"></i>
@@ -212,6 +218,7 @@
 
             function realizarBusqueda() {
                 var cedula = $('#buscar_cedula').val().trim();
+                var cedulaTipo = $('#buscar_cedula_tipo').val() || 'V';
 
                 if (cedula === '') {
                     Swal.fire({
@@ -223,10 +230,10 @@
                     return;
                 }
 
-                if (!/^\d{7,8}$/.test(cedula)) {
+                if (!/^\d{7,10}$/.test(cedula)) {
                     Swal.fire({
                         title: 'Formato inválido',
-                        text: 'La cédula debe contener entre 7 y 8 dígitos numéricos.',
+                        text: 'La cédula debe contener entre 7 y 10 dígitos numéricos.',
                         icon: 'error',
                         confirmButtonText: 'Corregir'
                     });
@@ -245,7 +252,8 @@
                     url: '{{ route('actas.buscar-persona') }}',
                     method: 'GET',
                     data: {
-                        cedula: cedula
+                        cedula: cedula,
+                        cedula_tipo: cedulaTipo
                     },
                     success: function(response) {
                         $('#loader_busqueda').addClass('d-none');
@@ -263,6 +271,7 @@
 
                         // Fill hidden inputs
                         $('.hidden_cedula').val(persona.cedula);
+                        $('.hidden_cedula_tipo').val(persona.cedula_tipo || 'V');
 
                         // Show cards and hide placeholder
                         $('#card_datos_ciudadano').removeClass('d-none');

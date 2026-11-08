@@ -218,7 +218,7 @@
                 var telefono = $('#telefono').val().trim();
                 var direccion = $('#direccion').val().trim();
                 var cedula = $('#cedula').val().trim();
-                // var cedulaTipo = $('#cedula_tipo').val();
+                var cedulaTipo = $('#cedula_tipo').val();
                 var proposito = $('#proposito').val().trim();
 
                 var errors = [];
@@ -232,15 +232,15 @@
                     errors.push('Apellido: debe tener entre 3 y 50 caracteres y solo letras.');
                 }
 
-                // Cédula: solo dígitos, 7-8
-                //if (!/^\d{7,8}$/.test(cedula)) {
-                //    errors.push('Cédula: debe contener solo números (7 u 8 dígitos).');
-                //}
+                // Cédula: solo dígitos, 7-10
+                if (!/^\d{7,10}$/.test(cedula)) {
+                    errors.push('Cédula: debe contener solo números (entre 7 y 10 dígitos).');
+                }
 
                 // Cedula tipo
-                // if (!(cedulaTipo === 'V' || cedulaTipo === 'E')) {
-                //     errors.push('Tipo de cédula inválido.');
-                // }
+                if (!['V', 'E', 'J'].includes(cedulaTipo)) {
+                    errors.push('Tipo de cédula inválido.');
+                }
 
                 // Propósito: mínimo 5 caracteres
                 if (proposito.length < 5) {
@@ -277,7 +277,7 @@
                 var telefono = $('#edit-telefono').val().trim();
                 var direccion = $('#edit-direccion').val().trim();
                 var cedula = $('#edit-cedula').val().trim();
-                // var cedulaTipo = $('#edit-cedula_tipo').val();
+                var cedulaTipo = $('#edit-cedula_tipo').val();
                 var proposito = $('#edit-proposito').val().trim();
 
                 var errors = [];
@@ -289,12 +289,12 @@
                 if (apellido.length < 3 || apellido.length > 50 || invalidNameRegex.test(apellido)) {
                     errors.push('Apellido: debe tener entre 3 y 50 caracteres y solo letras.');
                 }
-                // if (!/^\d{7,8}$/.test(cedula)) {
-                //     errors.push('Cédula: debe contener solo números (7 u 8 dígitos).');
-                // }
-                // if (!(cedulaTipo === 'V' || cedulaTipo === 'E')) {
-                //     errors.push('Tipo de cédula inválido.');
-                // }
+                if (!/^\d{7,10}$/.test(cedula)) {
+                    errors.push('Cédula: debe contener solo números (entre 7 y 10 dígitos).');
+                }
+                if (!['V', 'E', 'J'].includes(cedulaTipo)) {
+                    errors.push('Tipo de cédula inválido.');
+                }
                 if (proposito.length < 5) {
                     errors.push('Propósito: mínimo 5 caracteres.');
                 }

@@ -34,8 +34,12 @@
                         <div class="col-12">
                             <label class="form-label text-primary fw-bold mb-1">JEFE DE COMANDO</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-light">Cédula</span>
-                                <input type="text" class="form-control bg-white" id="edit-buscar_jefe_cedula" placeholder="Ingrese la cédula de la persona y presione Buscar" minlength="7" maxlength="8" pattern="^[0-9]{7,8}$" title="Ingrese entre 7 y 8 dígitos numéricos" inputmode="numeric" autocomplete="off">
+                                <select id="edit-buscar_jefe_cedula_tipo" class="form-select flex-grow-0" style="width: 75px;">
+                                    <option value="V">V</option>
+                                    <option value="E">E</option>
+                                    <option value="J">J</option>
+                                </select>
+                                <input type="text" class="form-control bg-white" id="edit-buscar_jefe_cedula" placeholder="Ingrese la cédula de la persona y presione Buscar" minlength="7" maxlength="10" pattern="^[0-9]{7,10}$" title="Ingrese entre 7 y 10 dígitos numéricos" inputmode="numeric" autocomplete="off">
                                 <button class="btn btn-primary" type="button" id="edit-btn_buscar_jefe">
                                     <i class="ri-search-line"></i> Buscar
                                 </button>

@@ -463,7 +463,8 @@
         // AJAX search for Person globally by Cédula (Add Integrante)
         function buscarPersonaEnCenso() {
             var cedula = $('#cedula').val().trim();
-            if (!/^\d{7,8}$/.test(cedula)) {
+            var cedulaTipo = $('#cedula_tipo').val() || 'V';
+            if (!/^\d{7,10}$/.test(cedula)) {
                 return;
             }
 
@@ -471,7 +472,8 @@
                 url: '{{ route('censo.buscar-persona') }}',
                 method: 'GET',
                 data: {
-                    cedula: cedula
+                    cedula: cedula,
+                    cedula_tipo: cedulaTipo
                 },
                 success: function(data) {
                     if (data.familia_id) {
@@ -578,11 +580,15 @@
         $('#cedula').on('blur', function() {
             buscarPersonaEnCenso();
         });
+        $('#cedula_tipo').on('change', function() {
+            buscarPersonaEnCenso();
+        });
 
         // AJAX search for Person globally by Cédula (Edit Integrante)
         function buscarPersonaEnCensoEdit() {
             var cedula = $('#edit-cedula').val().trim();
-            if (!/^\d{7,8}$/.test(cedula)) {
+            var cedulaTipo = $('#edit-cedula_tipo').val() || 'V';
+            if (!/^\d{7,10}$/.test(cedula)) {
                 return;
             }
 
@@ -590,7 +596,8 @@
                 url: '{{ route('censo.buscar-persona') }}',
                 method: 'GET',
                 data: {
-                    cedula: cedula
+                    cedula: cedula,
+                    cedula_tipo: cedulaTipo
                 },
                 success: function(data) {
                     $('#edit-nombres').val(data.nombres).prop('readonly', true);
@@ -661,7 +668,7 @@
                     if (data.personas && data.personas.length > 0) {
                         data.personas.forEach(function(p) {
                             html += `<tr>
-                                <td>${p.cedula}</td>
+                                <td><span class="badge bg-primary me-1">${p.cedula_tipo || 'V'}</span>${p.cedula}</td>
                                 <td>${p.nombres} ${p.apellidos}</td>
                                 <td><span class="badge bg-secondary">${p.parentesco ?? 'No registrado'}</span></td>
                                 <td>${p.telefono || 'No registrado'}</td>
@@ -695,6 +702,7 @@
                 url: '/censo/integrante/' + id,
                 type: 'GET',
                 success: function(data) {
+                    $('#view-cedula_tipo').val(data.cedula_tipo ?? 'V');
                     $('#view-cedula').val(data.cedula ?? '');
                     $('#view-nombres').val(data.nombres ?? '');
                     $('#view-apellidos').val(data.apellidos ?? '');
@@ -738,6 +746,7 @@
                 type: 'GET',
                 success: function(data) {
                     $('#formEditarIntegrante').attr('action', '/censo/integrante/' + data.id);
+                    $('#edit-cedula_tipo').val(data.cedula_tipo ?? 'V');
                     $('#edit-cedula').val(data.cedula ?? '');
                     $('#edit-nombres').val(data.nombres ?? '');
                     $('#edit-apellidos').val(data.apellidos ?? '');

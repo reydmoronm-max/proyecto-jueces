@@ -12,7 +12,11 @@
                         <div class="col-12 col-md-6">
                             <label for="cedula" class="text-primary fw-bold mb-1">CÉDULA DE IDENTIDAD</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
+                                <select id="cedula_tipo" name="cedula_tipo" class="form-select flex-grow-0" style="width: 75px;" required>
+                                    <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
+                                    <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
+                                    <option value="J" {{ old('cedula_tipo') == 'J' ? 'selected' : '' }}>J</option>
+                                </select>
                                 <input id="cedula" type="text" name="cedula" class="form-control" placeholder="15000100" value="{{ old('cedula') }}" required maxlength="8" inputmode="numeric" pattern="^[0-9]{7,8}$" title="Solo números, hasta 8 dígitos" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)">
                             </div>
                         </div>    

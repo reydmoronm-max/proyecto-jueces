@@ -17,7 +17,11 @@
                         <div class="col-12 col-md-4">
                             <label class="text-primary fw-bold mb-1" for="cedula">CÉDULA <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
+                                <select id="cedula_tipo" name="cedula_tipo" class="form-select flex-grow-0" style="width: 75px;" required>
+                                    <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
+                                    <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
+                                    <option value="J" {{ old('cedula_tipo') == 'J' ? 'selected' : '' }}>J</option>
+                                </select>
                                 <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ej. 15000100" title="Ingresar solo números sin puntos (Ej. 28472748)" required oninput="if(this.value.length>10)this.value=this.value.slice(0,10)">
                             </div>
                         </div>

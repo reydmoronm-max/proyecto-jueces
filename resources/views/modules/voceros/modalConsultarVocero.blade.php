@@ -12,9 +12,9 @@
                     <div class="col-12">
                         <div class="row g-3">
                             <div class="col-12">
-                                <div class="form-floating">
+                                <div class="input-group">
+                                    <input id="view-cedula_tipo" type="text" class="form-control bg-white flex-grow-0 text-center fw-bold" style="width: 75px;" disabled>
                                     <input id="view-cedula" type="number" class="form-control bg-white" placeholder="Cédula" disabled>
-                                    <label for="view-cedula">Cédula</label>
                                 </div>
                             </div>
 

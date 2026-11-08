@@ -68,12 +68,10 @@ class DenunciasController extends Controller
     {
         $validated = $request->validate([
             'denunciantes' => 'required|array|min:1',
+            'denunciantes.*.cedula_tipo' => ['nullable', 'string', 'in:V,E,J'],
             'denunciantes.*.cedula' => [
                 'required',
-                'digits_between:7,8',
-                Rule::exists('personas', 'cedula')->where(
-                    fn ($query) => $query->where('cedula_tipo', 'V')->whereNotNull('familia_id')
-                ),
+                'digits_between:7,10',
             ],
             'caso' => 'required',
             'tipo_caso' => 'required',
@@ -81,14 +79,17 @@ class DenunciasController extends Controller
             'denunciado_a' => 'nullable|string|max:255',
         ]);
 
-        $personasPorCedula = Persona::where('cedula_tipo', 'V')
-            ->whereHas('familia')
-            ->whereIn('cedula', array_column($validated['denunciantes'], 'cedula'))
-            ->get()
-            ->keyBy('cedula');
+        $personasPorClave = collect();
 
         foreach ($validated['denunciantes'] as $indice => $denuncianteData) {
-            $persona = $personasPorCedula->get($denuncianteData['cedula']);
+            $cedulaTipo = $denuncianteData['cedula_tipo'] ?? 'V';
+            $cedulaNum = $denuncianteData['cedula'];
+            $clave = $cedulaTipo . '-' . $cedulaNum;
+
+            $persona = Persona::where('cedula', $cedulaNum)
+                ->where('cedula_tipo', $cedulaTipo)
+                ->whereHas('familia')
+                ->first();
 
             if (!$persona) {
                 throw ValidationException::withMessages([
@@ -103,6 +104,8 @@ class DenunciasController extends Controller
                     ]);
                 }
             }
+
+            $personasPorClave->put($clave, $persona);
         }
 
         DB::beginTransaction();
@@ -118,7 +121,9 @@ class DenunciasController extends Controller
 
             // 2. Guardar cada denunciante (persona + involucrado)
             foreach ($validated['denunciantes'] as $denuncianteData) {
-                $persona = $personasPorCedula->get($denuncianteData['cedula']);
+                $cedulaTipo = $denuncianteData['cedula_tipo'] ?? 'V';
+                $clave = $cedulaTipo . '-' . $denuncianteData['cedula'];
+                $persona = $personasPorClave->get($clave);
 
                 Involucrados::create([
                     'persona_id' => $persona->id,
@@ -181,12 +186,13 @@ class DenunciasController extends Controller
     public function buscarPersona(Request $request)
     {
         $request->validate([
-            // 'cedula_tipo' => ['required', 'in:V,E'],
-            'cedula' => ['required', 'digits_between:7,8'],
+            'cedula_tipo' => ['nullable', 'in:V,E,J'],
+            'cedula' => ['required', 'digits_between:7,10'],
         ]);
 
+        $cedulaTipo = $request->input('cedula_tipo', 'V');
         $persona = Persona::where('cedula', $request->cedula)
-            ->where('cedula_tipo', 'V')
+            ->where('cedula_tipo', $cedulaTipo)
             ->whereHas('familia')
             ->first();
 
@@ -195,7 +201,7 @@ class DenunciasController extends Controller
         }
 
         return response()->json([
-            'cedula_tipo' => 'V',
+            'cedula_tipo' => $persona->cedula_tipo,
             'cedula' => $persona->cedula,
             'nombres' => $persona->nombres,
             'apellidos' => $persona->apellidos,
@@ -272,9 +278,10 @@ class DenunciasController extends Controller
             // Solo crear/obtener persona si se enviaron datos de persona (cedula)
             $persona = null;
             if ($request->filled('cedula')) {
+                $cedulaTipo = $request->input('cedula_tipo', 'V');
                 $persona = Persona::firstOrCreate(
                     [
-                        'cedula_tipo' => 'V',
+                        'cedula_tipo' => $cedulaTipo,
                         'cedula' => $request->cedula,
                     ],
                     [

@@ -19,7 +19,7 @@
         </td>
         <td>
             <h6>
-                <span class="badge {{ optional($item->persona)->cedula_tipo == 'V' ? 'bg-primary' : 'bg-warning text-dark' }} me-1">{{ optional($item->persona)->cedula_tipo }}</span>
+                <span class="badge {{ optional($item->persona)->cedula_tipo == 'V' ? 'bg-primary' : (optional($item->persona)->cedula_tipo == 'E' ? 'bg-warning text-dark' : 'bg-info text-dark') }} me-1">{{ optional($item->persona)->cedula_tipo ?? 'V' }}</span>
                 {{ optional($item->persona)->cedula }}
             </h6>
         </td>

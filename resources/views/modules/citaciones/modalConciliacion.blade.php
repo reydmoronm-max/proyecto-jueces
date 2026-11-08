@@ -27,7 +27,11 @@
                                         <div class="col-12 col-md-6">
                                             <label class="text-primary fw-bold mb-1">CÉDULA DEL DENUNCIADO</label>
                                             <div class="input-group">
-                                                <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                                                <select name="denunciados[0][cedula_tipo]" class="form-select flex-grow-0 denunciado-cedula-tipo" style="width: 75px;">
+                                                    <option value="V">V</option>
+                                                    <option value="E">E</option>
+                                                    <option value="J">J</option>
+                                                </select>
                                                 <input type="number" name="denunciados[0][cedula]" class="form-control bg-white denunciado-cedula" placeholder="15000100" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                                             </div>
                                         </div>
@@ -136,7 +140,11 @@
                     '<div class="col-12 col-md-6">' +
                         '<label class="text-primary fw-bold mb-1">CÉDULA DEL REQUERIDO</label>' +
                         '<div class="input-group">' +
-                            '<span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>' +
+                            '<select name="denunciados[' + idx + '][cedula_tipo]" class="form-select flex-grow-0 denunciado-cedula-tipo" style="width: 75px;">' +
+                                '<option value="V">V</option>' +
+                                '<option value="E">E</option>' +
+                                '<option value="J">J</option>' +
+                            '</select>' +
                             '<input type="number" name="denunciados[' + idx + '][cedula]" class="form-control bg-white denunciado-cedula" placeholder="15000100" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">' +
                         '</div>' +
                     '</div>' +
@@ -173,6 +181,7 @@
             container.appendChild(block);
 
             var cedulaInput = block.querySelector('.denunciado-cedula');
+            var tipoSelect = block.querySelector('.denunciado-cedula-tipo');
             if (cedulaInput) {
                 cedulaInput.addEventListener('input', function() {
                     if (window.conciliacionDenuncianteCedula && this.value.trim() === window.conciliacionDenuncianteCedula) {
@@ -195,6 +204,11 @@
                     buscarDenunciadoPorCedulaEnBloque(block);
                 });
             }
+            if (tipoSelect) {
+                tipoSelect.addEventListener('change', function() {
+                    buscarDenunciadoPorCedulaEnBloque(block);
+                });
+            }
         });
 
         container.addEventListener('click', function(e) {
@@ -206,6 +220,7 @@
         });
 
         var primerCedula = container.querySelector('.denunciado-cedula');
+        var primerTipo = container.querySelector('.denunciado-cedula-tipo');
         if (primerCedula) {
             primerCedula.addEventListener('input', function() {
                 if (window.conciliacionDenuncianteCedula && this.value.trim() === window.conciliacionDenuncianteCedula) {
@@ -230,16 +245,24 @@
                 if (block) buscarDenunciadoPorCedulaEnBloque(block);
             });
         }
+        if (primerTipo) {
+            primerTipo.addEventListener('change', function() {
+                var block = this.closest('.denunciado-block');
+                if (block) buscarDenunciadoPorCedulaEnBloque(block);
+            });
+        }
     }
 
     function buscarDenunciadoPorCedulaEnBloque(block) {
         var cedulaInput = block.querySelector('input[name$="[cedula]"]');
+        var tipoSelect = block.querySelector('select[name$="[cedula_tipo]"]');
+        var cedulaTipo = tipoSelect ? tipoSelect.value : 'V';
         if (!cedulaInput) return;
         var cedula = cedulaInput.value.trim();
         if (!/^[0-9]{7,8}$/.test(cedula)) return;
 
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '{{ route("denuncias.buscar-persona") }}?cedula=' + encodeURIComponent(cedula), true);
+        xhr.open('GET', '{{ route("denuncias.buscar-persona") }}?cedula=' + encodeURIComponent(cedula) + '&cedula_tipo=' + encodeURIComponent(cedulaTipo), true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.onload = function() {
             if (xhr.status === 200) {

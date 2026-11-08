@@ -76,10 +76,11 @@ class ConsejoComunalController extends Controller
             'jefe_comando' => $consejo->jefe,
             'direccion'    => $consejo->direccion,
             'persona'      => $consejo->jefe ? [
-                'id'        => $consejo->jefe->id,
-                'cedula'    => $consejo->jefe->cedula,
-                'nombres'   => $consejo->jefe->nombres,
-                'apellidos' => $consejo->jefe->apellidos,
+                'id'          => $consejo->jefe->id,
+                'cedula_tipo' => $consejo->jefe->cedula_tipo ?? 'V',
+                'cedula'      => $consejo->jefe->cedula,
+                'nombres'     => $consejo->jefe->nombres,
+                'apellidos'   => $consejo->jefe->apellidos,
             ] : null
         ]);
     }
@@ -144,7 +145,10 @@ class ConsejoComunalController extends Controller
      */
     public function buscarPersonaPorCedula($cedula)
     {
-        $persona = Persona::where('cedula', $cedula)->first();
+        $cedulaTipo = request()->query('cedula_tipo');
+        $persona = Persona::where('cedula', $cedula)
+            ->when($cedulaTipo, fn ($q) => $q->where('cedula_tipo', $cedulaTipo))
+            ->first();
         $currentConsejoId = request()->query('current_consejo');
 
         if (!$persona) {

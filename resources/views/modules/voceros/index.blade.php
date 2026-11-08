@@ -134,7 +134,8 @@
         // AJAX search for Person globally by Cédula (Create Modal)
         function buscarPersonaEnVoceros() {
             var cedula = $('#cedula').val().trim();
-            if (!/^\d{7,8}$/.test(cedula)) {
+            var cedulaTipo = $('#cedula_tipo').val() || 'V';
+            if (!/^\d{7,10}$/.test(cedula)) {
                 return;
             }
 
@@ -142,7 +143,8 @@
                 url: '{{ route('voceros.buscar-persona') }}',
                 method: 'GET',
                 data: {
-                    cedula: cedula
+                    cedula: cedula,
+                    cedula_tipo: cedulaTipo
                 },
                 success: function(data) {
                     $('#nombres').val(data.nombres).prop('readonly', true);
@@ -160,11 +162,15 @@
         $('#cedula').on('blur', function() {
             buscarPersonaEnVoceros();
         });
+        $('#cedula_tipo').on('change', function() {
+            buscarPersonaEnVoceros();
+        });
 
         // AJAX search for Person globally by Cédula (Edit Modal)
         function buscarPersonaEnVocerosEdit() {
             var cedula = $('#edit-cedula').val().trim();
-            if (!/^\d{7,8}$/.test(cedula)) {
+            var cedulaTipo = $('#edit-cedula_tipo').val() || 'V';
+            if (!/^\d{7,10}$/.test(cedula)) {
                 return;
             }
 
@@ -172,7 +178,8 @@
                 url: '{{ route('voceros.buscar-persona') }}',
                 method: 'GET',
                 data: {
-                    cedula: cedula
+                    cedula: cedula,
+                    cedula_tipo: cedulaTipo
                 },
                 success: function(data) {
                     $('#edit-nombres').val(data.nombres).prop('readonly', true);
@@ -197,6 +204,7 @@
                 url: '/voceros/' + id,
                 type: 'GET',
                 success: function(data) {
+                    $('#view-cedula_tipo').val(data.persona?.cedula_tipo ?? 'V');
                     $('#view-cedula').val(data.persona?.cedula ?? '');
                     $('#view-nombres').val(data.persona?.nombres ?? '');
                     $('#view-apellidos').val(data.persona?.apellidos ?? '');
@@ -223,6 +231,7 @@
                 type: 'GET',
                 success: function(data) {
                     $('#formEditarVocero').attr('action', '/voceros/' + data.id);
+                    $('#edit-cedula_tipo').val(data.persona?.cedula_tipo ?? 'V');
                     $('#edit-cedula').val(data.persona?.cedula ?? '');
                     $('#edit-nombres').val(data.persona?.nombres ?? '');
                     $('#edit-apellidos').val(data.persona?.apellidos ?? '');
@@ -372,6 +381,7 @@
             // Create Vocero validation
             $('#formVocero').on('submit', function(e) {
                 var cedula = $('#cedula').val().trim();
+                var cedulaTipo = $('#cedula_tipo').val();
                 var nombres = $('#nombres').val().trim();
                 var apellidos = $('#apellidos').val().trim();
                 var categoria = $('#categoria_vocero').val();
@@ -380,8 +390,11 @@
                 var errors = [];
                 var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s]/;
 
-                if (!/^\d{7,8}$/.test(cedula)) {
-                    errors.push('Cédula: debe contener solo números (7 u 8 dígitos).');
+                if (!['V', 'E', 'J'].includes(cedulaTipo)) {
+                    errors.push('Tipo de cédula inválido.');
+                }
+                if (!/^\d{7,10}$/.test(cedula)) {
+                    errors.push('Cédula: debe contener solo números (entre 7 y 10 dígitos).');
                 }
                 if (nombres.length < 3 || nombres.length > 50 || invalidNameRegex.test(nombres)) {
                     errors.push('Nombres: debe tener entre 3 y 50 caracteres y contener solo letras.');
@@ -420,6 +433,7 @@
             // Edit Vocero validation
             $('#formEditarVocero').on('submit', function(e) {
                 var cedula = $('#edit-cedula').val().trim();
+                var cedulaTipo = $('#edit-cedula_tipo').val();
                 var nombres = $('#edit-nombres').val().trim();
                 var apellidos = $('#edit-apellidos').val().trim();
                 var categoria = $('#edit-categoria_vocero').val();
@@ -428,8 +442,11 @@
                 var errors = [];
                 var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s]/;
 
-                if (!/^\d{7,8}$/.test(cedula)) {
-                    errors.push('Cédula: debe contener solo números (7 u 8 dígitos).');
+                if (!['V', 'E', 'J'].includes(cedulaTipo)) {
+                    errors.push('Tipo de cédula inválido.');
+                }
+                if (!/^\d{7,10}$/.test(cedula)) {
+                    errors.push('Cédula: debe contener solo números (entre 7 y 10 dígitos).');
                 }
                 if (nombres.length < 3 || nombres.length > 50 || invalidNameRegex.test(nombres)) {
                     errors.push('Nombres: debe tener entre 3 y 50 caracteres y contener solo letras.');
