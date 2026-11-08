@@ -223,6 +223,7 @@ class CensoController extends Controller
         $this->normalizarCatalogosCenso($request);
         $this->normalizarPensionadoJubilado($request);
         $this->normalizarCamposMenorEdad($request);
+        $this->normalizarCarnetPatria($request);
         $this->normalizarNivelAcademicoMenorEdad($request);
 
         $request->validate([
@@ -346,6 +347,7 @@ class CensoController extends Controller
         $this->normalizarCatalogosCenso($request);
         $this->normalizarPensionadoJubilado($request);
         $this->normalizarCamposMenorEdad($request);
+        $this->normalizarCarnetPatria($request);
         $this->normalizarNivelAcademicoMenorEdad($request);
 
         $request->validate([
@@ -460,6 +462,21 @@ class CensoController extends Controller
                     'profesion' => 'No aplica',
                     'situacion_laboral' => 'No aplica',
                     'centro_votacion' => 'No aplica',
+                ]);
+            }
+        } catch (\Throwable $exception) {
+            // La validación y el procesamiento de la fecha informarán el formato inválido.
+        }
+    }
+
+    private function normalizarCarnetPatria(Request $request): void
+    {
+        try {
+            $fechaNacimiento = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento'));
+
+            if ($fechaNacimiento->age < 15) {
+                $request->merge([
+                    'carnet_patria' => null,
                 ]);
             }
         } catch (\Throwable $exception) {

@@ -422,9 +422,24 @@
             }
         }
 
+        function actualizarCarnetPatria(prefix) {
+            var carnet = $('#' + (prefix ? 'edit-carnet_patria' : 'carnet_patria'));
+            var aviso = $('#' + (prefix ? 'edit-aviso-carnet-patria' : 'aviso-carnet-patria'));
+            var edad = obtenerEdadIntegrante(prefix);
+            var tieneEdad = edad >= 0;
+            var esMayor15 = tieneEdad && edad >= 15;
+
+            carnet.prop('disabled', tieneEdad && !esMayor15);
+            aviso.toggleClass('d-none', !tieneEdad || esMayor15);
+            if (tieneEdad && !esMayor15) {
+                carnet.val('');
+            }
+        }
+
         function actualizarReglasPorEdad(prefix) {
             actualizarPensionadoJubilado(prefix);
             actualizarCamposMenorEdad(prefix);
+            actualizarCarnetPatria(prefix);
         }
 
         function actualizarMisionVivienda(prefix) {
@@ -926,6 +941,8 @@
                 var estudia = $('#' + p + 'estudia').val();
                 var pension = $('#' + p + 'pensionado_jubilado').val();
                 var nivel = $('#' + p + 'nivel_academico').val();
+                var carnetPatria = $('#' + p + 'carnet_patria').val().trim();
+                var edad = obtenerEdadIntegrante(prefix);
 
                 var errors = [];
                 var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s\.]/;
@@ -959,6 +976,9 @@
                 }
                 if (!nivel) {
                     errors.push('Nivel académico: campo obligatorio.');
+                }
+                if (carnetPatria && edad >= 0 && edad < 15) {
+                    errors.push('Carnet de la Patria: solo se permite a personas de 15 años en adelante.');
                 }
 
                 return errors;

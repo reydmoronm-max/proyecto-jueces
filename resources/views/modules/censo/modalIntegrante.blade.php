@@ -186,6 +186,7 @@
                                 <span class="input-group-text"><i class="fa-solid fa-id-card-clip"></i></span>
                                 <input type="text" class="form-control bg-white" name="carnet_patria" id="carnet_patria" placeholder="Ingrese carnet de la patria del ciudadano" oninput="if(this.value.length>10)this.value=this.value.slice(0,10)">
                             </div>
+                            <small id="aviso-carnet-patria" class="text-danger d-none">Solo permitido para mayores de 15 años</small>
                         </div>
 
                         <!-- Tipo Enfermedad -->
