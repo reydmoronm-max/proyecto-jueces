@@ -18,7 +18,6 @@
                                     <option value="E">E</option>
                                     <option value="J">J</option>
                                 </select>
-                                <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
                                 <input id="edit-cedula" type="text" name="cedula" class="form-control bg-light" placeholder="15000100" required maxlength="8" inputmode="numeric" pattern="^[0-9]{7,8}$" title="Solo números, hasta 8 dígitos" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)" readonly>
                             </div>
                         </div>
