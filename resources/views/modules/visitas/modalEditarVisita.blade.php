@@ -18,7 +18,8 @@
                                     <option value="E">E</option>
                                     <option value="J">J</option>
                                 </select>
-                                <input id="edit-cedula" type="text" name="cedula" class="form-control" placeholder="15000100" required maxlength="8" inputmode="numeric" pattern="^[0-9]{7,8}$" title="Solo números, hasta 8 dígitos" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)" readonly>
+                                <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
+                                <input id="edit-cedula" type="text" name="cedula" class="form-control bg-light" placeholder="15000100" required maxlength="8" inputmode="numeric" pattern="^[0-9]{7,8}$" title="Solo números, hasta 8 dígitos" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)" readonly>
                             </div>
                         </div>
 
@@ -26,7 +27,7 @@
                             <label for="edit-telefono" class="text-primary fw-bold mb-1">TELÉFONO</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
-                                <input id="edit-telefono" type="text" name="telefono" class="form-control" placeholder="0412XXXXXXX" maxlength="11" minlength="11" inputmode="tel"readonly>
+                                <input id="edit-telefono" type="text" name="telefono" class="form-control bg-light" placeholder="0412XXXXXXX" maxlength="11" minlength="11" inputmode="tel" readonly>
                             </div>
                         </div>
                         
@@ -34,7 +35,7 @@
                             <label for="edit-nombre" class="text-primary fw-bold mb-1">NOMBRE</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-address-book"></i></span>
-                                <input id="edit-nombre" type="text" name="nombre" class="form-control" placeholder="Nombre del ciudadano" required maxlength="50" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')"readonly>
+                                <input id="edit-nombre" type="text" name="nombre" class="form-control bg-light" placeholder="Nombre del ciudadano" required maxlength="50" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')" readonly>
                             </div>
                         </div>
 
@@ -42,7 +43,7 @@
                             <label for="edit-apellido" class="text-primary fw-bold mb-1">APELLIDO</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-regular fa-address-book"></i></span>
-                                <input id="edit-apellido" type="text" name="apellido" class="form-control" placeholder="Apellido del ciudadano" required maxlength="50" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')"readonly>
+                                <input id="edit-apellido" type="text" name="apellido" class="form-control bg-light" placeholder="Apellido del ciudadano" required maxlength="50" pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$" title="Solo letras y espacios" oninput="this.value = this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ ]+/g, '')" readonly>
                             </div>
                         </div>
 
@@ -50,7 +51,7 @@
                             <label for="edit-direccion" class="text-primary fw-bold mb-1">DIRECCIÓN</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-house-chimney"></i></span>
-                                <input id="edit-direccion" type="text" name="direccion" class="form-control" placeholder="Calle 1, Casa N° 23, Sector 4" readonly>
+                                <input id="edit-direccion" type="text" name="direccion" class="form-control bg-light" placeholder="Calle 1, Casa N° 23, Sector 4" readonly>
                             </div>
                         </div>
 
