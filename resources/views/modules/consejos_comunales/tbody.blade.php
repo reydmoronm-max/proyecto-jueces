@@ -43,14 +43,16 @@
                     title="Editar consejo">
                     <i class="ri-edit-fill"></i>
                 </button>
-                <form action="{{ route('consejos-comunales.destroy', $item->id) }}" method="POST"
-                    class="d-inline form-eliminar">
-                    @csrf
-                    @method('DELETE')
-                    <button type="button" class="btn btn-sm btn-danger btn-eliminar-consejo" title="Eliminar consejo">
-                        <i class="ri-delete-bin-fill"></i>
-                    </button>
-                </form>
+                @if (Auth::user()->rol === 'Jefe de comuna')
+                    <form action="{{ route('consejos-comunales.destroy', $item->id) }}" method="POST"
+                        class="d-inline form-eliminar">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-sm btn-danger btn-eliminar-consejo" title="Eliminar consejo">
+                            <i class="ri-delete-bin-fill"></i>
+                        </button>
+                    </form>
+                @endif
             </div>
         </td>
     </tr>

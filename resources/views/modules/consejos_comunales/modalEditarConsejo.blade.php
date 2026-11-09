@@ -32,7 +32,7 @@
 
                         <!-- Búsqueda de Jefe de Comando -->
                         <div class="col-12">
-                            <label class="form-label text-primary fw-bold mb-1">JEFE DE COMANDO</label>
+                            <label class="form-label text-primary fw-bold mb-1">JEFE DE COMANDO <span class="text-muted fw-normal">(Opcional)</span></label>
                             <div class="input-group">
                                 <select id="edit-buscar_jefe_cedula_tipo" class="form-select flex-grow-0" style="width: 75px;">
                                     <option value="V">V</option>
@@ -60,7 +60,7 @@
                             </div>
 
                             <!-- Input hidden para almacenar el ID de la persona -->
-                            <input type="hidden" name="jefe_comando" id="edit-jefe_comando_id" required>
+                            <input type="hidden" name="jefe_comando" id="edit-jefe_comando_id">
                         </div>
 
                         <!-- Dirección -->
