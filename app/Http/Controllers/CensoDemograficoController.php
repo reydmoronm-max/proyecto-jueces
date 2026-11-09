@@ -506,29 +506,34 @@ class CensoDemograficoController extends Controller
             ->count();
         $abuelos = (clone $query)->whereNotNull('fecha_nacimiento')->where('fecha_nacimiento', '<=', $fecha60)->count();
 
-        $conPatologias = (clone $query)->whereNotNull('tipo_enfermedad')
+        $patologiasBaseQuery = (clone $query)->whereNotNull('tipo_enfermedad')
             ->where('tipo_enfermedad', '!=', '')
-            ->whereNotIn(DB::raw('LOWER(tipo_enfermedad)'), ['ninguna', 'no aplica', 'sano', 'ninguno'])
-            ->count();
+            ->whereNotIn(DB::raw('LOWER(tipo_enfermedad)'), ['ninguna', 'no aplica', 'sano', 'ninguno']);
+
+        $conPatologias = (clone $patologiasBaseQuery)->count();
+        $patologiasHombres = (clone $patologiasBaseQuery)->where('genero', 'Masculino')->count();
+        $patologiasMujeres = (clone $patologiasBaseQuery)->where('genero', 'Femenino')->count();
 
         $recibeClap = (clone $query)->whereHas('familia', fn($q) => $q->where('clap', 'Sí'))->count();
         $viviendaPropia = (clone $query)->whereHas('familia', fn($q) => $q->where('vivienda', 'Propia'))->count();
         $estudiantes = (clone $query)->where('estudia', 'Sí')->count();
 
         return [
-            'id'             => $consejo->id,
-            'nombre'         => $consejo->nombre,
-            'familias'       => $familiasCount,
-            'poblacion'      => $totalPoblacion,
-            'hombres'        => $hombres,
-            'mujeres'        => $mujeres,
-            'menores'        => $menores,
-            'adultos'        => $adultos,
-            'abuelos'        => $abuelos,
-            'patologias'     => $conPatologias,
-            'clap'           => $recibeClap,
-            'viviendaPropia' => $viviendaPropia,
-            'estudiantes'    => $estudiantes,
+            'id'                 => $consejo->id,
+            'nombre'             => $consejo->nombre,
+            'familias'           => $familiasCount,
+            'poblacion'          => $totalPoblacion,
+            'hombres'            => $hombres,
+            'mujeres'            => $mujeres,
+            'menores'            => $menores,
+            'adultos'            => $adultos,
+            'abuelos'            => $abuelos,
+            'patologias'         => $conPatologias,
+            'patologias_hombres' => $patologiasHombres,
+            'patologias_mujeres' => $patologiasMujeres,
+            'clap'               => $recibeClap,
+            'viviendaPropia'     => $viviendaPropia,
+            'estudiantes'        => $estudiantes,
         ];
     }
 }

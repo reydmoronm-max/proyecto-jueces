@@ -920,12 +920,36 @@
                                         <tr>
                                             <td class="text-start ps-4">Personas con Patologías Crónicas</td>
                                             <td>
-                                                <span class="text-danger fw-bold">{{ $c1['patologias'] }}</span>
-                                                <small class="text-muted">({{ $c1['poblacion'] > 0 ? round(($c1['patologias'] / $c1['poblacion']) * 100, 1) : 0 }}%)</small>
+                                                <div class="d-flex flex-column align-items-center gap-1">
+                                                    <div>
+                                                        <span class="text-danger fw-bold fs-6">{{ $c1['patologias'] }}</span>
+                                                        <small class="text-muted">({{ $c1['poblacion'] > 0 ? round(($c1['patologias'] / $c1['poblacion']) * 100, 1) : 0 }}%)</small>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-center gap-1">
+                                                        <span class="badge bg-soft-primary text-primary" style="font-size: 0.72rem;">
+                                                            <i class="ri-men-line"></i> {{ $c1['patologias_hombres'] ?? 0 }} {{ ($c1['patologias_hombres'] ?? 0) == 1 ? 'Hombre' : 'Hombres' }}
+                                                        </span>
+                                                        <span class="badge bg-soft-danger text-danger" style="font-size: 0.72rem;">
+                                                            <i class="ri-women-line"></i> {{ $c1['patologias_mujeres'] ?? 0 }} {{ ($c1['patologias_mujeres'] ?? 0) == 1 ? 'Mujer' : 'Mujeres' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td>
-                                                <span class="text-danger fw-bold">{{ $c2['patologias'] }}</span>
-                                                <small class="text-muted">({{ $c2['poblacion'] > 0 ? round(($c2['patologias'] / $c2['poblacion']) * 100, 1) : 0 }}%)</small>
+                                                <div class="d-flex flex-column align-items-center gap-1">
+                                                    <div>
+                                                        <span class="text-danger fw-bold fs-6">{{ $c2['patologias'] }}</span>
+                                                        <small class="text-muted">({{ $c2['poblacion'] > 0 ? round(($c2['patologias'] / $c2['poblacion']) * 100, 1) : 0 }}%)</small>
+                                                    </div>
+                                                    <div class="d-flex align-items-center justify-content-center gap-1">
+                                                        <span class="badge bg-soft-primary text-primary" style="font-size: 0.72rem;">
+                                                            <i class="ri-men-line"></i> {{ $c2['patologias_hombres'] ?? 0 }} {{ ($c2['patologias_hombres'] ?? 0) == 1 ? 'Hombre' : 'Hombres' }}
+                                                        </span>
+                                                        <span class="badge bg-soft-danger text-danger" style="font-size: 0.72rem;">
+                                                            <i class="ri-women-line"></i> {{ $c2['patologias_mujeres'] ?? 0 }} {{ ($c2['patologias_mujeres'] ?? 0) == 1 ? 'Mujer' : 'Mujeres' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr>
