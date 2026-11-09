@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ConsejoComunal;
+use App\Models\Familia;
+use App\Models\JornadaAbuelo;
 use App\Models\Persona;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class ConsejoComunalController extends Controller
 {
@@ -44,7 +47,7 @@ class ConsejoComunalController extends Controller
         $request->validate([
             'nombre'       => ['required', 'string', 'max:255', 'unique:consejos_comunales,nombre'],
             'rif'          => ['required', 'string', 'size:10', 'regex:/^C\d{9}$/i', 'unique:consejos_comunales,rif'],
-            'jefe_comando' => ['required', 'exists:personas,id', 'unique:consejos_comunales,jefe_comando'],
+            'jefe_comando' => ['nullable', 'exists:personas,id', 'unique:consejos_comunales,jefe_comando'],
             'direccion'    => ['required', 'string', 'max:500'],
         ], [
             'rif.regex' => 'El RIF debe comenzar obligatoriamente con la letra "C" seguido de 9 dígitos (ej. C123456789).',
@@ -55,7 +58,7 @@ class ConsejoComunalController extends Controller
         ConsejoComunal::create([
             'nombre'       => $request->nombre,
             'rif'          => $request->rif,
-            'jefe_comando' => $request->jefe_comando,
+            'jefe_comando' => $request->filled('jefe_comando') ? $request->jefe_comando : null,
             'direccion'    => $request->direccion,
         ]);
 
@@ -76,10 +79,11 @@ class ConsejoComunalController extends Controller
             'jefe_comando' => $consejo->jefe,
             'direccion'    => $consejo->direccion,
             'persona'      => $consejo->jefe ? [
-                'id'        => $consejo->jefe->id,
-                'cedula'    => $consejo->jefe->cedula,
-                'nombres'   => $consejo->jefe->nombres,
-                'apellidos' => $consejo->jefe->apellidos,
+                'id'          => $consejo->jefe->id,
+                'cedula_tipo' => $consejo->jefe->cedula_tipo ?? 'V',
+                'cedula'      => $consejo->jefe->cedula,
+                'nombres'     => $consejo->jefe->nombres,
+                'apellidos'   => $consejo->jefe->apellidos,
             ] : null
         ]);
     }
@@ -100,7 +104,7 @@ class ConsejoComunalController extends Controller
         $request->validate([
             'nombre'       => ['required', 'string', 'max:255', Rule::unique('consejos_comunales', 'nombre')->ignore($consejo->id)],
             'rif'          => ['required', 'string', 'size:10', 'regex:/^C\d{9}$/i', Rule::unique('consejos_comunales', 'rif')->ignore($consejo->id)],
-            'jefe_comando' => ['required', 'exists:personas,id', Rule::unique('consejos_comunales', 'jefe_comando')->ignore($consejo->id)],
+            'jefe_comando' => ['nullable', 'exists:personas,id', Rule::unique('consejos_comunales', 'jefe_comando')->ignore($consejo->id)],
             'direccion'    => ['required', 'string', 'max:500'],
         ], [
             'rif.regex' => 'El RIF debe comenzar obligatoriamente con la letra "C" seguido de 9 dígitos (ej. C123456789).',
@@ -111,7 +115,7 @@ class ConsejoComunalController extends Controller
         $consejo->update([
             'nombre'       => $request->nombre,
             'rif'          => $request->rif,
-            'jefe_comando' => $request->jefe_comando,
+            'jefe_comando' => $request->filled('jefe_comando') ? $request->jefe_comando : null,
             'direccion'    => $request->direccion,
         ]);
 
@@ -121,12 +125,61 @@ class ConsejoComunalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         $consejo = ConsejoComunal::findOrFail($id);
-        $consejo->delete();
 
-        return to_route('consejos-comunales.index')->with('success', 'Consejo Comunal eliminado correctamente.');
+        $request->validate([
+            'reemplazo_consejo_id' => ['nullable', 'exists:consejos_comunales,id'],
+        ]);
+
+        $reemplazoId = $request->input('reemplazo_consejo_id');
+        if ($reemplazoId == $consejo->id) {
+            $reemplazoId = null;
+        }
+
+        DB::beginTransaction();
+        try {
+            // Reasignar o dejar en null familias asociadas
+            Familia::where('consejo_comunal_id', $consejo->id)
+                ->update(['consejo_comunal_id' => $reemplazoId]);
+
+            // Reasignar o dejar en null jornadas de abuelos asociadas
+            JornadaAbuelo::where('consejo_comunal_id', $consejo->id)
+                ->update(['consejo_comunal_id' => $reemplazoId]);
+
+            $consejo->delete();
+
+            DB::commit();
+
+            return to_route('consejos-comunales.index')->with('success', 'Consejo Comunal eliminado correctamente.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return to_route('consejos-comunales.index')->with('error', 'Ocurrió un error al eliminar el Consejo Comunal.');
+        }
+    }
+
+    /**
+     * Verificar cuántos registros están vinculados a este consejo y retornar otros disponibles para reemplazo.
+     */
+    public function verificarVinculos(string $id)
+    {
+        $consejo = ConsejoComunal::findOrFail($id);
+
+        $familiasCount = Familia::where('consejo_comunal_id', $consejo->id)->count();
+        $jornadasCount = JornadaAbuelo::where('consejo_comunal_id', $consejo->id)->count();
+        $totalVinculos = $familiasCount + $jornadasCount;
+
+        $otrosConsejos = ConsejoComunal::where('id', '!=', $consejo->id)
+            ->orderBy('nombre')
+            ->get(['id', 'nombre']);
+
+        return response()->json([
+            'total_vinculos' => $totalVinculos,
+            'familias_count' => $familiasCount,
+            'jornadas_count' => $jornadasCount,
+            'otros_consejos' => $otrosConsejos,
+        ]);
     }
 
     /**
@@ -144,7 +197,10 @@ class ConsejoComunalController extends Controller
      */
     public function buscarPersonaPorCedula($cedula)
     {
-        $persona = Persona::where('cedula', $cedula)->first();
+        $cedulaTipo = request()->query('cedula_tipo');
+        $persona = Persona::where('cedula', $cedula)
+            ->when($cedulaTipo, fn ($q) => $q->where('cedula_tipo', $cedulaTipo))
+            ->first();
         $currentConsejoId = request()->query('current_consejo');
 
         if (!$persona) {
@@ -170,3 +226,4 @@ class ConsejoComunalController extends Controller
         ]);
     }
 }
+

@@ -209,9 +209,10 @@ class CitacionesController extends Controller
             if ($request->has('denunciados') && is_array($request->denunciados)) {
                 foreach ($request->denunciados as $denunciadoData) {
                     if (!empty($denunciadoData['cedula'])) {
+                        $tipo = $denunciadoData['cedula_tipo'] ?? 'V';
                         $persona = Persona::firstOrCreate(
                             [
-                                'cedula_tipo' => 'V',
+                                'cedula_tipo' => $tipo,
                                 'cedula' => $denunciadoData['cedula'],
                             ],
                             [
@@ -230,9 +231,10 @@ class CitacionesController extends Controller
                     }
                 }
             } elseif ($request->filled('cedula')) {
+                $tipo = $request->input('cedula_tipo', 'V');
                 $persona = Persona::firstOrCreate(
                     [
-                        'cedula_tipo' => 'V',
+                        'cedula_tipo' => $tipo,
                         'cedula' => $request->cedula,
                     ],
                     [

@@ -132,9 +132,12 @@
         @endif
 
         // AJAX search for Person globally by Cédula (Create Modal)
+        var personaFechaNacimiento = null;
+
         function buscarPersonaEnVoceros() {
             var cedula = $('#cedula').val().trim();
-            if (!/^\d{7,8}$/.test(cedula)) {
+            var cedulaTipo = $('#cedula_tipo').val() || 'V';
+            if (!/^\d{7,10}$/.test(cedula)) {
                 return;
             }
 
@@ -142,16 +145,37 @@
                 url: '{{ route('voceros.buscar-persona') }}',
                 method: 'GET',
                 data: {
-                    cedula: cedula
+                    cedula: cedula,
+                    cedula_tipo: cedulaTipo
                 },
                 success: function(data) {
                     $('#nombres').val(data.nombres).prop('readonly', true);
                     $('#apellidos').val(data.apellidos).prop('readonly', true);
+                    personaFechaNacimiento = data.fecha_nacimiento;
+
+                    // Validar edad al encontrar la persona
+                    if (data.fecha_nacimiento) {
+                        var nacimiento = new Date(data.fecha_nacimiento);
+                        var hoy = new Date();
+                        var edad = hoy.getFullYear() - nacimiento.getFullYear();
+                        var m = hoy.getMonth() - nacimiento.getMonth();
+                        if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+                            edad--;
+                        }
+                        if (edad < 18) {
+                            Swal.fire({
+                                title: 'Edad no permitida',
+                                text: 'La persona tiene ' + edad + ' años. El vocero debe ser mayor de 18 años.',
+                                icon: 'warning'
+                            });
+                        }
+                    }
                 },
                 error: function(xhr) {
                     if (xhr.status === 404) {
                         $('#nombres').val('').prop('readonly', false);
                         $('#apellidos').val('').prop('readonly', false);
+                        personaFechaNacimiento = null;
                     }
                 }
             });
@@ -160,11 +184,17 @@
         $('#cedula').on('blur', function() {
             buscarPersonaEnVoceros();
         });
+        $('#cedula_tipo').on('change', function() {
+            buscarPersonaEnVoceros();
+        });
 
         // AJAX search for Person globally by Cédula (Edit Modal)
+        var editPersonaFechaNacimiento = null;
+
         function buscarPersonaEnVocerosEdit() {
             var cedula = $('#edit-cedula').val().trim();
-            if (!/^\d{7,8}$/.test(cedula)) {
+            var cedulaTipo = $('#edit-cedula_tipo').val() || 'V';
+            if (!/^\d{7,10}$/.test(cedula)) {
                 return;
             }
 
@@ -172,16 +202,37 @@
                 url: '{{ route('voceros.buscar-persona') }}',
                 method: 'GET',
                 data: {
-                    cedula: cedula
+                    cedula: cedula,
+                    cedula_tipo: cedulaTipo
                 },
                 success: function(data) {
                     $('#edit-nombres').val(data.nombres).prop('readonly', true);
                     $('#edit-apellidos').val(data.apellidos).prop('readonly', true);
+                    editPersonaFechaNacimiento = data.fecha_nacimiento;
+
+                    // Validar edad al encontrar la persona
+                    if (data.fecha_nacimiento) {
+                        var nacimiento = new Date(data.fecha_nacimiento);
+                        var hoy = new Date();
+                        var edad = hoy.getFullYear() - nacimiento.getFullYear();
+                        var m = hoy.getMonth() - nacimiento.getMonth();
+                        if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+                            edad--;
+                        }
+                        if (edad < 18) {
+                            Swal.fire({
+                                title: 'Edad no permitida',
+                                text: 'La persona tiene ' + edad + ' años. El vocero debe ser mayor de 18 años.',
+                                icon: 'warning'
+                            });
+                        }
+                    }
                 },
                 error: function(xhr) {
                     if (xhr.status === 404) {
                         $('#edit-nombres').prop('readonly', false);
                         $('#edit-apellidos').prop('readonly', false);
+                        editPersonaFechaNacimiento = null;
                     }
                 }
             });
@@ -197,6 +248,7 @@
                 url: '/voceros/' + id,
                 type: 'GET',
                 success: function(data) {
+                    $('#view-cedula_tipo').val(data.persona?.cedula_tipo ?? 'V');
                     $('#view-cedula').val(data.persona?.cedula ?? '');
                     $('#view-nombres').val(data.persona?.nombres ?? '');
                     $('#view-apellidos').val(data.persona?.apellidos ?? '');
@@ -223,10 +275,12 @@
                 type: 'GET',
                 success: function(data) {
                     $('#formEditarVocero').attr('action', '/voceros/' + data.id);
+                    $('#edit-cedula_tipo').val(data.persona?.cedula_tipo ?? 'V');
                     $('#edit-cedula').val(data.persona?.cedula ?? '');
                     $('#edit-nombres').val(data.persona?.nombres ?? '');
                     $('#edit-apellidos').val(data.persona?.apellidos ?? '');
                     $('#edit-categoria_vocero').val(data.categoria_vocero ?? '');
+                    editPersonaFechaNacimiento = data.persona?.fecha_nacimiento ?? null;
 
                     // Set flatpickr date
                     var fp = document.getElementById('edit-fecha_eleccion_container')._flatpickr;
@@ -372,6 +426,7 @@
             // Create Vocero validation
             $('#formVocero').on('submit', function(e) {
                 var cedula = $('#cedula').val().trim();
+                var cedulaTipo = $('#cedula_tipo').val();
                 var nombres = $('#nombres').val().trim();
                 var apellidos = $('#apellidos').val().trim();
                 var categoria = $('#categoria_vocero').val();
@@ -380,8 +435,11 @@
                 var errors = [];
                 var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s]/;
 
-                if (!/^\d{7,8}$/.test(cedula)) {
-                    errors.push('Cédula: debe contener solo números (7 u 8 dígitos).');
+                if (!['V', 'E', 'J'].includes(cedulaTipo)) {
+                    errors.push('Tipo de cédula inválido.');
+                }
+                if (!/^\d{7,10}$/.test(cedula)) {
+                    errors.push('Cédula: debe contener solo números (entre 7 y 10 dígitos).');
                 }
                 if (nombres.length < 3 || nombres.length > 50 || invalidNameRegex.test(nombres)) {
                     errors.push('Nombres: debe tener entre 3 y 50 caracteres y contener solo letras.');
@@ -406,6 +464,20 @@
                     }
                 }
 
+                // Validar mayoría de edad
+                if (personaFechaNacimiento) {
+                    var nacimiento = new Date(personaFechaNacimiento);
+                    var hoyEdad = new Date();
+                    var edadCalc = hoyEdad.getFullYear() - nacimiento.getFullYear();
+                    var mesEdad = hoyEdad.getMonth() - nacimiento.getMonth();
+                    if (mesEdad < 0 || (mesEdad === 0 && hoyEdad.getDate() < nacimiento.getDate())) {
+                        edadCalc--;
+                    }
+                    if (edadCalc < 18) {
+                        errors.push('El vocero debe ser mayor de 18 años. La persona tiene ' + edadCalc + ' años.');
+                    }
+                }
+
                 if (errors.length > 0) {
                     e.preventDefault();
                     Swal.fire({
@@ -420,6 +492,7 @@
             // Edit Vocero validation
             $('#formEditarVocero').on('submit', function(e) {
                 var cedula = $('#edit-cedula').val().trim();
+                var cedulaTipo = $('#edit-cedula_tipo').val();
                 var nombres = $('#edit-nombres').val().trim();
                 var apellidos = $('#edit-apellidos').val().trim();
                 var categoria = $('#edit-categoria_vocero').val();
@@ -428,8 +501,11 @@
                 var errors = [];
                 var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s]/;
 
-                if (!/^\d{7,8}$/.test(cedula)) {
-                    errors.push('Cédula: debe contener solo números (7 u 8 dígitos).');
+                if (!['V', 'E', 'J'].includes(cedulaTipo)) {
+                    errors.push('Tipo de cédula inválido.');
+                }
+                if (!/^\d{7,10}$/.test(cedula)) {
+                    errors.push('Cédula: debe contener solo números (entre 7 y 10 dígitos).');
                 }
                 if (nombres.length < 3 || nombres.length > 50 || invalidNameRegex.test(nombres)) {
                     errors.push('Nombres: debe tener entre 3 y 50 caracteres y contener solo letras.');
@@ -451,6 +527,20 @@
                         if (fechaDate > hoy) {
                             errors.push('Fecha de elección: no puede ser una fecha futura.');
                         }
+                    }
+                }
+
+                // Validar mayoría de edad
+                if (editPersonaFechaNacimiento) {
+                    var nacimiento = new Date(editPersonaFechaNacimiento);
+                    var hoyEdad = new Date();
+                    var edadCalc = hoyEdad.getFullYear() - nacimiento.getFullYear();
+                    var mesEdad = hoyEdad.getMonth() - nacimiento.getMonth();
+                    if (mesEdad < 0 || (mesEdad === 0 && hoyEdad.getDate() < nacimiento.getDate())) {
+                        edadCalc--;
+                    }
+                    if (edadCalc < 18) {
+                        errors.push('El vocero debe ser mayor de 18 años. La persona tiene ' + edadCalc + ' años.');
                     }
                 }
 

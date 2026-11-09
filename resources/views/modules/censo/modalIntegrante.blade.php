@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold"><i class="ri-user-add-line me-1 text-primary"></i> AÑADIR INTEGRANTE</h5>
+                <h5 class="modal-title fw-bold"><i class="ri-user-add-line me-1 text-primary"></i> AÑADIR INTEGRANTE <span id="lbl_integrante_familia_nombre" class="text-muted fw-normal fs-6 ms-1"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-3">
@@ -17,7 +17,11 @@
                         <div class="col-12 col-md-4">
                             <label class="text-primary fw-bold mb-1" for="cedula">CÉDULA <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
+                                <select id="cedula_tipo" name="cedula_tipo" class="form-select flex-grow-0" style="width: 75px;" required>
+                                    <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
+                                    <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
+                                    <option value="J" {{ old('cedula_tipo') == 'J' ? 'selected' : '' }}>J</option>
+                                </select>
                                 <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ej. 15000100" title="Ingresar solo números sin puntos (Ej. 28472748)" required oninput="if(this.value.length>10)this.value=this.value.slice(0,10)">
                             </div>
                         </div>
@@ -182,6 +186,7 @@
                                 <span class="input-group-text"><i class="fa-solid fa-id-card-clip"></i></span>
                                 <input type="text" class="form-control bg-white" name="carnet_patria" id="carnet_patria" placeholder="Ingrese carnet de la patria del ciudadano" oninput="if(this.value.length>10)this.value=this.value.slice(0,10)">
                             </div>
+                            <small id="aviso-carnet-patria" class="text-danger d-none">Solo permitido para mayores de 15 años</small>
                         </div>
 
                         <!-- Tipo Enfermedad -->

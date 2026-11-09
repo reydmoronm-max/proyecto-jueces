@@ -20,6 +20,7 @@
                                         <select id="view-cedula_tipo" name="cedula_tipo" class="form-select bg-white" style="max-width: 80px;" disabled>
                                             <option value="V" {{ old('cedula_tipo', 'V') == 'V' ? 'selected' : '' }}>V</option>
                                             <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
+                                            <option value="J" {{ old('cedula_tipo') == 'J' ? 'selected' : '' }}>J</option>
                                         </select>
                                         <input id="view-cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Cédula" value="{{ old('cedula') }}" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)" disabled> 
                                     </div>

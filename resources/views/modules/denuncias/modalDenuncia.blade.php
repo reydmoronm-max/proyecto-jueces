@@ -24,7 +24,11 @@
                                         <div class="col-12 col-md-6">
                                             <label class="text-primary fw-bold mb-1">CÉDULA DEL DENUNCIANTE</label>
                                             <div class="input-group">
-                                                <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                                                <select name="denunciantes[0][cedula_tipo]" class="form-select flex-grow-0 denunciante-cedula-tipo" style="width: 75px;">
+                                                    <option value="V">V</option>
+                                                    <option value="E">E</option>
+                                                    <option value="J">J</option>
+                                                </select>
                                                 <input type="number" name="denunciantes[0][cedula]" class="form-control denunciante-cedula" placeholder="15000100" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                                                 <span class="input-group-text denunciante-cedula-status d-none" aria-live="polite"></span>
                                             </div>
@@ -178,7 +182,11 @@
                     '<div class="col-12 col-md-6">' +
                     '<label class="text-primary fw-bold mb-1">CÉDULA DEL DENUNCIANTE</label>' +
                     '<div class="input-group">' +
-                    '<span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>' +
+                    '<select name="denunciantes[' + idx + '][cedula_tipo]" class="form-select flex-grow-0 denunciante-cedula-tipo" style="width: 75px;">' +
+                    '<option value="V">V</option>' +
+                    '<option value="E">E</option>' +
+                    '<option value="J">J</option>' +
+                    '</select>' +
                     '<input type="number" name="denunciantes[' + idx + '][cedula]" class="form-control denunciante-cedula" placeholder="15000100" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">' +
                     '<span class="input-group-text denunciante-cedula-status d-none" aria-live="polite"></span>' +
                     '</div>' +
@@ -223,6 +231,16 @@
                 if (btn) {
                     var block = btn.closest('.denunciante-block');
                     if (block) block.remove();
+                }
+            });
+
+            container.addEventListener('change', function (event) {
+                var tipoSelect = event.target.closest('.denunciante-cedula-tipo');
+                if (!tipoSelect) return;
+                var block = tipoSelect.closest('.denunciante-block');
+                var cedulaInput = block.querySelector('.denunciante-cedula');
+                if (cedulaInput && cedulaInput.value.trim()) {
+                    cedulaInput.dispatchEvent(new Event('input', { bubbles: true }));
                 }
             });
 
@@ -350,12 +368,14 @@
 
         function buscarPersonaPorCedulaEnBloque(block, version) {
             var cedulaInput = block.querySelector('input[name$="[cedula]"]');
+            var tipoSelect = block.querySelector('select[name$="[cedula_tipo]"]');
+            var cedulaTipo = tipoSelect ? tipoSelect.value : 'V';
             if (!cedulaInput || Number(cedulaInput.dataset.lookupVersion || 0) !== version) return;
             var cedula = cedulaInput.value.trim();
             if (!/^[0-9]{7,8}$/.test(cedula)) return;
 
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', '{{ route("denuncias.buscar-persona") }}?cedula=' + encodeURIComponent(cedula), true);
+            xhr.open('GET', '{{ route("denuncias.buscar-persona") }}?cedula=' + encodeURIComponent(cedula) + '&cedula_tipo=' + encodeURIComponent(cedulaTipo), true);
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.onload = function () {
                 if (Number(cedulaInput.dataset.lookupVersion || 0) !== version || cedulaInput.value.trim() !== cedula) return;

@@ -48,8 +48,10 @@ class VocerosController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge(['cedula_tipo' => $request->input('cedula_tipo', 'V')]);
         $request->validate([
-            'cedula'           => ['required', 'digits_between:7,8'],
+            'cedula_tipo'      => ['required', 'string', 'in:V,E,J'],
+            'cedula'           => ['required', 'digits_between:7,10'],
             'nombres'          => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellidos'        => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'categoria_vocero' => ['required', 'string'],
@@ -60,9 +62,11 @@ class VocerosController extends Controller
         try {
             // Find or create persona
             $persona = Persona::firstOrCreate(
-                ['cedula' => $request->cedula],
                 [
-                    'cedula_tipo' => 'V',
+                    'cedula'      => $request->cedula,
+                    'cedula_tipo' => $request->cedula_tipo,
+                ],
+                [
                     'nombres'     => $request->nombres,
                     'apellidos'   => $request->apellidos,
                 ]
@@ -74,6 +78,18 @@ class VocerosController extends Controller
                     'nombres'   => $request->nombres,
                     'apellidos' => $request->apellidos,
                 ]);
+            }
+
+            // Validar que la persona sea mayor de 18 años
+            if (!$persona->fecha_nacimiento) {
+                DB::rollBack();
+                return back()->withErrors(['edad' => 'La persona no tiene fecha de nacimiento registrada en el censo. Debe registrarla primero.'])->withInput();
+            }
+
+            $edad = \Carbon\Carbon::parse($persona->fecha_nacimiento)->age;
+            if ($edad < 18) {
+                DB::rollBack();
+                return back()->withErrors(['edad' => 'El vocero debe ser mayor de 18 años. La persona tiene ' . $edad . ' años.'])->withInput();
             }
 
             // Check if already registered as a vocero
@@ -127,9 +143,11 @@ class VocerosController extends Controller
     public function update(Request $request, string $id)
     {
         $vocero = Vocero::findOrFail($id);
+        $request->merge(['cedula_tipo' => $request->input('cedula_tipo', 'V')]);
 
         $request->validate([
-            'cedula'           => ['required', 'digits_between:7,8'],
+            'cedula_tipo'      => ['required', 'string', 'in:V,E,J'],
+            'cedula'           => ['required', 'digits_between:7,10'],
             'nombres'          => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellidos'        => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'categoria_vocero' => ['required', 'string'],
@@ -140,9 +158,11 @@ class VocerosController extends Controller
         try {
             // Find or create the target persona for this cédula
             $persona = Persona::firstOrCreate(
-                ['cedula' => $request->cedula],
                 [
-                    'cedula_tipo' => 'V',
+                    'cedula'      => $request->cedula,
+                    'cedula_tipo' => $request->cedula_tipo,
+                ],
+                [
                     'nombres'     => $request->nombres,
                     'apellidos'   => $request->apellidos,
                 ]
@@ -154,6 +174,18 @@ class VocerosController extends Controller
                     'nombres'   => $request->nombres,
                     'apellidos' => $request->apellidos,
                 ]);
+            }
+
+            // Validar que la persona sea mayor de 18 años
+            if (!$persona->fecha_nacimiento) {
+                DB::rollBack();
+                return back()->withErrors(['edad' => 'La persona no tiene fecha de nacimiento registrada en el censo. Debe registrarla primero.'])->withInput();
+            }
+
+            $edad = \Carbon\Carbon::parse($persona->fecha_nacimiento)->age;
+            if ($edad < 18) {
+                DB::rollBack();
+                return back()->withErrors(['edad' => 'El vocero debe ser mayor de 18 años. La persona tiene ' . $edad . ' años.'])->withInput();
             }
 
             // Check if this new persona is already a vocero on another record
@@ -205,19 +237,25 @@ class VocerosController extends Controller
     public function buscarPersona(Request $request)
     {
         $request->validate([
-            'cedula' => ['required', 'digits_between:7,8'],
+            'cedula'      => ['required', 'digits_between:7,10'],
+            'cedula_tipo' => ['nullable', 'string', 'in:V,E,J'],
         ]);
 
-        $persona = Persona::where('cedula', $request->cedula)->first();
+        $cedulaTipo = $request->input('cedula_tipo', 'V');
+        $persona = Persona::where('cedula', $request->cedula)
+            ->when($cedulaTipo, fn ($q) => $q->where('cedula_tipo', $cedulaTipo))
+            ->first();
 
         if (!$persona) {
             return response()->json(['message' => 'Persona no encontrada'], 404);
         }
 
         return response()->json([
-            'cedula'    => $persona->cedula,
-            'nombres'   => $persona->nombres,
-            'apellidos' => $persona->apellidos,
+            'cedula_tipo'      => $persona->cedula_tipo,
+            'cedula'           => $persona->cedula,
+            'nombres'          => $persona->nombres,
+            'apellidos'        => $persona->apellidos,
+            'fecha_nacimiento' => $persona->fecha_nacimiento,
         ]);
     }
 }

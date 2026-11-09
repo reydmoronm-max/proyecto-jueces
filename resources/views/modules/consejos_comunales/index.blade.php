@@ -124,6 +124,8 @@
         // Función de búsqueda de Jefe de Comando por Cédula (Común)
         function buscarJefeComando(cedulaInputId, hiddenIdId, containerId, labelId) {
             var cedula = $('#' + cedulaInputId).val().trim();
+            var tipoInputId = (cedulaInputId === 'edit-buscar_jefe_cedula') ? 'edit-buscar_jefe_cedula_tipo' : 'buscar_jefe_cedula_tipo';
+            var cedulaTipo = $('#' + tipoInputId).val() || 'V';
             if (cedula === '') {
                 Swal.fire({
                     title: 'Campo vacío',
@@ -133,21 +135,21 @@
                 return;
             }
 
-            if (!/^[0-9]{7,8}$/.test(cedula)) {
+            if (!/^[0-9]{7,10}$/.test(cedula)) {
                 Swal.fire({
                     title: 'Formato inválido',
-                    text: 'La cédula debe contener únicamente números y tener entre 7 y 8 dígitos.',
+                    text: 'La cédula debe contener únicamente números y tener entre 7 y 10 dígitos.',
                     icon: 'warning'
                 });
                 return;
             }
 
-            var url = '/consejos-comunales/buscar-persona/' + cedula;
+            var url = '/consejos-comunales/buscar-persona/' + cedula + '?cedula_tipo=' + encodeURIComponent(cedulaTipo);
             if (cedulaInputId === 'edit-buscar_jefe_cedula') {
                 var action = $('#formEditarConsejo').attr('action');
                 var match = action ? action.match(/\/consejos-comunales\/(\d+)$/) : null;
                 if (match) {
-                    url += '?current_consejo=' + match[1];
+                    url += '&current_consejo=' + match[1];
                 }
             }
 
@@ -228,6 +230,7 @@
                     $('#edit-direccion').val(response.direccion);
                     
                     if (response.persona) {
+                        $('#edit-buscar_jefe_cedula_tipo').val(response.persona.cedula_tipo || 'V');
                         $('#edit-buscar_jefe_cedula').val(response.persona.cedula);
                         $('#edit-jefe_comando_id').val(response.persona.id);
                         var $label = $('#edit-jefe_nombre_completo');
@@ -324,10 +327,6 @@
                     errors.push('El RIF es requerido y debe contener exactamente 9 dígitos (ej. 123456789).');
                 }
 
-                if (!jefeComando) {
-                    errors.push('Debe buscar y seleccionar un Jefe de Comando registrado.');
-                }
-
                 if (direccion.length < 5 || direccion.length > 500) {
                     errors.push('La dirección detallada debe tener entre 5 y 500 caracteres.');
                 }
@@ -365,10 +364,6 @@
                     errors.push('El RIF es requerido y debe contener exactamente 9 dígitos (ej. 123456789).');
                 }
 
-                if (!jefeComando) {
-                    errors.push('Debe buscar y seleccionar un Jefe de Comando registrado.');
-                }
-
                 if (direccion.length < 5 || direccion.length > 500) {
                     errors.push('La dirección detallada debe tener entre 5 y 500 caracteres.');
                 }
@@ -387,22 +382,102 @@
                 $('#edit-rif').val('C' + rifNumber);
             });
 
-            // Alerta de confirmación al eliminar
+            // Alerta de confirmación al eliminar con verificación de vínculos
             $(document).on('click', '.btn-eliminar-consejo', function(e) {
                 e.preventDefault();
                 var form = $(this).closest('form');
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: 'Esta acción eliminará el Consejo Comunal permanentemente.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#e20000',
-                    cancelButtonColor: '#001f4d',
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
+                var action = form.attr('action');
+                var match = action ? action.match(/\/consejos-comunales\/(\d+)$/) : null;
+                var consejoId = match ? match[1] : null;
+
+                if (!consejoId) {
+                    form.submit();
+                    return;
+                }
+
+                // Consultar vínculos asociados
+                $.ajax({
+                    url: '/consejos-comunales/' + consejoId + '/vinculos',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.total_vinculos > 0) {
+                            var opcionesHtml = '<option value="">No reemplazar (dejar sin consejo comunal)</option>';
+                            if (data.otros_consejos && data.otros_consejos.length > 0) {
+                                data.otros_consejos.forEach(function(c) {
+                                    opcionesHtml += '<option value="' + c.id + '">' + c.nombre + '</option>';
+                                });
+                            }
+
+                            var detalleMensaje = [];
+                            if (data.familias_count > 0) {
+                                detalleMensaje.push('<b>' + data.familias_count + '</b> familia(s)');
+                            }
+                            if (data.jornadas_count > 0) {
+                                detalleMensaje.push('<b>' + data.jornadas_count + '</b> jornada(s) de abuelos');
+                            }
+
+                            Swal.fire({
+                                title: '¿Eliminar Consejo Comunal?',
+                                html: '<p class="text-start mb-2">Este consejo comunal tiene ' + detalleMensaje.join(' y ') + ' vinculada(s).</p>' +
+                                      '<p class="text-start mb-2">Si lo desea, puede seleccionar otro consejo comunal para <b>transferir</b> dichos registros. De lo contrario, quedarán sin consejo comunal asignado:</p>' +
+                                      '<div class="text-start mt-3">' +
+                                          '<label class="form-label fw-bold text-primary small">CONSEJO COMUNAL DE REEMPLAZO (OPCIONAL):</label>' +
+                                          '<select id="swal_reemplazo_consejo" class="form-select">' + opcionesHtml + '</select>' +
+                                      '</div>',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#e20000',
+                                cancelButtonColor: '#6c757d',
+                                confirmButtonText: 'Sí, continuar y eliminar',
+                                cancelButtonText: 'Cancelar',
+                                preConfirm: () => {
+                                    return document.getElementById('swal_reemplazo_consejo').value;
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    var reemplazo = result.value;
+                                    form.find('input[name="reemplazo_consejo_id"]').remove();
+                                    if (reemplazo) {
+                                        form.append('<input type="hidden" name="reemplazo_consejo_id" value="' + reemplazo + '">');
+                                    }
+                                    form.submit();
+                                }
+                            });
+                        } else {
+                            // Sin vínculos
+                            Swal.fire({
+                                title: '¿Estás seguro?',
+                                text: 'Esta acción eliminará el Consejo Comunal permanentemente.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#e20000',
+                                cancelButtonColor: '#001f4d',
+                                confirmButtonText: 'Sí, eliminar',
+                                cancelButtonText: 'Cancelar'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form.submit();
+                                }
+                            });
+                        }
+                    },
+                    error: function() {
+                        // Fallback en caso de error en la petición
+                        Swal.fire({
+                            title: '¿Estás seguro?',
+                            text: 'Esta acción eliminará el Consejo Comunal permanentemente.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#e20000',
+                            cancelButtonColor: '#001f4d',
+                            confirmButtonText: 'Sí, eliminar',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
                     }
                 });
             });

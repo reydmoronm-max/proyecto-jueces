@@ -101,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:Jefe de comuna,Jefe de Comando')->group(function () {
         // Consejos Comunales
         Route::get('/consejos-comunales/buscar-persona/{cedula}', [ConsejoComunalController::class, 'buscarPersonaPorCedula'])->name('consejos-comunales.buscar-persona');
+        Route::get('/consejos-comunales/{id}/vinculos', [ConsejoComunalController::class, 'verificarVinculos'])->name('consejos-comunales.vinculos');
         Route::get('/tbody-consejos', [ConsejoComunalController::class, 'tbody'])->name('tbody.consejos');
         Route::resource('consejos-comunales', ConsejoComunalController::class);
 

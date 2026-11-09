@@ -13,6 +13,11 @@
                         <div class="col-12 col-md-6">
                             <label for="edit-cedula" class="form-label text-primary fw-bold mb-1">CÉDULA DE IDENTIDAD</label>
                             <div class="input-group">
+                                <select id="edit-cedula_tipo" name="cedula_tipo" class="form-select flex-grow-0" style="width: 75px; pointer-events: none; background-color: #e9ecef;" tabindex="-1" required>
+                                    <option value="V">V</option>
+                                    <option value="E">E</option>
+                                    <option value="J">J</option>
+                                </select>
                                 <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
                                 <input id="edit-cedula" type="text" name="cedula" class="form-control bg-light" placeholder="15000100" required maxlength="8" inputmode="numeric" pattern="^[0-9]{7,8}$" title="Solo números, hasta 8 dígitos" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)" readonly>
                             </div>

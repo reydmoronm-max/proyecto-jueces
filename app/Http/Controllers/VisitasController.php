@@ -27,11 +27,12 @@ class VisitasController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge(['cedula_tipo' => $request->input('cedula_tipo', 'V')]);
         $request->validate([
             'nombre'      => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            // 'cedula_tipo' => ['required', 'in:V,E'],
-            'cedula'      => ['required', 'digits_between:7,8'],
+            'cedula_tipo' => ['required', 'string', 'in:V,E,J'],
+            'cedula'      => ['required', 'digits_between:7,10'],
             'telefono'    => ['nullable', 'string', 'max:20'],
             'direccion'   => ['nullable', 'string', 'min:5', 'max:255'],
             'proposito'   => ['required', 'string', 'min:5', 'max:255'],
@@ -39,7 +40,9 @@ class VisitasController extends Controller
         ]);
 
         // prevent duplicate visits by the same persona within the same minute
-        $existingPersona = Persona::where('cedula', $request->cedula)->first();
+        $existingPersona = Persona::where('cedula', $request->cedula)
+            ->where('cedula_tipo', $request->cedula_tipo)
+            ->first();
         if ($existingPersona) {
             $now = now();
             $start = $now->copy()->startOfMinute();
@@ -54,9 +57,11 @@ class VisitasController extends Controller
 
         // find or create persona
         $persona = \App\Models\Persona::firstOrCreate(
-            ['cedula' => $request->cedula],
             [
-                'cedula_tipo' => 'V',
+                'cedula' => $request->cedula,
+                'cedula_tipo' => $request->cedula_tipo,
+            ],
+            [
                 'nombres' => $request->nombre,
                 'apellidos' => $request->apellido,
                 'telefono' => $request->telefono,
@@ -92,6 +97,7 @@ class VisitasController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->merge(['cedula_tipo' => $request->input('cedula_tipo', 'V')]);
         // load visita and persona first so we can ignore persona on unique check
         $visita = Visita::findOrFail($id);
         $persona = Persona::findOrFail($visita->persona_id);
@@ -99,8 +105,14 @@ class VisitasController extends Controller
         $request->validate([
             'nombre'      => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
             'apellido'    => ['required', 'string', 'min:3', 'max:50', 'regex:/^[\p{L}\s]+$/u'],
-            // 'cedula_tipo' => ['required', 'in:V,E'],
-            'cedula'      => ['required', 'digits_between:7,8', Rule::unique('personas', 'cedula')->ignore($persona->id)],
+            'cedula_tipo' => ['required', 'string', 'in:V,E,J'],
+            'cedula'      => [
+                'required',
+                'digits_between:7,10',
+                Rule::unique('personas', 'cedula')
+                    ->where(fn ($query) => $query->where('cedula_tipo', $request->cedula_tipo))
+                    ->ignore($persona->id)
+            ],
             'telefono'    => ['nullable', 'string', 'max:20'],
             'direccion'   => ['nullable', 'string', 'min:5', 'max:255'],
             'proposito'   => ['required', 'string', 'min:5', 'max:255'],
@@ -108,7 +120,7 @@ class VisitasController extends Controller
         ]);
 
         $persona->update([
-            'cedula_tipo' => 'V',
+            'cedula_tipo' => $request->cedula_tipo,
             'cedula'      => $request->cedula,
             'nombres'     => $request->nombre,
             'apellidos'   => $request->apellido,

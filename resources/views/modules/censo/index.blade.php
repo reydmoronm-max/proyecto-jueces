@@ -159,8 +159,8 @@
                                             </td>
                                             <td class="text-end">
                                                 <div>
-                                                    <button type="button" class="btn btn-sm btn-success me-1" title="Añadir Integrante"
-                                                        onclick="abrirAñadirIntegrante({{ $item->id }})">
+                                                    <button type="button" class="btn btn-sm btn-primary me-1" title="Añadir Integrante"
+                                                        onclick="abrirAñadirIntegrante({{ $item->id }}, '{{ addslashes($item->numero_familia) }}')">
                                                         <i class="ri-user-add-fill"></i>
                                                     </button>
                                                     <button type="button" class="btn btn-sm btn-light me-1" title="Ver Integrantes"
@@ -422,9 +422,24 @@
             }
         }
 
+        function actualizarCarnetPatria(prefix) {
+            var carnet = $('#' + (prefix ? 'edit-carnet_patria' : 'carnet_patria'));
+            var aviso = $('#' + (prefix ? 'edit-aviso-carnet-patria' : 'aviso-carnet-patria'));
+            var edad = obtenerEdadIntegrante(prefix);
+            var tieneEdad = edad >= 0;
+            var esMayor15 = tieneEdad && edad >= 15;
+
+            carnet.prop('disabled', tieneEdad && !esMayor15);
+            aviso.toggleClass('d-none', !tieneEdad || esMayor15);
+            if (tieneEdad && !esMayor15) {
+                carnet.val('');
+            }
+        }
+
         function actualizarReglasPorEdad(prefix) {
             actualizarPensionadoJubilado(prefix);
             actualizarCamposMenorEdad(prefix);
+            actualizarCarnetPatria(prefix);
         }
 
         function actualizarMisionVivienda(prefix) {
@@ -463,7 +478,8 @@
         // AJAX search for Person globally by Cédula (Add Integrante)
         function buscarPersonaEnCenso() {
             var cedula = $('#cedula').val().trim();
-            if (!/^\d{7,8}$/.test(cedula)) {
+            var cedulaTipo = $('#cedula_tipo').val() || 'V';
+            if (!/^\d{7,10}$/.test(cedula)) {
                 return;
             }
 
@@ -471,7 +487,8 @@
                 url: '{{ route('censo.buscar-persona') }}',
                 method: 'GET',
                 data: {
-                    cedula: cedula
+                    cedula: cedula,
+                    cedula_tipo: cedulaTipo
                 },
                 success: function(data) {
                     if (data.familia_id) {
@@ -578,11 +595,15 @@
         $('#cedula').on('blur', function() {
             buscarPersonaEnCenso();
         });
+        $('#cedula_tipo').on('change', function() {
+            buscarPersonaEnCenso();
+        });
 
         // AJAX search for Person globally by Cédula (Edit Integrante)
         function buscarPersonaEnCensoEdit() {
             var cedula = $('#edit-cedula').val().trim();
-            if (!/^\d{7,8}$/.test(cedula)) {
+            var cedulaTipo = $('#edit-cedula_tipo').val() || 'V';
+            if (!/^\d{7,10}$/.test(cedula)) {
                 return;
             }
 
@@ -590,7 +611,8 @@
                 url: '{{ route('censo.buscar-persona') }}',
                 method: 'GET',
                 data: {
-                    cedula: cedula
+                    cedula: cedula,
+                    cedula_tipo: cedulaTipo
                 },
                 success: function(data) {
                     $('#edit-nombres').val(data.nombres).prop('readonly', true);
@@ -610,11 +632,12 @@
         });
 
         // Open Add Member Modal
-        function abrirAñadirIntegrante(familiaId) {
+        function abrirAñadirIntegrante(familiaId, numeroFamilia) {
             $('#formIntegrante')[0].reset();
             $('#nombres').prop('readonly', false);
             $('#apellidos').prop('readonly', false);
             $('#integrante_familia_id').val(familiaId);
+            $('#lbl_integrante_familia_nombre').text(numeroFamilia ? '- ' + numeroFamilia : '');
             
             var fp = document.getElementById('fecha_nacimiento')._flatpickr;
             if (fp) fp.clear();
@@ -661,7 +684,7 @@
                     if (data.personas && data.personas.length > 0) {
                         data.personas.forEach(function(p) {
                             html += `<tr>
-                                <td>${p.cedula}</td>
+                                <td><span class="badge bg-primary me-1">${p.cedula_tipo || 'V'}</span>${p.cedula}</td>
                                 <td>${p.nombres} ${p.apellidos}</td>
                                 <td><span class="badge bg-secondary">${p.parentesco ?? 'No registrado'}</span></td>
                                 <td>${p.telefono || 'No registrado'}</td>
@@ -695,6 +718,7 @@
                 url: '/censo/integrante/' + id,
                 type: 'GET',
                 success: function(data) {
+                    $('#view-cedula_tipo').val(data.cedula_tipo ?? 'V');
                     $('#view-cedula').val(data.cedula ?? '');
                     $('#view-nombres').val(data.nombres ?? '');
                     $('#view-apellidos').val(data.apellidos ?? '');
@@ -738,6 +762,9 @@
                 type: 'GET',
                 success: function(data) {
                     $('#formEditarIntegrante').attr('action', '/censo/integrante/' + data.id);
+                    var nombreFamilia = data.familia ? data.familia.numero_familia : '';
+                    $('#lbl_edit_integrante_familia_nombre').text(nombreFamilia ? '- ' + nombreFamilia : '');
+                    $('#edit-cedula_tipo').val(data.cedula_tipo ?? 'V');
                     $('#edit-cedula').val(data.cedula ?? '');
                     $('#edit-nombres').val(data.nombres ?? '');
                     $('#edit-apellidos').val(data.apellidos ?? '');
@@ -914,6 +941,8 @@
                 var estudia = $('#' + p + 'estudia').val();
                 var pension = $('#' + p + 'pensionado_jubilado').val();
                 var nivel = $('#' + p + 'nivel_academico').val();
+                var carnetPatria = $('#' + p + 'carnet_patria').val().trim();
+                var edad = obtenerEdadIntegrante(prefix);
 
                 var errors = [];
                 var invalidNameRegex = /[^A-Za-zÀ-ÖØ-öø-ÿ\s\.]/;
@@ -947,6 +976,9 @@
                 }
                 if (!nivel) {
                     errors.push('Nivel académico: campo obligatorio.');
+                }
+                if (carnetPatria && edad >= 0 && edad < 15) {
+                    errors.push('Carnet de la Patria: solo se permite a personas de 15 años en adelante.');
                 }
 
                 return errors;

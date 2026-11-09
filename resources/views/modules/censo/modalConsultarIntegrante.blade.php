@@ -11,7 +11,7 @@
                     <div class="col-12 col-md-4">
                         <label class="text-primary fw-bold mb-1">CÉDULA</label>
                         <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-address-card"></i></span>
+                            <input id="view-cedula_tipo" type="text" class="form-control bg-light flex-grow-0 text-center fw-bold" style="width: 75px;" readonly>
                             <input id="view-cedula" type="text" class="form-control bg-light" readonly>
                         </div>
                     </div>

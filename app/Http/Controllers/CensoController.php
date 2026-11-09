@@ -185,9 +185,14 @@ class CensoController extends Controller
     {
         $request->validate([
             'cedula' => ['required', 'digits_between:7,10'],
+            'cedula_tipo' => ['nullable', 'string', 'in:V,E,J'],
         ]);
 
-        $persona = Persona::with('familia')->where('cedula', $request->cedula)->first();
+        $cedulaTipo = $request->input('cedula_tipo', 'V');
+        $persona = Persona::with('familia')
+            ->where('cedula', $request->cedula)
+            ->when($cedulaTipo, fn ($q) => $q->where('cedula_tipo', $cedulaTipo))
+            ->first();
 
         if (!$persona) {
             return response()->json(['message' => 'Persona no encontrada'], 404);
@@ -214,13 +219,16 @@ class CensoController extends Controller
      */
     public function storeIntegrante(Request $request)
     {
+        $request->merge(['cedula_tipo' => $request->input('cedula_tipo', 'V')]);
         $this->normalizarCatalogosCenso($request);
         $this->normalizarPensionadoJubilado($request);
         $this->normalizarCamposMenorEdad($request);
+        $this->normalizarCarnetPatria($request);
         $this->normalizarNivelAcademicoMenorEdad($request);
 
         $request->validate([
             'familia_id'          => ['required', 'exists:familias,id'],
+            'cedula_tipo'         => ['required', 'string', 'in:V,E,J'],
             'cedula'              => ['required', 'digits_between:7,10'],
             'nombres'             => ['required', 'string', 'min:2', 'max:50', 'regex:/^[\p{L}\s\.]+$/u'],
             'apellidos'           => ['required', 'string', 'min:2', 'max:50', 'regex:/^[\p{L}\s\.]+$/u'],
@@ -247,7 +255,9 @@ class CensoController extends Controller
             }
         }
 
-        $personaExistente = Persona::where('cedula', $request->cedula)->first();
+        $personaExistente = Persona::where('cedula', $request->cedula)
+            ->where('cedula_tipo', $request->cedula_tipo)
+            ->first();
         if ($personaExistente && $personaExistente->familia_id) {
             if ((int) $personaExistente->familia_id === (int) $request->familia_id) {
                 return back()->withErrors(['cedula' => 'Este ciudadano ya se encuentra registrado como integrante de esta familia.'])->withInput();
@@ -262,9 +272,11 @@ class CensoController extends Controller
             $familia = Familia::findOrFail($request->familia_id);
 
             $persona = Persona::firstOrCreate(
-                ['cedula' => $request->cedula],
                 [
-                    'cedula_tipo' => 'V',
+                    'cedula'      => $request->cedula,
+                    'cedula_tipo' => $request->cedula_tipo,
+                ],
+                [
                     'nombres'     => $request->nombres,
                     'apellidos'   => $request->apellidos,
                     'telefono'    => $request->telefono,
@@ -274,6 +286,7 @@ class CensoController extends Controller
 
             // Update all member census and basic fields (direccion comes from familia)
             $persona->update([
+                'cedula_tipo'         => $request->cedula_tipo,
                 'nombres'             => $request->nombres,
                 'apellidos'           => $request->apellidos,
                 'telefono'            => $request->telefono,
@@ -329,13 +342,16 @@ class CensoController extends Controller
      */
     public function updateIntegrante(Request $request, string $id)
     {
+        $request->merge(['cedula_tipo' => $request->input('cedula_tipo', 'V')]);
         $persona = Persona::with('familia')->findOrFail($id);
         $this->normalizarCatalogosCenso($request);
         $this->normalizarPensionadoJubilado($request);
         $this->normalizarCamposMenorEdad($request);
+        $this->normalizarCarnetPatria($request);
         $this->normalizarNivelAcademicoMenorEdad($request);
 
         $request->validate([
+            'cedula_tipo'         => ['required', 'string', 'in:V,E,J'],
             'cedula'              => ['required', 'digits_between:7,10'],
             'nombres'             => ['required', 'string', 'min:2', 'max:50', 'regex:/^[\p{L}\s\.]+$/u'],
             'apellidos'           => ['required', 'string', 'min:2', 'max:50', 'regex:/^[\p{L}\s\.]+$/u'],
@@ -364,6 +380,7 @@ class CensoController extends Controller
         }
 
         $otraPersonaConCedula = Persona::where('cedula', $request->cedula)
+            ->where('cedula_tipo', $request->cedula_tipo)
             ->where('id', '!=', $id)
             ->first();
         if ($otraPersonaConCedula && $otraPersonaConCedula->familia_id) {
@@ -379,6 +396,7 @@ class CensoController extends Controller
             $fecha = \Carbon\Carbon::createFromFormat('d-m-Y', $request->fecha_nacimiento)->format('Y-m-d');
 
             $persona->update([
+                'cedula_tipo'         => $request->cedula_tipo,
                 'cedula'              => $request->cedula,
                 'nombres'             => $request->nombres,
                 'apellidos'           => $request->apellidos,
@@ -444,6 +462,21 @@ class CensoController extends Controller
                     'profesion' => 'No aplica',
                     'situacion_laboral' => 'No aplica',
                     'centro_votacion' => 'No aplica',
+                ]);
+            }
+        } catch (\Throwable $exception) {
+            // La validación y el procesamiento de la fecha informarán el formato inválido.
+        }
+    }
+
+    private function normalizarCarnetPatria(Request $request): void
+    {
+        try {
+            $fechaNacimiento = \Carbon\Carbon::createFromFormat('d-m-Y', $request->input('fecha_nacimiento'));
+
+            if ($fechaNacimiento->age < 15) {
+                $request->merge([
+                    'carnet_patria' => null,
                 ]);
             }
         } catch (\Throwable $exception) {
