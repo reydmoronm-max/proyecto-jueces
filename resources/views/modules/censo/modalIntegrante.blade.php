@@ -22,7 +22,7 @@
                                     <option value="E" {{ old('cedula_tipo') == 'E' ? 'selected' : '' }}>E</option>
                                     <option value="J" {{ old('cedula_tipo') == 'J' ? 'selected' : '' }}>J</option>
                                 </select>
-                                <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ej. 15000100" title="Ingresar solo números sin puntos (Ej. 28472748)" required oninput="if(this.value.length>10)this.value=this.value.slice(0,10)">
+                                <input id="cedula" type="number" name="cedula" class="form-control bg-white" placeholder="Ej. 15000100" title="Ingresar solo números sin puntos (Ej. 28472748)" required oninput="if(this.value.length>8)this.value=this.value.slice(0,8)">
                             </div>
                         </div>
 
